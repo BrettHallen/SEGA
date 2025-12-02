@@ -11,8 +11,8 @@ I did start working on a homebrew SC-3000 ... but an already, far-superior [vers
 ## Sega Saturn
 ### [Windows Communication Cable](/Saturn/Windows_Communication_Cable)<br>
 
-### [Saturn Keyboard (HSS-0129)](/Keyboard)<br>
+### [Saturn Keyboard (HSS-0129)](/Saturn/Keyboard)<br>
 Started work on a homebrew version of the Saturn's keyboard.
 
-![Saturn Keyboard Layout](/Keyboard/sega-saturn-keyboard-(hss-0129).jpg)
+![Saturn Keyboard Layout](/Saturn/Keyboard/sega-saturn-keyboard-(hss-0129).jpg)
 
