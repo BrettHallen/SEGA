@@ -1,0 +1,9095 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "721ba845-6750-4528-8989-01eeffcf4c30")
+	(paper "A3")
+	(title_block
+		(title "Sega Saturn Keyboard (HSS-0129)")
+		(date "3/DEC/2025")
+		(rev "WIP")
+		(company "Brett Hallen")
+		(comment 1 "www.youtube.com/@Brfff")
+		(comment 2 "github.com/BrettHallen")
+	)
+	(lib_symbols
+		(symbol "Switch:SW_Push_45deg"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "SW"
+				(at 3.048 1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "SW_Push_45deg"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "switch normally-open pushbutton push-button"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SW_Push_45deg_0_1"
+				(polyline
+					(pts
+						(xy -2.54 2.54) (xy -1.524 1.524) (xy -1.524 1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.1684 1.1684)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.508 2.54) (xy 2.54 -0.508)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 1.016) (xy 2.032 2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.143 -1.1938)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -1.524) (xy 2.54 -2.54) (xy 2.54 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -2.54 2.54 0)
+					(length 0)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -2.54 180)
+					(length 0)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "Row & Column numbering correspond to the assigned CN2 pin inside the keyboard."
+		(exclude_from_sim no)
+		(at 93.726 234.188 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "7c6b9b45-da1b-4ca5-9fee-5c5551aeb2ad")
+	)
+	(junction
+		(at 68.58 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "043ffdcc-0b73-4745-9872-8ff83eb4cd34")
+	)
+	(junction
+		(at 124.46 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "07c17e42-32cd-45e1-a686-3fc3184dce05")
+	)
+	(junction
+		(at 82.55 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "09b17f1c-4f06-4261-a25f-303658324339")
+	)
+	(junction
+		(at 95.25 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0b6bb72d-0af1-4dd1-b383-5f7fe91c6f41")
+	)
+	(junction
+		(at 35.56 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0e3019c9-c2d5-48ea-af29-1be67fcf90c7")
+	)
+	(junction
+		(at 68.58 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0ec448b3-1223-440a-91c8-5baae77ee9d0")
+	)
+	(junction
+		(at 90.17 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "10407c88-3e39-4c69-a02a-d857b8df242c")
+	)
+	(junction
+		(at 49.53 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "113e09af-cb36-44c2-b310-0acbf5170960")
+	)
+	(junction
+		(at 77.47 157.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1420d715-d2b4-4071-8ff0-f24cdba0c8d1")
+	)
+	(junction
+		(at 77.47 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "17185c06-64a0-4077-8afb-fe884754178d")
+	)
+	(junction
+		(at 49.53 157.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "17f837ac-858e-475d-b826-304122485d00")
+	)
+	(junction
+		(at 77.47 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1a3562cf-a720-4488-aaff-1390baba6a4c")
+	)
+	(junction
+		(at 124.46 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1eaa00c6-27a8-496d-a83b-f94f7ef95f5f")
+	)
+	(junction
+		(at 109.22 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1f3b104d-2f26-4960-ad93-bd8d864e08dd")
+	)
+	(junction
+		(at 134.62 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "21a4e9c0-02f0-4c72-960b-055a4a448757")
+	)
+	(junction
+		(at 63.5 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "21dfbbf2-0772-40e7-92c9-c6730d621a98")
+	)
+	(junction
+		(at 139.7 49.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2433bef9-70ac-403d-a209-57b15e9f0754")
+	)
+	(junction
+		(at 95.25 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2580a63b-0a09-4b84-b1a6-a108c88fd61d")
+	)
+	(junction
+		(at 134.62 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "260ffb86-4c32-4460-8baa-b1ae88969239")
+	)
+	(junction
+		(at 68.58 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "266e37e6-035d-4ca8-af6a-16a998738b3d")
+	)
+	(junction
+		(at 109.22 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2744cfe4-c6fb-4d35-8501-27246e2cc806")
+	)
+	(junction
+		(at 124.46 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2764d240-4913-4d27-bf7c-f693de93fffd")
+	)
+	(junction
+		(at 49.53 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2aceef7a-5698-493a-af71-f42a48d631ab")
+	)
+	(junction
+		(at 95.25 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2ad7869a-0db5-4434-8080-f9daecde14fd")
+	)
+	(junction
+		(at 139.7 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2c093728-b08f-44d8-8dc5-5c45f318bc7f")
+	)
+	(junction
+		(at 54.61 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2dc143b3-ed8a-4b2e-b47b-b3feec4b0d79")
+	)
+	(junction
+		(at 104.14 209.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2ff56359-0068-4216-9a29-eacc72289098")
+	)
+	(junction
+		(at 109.22 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "320795c8-ff61-4cca-b4d4-321b3e889c02")
+	)
+	(junction
+		(at 68.58 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "38f0c237-e5e8-4cad-a00a-4159725b21bb")
+	)
+	(junction
+		(at 109.22 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3963811f-e616-43c1-ad99-271e15fb402b")
+	)
+	(junction
+		(at 63.5 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3aecc67c-105f-4ad1-8cd2-f94aaaa51892")
+	)
+	(junction
+		(at 104.14 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3fe87c2a-71fe-4280-9662-3776ecc0898c")
+	)
+	(junction
+		(at 54.61 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "40eac0ee-831c-4080-9c1c-99ac977937d1")
+	)
+	(junction
+		(at 119.38 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4265a469-2d7c-4df3-ba18-9de32e08e7e9")
+	)
+	(junction
+		(at 139.7 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "43744261-3616-4242-964e-77db8a8c510d")
+	)
+	(junction
+		(at 139.7 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "47e5ca10-01f9-4770-bbee-149c728e8156")
+	)
+	(junction
+		(at 82.55 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4c0721a6-d9ea-4aeb-9cc1-e248c55d6402")
+	)
+	(junction
+		(at 68.58 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4c8a7c8e-acb7-4de4-9f1b-3b3f63f7da69")
+	)
+	(junction
+		(at 134.62 157.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4f181965-c2b2-4add-9728-4b952d91a38e")
+	)
+	(junction
+		(at 54.61 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4fa11098-6e43-42eb-9239-d48e993cf5b5")
+	)
+	(junction
+		(at 134.62 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "500b38ff-502d-4ccd-9de6-956571fd57ae")
+	)
+	(junction
+		(at 139.7 162.56)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "52428a2b-c72b-4ff9-b1eb-e492d851a6db")
+	)
+	(junction
+		(at 82.55 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "52551797-0187-4843-8882-c4a4b6811f8a")
+	)
+	(junction
+		(at 49.53 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "54de403d-db70-44a5-8663-a9e296cb3807")
+	)
+	(junction
+		(at 104.14 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "553e0c49-93f2-477c-a38a-07030e049e3c")
+	)
+	(junction
+		(at 95.25 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "58564925-35be-4ef5-9653-b266452490e8")
+	)
+	(junction
+		(at 104.14 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "587ea019-7e48-4f2b-823f-c8b8bab438d9")
+	)
+	(junction
+		(at 82.55 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "59339a8f-87dc-44c5-ae5d-1e0564273626")
+	)
+	(junction
+		(at 124.46 162.56)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5936f54f-a844-4bcd-85bc-55c0277e4e8a")
+	)
+	(junction
+		(at 35.56 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5c4a7d37-d761-4495-bddc-0a15d2ef9ca8")
+	)
+	(junction
+		(at 95.25 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5cce77c7-bd5e-44d3-852c-8f25a66ac14d")
+	)
+	(junction
+		(at 54.61 162.56)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5dca2422-6a7a-46b1-aa4a-9d55b45583a8")
+	)
+	(junction
+		(at 82.55 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "646377c4-fdd0-4b4f-bff9-956b83d6b6ca")
+	)
+	(junction
+		(at 82.55 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "65d5d69b-2fd1-43b0-bb0f-fdf84e939fd1")
+	)
+	(junction
+		(at 35.56 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "666a68a0-a122-4490-9343-c995894751b1")
+	)
+	(junction
+		(at 54.61 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "666bf0b0-1d6a-4f89-9bd8-76dacc95f8bb")
+	)
+	(junction
+		(at 119.38 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6775b5ec-95fb-47d9-a9d1-818b34090e54")
+	)
+	(junction
+		(at 104.14 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6978e02b-2b64-441d-9c97-7cbbf17b20fe")
+	)
+	(junction
+		(at 77.47 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "69f94412-e5fa-4154-b26c-3d0b36fb3438")
+	)
+	(junction
+		(at 124.46 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6a33bccf-fa0c-4662-974c-e6e3c6f8d3eb")
+	)
+	(junction
+		(at 109.22 214.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6dedff33-a28f-4cff-8962-048c5a2ae204")
+	)
+	(junction
+		(at 90.17 209.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "702f60ac-cc27-47ee-8b78-c13c88a63cd8")
+	)
+	(junction
+		(at 82.55 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "70c683c4-f025-4198-bbe4-051a8894c587")
+	)
+	(junction
+		(at 124.46 34.29)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "753accfb-fae1-48f9-ab04-d32fd68447dc")
+	)
+	(junction
+		(at 82.55 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "77768a38-5c98-4ec8-8d22-5aae5c9362e9")
+	)
+	(junction
+		(at 104.14 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "785ce800-442e-4a34-9378-008bfcda5c49")
+	)
+	(junction
+		(at 54.61 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7a9045a0-39b3-4c3c-ba41-2f7d41b66aa2")
+	)
+	(junction
+		(at 63.5 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7d2d484c-7044-4be9-a67e-cf26fc20e2fc")
+	)
+	(junction
+		(at 49.53 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7eb86a3e-afee-416e-86bb-af91b874112e")
+	)
+	(junction
+		(at 134.62 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7fcfb6a2-6d15-4339-9461-f7d52bb4240f")
+	)
+	(junction
+		(at 82.55 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8126981f-762b-479b-96ff-d1119f830129")
+	)
+	(junction
+		(at 109.22 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "816df20c-0dd9-4f89-94c1-97d40d1ab157")
+	)
+	(junction
+		(at 124.46 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "81e4eb37-4a8b-4b0b-8208-a3324aeac160")
+	)
+	(junction
+		(at 77.47 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "81e89df0-bcd7-4d39-8516-53be118b5acd")
+	)
+	(junction
+		(at 124.46 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "81eeb3f0-7b0b-44d6-981c-9f7608b449e5")
+	)
+	(junction
+		(at 124.46 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8305d671-b3a8-4d86-ae36-4252546554f3")
+	)
+	(junction
+		(at 139.7 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "83a99739-fc4c-42ec-af9b-4b60eabf3f54")
+	)
+	(junction
+		(at 134.62 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "843481cf-297c-4349-b09c-65376c67994b")
+	)
+	(junction
+		(at 77.47 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "843e7206-b925-4169-985f-ba6b873a7adf")
+	)
+	(junction
+		(at 119.38 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "84de4e39-e370-4f17-9846-4a44d3f6a5bd")
+	)
+	(junction
+		(at 134.62 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8764f22e-cfee-4c65-a564-2b99ce556f50")
+	)
+	(junction
+		(at 90.17 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "88386a74-32ba-4aa3-929f-59997f49f688")
+	)
+	(junction
+		(at 90.17 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8b36696d-d0ac-4075-8970-e85eae33606c")
+	)
+	(junction
+		(at 68.58 162.56)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8bd2cd42-e2cc-4f1a-b24c-9034029803ce")
+	)
+	(junction
+		(at 54.61 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8be19e04-c935-4953-b5d1-c53f058a8d11")
+	)
+	(junction
+		(at 134.62 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8bf66faa-c485-47a6-b3a5-82407d057778")
+	)
+	(junction
+		(at 77.47 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8d619363-cbaa-4f12-a048-bfe723299083")
+	)
+	(junction
+		(at 77.47 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8e2e8662-fd83-44c2-b435-7e0c6ac9569d")
+	)
+	(junction
+		(at 95.25 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8e95de51-41a6-4d66-a78b-5fa337853c6a")
+	)
+	(junction
+		(at 104.14 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8eefb11a-fdd4-4d5f-a897-d16764d4cd89")
+	)
+	(junction
+		(at 109.22 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "92fe19a6-7b3e-40d1-ae20-c1758ccd0645")
+	)
+	(junction
+		(at 35.56 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9681b1dd-ec93-4e2e-99a3-0a0786d02e7d")
+	)
+	(junction
+		(at 119.38 157.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9716e436-dc97-4a36-a70f-8b72c48dcef2")
+	)
+	(junction
+		(at 95.25 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "989f7bde-d226-4af6-ad1a-3c3a47434cce")
+	)
+	(junction
+		(at 77.47 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9a45e992-b86b-451a-a35c-f95905d586f9")
+	)
+	(junction
+		(at 63.5 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9acf0c76-b4ea-4776-bda8-f3e802d74d41")
+	)
+	(junction
+		(at 49.53 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9c2b54a7-7ded-4e3b-8a9b-4573355e0b96")
+	)
+	(junction
+		(at 63.5 157.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9d8532f6-9fb8-44a9-bb8a-16322718756d")
+	)
+	(junction
+		(at 54.61 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a3185fbe-d61c-4034-9755-7c74ce128b72")
+	)
+	(junction
+		(at 134.62 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a428d41c-82c0-4960-ad84-8ceb9d3d6971")
+	)
+	(junction
+		(at 35.56 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a42c4ad4-b876-4e9a-8b3f-ee0e4f8eafb8")
+	)
+	(junction
+		(at 139.7 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a48332a7-7c08-4432-88ba-b37f093ff8fc")
+	)
+	(junction
+		(at 35.56 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a99ff9bd-e1cb-4845-a341-19f34631fc96")
+	)
+	(junction
+		(at 109.22 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "aac518a2-831a-4afd-a0cf-3112655a01d9")
+	)
+	(junction
+		(at 95.25 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ab131764-80f5-435e-9e39-515f28e83c66")
+	)
+	(junction
+		(at 119.38 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ac038ace-dfc9-40a2-8798-bc84c747b480")
+	)
+	(junction
+		(at 49.53 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b01d190a-fa85-4063-a7da-2f289626ebce")
+	)
+	(junction
+		(at 49.53 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b0924d0a-ef80-4aa9-9ef2-78e9fe0bd2cf")
+	)
+	(junction
+		(at 68.58 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b09fb965-428f-4634-9257-011500584c07")
+	)
+	(junction
+		(at 35.56 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b2133121-2bc9-4752-ae2c-70562cf06b34")
+	)
+	(junction
+		(at 68.58 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b27eccf8-03aa-460f-9ef9-b88ecea9de05")
+	)
+	(junction
+		(at 124.46 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b74e76b6-0858-4b2a-bc94-53cafc1fe688")
+	)
+	(junction
+		(at 90.17 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b8a22641-b6b9-4a33-964c-04a8e54c1b97")
+	)
+	(junction
+		(at 134.62 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b8b1ba8f-dde9-4d6e-b9e3-d8daa3815887")
+	)
+	(junction
+		(at 35.56 157.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b8b44620-a72b-40ef-aa5f-f62a93e5ff2a")
+	)
+	(junction
+		(at 139.7 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b9395bbe-18a7-4910-b14d-26807895c9f5")
+	)
+	(junction
+		(at 104.14 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b99df722-1da9-4e3f-b17b-ced7c38d6d43")
+	)
+	(junction
+		(at 68.58 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ba858bad-6c9b-4424-b69d-668d2e2dbee7")
+	)
+	(junction
+		(at 139.7 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bac395b5-68da-4217-a987-cc1e32e3f282")
+	)
+	(junction
+		(at 119.38 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bb501d10-8d2e-420f-b7e3-25396f3a942d")
+	)
+	(junction
+		(at 119.38 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bcff7e60-cf81-4ae2-a4b0-397f0d334f55")
+	)
+	(junction
+		(at 95.25 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bf96a4e8-2030-4b28-9619-e728efb49c75")
+	)
+	(junction
+		(at 49.53 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c03bae44-8ef8-44b8-97c5-87e3f9f96a88")
+	)
+	(junction
+		(at 90.17 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c3821be9-3ec0-43af-8fbf-4bc262f0622d")
+	)
+	(junction
+		(at 63.5 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c41c5391-5c69-4be9-ae75-3d9e8b7dfea3")
+	)
+	(junction
+		(at 63.5 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c431877a-1c9d-4e59-93dc-e7d2fc11c754")
+	)
+	(junction
+		(at 90.17 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c8bcafd8-b0df-4826-8f62-49d3b373f738")
+	)
+	(junction
+		(at 77.47 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cd5854f5-ab9d-4476-ad89-368717403c84")
+	)
+	(junction
+		(at 119.38 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d43fedf1-db36-49b0-9e0c-40a11da080d3")
+	)
+	(junction
+		(at 77.47 184.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d48a3ed0-ac5e-4b39-806d-10101d348a7f")
+	)
+	(junction
+		(at 68.58 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d6fdcc28-9b65-41e2-9d31-f70b135589df")
+	)
+	(junction
+		(at 139.7 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dbb12099-6964-4e60-8cf6-90142766ec95")
+	)
+	(junction
+		(at 63.5 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dcb5aa03-0031-4a0d-a1d5-1eb919442448")
+	)
+	(junction
+		(at 139.7 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e07dceca-0579-45d7-9bef-1e16b649ddba")
+	)
+	(junction
+		(at 68.58 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e17054d1-33d5-4582-9161-bdf9a7e0f0ed")
+	)
+	(junction
+		(at 82.55 162.56)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e47dd27e-43f6-405c-8ba0-d92a3155eaf1")
+	)
+	(junction
+		(at 63.5 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e48455e7-3c77-4506-80e3-d5be23fef2ed")
+	)
+	(junction
+		(at 90.17 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e5051a7a-49be-4850-beb1-a805106f6ee7")
+	)
+	(junction
+		(at 82.55 106.68)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e8403bf9-27f1-44ac-a9eb-a92ba16908dd")
+	)
+	(junction
+		(at 124.46 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e90bdbb2-1d8b-484b-a778-9f324685f896")
+	)
+	(junction
+		(at 124.46 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ec291908-3f7e-4505-bee9-3ca18fb5441c")
+	)
+	(junction
+		(at 109.22 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ee04e78a-c2b5-4ced-acda-2181fc0afd11")
+	)
+	(junction
+		(at 109.22 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ef72819f-998d-4dbf-97b3-da7f5a9affa1")
+	)
+	(junction
+		(at 54.61 189.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f0ca0a66-b4d9-4f0d-ac32-e9e071d11e30")
+	)
+	(junction
+		(at 54.61 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f145835b-ec33-4f83-9b4a-8f0d342497b2")
+	)
+	(junction
+		(at 119.38 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f18c60a9-8fbc-4241-9c1f-c3fe29911508")
+	)
+	(junction
+		(at 35.56 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f1a85f84-aed9-499f-9109-c89cd98cb367")
+	)
+	(junction
+		(at 63.5 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f3af68a9-7bb3-497d-a98f-ee47f65c6eb7")
+	)
+	(junction
+		(at 35.56 196.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f736ef17-b766-49c5-b6c7-59d5eebea080")
+	)
+	(junction
+		(at 90.17 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f80ae55d-f365-4cbe-9c31-6f5589335a38")
+	)
+	(junction
+		(at 63.5 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8eeac68-2100-4051-a202-fcc6ac8e3031")
+	)
+	(junction
+		(at 119.38 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f940d7bd-3189-43f6-9f88-dfe9bfd8fc68")
+	)
+	(junction
+		(at 104.14 170.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fced752a-570a-4e93-b4fb-d50783fca515")
+	)
+	(junction
+		(at 119.38 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fcfb3f38-22db-45a4-a28d-7ceb29cfa476")
+	)
+	(wire
+		(pts
+			(xy 104.14 170.18) (xy 104.14 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "011ba274-9a81-4b6f-bb40-42b09fee9e31")
+	)
+	(wire
+		(pts
+			(xy 68.58 189.23) (xy 82.55 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01c39e95-8ac8-4aae-bf29-8f45c5a622c5")
+	)
+	(wire
+		(pts
+			(xy 82.55 34.29) (xy 124.46 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03e274bd-ccc3-4f80-9de5-53d186f933d1")
+	)
+	(wire
+		(pts
+			(xy 139.7 201.93) (xy 146.05 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04b5c846-b209-4362-84e5-1a3e9d8a60f4")
+	)
+	(wire
+		(pts
+			(xy 77.47 144.78) (xy 77.47 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07634cad-96de-4f19-9654-9a7a76720c6f")
+	)
+	(wire
+		(pts
+			(xy 90.17 86.36) (xy 90.17 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09038fee-f325-45f7-9dd9-de6755a6eed6")
+	)
+	(wire
+		(pts
+			(xy 35.56 184.15) (xy 35.56 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c03e1c4-daf0-4705-aa43-44550da9bb52")
+	)
+	(wire
+		(pts
+			(xy 119.38 73.66) (xy 119.38 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11771f74-85f6-40de-8a0b-cb6dbf75209e")
+	)
+	(wire
+		(pts
+			(xy 134.62 44.45) (xy 134.62 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12e30ebf-ca36-478e-8d01-88ed11cd6e7b")
+	)
+	(wire
+		(pts
+			(xy 124.46 201.93) (xy 139.7 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "153bb30a-ddef-4ee9-9045-9fa6b72652ad")
+	)
+	(wire
+		(pts
+			(xy 124.46 63.5) (xy 139.7 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18fc44a1-50d6-44a2-b771-a6104acefbbf")
+	)
+	(wire
+		(pts
+			(xy 124.46 162.56) (xy 139.7 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "198b72a7-6580-4b6b-87d1-bb387b46cc0a")
+	)
+	(wire
+		(pts
+			(xy 109.22 106.68) (xy 124.46 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1dad6291-0c75-4e02-b1f2-80407d6d13f7")
+	)
+	(wire
+		(pts
+			(xy 54.61 189.23) (xy 68.58 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1de2fb7c-5e06-47ad-a144-2a3e90e0d575")
+	)
+	(wire
+		(pts
+			(xy 139.7 162.56) (xy 146.05 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "207ef2c0-0434-412e-91e3-dd60e4dc907d")
+	)
+	(wire
+		(pts
+			(xy 104.14 116.84) (xy 104.14 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "268b2f9f-f369-4ce4-a25c-d78d22133270")
+	)
+	(wire
+		(pts
+			(xy 139.7 49.53) (xy 146.05 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "26d333c5-24c9-4131-becc-5cb89bbb5287")
+	)
+	(wire
+		(pts
+			(xy 49.53 170.18) (xy 49.53 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2768e5f7-d739-443b-8a9f-83091ff0b833")
+	)
+	(wire
+		(pts
+			(xy 77.47 86.36) (xy 77.47 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27c0efab-a844-4fb2-a8ea-8fa4034bbc2a")
+	)
+	(wire
+		(pts
+			(xy 54.61 149.86) (xy 68.58 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2834fd70-a589-4984-bc56-68d4d2f00149")
+	)
+	(wire
+		(pts
+			(xy 134.62 184.15) (xy 134.62 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2986a9b7-eb20-4aa7-b35a-eaccac914de8")
+	)
+	(wire
+		(pts
+			(xy 77.47 157.48) (xy 77.47 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29e7f79c-fccc-4776-b545-9f6415b33e19")
+	)
+	(wire
+		(pts
+			(xy 68.58 201.93) (xy 82.55 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29f319ff-84a3-4749-b559-c7074771a037")
+	)
+	(wire
+		(pts
+			(xy 95.25 106.68) (xy 109.22 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2a3373b8-5ee7-4faa-93bc-5532b326d552")
+	)
+	(wire
+		(pts
+			(xy 109.22 91.44) (xy 124.46 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2bd5961c-8a37-47c9-a2d8-81fe4218093b")
+	)
+	(wire
+		(pts
+			(xy 90.17 73.66) (xy 90.17 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2bd6eddb-88bb-46e3-a040-8b58ecc676f1")
+	)
+	(wire
+		(pts
+			(xy 63.5 73.66) (xy 63.5 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d9fcc42-8e80-45f5-93e8-345bc84592ca")
+	)
+	(wire
+		(pts
+			(xy 40.64 149.86) (xy 54.61 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e0f19f0-74a5-4e7c-b151-d84677976d9e")
+	)
+	(wire
+		(pts
+			(xy 63.5 44.45) (xy 63.5 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f19d8d7-0c73-43d4-aa6c-64ad7fd49de8")
+	)
+	(wire
+		(pts
+			(xy 63.5 58.42) (xy 63.5 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "30635ada-631f-42c2-a071-5a59800b9027")
+	)
+	(wire
+		(pts
+			(xy 119.38 29.21) (xy 119.38 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3238f59c-16c9-41f2-ad9c-b942653ee935")
+	)
+	(wire
+		(pts
+			(xy 35.56 130.81) (xy 35.56 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "338d3355-88ab-4806-a549-110960bd0966")
+	)
+	(wire
+		(pts
+			(xy 90.17 101.6) (xy 90.17 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "33f29751-51d7-42f6-8d79-a4c4f5013e10")
+	)
+	(wire
+		(pts
+			(xy 82.55 135.89) (xy 95.25 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3591896a-4ccc-4d18-a416-4d71f5072512")
+	)
+	(wire
+		(pts
+			(xy 68.58 49.53) (xy 139.7 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "36f1e4be-024f-4040-b2e1-a10fcff22828")
+	)
+	(wire
+		(pts
+			(xy 90.17 144.78) (xy 90.17 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "377c864a-42ac-48af-a7a4-ffb6e07e8eb7")
+	)
+	(wire
+		(pts
+			(xy 54.61 201.93) (xy 68.58 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "382f2080-44ed-456b-83b2-b17660cd52f1")
+	)
+	(wire
+		(pts
+			(xy 109.22 175.26) (xy 124.46 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "38a241b9-689a-42ba-a47a-278854362330")
+	)
+	(wire
+		(pts
+			(xy 104.14 196.85) (xy 104.14 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39b51daf-b1cb-40e7-89d8-67eabe5b65b7")
+	)
+	(wire
+		(pts
+			(xy 68.58 135.89) (xy 82.55 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3aeec46a-b9be-4e11-9d4c-f1eef7115910")
+	)
+	(wire
+		(pts
+			(xy 82.55 189.23) (xy 95.25 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3bdff21a-f753-4c0c-aac5-50b5fda3cc40")
+	)
+	(wire
+		(pts
+			(xy 35.56 101.6) (xy 35.56 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c9a123c-82dc-47bd-ae34-bbadb30cdd20")
+	)
+	(wire
+		(pts
+			(xy 77.47 73.66) (xy 77.47 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d386a9e-04dd-4854-b44e-4338560e5156")
+	)
+	(wire
+		(pts
+			(xy 104.14 86.36) (xy 104.14 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3dd05e23-5666-44c3-9015-00ad017cf488")
+	)
+	(wire
+		(pts
+			(xy 95.25 189.23) (xy 109.22 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ddd745d-04b7-4799-a812-25ee46ab0e2e")
+	)
+	(wire
+		(pts
+			(xy 104.14 58.42) (xy 104.14 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3fac6f57-337d-4941-9dbd-84f526b3b0d7")
+	)
+	(wire
+		(pts
+			(xy 77.47 116.84) (xy 77.47 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ffb7585-0be0-4e1b-bd72-7531608bf60a")
+	)
+	(wire
+		(pts
+			(xy 49.53 184.15) (xy 49.53 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "40383629-ac05-4048-a5b0-a750ccaa646e")
+	)
+	(wire
+		(pts
+			(xy 139.7 106.68) (xy 146.05 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4112f994-6ac1-4a6b-9660-5d4eea7cc95d")
+	)
+	(wire
+		(pts
+			(xy 49.53 196.85) (xy 49.53 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "43661675-2b02-4088-ba59-9a35ae6ef82d")
+	)
+	(wire
+		(pts
+			(xy 35.56 116.84) (xy 35.56 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "444cd4ff-9d69-4245-8b42-423887c9b8cf")
+	)
+	(wire
+		(pts
+			(xy 139.7 121.92) (xy 146.05 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4471e03c-0685-4201-90bf-cbf9ccdbec4e")
+	)
+	(wire
+		(pts
+			(xy 68.58 149.86) (xy 82.55 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44939ffd-9626-4a30-bc31-3ff995e0f559")
+	)
+	(wire
+		(pts
+			(xy 109.22 63.5) (xy 124.46 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "449ef63c-ad78-4c6f-8ae6-836a1c7213db")
+	)
+	(wire
+		(pts
+			(xy 40.64 106.68) (xy 54.61 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45f5ed63-d8c2-4cdd-8493-26a1489de683")
+	)
+	(wire
+		(pts
+			(xy 82.55 175.26) (xy 95.25 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4ae01bab-6971-4a61-8878-4065354411c1")
+	)
+	(wire
+		(pts
+			(xy 119.38 144.78) (xy 119.38 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b7390d5-a68d-4c64-ae38-91870916c545")
+	)
+	(wire
+		(pts
+			(xy 63.5 116.84) (xy 63.5 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d9a4c13-81b9-4b23-bfa1-3f3e9dec5ca8")
+	)
+	(wire
+		(pts
+			(xy 109.22 121.92) (xy 124.46 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4de17522-a103-45e1-9309-33c81949baf9")
+	)
+	(wire
+		(pts
+			(xy 95.25 135.89) (xy 109.22 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "519089ec-5ce9-4ae6-9ec3-b6d6980bab97")
+	)
+	(wire
+		(pts
+			(xy 134.62 58.42) (xy 134.62 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5201a479-eda6-450f-8723-97a330958800")
+	)
+	(wire
+		(pts
+			(xy 77.47 184.15) (xy 77.47 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5353e06f-41da-471f-98f9-241e47402831")
+	)
+	(wire
+		(pts
+			(xy 139.7 189.23) (xy 146.05 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "53709c73-a90f-4fae-8428-3090f9f576c9")
+	)
+	(wire
+		(pts
+			(xy 119.38 116.84) (xy 119.38 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "53c63f0c-782a-4e4a-8c12-047a5c5194ad")
+	)
+	(wire
+		(pts
+			(xy 54.61 175.26) (xy 68.58 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56e0c865-4fa9-430c-a9a6-3e94de1db0b0")
+	)
+	(wire
+		(pts
+			(xy 139.7 91.44) (xy 146.05 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57c998ff-b286-4587-928d-1d0048aeb591")
+	)
+	(wire
+		(pts
+			(xy 119.38 86.36) (xy 119.38 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5830dbd3-7101-4734-b1d9-131b37d3cac4")
+	)
+	(wire
+		(pts
+			(xy 90.17 184.15) (xy 90.17 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "584e4d5c-f9ba-4905-a04a-023aaed1a3d4")
+	)
+	(wire
+		(pts
+			(xy 63.5 170.18) (xy 63.5 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58dfe671-4f88-46b1-af18-93c43448edca")
+	)
+	(wire
+		(pts
+			(xy 35.56 86.36) (xy 35.56 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a1885ee-97aa-4afd-bd5b-df6359a8cf58")
+	)
+	(wire
+		(pts
+			(xy 134.62 130.81) (xy 134.62 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ac6edc8-343d-4ca8-a8be-4f74f9e2d7c5")
+	)
+	(wire
+		(pts
+			(xy 90.17 130.81) (xy 90.17 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5bebaec3-4284-46d6-b134-09bdb96d87bc")
+	)
+	(wire
+		(pts
+			(xy 134.62 170.18) (xy 134.62 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c4b8710-ba47-4ab8-ad62-9762f051c090")
+	)
+	(wire
+		(pts
+			(xy 63.5 157.48) (xy 63.5 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d09a552-790b-4748-b16c-3f52f2878ed0")
+	)
+	(wire
+		(pts
+			(xy 40.64 121.92) (xy 54.61 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e21661c-a0e4-4f1b-9742-91046d60eefc")
+	)
+	(wire
+		(pts
+			(xy 54.61 63.5) (xy 68.58 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e7d4d84-e70b-45c0-9738-bea856611411")
+	)
+	(wire
+		(pts
+			(xy 49.53 58.42) (xy 49.53 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ed68152-6aa7-4923-996f-093b9cc7c657")
+	)
+	(wire
+		(pts
+			(xy 95.25 175.26) (xy 109.22 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "60938006-3bb0-41b8-af48-2488d6eda886")
+	)
+	(wire
+		(pts
+			(xy 134.62 196.85) (xy 134.62 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "614e44d2-3bdc-4e9d-b603-c273bdbaf325")
+	)
+	(wire
+		(pts
+			(xy 68.58 91.44) (xy 82.55 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63162a04-deff-4837-a747-6a5e646d3d2a")
+	)
+	(wire
+		(pts
+			(xy 139.7 175.26) (xy 146.05 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63944c81-6cf1-4627-8f3a-8bfb1a199e78")
+	)
+	(wire
+		(pts
+			(xy 63.5 86.36) (xy 63.5 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6465ad44-cc26-4c99-a89a-b7fafe225879")
+	)
+	(wire
+		(pts
+			(xy 124.46 135.89) (xy 139.7 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6688245d-1315-4c73-ba8d-bdd891db95a3")
+	)
+	(wire
+		(pts
+			(xy 119.38 196.85) (xy 119.38 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "671aca4e-7d3f-4f2b-8eb3-1c8f83a33f3d")
+	)
+	(wire
+		(pts
+			(xy 109.22 189.23) (xy 124.46 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "690497da-7ef2-4a89-a196-cb7c4b5a88ce")
+	)
+	(wire
+		(pts
+			(xy 124.46 106.68) (xy 139.7 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d192ede-4389-4baf-93b2-f874548b09b7")
+	)
+	(wire
+		(pts
+			(xy 119.38 58.42) (xy 119.38 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d74a6a2-ef69-462c-a536-4f5e38279430")
+	)
+	(wire
+		(pts
+			(xy 104.14 209.55) (xy 104.14 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6dafd592-0916-4f1f-aa68-6fd1127c322b")
+	)
+	(wire
+		(pts
+			(xy 63.5 130.81) (xy 63.5 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6dead46f-ac53-4286-9486-02af7d3aaccf")
+	)
+	(wire
+		(pts
+			(xy 119.38 130.81) (xy 119.38 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ec74857-40e1-4c0f-bb2d-79739bb5aa74")
+	)
+	(wire
+		(pts
+			(xy 40.64 91.44) (xy 68.58 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f767439-e0a7-469a-a98e-df21985d32e2")
+	)
+	(wire
+		(pts
+			(xy 124.46 34.29) (xy 146.05 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7150afec-c394-4ef9-be1b-51fec28b11c6")
+	)
+	(wire
+		(pts
+			(xy 35.56 58.42) (xy 35.56 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "72d2cc26-9142-422a-8cc8-153047340248")
+	)
+	(wire
+		(pts
+			(xy 109.22 135.89) (xy 124.46 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "742927ec-8550-4286-a168-6d03590de942")
+	)
+	(wire
+		(pts
+			(xy 139.7 78.74) (xy 146.05 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75da453c-38fa-4f81-8d31-b8e4e15ff65f")
+	)
+	(wire
+		(pts
+			(xy 68.58 175.26) (xy 82.55 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "772ef239-fb0f-4611-8abc-0e84f9b3acd7")
+	)
+	(wire
+		(pts
+			(xy 134.62 101.6) (xy 134.62 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78199547-ccff-47fa-b4d5-30e8a5f7e924")
+	)
+	(wire
+		(pts
+			(xy 40.64 63.5) (xy 54.61 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78efd5a5-61db-49de-a103-622e1696964a")
+	)
+	(wire
+		(pts
+			(xy 95.25 78.74) (xy 109.22 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "791715d0-bab2-4689-affa-b58db6f8e736")
+	)
+	(wire
+		(pts
+			(xy 63.5 184.15) (xy 63.5 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7952854a-e05b-4339-a19f-919a0ee769b7")
+	)
+	(wire
+		(pts
+			(xy 77.47 101.6) (xy 77.47 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79ff0230-a45c-4ef8-85af-210967bc17bb")
+	)
+	(wire
+		(pts
+			(xy 104.14 184.15) (xy 104.14 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b64b791-2e1e-442e-9537-04499a68c8f1")
+	)
+	(wire
+		(pts
+			(xy 35.56 144.78) (xy 35.56 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c452079-1697-4bcf-b0fa-162138786da8")
+	)
+	(wire
+		(pts
+			(xy 35.56 170.18) (xy 35.56 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cf0cf8b-e237-4a20-b80d-613b023ed028")
+	)
+	(wire
+		(pts
+			(xy 95.25 121.92) (xy 109.22 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ec14a2d-f22c-4875-9320-92dc0639993f")
+	)
+	(wire
+		(pts
+			(xy 54.61 121.92) (xy 68.58 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8087c649-8dcd-4214-b5a0-abd137264ae6")
+	)
+	(wire
+		(pts
+			(xy 124.46 121.92) (xy 139.7 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81da8956-2c50-4ea1-ae91-851bb26f79b0")
+	)
+	(wire
+		(pts
+			(xy 124.46 78.74) (xy 139.7 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8324596b-7648-49cf-aa27-73ec1d24c37b")
+	)
+	(wire
+		(pts
+			(xy 49.53 101.6) (xy 49.53 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8367b580-5536-4df8-a185-7fad7b6c764f")
+	)
+	(wire
+		(pts
+			(xy 124.46 175.26) (xy 139.7 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83f85d9b-355a-430e-b3cf-80c66af96bf4")
+	)
+	(wire
+		(pts
+			(xy 82.55 78.74) (xy 95.25 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84d82898-04c2-4692-8f82-0da8f366bd15")
+	)
+	(wire
+		(pts
+			(xy 124.46 91.44) (xy 139.7 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "856a3fdb-5a81-47b3-a54f-37657c66a123")
+	)
+	(wire
+		(pts
+			(xy 95.25 63.5) (xy 109.22 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8631351c-e71d-4e03-9cb2-c57327600c32")
+	)
+	(wire
+		(pts
+			(xy 68.58 162.56) (xy 82.55 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "86d8de98-5c93-40af-b0d1-97c95ea8f561")
+	)
+	(wire
+		(pts
+			(xy 40.64 189.23) (xy 54.61 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87922ecc-3006-4721-ac70-64b5dc33c92f")
+	)
+	(wire
+		(pts
+			(xy 54.61 106.68) (xy 68.58 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89181c09-4f64-4205-8a65-420b7d11f9c4")
+	)
+	(wire
+		(pts
+			(xy 82.55 149.86) (xy 95.25 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89a1720e-42e5-4465-8b33-9d46c94c5f75")
+	)
+	(wire
+		(pts
+			(xy 82.55 162.56) (xy 124.46 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8a5d81b3-1abf-4d63-bac2-5fe7335364de")
+	)
+	(wire
+		(pts
+			(xy 119.38 170.18) (xy 119.38 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b5d901f-2127-4809-88e9-189006600acc")
+	)
+	(wire
+		(pts
+			(xy 68.58 63.5) (xy 82.55 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8bd8f052-d68a-43a2-9d45-424c96a12054")
+	)
+	(wire
+		(pts
+			(xy 104.14 73.66) (xy 104.14 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8bf46ddf-d88d-4d77-a05d-233e55a5864c")
+	)
+	(wire
+		(pts
+			(xy 49.53 116.84) (xy 49.53 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8da4aeaf-f212-472d-89b1-fdbfe51e9a22")
+	)
+	(wire
+		(pts
+			(xy 124.46 189.23) (xy 139.7 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e9fa6be-bda6-4caf-91cd-12ab440c845c")
+	)
+	(wire
+		(pts
+			(xy 82.55 91.44) (xy 95.25 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f9abae5-2b2c-4427-9e3f-7088b18f39fd")
+	)
+	(wire
+		(pts
+			(xy 77.47 170.18) (xy 77.47 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8fd0f423-5f97-454f-8e28-96d7aa675c80")
+	)
+	(wire
+		(pts
+			(xy 35.56 73.66) (xy 35.56 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93700ccb-ceff-4b3d-a24c-f8edce258b9d")
+	)
+	(wire
+		(pts
+			(xy 77.47 130.81) (xy 77.47 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "95823ffa-1205-4574-afb0-0037305b4fc6")
+	)
+	(wire
+		(pts
+			(xy 139.7 63.5) (xy 146.05 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "963b57e7-b630-4a4b-bf3c-d4dc5112b009")
+	)
+	(wire
+		(pts
+			(xy 90.17 209.55) (xy 90.17 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e9d2e12-543e-40f4-9217-6e462cf662a5")
+	)
+	(wire
+		(pts
+			(xy 139.7 135.89) (xy 146.05 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a0938be7-6d8a-421d-a5c7-295d45080285")
+	)
+	(wire
+		(pts
+			(xy 35.56 196.85) (xy 35.56 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a265dfa8-b654-4b53-a822-6a461ee31a5c")
+	)
+	(wire
+		(pts
+			(xy 134.62 157.48) (xy 134.62 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a3b8ce5f-6bd1-4b99-9c5e-8a77a0d899c4")
+	)
+	(wire
+		(pts
+			(xy 77.47 58.42) (xy 77.47 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a51c2b3e-93f6-41c2-9d73-ec18cfdf52c3")
+	)
+	(wire
+		(pts
+			(xy 82.55 63.5) (xy 95.25 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a61be231-7e71-4f13-861c-6a2de6d0b9fb")
+	)
+	(wire
+		(pts
+			(xy 68.58 78.74) (xy 82.55 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab501035-e247-433b-a34b-41f4c7acabf5")
+	)
+	(wire
+		(pts
+			(xy 95.25 214.63) (xy 109.22 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "acc8e96b-3720-4f5f-baa2-c0dbd01130c3")
+	)
+	(wire
+		(pts
+			(xy 63.5 144.78) (xy 63.5 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "afde2649-b8c7-455f-bd43-69a5d14cbfbb")
+	)
+	(wire
+		(pts
+			(xy 90.17 116.84) (xy 90.17 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b1772e5f-9219-44ed-99c4-e49571699a74")
+	)
+	(wire
+		(pts
+			(xy 119.38 184.15) (xy 119.38 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b48b6edb-539d-4726-89f0-d2e167320ed8")
+	)
+	(wire
+		(pts
+			(xy 49.53 144.78) (xy 49.53 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b780eb5b-b318-4995-85bc-328f8860d348")
+	)
+	(wire
+		(pts
+			(xy 104.14 101.6) (xy 104.14 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b957562c-de5f-43de-9057-3beae78a904b")
+	)
+	(wire
+		(pts
+			(xy 77.47 29.21) (xy 77.47 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd247375-8cb2-4e2c-80c3-d4f554ea20d2")
+	)
+	(wire
+		(pts
+			(xy 119.38 157.48) (xy 119.38 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf4011ce-4309-4442-9151-908b4202c2a7")
+	)
+	(wire
+		(pts
+			(xy 109.22 214.63) (xy 146.05 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1477b1c-3ba4-472a-b03c-baf48d994e26")
+	)
+	(wire
+		(pts
+			(xy 119.38 101.6) (xy 119.38 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c400f9e5-05ec-4855-9360-468ed6c32d37")
+	)
+	(wire
+		(pts
+			(xy 40.64 78.74) (xy 54.61 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c5f52b08-15e2-4e63-90b3-c321a074dddd")
+	)
+	(wire
+		(pts
+			(xy 90.17 170.18) (xy 90.17 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c78914c4-2a69-40fb-b29e-c850e56f3396")
+	)
+	(wire
+		(pts
+			(xy 63.5 101.6) (xy 63.5 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb399130-bbc3-40da-9313-6813f709679a")
+	)
+	(wire
+		(pts
+			(xy 49.53 73.66) (xy 49.53 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cce93500-be19-48aa-af79-731cae24b453")
+	)
+	(wire
+		(pts
+			(xy 77.47 196.85) (xy 77.47 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf62503f-800b-4835-9222-f236eb42189b")
+	)
+	(wire
+		(pts
+			(xy 40.64 175.26) (xy 54.61 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d02d0156-fa39-4658-b899-bf06a9dac8ac")
+	)
+	(wire
+		(pts
+			(xy 35.56 157.48) (xy 35.56 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1262cf2-34f7-4bd8-b535-e04ac62cf758")
+	)
+	(wire
+		(pts
+			(xy 54.61 78.74) (xy 68.58 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1c3e6fa-89e7-4c69-b649-2fb54f0ed0f6")
+	)
+	(wire
+		(pts
+			(xy 40.64 201.93) (xy 54.61 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd8a2a06-dd64-4422-8435-893d1525d85f")
+	)
+	(wire
+		(pts
+			(xy 82.55 201.93) (xy 109.22 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "de2d1fa6-743b-492e-8fed-cecbe074119c")
+	)
+	(wire
+		(pts
+			(xy 104.14 130.81) (xy 104.14 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df901f2e-63eb-42b7-9e63-e086efdaf56e")
+	)
+	(wire
+		(pts
+			(xy 82.55 106.68) (xy 95.25 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e23ebba1-74af-4c88-b16b-96174831e648")
+	)
+	(wire
+		(pts
+			(xy 109.22 78.74) (xy 124.46 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e247bbd3-ef0e-42cd-b8de-b8de04966358")
+	)
+	(wire
+		(pts
+			(xy 95.25 149.86) (xy 124.46 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2c07184-1460-4a35-946c-b3e5e2abc99f")
+	)
+	(wire
+		(pts
+			(xy 40.64 135.89) (xy 54.61 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e653954f-392b-47c3-8a45-0d0b1ad8449d")
+	)
+	(wire
+		(pts
+			(xy 68.58 121.92) (xy 82.55 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7e735d2-8c36-42c5-ae33-dcaa061bf1cb")
+	)
+	(wire
+		(pts
+			(xy 54.61 162.56) (xy 68.58 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e82bd0ff-a19a-4156-93da-b05898692851")
+	)
+	(wire
+		(pts
+			(xy 82.55 121.92) (xy 95.25 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8c13218-4da7-4da5-bd76-5b200b8a9457")
+	)
+	(wire
+		(pts
+			(xy 49.53 130.81) (xy 49.53 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8edf56e-9af3-4afc-b98a-9432ce935850")
+	)
+	(wire
+		(pts
+			(xy 68.58 106.68) (xy 82.55 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e9eb4d6e-76ff-4429-b494-d5ab21bcfcb0")
+	)
+	(wire
+		(pts
+			(xy 95.25 91.44) (xy 109.22 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea03d620-135c-4117-94a6-9c7ece041570")
+	)
+	(wire
+		(pts
+			(xy 134.62 101.6) (xy 134.62 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea2fe5e4-34c8-4d09-81a8-9ec6540d0668")
+	)
+	(wire
+		(pts
+			(xy 40.64 162.56) (xy 54.61 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed450be0-b2ee-45c0-b8a1-9836d6c6bd7f")
+	)
+	(wire
+		(pts
+			(xy 63.5 196.85) (xy 63.5 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee32c115-addc-4bf1-ac26-74206d5e2c09")
+	)
+	(wire
+		(pts
+			(xy 49.53 157.48) (xy 49.53 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efccef70-a7fb-42e6-9ac6-8ef988cff37d")
+	)
+	(wire
+		(pts
+			(xy 134.62 86.36) (xy 134.62 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f09da6c0-7682-41f3-a519-3b80f74b2127")
+	)
+	(wire
+		(pts
+			(xy 134.62 116.84) (xy 134.62 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1a17007-483c-4626-868d-6aa84bd15439")
+	)
+	(wire
+		(pts
+			(xy 54.61 135.89) (xy 68.58 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3c6f3a6-533a-47b0-a019-09781518e0ef")
+	)
+	(wire
+		(pts
+			(xy 90.17 58.42) (xy 90.17 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8153962-98cf-4f01-9eae-513bea980ffa")
+	)
+	(wire
+		(pts
+			(xy 109.22 201.93) (xy 124.46 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe451a3d-1fa6-4cdd-8283-ab173fdb8886")
+	)
+	(wire
+		(pts
+			(xy 124.46 149.86) (xy 146.05 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fff34650-a16a-4115-ab25-6b8e88a05c11")
+	)
+	(label "ROW 10"
+		(at 146.05 162.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "14f37d57-3554-48e1-b9ed-64c42948d672")
+	)
+	(label "ROW 2"
+		(at 146.05 49.53 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1d4cd1c8-18f8-467b-b7f4-d015cfdd4260")
+	)
+	(label "COL 17"
+		(at 119.38 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "245b2ead-c29d-4443-83e2-512448afa7ee")
+	)
+	(label "ROW 12"
+		(at 146.05 189.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "251c02c8-6214-4467-9ace-fb4558429f59")
+	)
+	(label "ROW 11"
+		(at 146.05 175.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2a2ec2fe-2583-4cdb-8a74-6bb16393c4ac")
+	)
+	(label "ROW 3"
+		(at 146.05 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "395fa80f-23f2-4416-8866-50696613047b")
+	)
+	(label "COL 18"
+		(at 104.14 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "436e3089-7a3e-401c-87c8-9c30e8fdf003")
+	)
+	(label "ROW 14"
+		(at 146.05 214.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "50f4b272-f135-4483-a894-ff6f962b03cd")
+	)
+	(label "COL 16"
+		(at 134.62 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5dc9ea81-d4fc-48ad-89d0-f052ca7c3542")
+	)
+	(label "ROW 13"
+		(at 146.05 201.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "68f693ca-087b-42ed-a057-244c9347e5c6")
+	)
+	(label "COL 22"
+		(at 49.53 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "69771393-7a35-4cdb-85f2-67340b437262")
+	)
+	(label "ROW 4"
+		(at 146.05 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7e200fd3-7364-4fbf-ad24-1b4442fda93f")
+	)
+	(label "COL 23"
+		(at 35.56 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "87628c1e-8e77-43ff-a914-0f597c5f8d90")
+	)
+	(label "ROW 8"
+		(at 146.05 135.89 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8c2ff09d-7549-451c-bb5d-aa073d7805da")
+	)
+	(label "ROW 6"
+		(at 146.05 106.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9be40172-78f8-47e9-8b32-8370e728f1d4")
+	)
+	(label "ROW 7"
+		(at 146.05 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9cf472d5-5429-469d-a88d-f5b667670b8b")
+	)
+	(label "ROW 1"
+		(at 146.05 34.29 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a979d713-4335-4e8d-b06f-f27cb0f6fafe")
+	)
+	(label "COL 20"
+		(at 77.47 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ac481d5a-b170-404b-b818-2a4aea9f6b14")
+	)
+	(label "ROW 5"
+		(at 146.05 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b771e2b5-91c5-4c25-ae24-5f763987b96c")
+	)
+	(label "COL 21"
+		(at 63.5 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c56d8abe-ed68-49b9-bd11-46ce23e937ee")
+	)
+	(label "ROW 9"
+		(at 146.05 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cac87fe2-b134-401d-99e6-1b33c2bab120")
+	)
+	(label "COL 19"
+		(at 90.17 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e6b873d2-c3aa-4916-8192-cee0a554f827")
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0346c487-5e7a-443d-8d25-132880d827ef")
+		(property "Reference" "SW8"
+			(at 80.01 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F11"
+			(at 80.01 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "a37ddf58-fe91-4a9d-9369-d2374ec77102")
+		)
+		(pin "1"
+			(uuid "b5019003-f71a-45a0-af12-b105823307c5")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "06d9f8e7-05e7-4a89-911c-9fda4929dcbe")
+		(property "Reference" "SW66"
+			(at 66.04 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "T"
+			(at 66.04 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8eb53ab4-8a73-4e5a-9f3b-4f8884bd9c19")
+		)
+		(pin "1"
+			(uuid "0d6897aa-4ada-4d11-9452-baad44d5c3c5")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW66")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "07533579-6db7-43b0-b769-eb8ee2d1b0a2")
+		(property "Reference" "SW79"
+			(at 137.16 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "! 1"
+			(at 137.16 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1bbb396d-5fd6-4c15-acee-b6756adfd349")
+		)
+		(pin "1"
+			(uuid "4f70d8ad-d610-47db-8b66-5b2890551870")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW79")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "09a04d0d-449c-4cb7-9bed-fbf6d4752f84")
+		(property "Reference" "SW46"
+			(at 66.04 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "~ 0"
+			(at 66.04 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "97e2655b-1ffa-4ea1-a8d4-92bdaa7a2169")
+		)
+		(pin "1"
+			(uuid "d74c9408-f812-463c-96c7-a54fa8893c93")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW46")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 160.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "09dc8f38-9a8e-45dc-9f15-bab974f53d47")
+		(property "Reference" "SW59"
+			(at 52.07 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "H"
+			(at 52.07 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0f9ee5a9-08fe-45c5-8396-fb9fe082345f")
+		)
+		(pin "1"
+			(uuid "9090140d-1acd-4114-9b9b-52950b86cc3a")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW59")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0b3d5506-a30d-457e-a071-a4d990a98208")
+		(property "Reference" "SW9"
+			(at 92.71 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F12"
+			(at 92.71 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c195cb45-86c4-4d47-9c11-b86420f2998a")
+		)
+		(pin "1"
+			(uuid "222f0354-c3ae-436f-b43a-a3a2c1566450")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "12cc4d47-9b4c-45f1-82e6-e51fc285e481")
+		(property "Reference" "SW24"
+			(at 92.71 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "前候補"
+			(at 92.71 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 92.71 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "528da941-e8b1-48cf-8895-10f1bf70823e")
+		)
+		(pin "1"
+			(uuid "8dd8a735-89e5-402a-989b-27f22008fe29")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "15e3d437-44c8-4907-9553-f5752151f300")
+		(property "Reference" "SW43"
+			(at 137.16 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INSERT"
+			(at 137.16 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4a22a9d2-d32d-492f-bc38-9b10866dde20")
+		)
+		(pin "1"
+			(uuid "73b7916f-e5a7-4e31-9454-5b0991b8be87")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW43")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 212.09 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "160c0f61-67ac-401b-8634-ebfa1db26baf")
+		(property "Reference" "SW87"
+			(at 92.71 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RH ALT"
+			(at 92.71 207.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 92.71 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ba97fd60-bec8-4886-929a-2fce6381b847")
+		)
+		(pin "1"
+			(uuid "760ecb1d-7eb7-4f0c-9173-42634d9c4d50")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW87")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "16762365-8a64-4993-b29f-0e5949bd690d")
+		(property "Reference" "SW5"
+			(at 38.1 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F8"
+			(at 38.1 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "21e6c864-1180-4752-bf82-1aa958f7a296")
+		)
+		(pin "1"
+			(uuid "3082a9ac-c4f8-4163-9b14-2da449cc4a5c")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1ab80f8d-1b1a-4e23-b9bf-e389cc257767")
+		(property "Reference" "SW68"
+			(at 92.71 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "W"
+			(at 92.71 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9d10bbee-40c7-4de8-9cc7-684a44f4d3d6")
+		)
+		(pin "1"
+			(uuid "23ff4f83-b1bd-484d-8cca-ecbac60718bd")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW68")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "267cd1a5-c169-4e16-a579-4853a8b3c632")
+		(property "Reference" "SW21"
+			(at 38.1 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "> ."
+			(at 38.1 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "522860e4-9b9c-4077-9b06-02ef9884a7c6")
+		)
+		(pin "1"
+			(uuid "f2b3a077-5fc2-45bf-8720-3cf8693d5050")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2e2e4449-049e-40a4-899b-39d6bbc2fb2c")
+		(property "Reference" "SW18"
+			(at 106.68 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RIGHT"
+			(at 106.68 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 106.68 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c8485b00-5460-40cc-a8ba-3147f1cb095c")
+		)
+		(pin "1"
+			(uuid "659b4245-301e-4b81-9c29-b87272fd2107")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 31.75 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3c948bbb-24e0-479c-a08c-389cf9110e38")
+		(property "Reference" "SW2"
+			(at 121.92 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LH CTRL"
+			(at 121.92 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 121.92 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9b4ef92e-28a5-4114-805e-a185c073d3d7")
+		)
+		(pin "1"
+			(uuid "bb36528a-1f1c-41b9-a70a-79cfb9430642")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4200a956-0f00-4542-b59c-49929c1cf0a5")
+		(property "Reference" "SW67"
+			(at 80.01 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 80.01 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "287f97b4-7bf0-498f-bc20-3ab8257a242a")
+		)
+		(pin "1"
+			(uuid "581fa383-8b20-41e6-8b3a-32ecef7673be")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW67")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "45df9ac7-1515-4d4e-a9af-50785e4c04c6")
+		(property "Reference" "SW74"
+			(at 66.04 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "% 5"
+			(at 66.04 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "00b9ebfd-1cc8-4035-96d4-82d0c6fb2f72")
+		)
+		(pin "1"
+			(uuid "2a7f4843-0f35-4acf-a3d7-5276cf05b2bb")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW74")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "46f8be8e-9c3b-460f-9cb5-27fcecd8b521")
+		(property "Reference" "SW81"
+			(at 52.07 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F6"
+			(at 52.07 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "90b72eed-22b7-42d1-a861-e0652c5771fd")
+		)
+		(pin "1"
+			(uuid "75db6342-484c-4274-a70d-e4ebd0a31b83")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW81")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "48145d91-6e81-403c-8a76-c3a9c74dc4f1")
+		(property "Reference" "SW34"
+			(at 121.92 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "X"
+			(at 121.92 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b6f971db-dbf5-4669-a691-5b1f8e55cc28")
+		)
+		(pin "1"
+			(uuid "82586a06-da91-4b05-801a-36d5d164a409")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4a01782c-d20e-4068-ad53-cb98953180ae")
+		(property "Reference" "SW53"
+			(at 52.07 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M"
+			(at 52.07 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "67233c2e-99df-4931-87a3-a5d33e9c988c")
+		)
+		(pin "1"
+			(uuid "69f42be0-119c-4cbc-af84-51315048b879")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW53")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4a7bdd78-4980-4e52-b86f-483d2fe6c54c")
+		(property "Reference" "SW57"
+			(at 121.92 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "C"
+			(at 121.92 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b1b254a7-29ed-437b-944f-f5c2637bd706")
+		)
+		(pin "1"
+			(uuid "cf99faf9-30b2-4e67-888e-4e52e2cae3e9")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW57")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4d2b4da4-31a0-456a-8edb-602d50e1c28b")
+		(property "Reference" "SW32"
+			(at 92.71 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "} ]"
+			(at 92.71 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2b89dc9e-3f9e-4afb-9d84-e973fe5b591d")
+		)
+		(pin "1"
+			(uuid "e344c1ed-0cae-4026-b579-41b0058a418f")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5079d751-061f-4e42-b0ce-e7043ff49063")
+		(property "Reference" "SW86"
+			(at 137.16 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F1"
+			(at 137.16 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b705d3d4-a7d1-4f7e-a59f-3ca49dceb26c")
+		)
+		(pin "1"
+			(uuid "f691e646-3dc6-4bea-8657-d75fb042e224")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW86")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "53075444-1857-48f4-bf92-453c1379cec4")
+		(property "Reference" "SW37"
+			(at 52.07 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "O"
+			(at 52.07 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "45ad3397-1c58-4f15-a9c1-aa391a1cde8d")
+		)
+		(pin "1"
+			(uuid "45548103-74d0-4497-9852-e0daf40f36d8")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "54978044-3dd9-4b13-b62f-fef8e2ab830b")
+		(property "Reference" "SW23"
+			(at 80.01 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "カタカナ"
+			(at 80.01 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 80.01 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "82064f82-4876-43fc-8368-595786c6e24a")
+		)
+		(pin "1"
+			(uuid "6ed617fe-ee6c-4666-877f-e5012b2c445f")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "56afa224-1878-4ae9-a8c4-37d3c9777694")
+		(property "Reference" "SW14"
+			(at 52.07 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "_ \\"
+			(at 52.07 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e097325f-46c4-48b6-a18b-4bbfac3d0d10")
+		)
+		(pin "1"
+			(uuid "c6e66c34-583f-4708-9002-74a5ae832092")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "59c3d6ef-256a-4a11-acfc-2fb3a88cfd57")
+		(property "Reference" "SW42"
+			(at 121.92 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "A"
+			(at 121.92 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fc1b2a34-c834-48ea-a1fd-057bc3bfd8c3")
+		)
+		(pin "1"
+			(uuid "1cc40dbe-2159-46c2-9f47-c9c50b6d1a2a")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW42")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5f58796b-2f55-4a94-a241-4c924231a8d9")
+		(property "Reference" "SW33"
+			(at 106.68 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ENTER"
+			(at 106.68 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_ISOEnter"
+			(at 106.68 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3955ac68-d300-4de2-9eb1-ea609ffcd6ec")
+		)
+		(pin "1"
+			(uuid "9097d56b-167e-4ca2-be40-cb405eead3f1")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "601c45c0-a0e9-4bcd-a674-58aeb08dd5ea")
+		(property "Reference" "SW22"
+			(at 66.04 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "無変換"
+			(at 66.04 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 66.04 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "82fdc38e-ec36-4e9e-b8cc-52bd7cd7ca4d")
+		)
+		(pin "1"
+			(uuid "42fa14aa-7fe6-45df-9ea3-89b027328480")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "61c9b389-2962-4356-8641-38a422e616a8")
+		(property "Reference" "SW28"
+			(at 38.1 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "K"
+			(at 38.1 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "272b859d-c8b5-4012-97d1-69e8a2134b54")
+		)
+		(pin "1"
+			(uuid "1e36c546-fdf6-44ac-8fe9-d087178e2840")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6244e665-ca56-4521-8d30-ef7136b242ad")
+		(property "Reference" "SW55"
+			(at 80.01 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "B"
+			(at 80.01 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ecda5d2e-aaf6-4b42-9453-bd714c89ac07")
+		)
+		(pin "1"
+			(uuid "484b5a5c-0748-4423-b346-4b72b03995e1")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW55")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "661fea55-ea4e-48e9-9389-e083a50b0840")
+		(property "Reference" "SW49"
+			(at 106.68 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "| ¥"
+			(at 106.68 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 106.68 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ef9650ea-5d0d-4b03-af5f-b0500069c3d5")
+		)
+		(pin "1"
+			(uuid "c958a987-9321-4646-86f7-a6ba8ad7a977")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW49")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "664f45eb-67df-432f-a313-75c505519076")
+		(property "Reference" "SW29"
+			(at 52.07 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "L"
+			(at 52.07 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "37006e95-b470-48de-a360-b025956cf50b")
+		)
+		(pin "1"
+			(uuid "061523dd-cec7-4ed0-bf79-4291f984e2c8")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "675aa570-5bba-4e67-8d2e-54be06fec2d4")
+		(property "Reference" "SW31"
+			(at 80.01 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "* :"
+			(at 80.01 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "210bf02c-1fb4-4ab8-aaed-1de87e2c2b4b")
+		)
+		(pin "1"
+			(uuid "ec1362a7-02ee-4259-bead-388a78c67c35")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "698bf597-7cbc-44bd-a2a6-56fad39108ee")
+		(property "Reference" "SW65"
+			(at 52.07 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Y"
+			(at 52.07 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4f169dd4-1990-4391-bee1-b51fb8b14717")
+		)
+		(pin "1"
+			(uuid "236b86be-ea0d-4a9e-bbc8-4e5bfaf9cee1")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW65")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6aa65074-fd5a-47f6-9367-fc45706e16da")
+		(property "Reference" "SW54"
+			(at 66.04 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "N"
+			(at 66.04 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2ab3f61b-a3f5-4412-a139-5d5c48a4ba84")
+		)
+		(pin "1"
+			(uuid "7581969c-8e54-4a81-bfbf-3be97661d25b")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW54")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "72b5dd71-aaa0-4aff-900c-c3070c679927")
+		(property "Reference" "SW44"
+			(at 38.1 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "( 8"
+			(at 38.1 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "6f820741-8655-482e-971f-8dbdbc068e05")
+		)
+		(pin "1"
+			(uuid "2ad06b5c-4644-488a-9f64-6564a1ebd715")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW44")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "72febb4f-97c3-440a-8af5-7b47722bc923")
+		(property "Reference" "SW19"
+			(at 121.92 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PAGE DOWN"
+			(at 121.92 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "58be6265-20c5-4fc2-bf85-0cff81a524a9")
+		)
+		(pin "1"
+			(uuid "7b1e9a02-718e-4796-90a7-bc9fae0c113e")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "731b885e-6cdc-432a-94c0-2b7bd153e521")
+		(property "Reference" "SW48"
+			(at 92.71 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "_ ^"
+			(at 92.71 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8b4151cf-6a78-417d-8eb1-81ca4344bf67")
+		)
+		(pin "1"
+			(uuid "03080312-862e-47fe-90bc-ec3002b50a02")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW48")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7569a590-16e2-4bcb-85f0-82422ca60207")
+		(property "Reference" "SW40"
+			(at 92.71 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "{ ["
+			(at 92.71 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ac11fe53-7aba-478c-9205-a7c48be66290")
+		)
+		(pin "1"
+			(uuid "51340176-bb30-44d7-8973-20853cc3c605")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW40")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 160.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "76544ed2-672f-41b8-91b2-9d448a1085af")
+		(property "Reference" "SW58"
+			(at 38.1 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "J"
+			(at 38.1 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e0128662-cb76-477d-aa75-f19fe0235112")
+		)
+		(pin "1"
+			(uuid "0aa9733a-a181-495b-ae70-e992600f7b8b")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW58")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "76d3f882-ae55-436f-a737-b8695d2c6a97")
+		(property "Reference" "SW76"
+			(at 92.71 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "# 3"
+			(at 92.71 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "cdd3cf09-b69b-403f-85f3-a2421b3c1bbd")
+		)
+		(pin "1"
+			(uuid "d60125b6-d636-4082-9e78-0bbd2e5a6cf7")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW76")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7a7ce481-45e6-469a-97d5-f3b5720de6cc")
+		(property "Reference" "SW15"
+			(at 66.04 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UP"
+			(at 66.04 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fc9bdadf-e4ba-470b-bf3a-42a8468d428e")
+		)
+		(pin "1"
+			(uuid "194be82e-f5d3-4ff1-84a0-7cbd1d9ef758")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7d8cdee0-d020-42bf-910f-20b4f622a10c")
+		(property "Reference" "SW12"
+			(at 137.16 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PAUSE"
+			(at 137.16 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b705d3d4-a7d1-4f7e-a59f-3ca49dceb26d")
+		)
+		(pin "1"
+			(uuid "f691e646-3dc6-4bea-8657-d75fb042e225")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7ef6caf0-9503-4a5b-84a5-35a158cb0549")
+		(property "Reference" "SW64"
+			(at 38.1 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "U"
+			(at 38.1 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "edc9c76a-ca4f-4e0c-bc24-b1bf9f366a96")
+		)
+		(pin "1"
+			(uuid "5685ba5d-ce02-4b25-a1c3-d51c0eb95633")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW64")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "815e5416-b85a-4bf1-b5b0-4cab4130db7e")
+		(property "Reference" "SW20"
+			(at 137.16 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PAGE UP"
+			(at 137.16 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "52c617d9-ec91-432e-8592-d7e7749b73d5")
+		)
+		(pin "1"
+			(uuid "addd15bc-056a-4af2-9d5a-658ffa622153")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "848e9516-8bb2-45c4-be40-7393e1153120")
+		(property "Reference" "SW27"
+			(at 137.16 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "END"
+			(at 137.16 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8b205306-1768-426c-af58-6201cf9d17fc")
+		)
+		(pin "1"
+			(uuid "d1c57fbc-6a25-47a9-8c13-60574799fb27")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "877bea50-8700-41b9-b444-661a2602cf85")
+		(property "Reference" "SW35"
+			(at 137.16 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "HOME"
+			(at 137.16 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "eadb6666-c040-42c0-8b34-f0a3652585f2")
+		)
+		(pin "1"
+			(uuid "8d93395b-e702-4fbb-b19e-b6bfe0cfe077")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "87d7745f-7ff7-442e-8dbf-4633f8335629")
+		(property "Reference" "SW6"
+			(at 52.07 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F9"
+			(at 52.07 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "843ab3bd-8ba8-4bda-af4c-6fa4a434e68d")
+		)
+		(pin "1"
+			(uuid "9da5b673-077e-45b2-9d44-2e25d242f91c")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "890b0b3b-3b79-43c6-900b-8206f1d78e1a")
+		(property "Reference" "SW73"
+			(at 52.07 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "& 6"
+			(at 52.07 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4523122c-7655-4142-ba6e-4d80d0438e76")
+		)
+		(pin "1"
+			(uuid "155462ff-8f95-43e8-9e16-78ed12cbc52e")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW73")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8b943665-5367-4724-852a-60b4f3ef0c8a")
+		(property "Reference" "SW11"
+			(at 121.92 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SCROLL LOCK"
+			(at 121.92 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1d2723e4-e55d-476a-99bf-e8f5321c5992")
+		)
+		(pin "1"
+			(uuid "65bbd6a3-1e06-4bf2-b233-768e5968c2fb")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 52.07 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "955b1f1f-60a0-488c-8137-f2ecbf78fec9")
+		(property "Reference" "SW45"
+			(at 52.07 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" ") 9"
+			(at 52.07 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 52.07 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 52.07 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "84186415-559f-4d7d-bf9e-aab608f612d1")
+		)
+		(pin "1"
+			(uuid "d79b1b76-e418-4807-9fe3-66f4bec3ea1f")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW45")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "99bfd3b4-82b9-490c-891a-c82e0b47c02e")
+		(property "Reference" "SW82"
+			(at 66.04 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F5"
+			(at 66.04 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "70eb50fe-c1d0-44bd-8a32-b20fbae8604a")
+		)
+		(pin "1"
+			(uuid "4ff7829d-07aa-4610-8c6c-504475468aa7")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW82")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9a5f3603-939d-49f8-970e-610533795026")
+		(property "Reference" "SW85"
+			(at 121.92 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ESC"
+			(at 121.92 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5521b8f2-7b42-4b99-83c2-247b107fd010")
+		)
+		(pin "1"
+			(uuid "6d1a4246-6a53-40a0-aec3-0aa01daa670a")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW85")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b38f7a71-9d2c-4375-97f8-9c9c67ea18d3")
+		(property "Reference" "SW10"
+			(at 106.68 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PRINT SCREEN"
+			(at 106.68 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 106.68 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "00545328-982c-4fba-ba98-53f9ff3b255c")
+		)
+		(pin "1"
+			(uuid "4916412b-20c3-435b-a550-e7201db339ca")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b3bb9fe9-85d6-4128-bb8f-f512125b23db")
+		(property "Reference" "SW39"
+			(at 80.01 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "' @"
+			(at 80.01 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5cd0caa9-462b-471b-b567-8b8c52a33911")
+		)
+		(pin "1"
+			(uuid "8a6c62c0-7e38-4942-9840-913ac4413a2f")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW39")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b6cf93e2-d822-4bb2-963b-c54765af3c65")
+		(property "Reference" "SW47"
+			(at 80.01 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "= -"
+			(at 80.01 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e4ef7cbd-eca1-4287-b7b6-d9c4836ea552")
+		)
+		(pin "1"
+			(uuid "335f05dd-45f0-4936-9b05-a94b885c5a5b")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW47")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b8750a54-7a8f-45a5-a125-f23109e5affa")
+		(property "Reference" "SW75"
+			(at 80.01 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "$ 4"
+			(at 80.01 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3e49ce38-a3cf-415d-8253-45e289730318")
+		)
+		(pin "1"
+			(uuid "7d01d562-ec86-41b9-a0aa-8237a003f2c4")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW75")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ba8678d6-843d-479e-aebb-5b99ed97a45f")
+		(property "Reference" "SW25"
+			(at 106.68 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SPACE"
+			(at 106.68 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_2.25u"
+			(at 106.68 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "57a2dea3-e243-43d4-904f-5ece721b9f6f")
+		)
+		(pin "1"
+			(uuid "b0547f83-25a8-477b-8d12-9a91bb01c07a")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bd71a04b-a19d-474b-9efe-a3c22bf9cbc9")
+		(property "Reference" "SW78"
+			(at 121.92 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Q"
+			(at 121.92 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "31328ffc-232a-48a1-a03a-486c47779581")
+		)
+		(pin "1"
+			(uuid "9b102017-ed93-4ea5-b817-16364b2a0bbd")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW78")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bdd9582e-0753-42f0-898f-9eef2cca0e3c")
+		(property "Reference" "SW52"
+			(at 38.1 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "< ,"
+			(at 38.1 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "27cd709f-903e-4556-8bd1-25f37edbb8b0")
+		)
+		(pin "1"
+			(uuid "7387de8a-fa8d-4670-919f-093b06e24357")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW52")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c1085147-e238-48e5-987a-7b8e4a60bb54")
+		(property "Reference" "SW26"
+			(at 121.92 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Z"
+			(at 121.92 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b9582376-c10b-4154-9668-c714dec271fb")
+		)
+		(pin "1"
+			(uuid "ff75bd31-8bd8-4e87-95cf-66198b253819")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c62b6489-c284-4a2d-bc84-ffae15586a35")
+		(property "Reference" "SW13"
+			(at 38.1 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "? /"
+			(at 38.1 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "097b9de7-82a6-4ace-b0bf-0079d71adaf2")
+		)
+		(pin "1"
+			(uuid "bad1cd29-e658-4263-a59e-9f18f69fe408")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c8810187-dfc6-4fe0-a1ed-cbd748634728")
+		(property "Reference" "SW30"
+			(at 66.04 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+ ;"
+			(at 66.04 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "859a420c-8145-4dd4-89f2-585d26c972bb")
+		)
+		(pin "1"
+			(uuid "241b116e-b0a8-4ca1-8043-48eca5dc462d")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c927b010-e217-4bf9-8979-68383097ecb8")
+		(property "Reference" "SW56"
+			(at 92.71 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "V"
+			(at 92.71 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "83ca2aff-4be6-4d83-9337-c03a1998877c")
+		)
+		(pin "1"
+			(uuid "d6323da5-2563-4208-bf91-535a27170889")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW56")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c9b07fee-5143-406c-895f-df436e665049")
+		(property "Reference" "SW83"
+			(at 80.01 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F4"
+			(at 80.01 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "acde00cd-8648-4add-8514-aa11d2e1b949")
+		)
+		(pin "1"
+			(uuid "ae7a74e8-cbf9-466e-a178-dc2c19ce5a3f")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW83")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 46.99 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cc67e3d9-1318-4c61-925c-e14bd112ef9e")
+		(property "Reference" "SW4"
+			(at 137.16 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LH SHIFT"
+			(at 137.16 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_2.00u"
+			(at 137.16 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "67564a09-170c-491c-9936-d6685c82bf24")
+		)
+		(pin "1"
+			(uuid "fd6e9523-2dbb-468f-afcc-37dd34b70b4a")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 92.71 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cd372bcc-d7ac-4b84-92a0-5c86ae6f9d1c")
+		(property "Reference" "SW17"
+			(at 92.71 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DOWN"
+			(at 92.71 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 92.71 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 92.71 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 92.71 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3dee3fff-08e8-453e-aa40-050e93eb3c8f")
+		)
+		(pin "1"
+			(uuid "a8c9c16f-0b12-4fc5-8fb1-f9e3ba55f193")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 160.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cd8db802-ebed-48d1-8d79-b2e477ec88e8")
+		(property "Reference" "SW63"
+			(at 137.16 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAPS LOCK"
+			(at 137.16 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.75u"
+			(at 137.16 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3a2a5525-0d33-4ec2-8b54-b502d611d8ca")
+		)
+		(pin "1"
+			(uuid "6accc516-ec7c-4f93-8379-5fdd21c86333")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW63")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cf43e0a4-670a-4441-b2d8-4e6d19108f2d")
+		(property "Reference" "SW69"
+			(at 106.68 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TAB"
+			(at 106.68 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 106.68 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "102bd703-55c4-4264-8621-9de3020205f1")
+		)
+		(pin "1"
+			(uuid "535f9441-5a9d-429c-b95f-1ea430963441")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW69")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cff769e3-24b9-4115-b289-e58aabb65970")
+		(property "Reference" "SW41"
+			(at 106.68 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DELETE"
+			(at 106.68 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 106.68 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "65824e71-9826-4780-b6b3-fffd9a88f2bb")
+		)
+		(pin "1"
+			(uuid "8d9e8deb-c3c9-4e71-8ae6-7dbfc717df77")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW41")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d426938b-539c-4aef-a81f-4ce7b6269c3b")
+		(property "Reference" "SW50"
+			(at 121.92 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "S"
+			(at 121.92 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7f66769d-22eb-42df-9c24-f08e52f4c78d")
+		)
+		(pin "1"
+			(uuid "92e13510-af04-4f63-96c7-4a2373178e8e")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW50")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 160.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d817bc44-086a-41cb-b5d5-7fc1de8e31de")
+		(property "Reference" "SW62"
+			(at 121.92 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "D"
+			(at 121.92 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0c3d9efa-c74e-4cb0-b62a-5040f5b9e1e9")
+		)
+		(pin "1"
+			(uuid "2cf58b73-a256-42d5-8bed-d76f5daaa067")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW62")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d847e52b-b202-4b72-9147-3eb2a1db18c7")
+		(property "Reference" "SW71"
+			(at 137.16 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "半角/全角"
+			(at 137.16 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b55d09ef-1eb3-4eb8-84b5-1aeee8454445")
+		)
+		(pin "1"
+			(uuid "f36bb34f-b38d-4fd5-88e5-781b9213bba8")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW71")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "db0967af-e3dc-4e0b-83dd-336e0857577b")
+		(property "Reference" "SW38"
+			(at 66.04 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "P"
+			(at 66.04 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2fd478d8-3087-4d10-b43b-00991a2a6d64")
+		)
+		(pin "1"
+			(uuid "713db15c-ee0a-4092-9242-16844476e02e")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 31.75 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dccd2954-7dbf-4477-a9d4-eacd182a610d")
+		(property "Reference" "SW1"
+			(at 80.01 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RH CTRL"
+			(at 80.01 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.75u"
+			(at 80.01 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5c863bfc-d8e8-4ba9-82a5-dec10ac554ac")
+		)
+		(pin "1"
+			(uuid "120c3b4e-3696-4105-9ea3-233e1f6f4fa9")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dce8ae59-3755-4ff8-8739-34ab5132912e")
+		(property "Reference" "SW16"
+			(at 80.01 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LEFT"
+			(at 80.01 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "67258c5c-af54-4260-880c-fdb91d2311ea")
+		)
+		(pin "1"
+			(uuid "142605ab-94cf-43a1-94e4-5b1697399145")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 121.92 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dee494e2-51e4-4f6e-a36f-d0e4cf37e971")
+		(property "Reference" "SW70"
+			(at 121.92 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "E"
+			(at 121.92 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 121.92 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.92 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 121.92 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "291f4ce8-f622-4c49-9187-c29b2c3c0c72")
+		)
+		(pin "1"
+			(uuid "bdc86e58-a578-4a6b-9520-bfeac2ea93ff")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW70")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "df97f977-783a-4248-99cf-6976e9f05320")
+		(property "Reference" "SW7"
+			(at 66.04 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F10"
+			(at 66.04 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "7b916b2f-47a6-44d9-9b80-a32c4e82f749")
+		)
+		(pin "1"
+			(uuid "992173e2-3395-4545-a097-ec73f90f15dd")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e213873a-ea21-4554-9a63-e2cb2b60221c")
+		(property "Reference" "SW84"
+			(at 106.68 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F2"
+			(at 106.68 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 106.68 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "51a7d861-216d-4928-b5b7-1eee7200277b")
+		)
+		(pin "1"
+			(uuid "10d931df-118f-42b1-8d62-fbfe40415ad5")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW84")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e5589886-0ec1-42b9-9e82-26464d950194")
+		(property "Reference" "SW77"
+			(at 106.68 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "\" 2"
+			(at 106.68 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 106.68 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "010b9764-b5f4-435e-8abf-475af806481e")
+		)
+		(pin "1"
+			(uuid "17206632-c38f-457c-a069-c83ba13ee05e")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW77")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 186.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e6313e40-07b0-47d7-8a11-b8f02a500b0d")
+		(property "Reference" "SW72"
+			(at 38.1 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "' 7"
+			(at 38.1 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8bafbf6e-dfbb-4c96-a764-455cdec60b22")
+		)
+		(pin "1"
+			(uuid "3f9dda0a-494b-43d9-b35b-014d86b2e7d5")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW72")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 119.38 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e6331a77-4391-4592-97b1-5544a76dd3e4")
+		(property "Reference" "SW36"
+			(at 38.1 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "I"
+			(at 38.1 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fc343259-7d29-4a90-8a17-be2e3ac4ce1c")
+		)
+		(pin "1"
+			(uuid "f4fc9927-a903-454f-b672-c8103ca496a3")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 38.1 199.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e95857e0-961c-420d-802d-40f7bf1c0460")
+		(property "Reference" "SW80"
+			(at 38.1 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F7"
+			(at 38.1 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 38.1 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 38.1 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "bd401144-7f04-473e-8252-d34762f809f0")
+		)
+		(pin "1"
+			(uuid "99f6d6cb-8852-4114-8e18-fba0c9ed1a3d")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW80")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 106.68 212.09 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eb03f9ef-7ea9-4f20-9246-9c92c7e4b8fd")
+		(property "Reference" "SW88"
+			(at 106.68 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LH ALT"
+			(at 106.68 207.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.50u"
+			(at 106.68 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 106.68 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "88a88d32-29a8-458a-9a4a-54bae8bc537b")
+		)
+		(pin "1"
+			(uuid "3cdcd182-139c-4f26-aeb6-11a314e1b51a")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW88")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 80.01 160.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ed9b22f1-599f-4940-ac26-9bc2105633b3")
+		(property "Reference" "SW61"
+			(at 80.01 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "F"
+			(at 80.01 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 80.01 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 80.01 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 80.01 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "972dcdb7-7125-4bee-8d92-46c3d0f204f6")
+		)
+		(pin "1"
+			(uuid "b3227b4d-5c0b-4094-aedc-2570d8a27525")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW61")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 160.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ef5e6d84-889a-4631-a06f-363da109f9fb")
+		(property "Reference" "SW60"
+			(at 66.04 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "G"
+			(at 66.04 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 66.04 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c436384d-34d7-4cee-a032-9bfe37e76ac5")
+		)
+		(pin "1"
+			(uuid "437d34e2-9ccc-464b-af1f-f54005e555dc")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW60")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 66.04 46.99 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f18cdd1f-fba8-4d09-8663-5ff1a2529f53")
+		(property "Reference" "SW3"
+			(at 66.04 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RH SHIFT"
+			(at 66.04 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_2.00u"
+			(at 66.04 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 66.04 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "14e347b6-39f7-4ce8-9bc2-9d8b24bbae7b")
+		)
+		(pin "1"
+			(uuid "baa613d5-1a70-4e28-82b5-a3776b7efdff")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push_45deg")
+		(at 137.16 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f9de74a7-5f04-465c-9300-855172da03b2")
+		(property "Reference" "SW51"
+			(at 137.16 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BACKSPACE"
+			(at 137.16 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PCM_Switch_Keyboard_Cherry_MX:SW_Cherry_MX_PCB_1.00u"
+			(at 137.16 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 137.16 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Push button switch, normally open, two pins, 45° tilted"
+			(at 137.16 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3405ed9e-0119-4ad3-a78a-79e426915951")
+		)
+		(pin "1"
+			(uuid "c7bf23ed-1d21-4fdc-a1ea-b06258098f1c")
+		)
+		(instances
+			(project "Sega_Saturn_Keyboard"
+				(path "/721ba845-6750-4528-8989-01eeffcf4c30"
+					(reference "SW51")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
