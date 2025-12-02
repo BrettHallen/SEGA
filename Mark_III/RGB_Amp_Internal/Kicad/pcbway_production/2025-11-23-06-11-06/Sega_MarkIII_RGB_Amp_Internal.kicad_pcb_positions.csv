@@ -1,0 +1,12 @@
+﻿pos_x,pos_y,rotation,side,designator,mpn,pack,footprint,value,mount_type
+113.4325,-74.295,180.0,top,C1,,,C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,100nF,smt
+115.106,-69.85,0.0,top,IC1,THS7314DR,,SOIC127P600X175-8N,THS7314D,smt
+109.22,-77.47,180.0,top,J1,,,PinHeader_1x06_P2.54mm_Horizontal,RGBS Input,tht
+128.965,-66.04,0.0,top,J2,,,PinHeader_1x05_P2.54mm_Horizontal,RGBS Output,tht
+121.015,-67.31,180.0,top,R1,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,75Ω,smt
+121.015,-69.85,180.0,top,R2,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,75Ω,smt
+121.015,-72.39,180.0,top,R3,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,75Ω,smt
+123.19,-63.5,180.0,top,R4,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,100Ω,smt
+125.095,-72.39,0.0,top,R5,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,75Ω,smt
+125.095,-69.85,0.0,top,R6,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,75Ω,smt
+125.095,-67.31,0.0,top,R7,,,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,75Ω,smt

@@ -1,0 +1,7 @@
+﻿Designator,Quantity,Value,Footprint,Package,MPN,DNP,Mount_Type,Height,Manufacturer_Name,Mouser Part Number,Mouser Price/Stock,Description
+C1,1,100nF,C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,,,,smt,,,,,
+IC1,1,THS7314D,SOIC127P600X175-8N,,THS7314DR,,smt,1.75,Texas Instruments,595-THS7314DR,https://www.mouser.co.uk/ProductDetail/Texas-Instruments/THS7314DR?qs=vD%252BlfiDS0%252BMWkz7XDVK1Ng%3D%3D,
+J1,1,RGBS Input,PinHeader_1x06_P2.54mm_Horizontal,,,,tht,,,,,"Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)"
+J2,1,RGBS Output,PinHeader_1x05_P2.54mm_Horizontal,,,,tht,,,,,"Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+"R1, R2, R3, R5, R6, R7",6,75Ω,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,,,,smt,,,,,
+R4,1,100Ω,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,,,,smt,,,,,
