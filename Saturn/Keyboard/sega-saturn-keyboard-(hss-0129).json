@@ -2,6 +2,7 @@
   {
     "name": "Sega Saturn Keyboard (HSS-0129)",
     "author": "Brett Hallen",
+    "notes": "半角 = Half-width (ASCII characters)<br>\n全角 = Full-width (wide characters)<br>\n英数 = Switch to direct alphanumeric (Roman) input<br>\n漢字番号 = Kanji number<br>\n無変換 = No conversion (skip conversion)<br>\n前候補 = Previous candidate<br>\n無変換(次候補) = No conversion (next candidate)<br>\n全候補 = All candidates<br>\n漢字 = Kanji<br>\nカタカナ = Katakana<br>\nひらがな = Hiragana<br>\nローマ字 = Roman characters<br>\n々 = Kanji repetition mark (踊り字)<br>",
     "switchMount": "cherry",
     "pcb": true
   },
@@ -137,7 +138,7 @@
       "a": 4,
       "w": 1.75
     },
-    "Caps Lock\n英数",
+    "Caps Lock\n英数\n\n\n漢字番号",
     "A\n\n\nち",
     "S\n\n\nと",
     "D\n\n\nし",
@@ -215,13 +216,13 @@
       ],
       "w": 1.5
     },
-    "前候補\n無変換(次候補)",
+    "前候補\n無変換(次候補)\n\n\n全候補",
     {
       "a": 5,
       "f": 3,
       "w": 1.5
     },
-    "カタカナ\nひらがな",
+    "カタカナ\nひらがな\n\n\nローマ字",
     {
       "a": 6,
       "f": 3,
