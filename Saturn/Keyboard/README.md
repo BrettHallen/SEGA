@@ -3,20 +3,23 @@ The Sega Saturn Keyboard is an 89 key keyboard released for the Sega Saturn cons
 
 I thought it might be interesting to reproduce it.<br>
 
-## Keyboard Matrix
+![Saturn Keyboard](Images/Sega_Saturn_Keyboard.jpg)
 
+## Keyboard Matrix
 I dismantled my keyboard and figured out the keyboard matrix - it uses two thin film sheets to register key presses.<br>
 
-The matrix has 14 rows and 8 columns (by my reckoning) and connects to a small controller board internally via a 23-way connector (CN2, pin 15 is not use).  The columns have a pull-up resistor.<br>
+The matrix has 14 rows and 8 columns (by my reckoning) and connects to a small controller board internally via a 23-way connector (CN2, pin 15 is not use).  The columns have a pull-up resistor so I assume the rows are scanned and the columns are read.<br>
 
-![annotated rows](Sega_Saturn_Keyboard_Membrane_Bottom_Rows_Annotated.jpeg)
+![annotated rows](Design_Reference/Sega_Saturn_Keyboard_Membrane_Bottom_Rows_Annotated.jpeg)
 
-![annotated columns](Sega_Saturn_Keyboard_Membrane_Top_Columns_Annotated.jpeg)
+![annotated columns](Design_Reference/Sega_Saturn_Keyboard_Membrane_Top_Columns_Annotated.jpeg)
 
 ## Controller
 The keyboard has an internal controller board based around the Motorola MC68HC05C4 microcontroller.  This 8-bit MCU has about 4KB of internal ROM. <br>
 
-The controller board connects to the Saturn via its 9-pin controller port which uses a 4-bit protocol to communicate.  Interestingly the internal pinout this connector (CN1) doesn't match the controller's pinout.  Weird.<br>
+![controller PCB](Images/Sega_Saturn_Keyboard_Controller_PCB_1.png)
+
+The controller board connects to the Saturn via its 9-pin controller port which uses a 4-bit protocol to communicate.  Interestingly the internal pinout this connector (CN1) doesn't match the controller's pinout.  Weird.  The signals are all pulled up.<br>
 
 | Controller | CN1      |
 |------------|----------|
