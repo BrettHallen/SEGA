@@ -11045,7 +11045,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R_Network07"
+		(property "Value" "100KΩ"
 			(at 334.01 32.0039 0)
 			(effects
 				(font
