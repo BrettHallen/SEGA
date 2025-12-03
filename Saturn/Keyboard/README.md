@@ -9,9 +9,9 @@ I dismantled my keyboard and figured out the keyboard matrix - it uses two thin 
 
 The matrix has 14 rows and 8 columns (by my reckoning) and connects to a small controller board internally via a 23-way connector (CN2, pin 15 is not use).  The columns have a pull-up resistor.<br>
 
-![annotated rows](/Sega_Saturn_Keyboard_Membrane_Bottom_Rows_Annotated.jpeg)
+![annotated rows](Sega_Saturn_Keyboard_Membrane_Bottom_Rows_Annotated.jpeg)
 
-![annotated columns](/Sega_Saturn_Keyboard_Membrane_Top_Columns_Annotated.jpeg)
+![annotated columns](Sega_Saturn_Keyboard_Membrane_Top_Columns_Annotated.jpeg)
 
 ## Controller
 The keyboard has an internal controller board based around the Motorola MC68HC05C4 microcontroller.  This 8-bit MCU has about 4KB of internal ROM. <br>
