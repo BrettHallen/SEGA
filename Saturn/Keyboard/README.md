@@ -5,6 +5,12 @@ I thought it might be interesting to reproduce it.<br>
 
 ![Saturn Keyboard](Images/Sega_Saturn_Keyboard.jpg)
 
+## Background Analysis
+Some excellent analysis has been done already on the Saturn's controller protocol:
+- [Saturn Controller Protocol MK80117 and Emulation](https://nfggames.com/forum2/index.php?topic=5055.0)
+- [Saturn keyboard scan codes](https://plutiedev.com/saturn-keyboard#scancodes)
+- [Evolution of Sega's controllers](https://hackaday.io/project/170365-blueretro/log/180790-evolution-of-segas-io-interface-from-sg-1000-to-saturn#)
+
 ## Keyboard Matrix
 I dismantled my keyboard and figured out the keyboard matrix - it uses two thin film sheets to register key presses.<br>
 
