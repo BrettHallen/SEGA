@@ -3328,6 +3328,26 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "<--"
+		(exclude_from_sim no)
+		(at 332.486 41.148 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6b270eaf-e704-45af-bbf2-c74fb4a7a716")
+	)
+	(text "<--"
+		(exclude_from_sim no)
+		(at 332.74 35.814 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6c6d7e13-cfc7-4f2b-97a3-7721babe1d12")
+	)
 	(text "Row & Column numbering correspond to the\nassigned CN2 pin inside the keyboard."
 		(exclude_from_sim no)
 		(at 41.148 33.02 0)
@@ -3337,6 +3357,36 @@
 			)
 		)
 		(uuid "7c6b9b45-da1b-4ca5-9fee-5c5551aeb2ad")
+	)
+	(text "-->"
+		(exclude_from_sim no)
+		(at 332.994 53.594 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9a097ca2-65a0-4089-97fb-4d1386b4ca87")
+	)
+	(text_box "S0/TH/SELECT\nSaturn --> Controller\n\nS1/TR/REQUEST\nSaturn --> Controller\n\nTL/ACKNOWLEDGE\nSaturn <-- Controller"
+		(exclude_from_sim no)
+		(at 367.03 66.04 0)
+		(size 35.56 20.32)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(type none)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "2f374e17-c330-4ade-8600-ff609cb5a682")
 	)
 	(text_box "Controller Pinout\nPin 1 = +5V power\nPin 2 = Data 1\nPin 3 = Data 0\nPin 4 = REQuest (S1/TR)\nPin 5 = SELect (S0/TH)\nPin 6 = ACKnowledge (TL)\nPin 7 = Data 3\nPin 8 = Data 2\nPin 9 = GND\n\nPCB CN1 Pinout\nPin 1 = Data 3 (controller pin 7)\nPin 2 = Data 2 (pin 8)\nPin 3 = Data 1 (pin 2)\nPin 4 = Data 0 (pin 3)\nPin 5 = SEL (pin 4)\nPin 6 = GND (pin 9)\nPin 7 = ACK (pin 6)\nPin 8 = SEL (pin 5)\nPin 9 = +5V (pin 1)"
 		(exclude_from_sim no)
