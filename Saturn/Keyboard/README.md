@@ -45,17 +45,17 @@ The keyboard has an internal controller board based around the Motorola MC68HC05
 
 The controller board connects to the Saturn via its 9-pin controller port which uses a 4-bit protocol to communicate.  Interestingly the internal pinout this connector (CN1) doesn't match the controller's pinout.  Weird.  The signals are all pulled up.<br>
 
-| Controller | CN1      |
-|------------|----------|
-| 1 (+5V)    | 9        |
-| 2 (Data 1) | 3        |
-| 3 (Data 0) | 4        |
-| 4 (REQ)    | 5        |
-| 5 (SEL)    | 8        |
-| 6 (ACK)    | 7        |
-| 7 (Data 3) | 1        |
-| 8 (Data 2) | 2        |
-| 9 (GND)    | 6        |
+| Controller | CN1      | Notes |
+|------------|----------|-------|
+| 1 (+5V)    | 9        |       |
+| 2 (Data 1) | 3        |       |
+| 3 (Data 0) | 4        |       |
+| 4 (REQ)    | 5        | Saturn -> Controller |
+| 5 (SEL)    | 8        | Saturn -> Controller |
+| 6 (ACK)    | 7        | Controller -> Saturn |
+| 7 (Data 3) | 1        |       |
+| 8 (Data 2) | 2        |       |
+| 9 (GND)    | 6        |       |
 
 ## Keys
 This Japanese keyboard has some additional keys with Kanji labels.  Here's a quick, rough translation - they are all related to entry of Japanese or Roman characters.<br>
