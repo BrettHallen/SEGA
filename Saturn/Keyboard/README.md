@@ -74,5 +74,9 @@ This Japanese keyboard has some additional keys with Kanji labels.  Here's a qui
 | ひらがな | Hiragana |
 | ローマ字 | Roman Characters |
 
+## Proposed PCB Layout
+What the proposed reproduction keyboard looks like.  I thought using a DE9 socket (female) would be better than hard-wiring a controller cable to the PCB.<br>
+
+![Keyboard PCB](Images/Sega_Saturn_Keyboard_Repro_3D.png)
 
 
