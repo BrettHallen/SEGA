@@ -27,10 +27,10 @@ I don't know if this is the "official" pinout, but I read that the angled corner
  12           2
 ```
 On the Saturn side it uses three wires plus shield:<br>
-- red (アカ) to pin 2
-- white (シロ) to pin 5
-- black (クロ) to pin 6
-- shield (シールド) to pins 8 & 12 (plus outside shield)
+- red (アカ) to pin 2 (+5V power)
+- white (シロ) to pin 5 (Saturn TTL to PC RS232)
+- black (クロ) to pin 6 (PC RS232 to Saturn TTL)
+- shield (シールド) to pins 8 & 12 (ground)
 
 ![Saturn Communications Plug](Pictures/Saturn_Communication_Plug.jpg)
 
