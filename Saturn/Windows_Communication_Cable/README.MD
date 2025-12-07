@@ -46,3 +46,11 @@ This translates as:<br>
 However the [manual](Documentation/Cable_Instructions_3_ENG.jpg) just details that an RS232 straight-through/modem cable should be used. My guess is that the cable is too short to properly connect the Saturn to your computer, so an extension cable should be used.<br>
 
 The relevant three pages can be found in the [Documentation](Documentation) folder - both in original Japanese and Google-translated English.
+
+## Sega Saturn to USB
+How about connecting via USB?  You could use this original cable (or make one) and then use a USB-to-serial converter cable.<br>
+
+But let's just drop the whole to/from RS232 conversion and go straight from TTL serial (Sega Saturn) to USB.  You can get cables that do this already, such as the [FTDI model TTL-232R-5V](https://ftdichip.com/products/ttl-232r-5v/).<br>
+
+You still have the issue of connecting to the Saturn's obscure 12-pin serial port.  As you only need three pins (Rx, Tx and GND) you could make these available by adding your own port on the Saturn.<br>
+
