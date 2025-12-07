@@ -16,3 +16,4 @@ fp-info-cache
 .DS_Store
 *.pxd
 *.lck
+*.csv#
