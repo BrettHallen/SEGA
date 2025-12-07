@@ -20,6 +20,24 @@ The matrix has 14 rows and 8 columns (by my reckoning) and connects to a small c
 
 ![annotated columns](Design_Reference/Sega_Saturn_Keyboard_Membrane_Top_Columns_Annotated.jpeg)
 
+|  |COLUMN 0|COLUMN 1|COLUMN 2|COLUMN 3|COLUMN 4|COLUMN 5|COLUMN 6|COLUMN 7|
+|---|--------|--------|--------|--------|--------|--------|--------|--------|
+|ROW 0||LH CTRL|||RH CTRL||||
+|ROW 1|LH SHIFT|||||RH SHIFT|||
+|ROW 2|PAUSE|SCROLL LOCK|PRINT SCREEN|F12|F11|F10|F9|F8|
+|ROW 3|PAGE UP|PAGE DOWN|RIGHT|DOWN|LEFT|UP|_ \ |? /|
+|ROW 4|END|Z|SPACE|前候補|カタカナ|無変換||> .|
+|ROW 5|HOME|X|ENTER|} ]|* :|+ ;|L|K|
+|ROW 6|INSERT|A|DELETE|{ [|' @|P|O|I|
+|ROW 7|BACKSPACE|S|\| ¥|_ ^|= -|- 0|) 9|( 8|
+|ROW 8||C||V|B|N|M|< ,|
+|ROW 9|CAPS LOCK|D|||F|G|H|J|
+|ROW 10|半角/全角|E|TAB|W|RH CTRL|T|Y|U|
+|ROW 11|! 1|Q|“ 2|# 3|$ 4|% 5|& 6|' 7|
+|ROW 12|F1|ESC|F2|F3|F4|F5|F6|F7|
+|ROW 13|||LH ALT|RH ALT|||||
+
+
 ## Controller
 The keyboard has an internal controller board based around the Motorola MC68HC05C4 microcontroller.  This 8-bit MCU has about 4KB of internal ROM. <br>
 
