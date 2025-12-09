@@ -10,6 +10,7 @@ Some excellent analysis has been done already on the Saturn's controller protoco
 - [Saturn Controller Protocol MK80117 and Emulation](https://nfggames.com/forum2/index.php?topic=5055.0)
 - [Saturn keyboard scan codes](https://plutiedev.com/saturn-keyboard#scancodes)
 - [Evolution of Sega's controllers](https://hackaday.io/project/170365-blueretro/log/180790-evolution-of-segas-io-interface-from-sg-1000-to-saturn#)
+- [USB controller to Saturn via Arduino](https://github.com/garybethel/DS4toSaturn)
 
 ## Keyboard Matrix
 I dismantled my keyboard and figured out the keyboard matrix - it uses two thin film sheets to register key presses.<br>
@@ -74,5 +75,9 @@ This Japanese keyboard has some additional keys with Kanji labels.  Here's a qui
 | ひらがな | Hiragana |
 | ローマ字 | Roman Characters |
 
+## Proposed PCB Layout
+What the proposed reproduction keyboard looks like.  I thought using a DE9 socket (female) would be better than hard-wiring a controller cable to the PCB.<br>
+
+![Keyboard PCB](Images/Sega_Saturn_Keyboard_Repro_3D.png)
 
 
