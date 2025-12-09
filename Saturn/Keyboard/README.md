@@ -5,6 +5,8 @@ I thought it might be interesting to reproduce it.<br>
 
 ![Saturn Keyboard](Images/Sega_Saturn_Keyboard.jpg)
 
+![Reproduction Keyboard 3D](Sega_Saturn_Keyboard_3D.png)
+
 ## Background Analysis
 Some excellent analysis has been done already on the Saturn's controller protocol:
 - [Saturn Controller Protocol MK80117 and Emulation](https://nfggames.com/forum2/index.php?topic=5055.0)
@@ -46,17 +48,25 @@ The keyboard has an internal controller board based around the Motorola MC68HC05
 
 The controller board connects to the Saturn via its 9-pin controller port which uses a 4-bit protocol to communicate.  Interestingly the internal pinout this connector (CN1) doesn't match the controller's pinout.  Weird.  The signals are all pulled up.<br>
 
-| Controller | CN1      | Notes |
-|------------|----------|-------|
-| 1 (+5V)    | 9        |       |
-| 2 (Data 1) | 3        |       |
-| 3 (Data 0) | 4        |       |
-| 4 (REQ)    | 5        | Saturn -> Controller |
-| 5 (SEL)    | 8        | Saturn -> Controller |
-| 6 (ACK)    | 7        | Controller -> Saturn |
-| 7 (Data 3) | 1        |       |
-| 8 (Data 2) | 2        |       |
-| 9 (GND)    | 6        |       |
+| Controller | CN1 | Notes            | Direction        |
+|------------|-----|------------------|------------------|
+| 1          | 9   | +5V power        | Saturn->Keyboard |
+| 2          | 3   | Data 1 (D)       | Keyboard->Saturn |
+| 3          | 4   | Data 0 (U)       | Keyboard->Saturn |
+| 4          | 5   | SELect (S0, TH)  | Saturn->Keyboard |
+| 5          | 8   | REQuest (S1, TR) | Saturn->Keyboard |
+| 6          | 7   | ACKnowledge (TL) | Keyboard->Saturn |
+| 7          | 1   | Data 3 (R)       | Keyboard->Saturn |
+| 8          | 2   | Data 2 (L)       | Keyboard->Saturn |
+| 9          | 6   | GND              | Keyboard->Saturn |
+
+### Further notes
+- The REQ/TR signal acts as the serial clock
+- The SEL/TH signal acts as a chip enable
+- The ACK/TL signal indicates data is available on the bus
+- The DATA0/U signal is high when idle, whereas DATA1 to DATA3 are low
+
+![Sample logic analyser](Design_Reference/Sega_Saturn_Keyboard_Signalling.png)
 
 ## Keys
 This Japanese keyboard has some additional keys with Kanji labels.  Here's a quick, rough translation - they are all related to entry of Japanese or Roman characters.<br>
@@ -74,10 +84,3 @@ This Japanese keyboard has some additional keys with Kanji labels.  Here's a qui
 | カタカナ | Katakana |
 | ひらがな | Hiragana |
 | ローマ字 | Roman Characters |
-
-## Proposed PCB Layout
-What the proposed reproduction keyboard looks like.  I thought using a DE9 socket (female) would be better than hard-wiring a controller cable to the PCB.<br>
-
-![Keyboard PCB](Images/Sega_Saturn_Keyboard_Repro_3D.png)
-
-
