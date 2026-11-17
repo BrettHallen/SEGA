@@ -13,6 +13,11 @@ const K = require('./keywords');
 const MAX_LINE_NUMBER = 99999;
 const LINE_NUM_RE = /^\s*(\d+)(?=\s|$|[^\d.])/;
 const INCLUDE_RE = /^\s*#include\s+"([^"]+)"\s*$/i;
+// Unnumbered lines that GAME BASIC runs at once instead of storing, such as
+// the LOAD "COM:..." lines at the top of several CD programs. Not program
+// lines, so they are never numbered and are left out when sending.
+const DIRECT_RE = /^\s*(LOAD|SAVE|RUN|NEW|LIST|LLIST|CONT|FILES|MERGE|DELETE|RENUM|AUTO|KILL|BLOAD|BSAVE|GLOAD|KLOAD)(?![A-Za-z0-9_$])/i;
+const COMMENT_RE = /^\s*('|REM(?![A-Za-z0-9_$]))/i;
 const LABEL_DEF_RE = /^\*([A-Za-z_][A-Za-z0-9_]*)/;
 
 const SEVERITY = { error: 'error', warning: 'warning', info: 'info' };
@@ -215,8 +220,20 @@ function analyze(text, opts = {}) {
     } else {
       const stripped = raw.trim();
       if (stripped === '') continue;
+      const lead = raw.length - raw.trimStart().length;
+      const dm = DIRECT_RE.exec(raw);
+      if (dm) {
+        add(l.line, lead, lead + dm[1].length, SEVERITY.info, 'direct-command',
+          `${dm[1].toUpperCase()} without a line number is a direct command, not a program line${inc}. ` +
+          'Send to Saturn leaves it out.');
+        continue;
+      }
+      if (!o.autoNumber && COMMENT_RE.test(raw)) {
+        add(l.line, lead, raw.length, SEVERITY.info, 'unnumbered-comment',
+          `Comment without a line number${inc}. Send to Saturn leaves it out.`);
+        continue;
+      }
       if (!o.autoNumber) {
-        const lead = raw.length - raw.trimStart().length;
         add(l.line, lead, raw.length, SEVERITY.error, 'no-line-number',
           'Line has no line number' + inc + '. Add one, or turn on "gameBasic.autoLineNumbers".');
         continue;
@@ -366,7 +383,7 @@ function effectiveNumbers(text, opts = {}) {
       return;
     }
     const s = raw.trim();
-    if (!s || !o.autoNumber) return;
+    if (!s || !o.autoNumber || DIRECT_RE.test(raw)) return;
     if (s.startsWith('*') && o.labelInterval > 0) {
       counter = Math.ceil(counter / o.labelInterval) * o.labelInterval;
     }

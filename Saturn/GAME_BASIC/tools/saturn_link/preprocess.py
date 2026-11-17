@@ -19,6 +19,12 @@ from typing import List, Optional, Tuple
 MAX_LINE_NUMBER = 99999
 LINE_NUM_RE = re.compile(r"^\s*(\d+)(?=\s|$|[^\d.])")
 INCLUDE_RE = re.compile(r'^\s*#include\s+"([^"]+)"\s*$', re.I)
+# Unnumbered lines GAME BASIC runs at once instead of storing (e.g. the
+# LOAD "COM:..." lines at the top of several CD programs). They are not
+# program lines, so they are never numbered and are left out when sending.
+DIRECT_RE = re.compile(r"^\s*(LOAD|SAVE|RUN|NEW|LIST|LLIST|CONT|FILES|MERGE|DELETE|RENUM|AUTO|KILL"
+                       r"|BLOAD|BSAVE|GLOAD|KLOAD)(?![A-Za-z0-9_$])", re.I)
+COMMENT_RE = re.compile(r"^\s*('|REM(?![A-Za-z0-9_$]))", re.I)
 
 
 @dataclass
@@ -42,7 +48,7 @@ class SourceLine:
 class Problem:
     file: str
     line: int
-    severity: str  # "error" | "warning"
+    severity: str  # "error" | "warning" | "info"
     message: str
 
     def __str__(self) -> str:
@@ -126,9 +132,19 @@ def process_lines(src: List[SourceLine], opts: Options, problems: List[Problem])
             counter = num + opts.step
         else:
             stripped = text.strip()
+            dm = DIRECT_RE.match(text)
+            if dm:
+                problems.append(Problem(sl.file, sl.line, "info",
+                                        f"left out direct command {dm.group(1).upper()} "
+                                        "(no line number, so it is not a program line)"))
+                continue
             if not opts.auto_number:
                 if stripped == "":
                     continue  # BASTERM drops blank lines when not numbering
+                if COMMENT_RE.match(text):
+                    problems.append(Problem(sl.file, sl.line, "info",
+                                            "left out comment with no line number"))
+                    continue
                 problems.append(Problem(sl.file, sl.line, "error",
                                         "line has no line number (turn on automatic line numbers, or add one)"))
                 continue

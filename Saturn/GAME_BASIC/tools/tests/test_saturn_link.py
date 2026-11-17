@@ -118,6 +118,19 @@ class PreprocessTests(unittest.TestCase):
             p2 = self._write(d, "bad.b", '#include "NOPE.B"\n')
             self.assertIn("not found", str(build(p2).problems[0]))
 
+    def test_direct_commands_and_comments_are_left_out(self):
+        # DEMO.B on the CD starts with LOAD"COM:DDD" and has no-number comments.
+        with tempfile.TemporaryDirectory() as d:
+            p = self._write(d, "demo.b", 'LOAD"COM:DDD"\n1000 \' TITLE\n\'LOAD END\n1100 END\n')
+            res = build(p)
+            self.assertEqual(res.errors, [])
+            self.assertEqual([x.severity for x in res.problems], ["info", "info"])
+            self.assertEqual(res.text(), "1000 ' TITLE\r\n1100 END\r\n")
+            res = build(p, Options(auto_number=True))
+            self.assertEqual(res.text(), "1000 ' TITLE\r\n1010 'LOAD END\r\n1100 END\r\n")
+            p2 = self._write(d, "bad.b", "PRINT 1\n")
+            self.assertEqual(len(build(p2).errors), 1)
+
     def test_japanese_text_is_shift_jis(self):
         with tempfile.TemporaryDirectory() as d:
             p = self._write(d, "j.b", '10 PRINT "セガ"\n')

@@ -94,7 +94,7 @@ def _check(a) -> int:
 def cmd_check(a) -> int:
     rc = _check(a)
     if rc == 0 and not a.json:
-        print("No problems found.")
+        print("No errors found.")
     return rc
 
 

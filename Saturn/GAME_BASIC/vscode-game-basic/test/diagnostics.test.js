@@ -92,25 +92,33 @@ test('ON ERROR GOTO 0 and a DOS end-of-file mark are fine', () => {
   assert.deepStrictEqual(codes('10 ON ERROR GOTO 0\n20 RESUME 0\n\x1a\n'), []);
 });
 
+test('unnumbered direct commands and comments are notes, not errors (DEMO.B)', () => {
+  const src = 'LOAD"COM:DDD"\n 1000 \' GAME BASIC\n\'LOAD END\nload "com:dummy"\nRUN\n1010 END\n';
+  assert.deepStrictEqual(codes(src), [
+    '0:direct-command', '2:unnumbered-comment', '3:direct-command', '4:direct-command',
+  ]);
+  assert.ok(analyze(src).every((d) => d.severity === 'info'));
+  // With automatic numbering, direct commands still get no number.
+  const nums = effectiveNumbers('LOAD"COM:X"\nPRINT 1\n', { autoNumber: true });
+  assert.deepStrictEqual([...nums.entries()], [[1, 10]]);
+  // A real statement without a number is still an error.
+  assert.deepStrictEqual(codes('PRINT 1\n'), ['0:no-line-number']);
+});
+
 // Runs over the sample programs on the GAME BASIC CD when they sit next to
-// this folder (GAME_BASIC/GAME_BASIC_CD). They should come up clean apart
-// from the developers' unnumbered LOAD "COM:..." lines, which BASTERM itself
-// would refuse to send, and two strings with no closing quote.
+// this folder (GAME_BASIC/GAME_BASIC_CD). They should come up with no errors
+// or warnings apart from two strings with no closing quote.
 const fs = require('fs');
 const path = require('path');
 const cd = path.join(__dirname, '..', '..', 'GAME_BASIC_CD');
 test('GAME BASIC CD samples', { skip: !fs.existsSync(cd) && 'GAME_BASIC_CD not found' }, () => {
-  const allowed = new Set(['no-line-number', 'unclosed-string', 'out-of-order']);
+  const allowed = new Set(['direct-command', 'unnumbered-comment', 'unclosed-string', 'out-of-order']);
   const files = fs.readdirSync(cd).filter((f) => /\.B$/i.test(f));
   assert.ok(files.length > 0);
   for (const f of files) {
     const text = new TextDecoder('shift_jis').decode(fs.readFileSync(path.join(cd, f)));
-    const lines = text.split(/\r?\n/);
     for (const d of analyze(text)) {
       assert.ok(allowed.has(d.code), `${f}:${d.line + 1} ${d.code}: ${d.message}`);
-      if (d.code === 'no-line-number') {
-        assert.match(lines[d.line], /^\s*'?LOAD/i, `${f}:${d.line + 1}`);
-      }
     }
   }
 });

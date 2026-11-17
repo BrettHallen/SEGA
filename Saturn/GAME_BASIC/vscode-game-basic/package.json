@@ -54,7 +54,9 @@
     "configurationDefaults": {
       "[game-basic]": {
         "files.encoding": "shiftjis",
-        "files.autoGuessEncoding": true,
+        "files.autoGuessEncoding": false,
+        "editor.unicodeHighlight.nonBasicASCII": false,
+        "editor.unicodeHighlight.ambiguousCharacters": false,
         "files.eol": "\r\n",
         "editor.wordBasedSuggestions": "off"
       }

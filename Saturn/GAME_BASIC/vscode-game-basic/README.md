@@ -9,7 +9,7 @@ The extension does the editing side itself. Anything that touches the serial por
 | Feature | Notes |
 |---|---|
 | Highlighting | Line numbers, keywords, built-in functions, strings, `'` and `REM` comments, `*labels`, `@ATR`-style object fields, `&H` hex numbers, BASTERM's `#include` |
-| Live checks | The same checks BASTERM makes before sending (missing, duplicate or too-big line numbers, over-long lines), plus characters Shift-JIS can't carry, missing `#include` files, unbalanced brackets, unclosed strings, `GOTO`/`GOSUB`/`RESTORE` to a line or `*label` that doesn't exist, and `IF` without `THEN` |
+| Live checks | Unnumbered direct commands such as `LOAD"COM:DDD"` and unnumbered comments are shown as notes and left out when sending. Otherwise, the same checks BASTERM makes before sending (missing, duplicate or too-big line numbers, over-long lines), plus characters Shift-JIS can't carry, missing `#include` files, unbalanced brackets, unclosed strings, `GOTO`/`GOSUB`/`RESTORE` to a line or `*label` that doesn't exist, and `IF` without `THEN` |
 | Automatic line numbers | Optional, BASTERM style: unnumbered lines get numbers when sent, a numbered line resets the counter, and inlay hints show the number each line will get |
 | Go to definition | On a `GOTO 100` target or a `*LABEL`. Labels also show in the Outline view |
 | Send to Saturn | **F6**, or the upload button in the editor title. Saves, checks, then types `LOAD "COM:TBASTERM.B"` at the Saturn and serves the file |
@@ -47,13 +47,13 @@ Files ending in `.b` (any case) and `.gbas` open as GAME BASIC. For `.bas` files
 | `gameBasic.senderScript` | auto | Path to `saturn_send.py` if you keep it elsewhere |
 | `gameBasic.trace` | false | Hex dump of every byte in the **GAME BASIC** output panel |
 
-The extension also sets Shift-JIS as the file encoding and CRLF line ends for GAME BASIC files, to match the files on the original CD. The sender reads UTF-8 or Shift-JIS either way.
+The extension also sets Shift-JIS as the file encoding (with encoding guessing off) and CRLF line ends for GAME BASIC files, to match the files on the original CD. It turns off VS Code's "non-basic ASCII" Unicode warning for them, because Japanese text and half-width katakana are normal in these programs. A UTF-8 file with Japanese text will look garbled under Shift-JIS: reopen it with **Reopen with Encoding**, or save it as Shift-JIS. The sender reads UTF-8 or Shift-JIS either way.
 
 ## Where the keyword list comes from
 
 The GAME BASIC manual isn't in this project, so [`src/keywords.js`](src/keywords.js) was built from how the 67 sample programs in `../GAME_BASIC_CD` use each word: in statement position and never assigned to, or called like a function. That gives about 140 confirmed words, including the Saturn-specific ones (`KPRINT`, `SETTEX`, `ROTZOOM`, `CAMERA`, `PLAYINIT`, `ENDIF` and so on). A few standard BASIC words that never appear on the CD are kept and marked as such. Highlighting a word GAME BASIC doesn't have does no harm, and the checker never flags an unknown word. Once you have the manual, edit `src/keywords.js` and run `npm run grammar` to rebuild the grammar.
 
-The CD samples also serve as a test: `npm test` runs the checker over all of them when `../GAME_BASIC_CD` exists. They come up clean apart from 18 out-of-order notes, two strings with no closing quote, and 38 unnumbered `LOAD "COM:..."` lines that the original developers left at the top of their files, which BASTERM itself would refuse to send.
+The CD samples also serve as a test: `npm test` runs the checker over all of them when `../GAME_BASIC_CD` exists. They come up with no errors. The only warnings are two strings with no closing quote. There are also notes for out-of-order line numbers, and for the unnumbered `LOAD "COM:..."` lines and comments that the original developers left in some files.
 
 ## Development
 
