@@ -1,0 +1,949 @@
+BASTERM help text: Japanese original with English translation
+Source: BASTERM_help_text_JP.txt (text extracted from BASTERM.HLP). Each Japanese line is
+followed by its English translation on a line starting with '  EN: '. Lines with no Japanese
+(codes, shortcuts, BASIC listings, leftover binary junk from the .HLP extraction) appear once, unchanged.
+[translator's note] marks places where words were lost in the extraction.
+================================================================================
+
+BASTERMについて4
+  EN: About BASTERM4
+BASTERMはGAME BASIC for SEGASATURNのプログラム開発を支援するWindows95対応の通信ソフトウェアです。本ソフトウェアを使用するにはWindows95マシンとGAME BASIC for SEGASATURNが正しく接続されていなければなりません。接続方法について詳しくはマニュアルをご参照ください。
+  EN: BASTERM is Windows 95 communications software that supports program development for GAME BASIC for SEGASATURN. To use this software, the Windows 95 machine and GAME BASIC for SEGASATURN must be correctly connected. For details on how to connect them, please refer to the manual.
+インストール
+  EN: Installation
+BASTERM.EXE, BASTERM.HLP, BASTERM.CNTの３つのファイルを同じフォルダにコピーしてください。通信ケーブルを接続しGAME BASIC for SEGASATURN側のボーレートを設定します（詳しくはマニュアルをご参照ください）。BASTERM.EXEのアイコンをダブルクリックして起動し、まずは
+  EN: Copy the three files BASTERM.EXE, BASTERM.HLP and BASTERM.CNT into the same folder. Connect the communication cable and set the baud rate on the GAME BASIC for SEGASATURN side (see the manual for details). Double-click the BASTERM.EXE icon to start it, then first use the
+[通信条件]コマンド
+  EN: [Communication Settings] command
+でケーブルを接続したポート番号を選択し、GAME BASIC for SEGASATURNと同じボーレートを選択します。設定がすんだらちゃんと接続できるか、
+  EN: to select the port number the cable is connected to, and select the same baud rate as GAME BASIC for SEGASATURN. Once the settings are done, check that you can actually connect by running the
+[接続]コマンド
+  EN: [Connect] command
+を実行して接続できるかを確認してください。
+  EN: and confirming that a connection is made.
+基本的な操作
+  EN: Basic Operation
+BASTERMのエディタか他のテキストエディタでプログラムを作成してください。BASTERMはテキストファイルを扱います。プログラムが完成したら
+  EN: Create your program in the BASTERM editor or in another text editor. BASTERM works with text files. When the program is finished, send it with the
+[送信]コマンド
+  EN: [Send] command
+でプログラムを送信し、
+  EN: and run it with the
+[プログラム実行]コマンド
+  EN: [Run Program] command
+でプログラムを実行します。実行中のキー操作やGAME BASIC for SEGASATURN側でのプログラムの修正には、
+  EN: . To press keys while the program is running, or to modify the program on the GAME BASIC for SEGASATURN side, use the
+[キー送信]コマンド
+  EN: [Send Keys] command
+でキー入力をGAME BASIC for SEGASATURNに送るようにします。修正した結果は
+  EN: to send key input to GAME BASIC for SEGASATURN. The modified result can be pulled into the BASTERM editing screen with the
+[受信]コマンド
+  EN: [Receive] command
+でBASTERMの編集画面に取り込み保存することができます。
+  EN: and saved.
+宴モ缺?
+宴ャゅ
+GAME BASIC for SEGASATURNのプログラムで[COM]に対するファイルアクセスを行うには、BASTERMが起動されていて、BASTERMとGAME BASIC for SEGASATURNが接続されている必要があります。接続には
+  EN: For a GAME BASIC for SEGASATURN program to perform file access on [COM], BASTERM must be running and BASTERM and GAME BASIC for SEGASATURN must be connected. To connect, use the
+[接続]コマンド
+  EN: [Connect] command
+を使用します。
+  EN: .
+コマンド一覧
+  EN: Command List
+[ファイル] メニュー
+  EN: [File] Menu
+文書を新規に作成します。
+  EN: Creates a new document.
+既存の文書を開きます。
+  EN: Opens an existing document.
+[上書き保存]
+  EN: [Save]
+作業中の文書を上書きして保存します。
+  EN: Saves the current document, overwriting it.
+[名前を付けて保存...]
+  EN: [Save As...]
+作業中の文書に新しい名前を付けて保存します。
+  EN: Saves the current document under a new name.
+[ファイル一覧]
+  EN: [File List]
+最近の文書をオープンします。
+  EN: Opens a recent document.
+[BASTERMの終了]
+  EN: [Exit BASTERM]
+BASTERMを終了します。
+  EN: Exits BASTERM.
+[編集] メニュー
+  EN: [Edit] Menu
+[元に戻す]
+  EN: [Undo]
+直前に行った操作を元に戻します。
+  EN: Undoes the last operation performed.
+[切り取り]
+  EN: [Cut]
+選択した範囲を切り取って、クリップボードに保存します。
+  EN: Cuts the selected range and stores it on the clipboard.
+[コピー]
+  EN: [Copy]
+選択した範囲をコピーして、クリップボードに保存します。
+  EN: Copies the selected range and stores it on the clipboard.
+[貼り付け]
+  EN: [Paste]
+クリップボードのデータを文書に貼り付けます。
+  EN: Pastes the clipboard data into the document.
+[すべて選択]
+  EN: [Select All]
+現在ウィンドウに表示されているテキストを全部選択します。
+  EN: Selects all the text currently shown in the window.
+宴ゅC>
+宴ゅD>
+文字列を検索します。
+  EN: Searches for a string.
+[次を検索]
+  EN: [Find Next]
+「検索...」コマンドで設定した内容で次を検索します。
+  EN: Finds the next match using the settings made with the "Find..." command.
+文字列を置換します。
+  EN: Replaces a string.
+[表示] メニュー
+  EN: [View] Menu
+[ツールバー]
+  EN: [Toolbar]
+ツールバーの表示または非表示を切り替えます。
+  EN: Shows or hides the toolbar.
+[ステータス バー]
+  EN: [Status Bar]
+ステータス バーの表示または非表示を切り替えます。
+  EN: Shows or hides the status bar.
+[通信] メニュー
+  EN: [Communication] Menu
+GAME BASIC for SEGASATURNとの接続・切断を行います。
+  EN: Connects to / disconnects from GAME BASIC for SEGASATURN.
+GAME BASIC for SEGASATURNにプログラムを送信します。
+  EN: Sends a program to GAME BASIC for SEGASATURN.
+宴ゅF>
+宴ゅn>
+宴ゅo>
+宴ゅp>
+宴ゅq>
+GAME BASIC for SEGASATURNからプログラムを受信します。
+  EN: Receives a program from GAME BASIC for SEGASATURN.
+[プログラム実行]
+  EN: [Run Program]
+GAME BASIC for SEGASATURNへRUNを送信します。
+  EN: Sends RUN to GAME BASIC for SEGASATURN.
+[実行中止]
+  EN: [Stop Execution]
+GAME BASIC for SEGASATURNにSTOPを送信します。
+  EN: Sends STOP to GAME BASIC for SEGASATURN.
+[キー送信]
+  EN: [Send Keys]
+GAME BASIC for SEGASATURNにキー入力を送信します。
+  EN: Sends key input to GAME BASIC for SEGASATURN.
+[設定] メニュー
+  EN: [Settings] Menu
+[カレントディレクトリ変更]
+  EN: [Change Current Directory]
+カレントディレクトリを変更します。
+  EN: Changes the current directory.
+[通信条件]
+  EN: [Communication Settings]
+通信条件を変更します。
+  EN: Changes the communication settings.
+[フィルタ指定]
+  EN: [Filter Settings]
+フィルタを指定します。
+  EN: Specifies a filter.
+[送信設定]
+  EN: [Send Settings]
+送信条件を変更します。
+  EN: Changes the send settings.
+宴モｂｂｂ
+[ヘルプ]メニュー
+  EN: [Help] Menu
+[ヘルプ]
+  EN: [Help]
+このファイルを表示します。
+  EN: Displays this file.
+バージョンと著作権を表示します。
+  EN: Displays the version and copyright.
+記載の会社名および製品名は各社の商標および登録商標です。
+  EN: Company names and product names mentioned are trademarks or registered trademarks of their respective owners.
+Copyright (C) 1998 ASCII Corp./Bits Laboratoy/ESP inc.
+s
+[ファイル] メニュー0
+  EN: [File] Menu0
+[ファイル] メニューのコマンド
+  EN: [File] Menu Commands
+新規作成
+  EN: New
+[開く...] ダイアログ ボックス
+  EN: [Open...] Dialog Box
+上書き保存
+  EN: Save
+名前を付けて保存...
+  EN: Save As...
+[名前を付けて保存] ダイアログ ボックス
+  EN: [Save As] Dialog Box
+ファイル一覧
+  EN: File List
+BASTERMの終了
+  EN: Exit BASTERM
+ｦ
+錙
+新規作成
+  EN: New
+ｂｂ缺?
+[新規作成] コマンド ([ファイル] メニュー)
+  EN: [New] Command ([File] Menu)
+BASTERMの新規文書を作成します。
+  EN: Creates a new BASTERM document.
+既存の文書は
+  EN: Existing documents are
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+N
+
+ｃｂ紜>
+既存の文書を開きます。新たに文書を作成するには
+  EN: Opens an existing document. To create a new document, use the
+ [新規作成] コマンド
+  EN:  [New] command
+を使ってください。
+  EN: .
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+O
+[開く...] ダイアログ ボックス
+  EN: [Open...] Dialog Box
+，
+[開く...] ダイアログ ボックスｿ
+  EN: [Open...] Dialog Boxｿ
+[開く...] ダイアログ ボックス
+  EN: [Open...] Dialog Box
+[開く...] ダイアログ ボックスでは、以下のオプションが設定できます。
+  EN: The following options can be set in the [Open...] dialog box.
+ファイル名
+  EN: File name
+開きたい文書の名前を入力または選択します。リスト ボックスには、[ファイルの種類]ボックスで選択したファイル形式に対応する拡張子を持ったファイルが一覧表示されます。
+  EN: Type or select the name of the document you want to open. The list box shows files whose extension matches the file type selected in the [Files of type] box.
+ファイルの種類
+  EN: Files of type
+開きたい文書のファイル形式を選択します。基本的にBASTERMがサポートしている形式は「.b」ですが、通常BASICの拡張子で使用される「.bas」もリストアップされます。「.b」もしくは「.bas」だけを表示させたい時には、このポップアップを操作してファイルの種類を選択してください。また「.b」でも「.bas」でもない場合には「*.*」ですべてのファイルを表示させてください。
+  EN: Select the file format of the document you want to open. The format BASTERM basically supports is ".b", but ".bas", the extension normally used for BASIC, is also listed. If you want to show only ".b" or only ".bas" files, use this pop-up to select the file type. If the file is neither ".b" nor ".bas", choose "*.*" to show all files.
+ファイルの場所
+  EN: Look in
+BASTERMで開きたい文書が保存されているディレクトリを選択します。
+  EN: Select the directory where the document you want to open in BASTERM is stored.
+
+上書き保存
+  EN: Save
+ [上書き保存] コマンド ([ファイル] メニュー)
+  EN:  [Save] Command ([File] Menu)
+作業中の文書のファイル名、保存場所を変更しないで保存します。新規作成した文書を初めて保存するときに、BASTERM は
+  EN: Saves the current document without changing its file name or location. When you save a newly created document for the first time, BASTERM displays the
+ [名前を付けて保存] ダイアログ ボックス
+  EN:  [Save As] dialog box
+を表示しますので、作業中の文書に適切なファイル名を付けて保存することができます。ファイル名、保存場所を変更して保存したいときは
+  EN: so you can save the current document under a suitable file name. To save with a different file name or location, use the
+ [名前を付けて保存...] コマンド
+  EN:  [Save As...] command
+を使います。
+  EN: .
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+S
+1I
+名前を付けて保存...ｫ
+  EN: Save As...ｫ
+[名前を付けて保存...] コマンド ([ファイル] メニュー)
+  EN: [Save As...] Command ([File] Menu)
+作業中の文書にファイル名を付けて保存します。BASTERMは
+  EN: Saves the current document under a file name. BASTERM displays the
+[名前を付けて保存] ダイアログ ボックス
+  EN: [Save As] dialog box
+を表示しますので、作業中の文書に適切なファイル名を付けて保存することができます。ファイルの拡張子は「.b」になります。
+  EN: so you can save the current document under a suitable file name. The file extension will be ".b".
+作業中の文書のファイル名、保存場所を変更しないで保存したいときは
+  EN: To save the current document without changing its file name or location, use the
+ [上書き保存] コマンド
+  EN:  [Save] command
+を使います。
+  EN: .
+3K
+[名前を付けて保存] ダイアログ ボックス4
+  EN: [Save As] Dialog Box4
+[名前を付けて保存] ダイアログ ボックス
+  EN: [Save As] Dialog Box
+[名前を付けて保存...] ダイアログ ボックスでは、ファイル名や保存場所を指定する以下のオプションが設定できます。
+  EN: The following options, which specify the file name and save location, can be set in the [Save As...] dialog box.
+ファイル名
+  EN: File name
+元のファイル名と違う名前でファイル名を入力します。ファイル名は半角 8 文字 までで指定しけます。拡張子は自動的に「.b」が付けられます。ファイル名自体としては全角文字（漢字など）を使用したり、８文字以上のロングファイル名をつけることはできますが、その場合はBASTERMを介して送受信する方法以外ではGAME BASIC for SEGASATURN側で扱うことができなくなります。
+  EN: Enter a file name different from the original one. File names can be up to 8 half-width (single-byte) characters. The ".b" extension is added automatically. You can use full-width characters (kanji etc.) in the file name itself, or give it a long file name of more than 8 characters, but in that case GAME BASIC for SEGASATURN will not be able to handle the file other than by sending/receiving it through BASTERM.
+ファイルの種類
+  EN: Files of type
+保存したい文書のファイル形式を選択します。基本的にBASTERMがサポートしている形式は「.b」ですが、例えば別のアプリケーションで取り込むために「.txt」ファイルにセーブしたいような場合には「*.*」を選択してから、拡張子まですべて入力してください。
+  EN: Select the file format of the document you want to save. The format BASTERM basically supports is ".b", but if, for example, you want to save as a ".txt" file to import into another application, select "*.*" and then type the full name including the extension.
+ファイルの場所
+  EN: Save in
+BASTERMで開きたい文書が保存されているディレクトリを選択します。
+  EN: Select the directory where the document you want to open in BASTERM is stored.
+0O
+ファイル一覧
+  EN: File List
+[ファイル一覧] コマンド ([ファイル] メニュー)
+  EN: [File List] Command ([File] Menu)
+[ファイル] メニューの下部には、直前に閉じたファイル名が番号とともに最大 8 つまで表示されます。ここから目的のファイルを選択して開くことができます。
+  EN: The bottom of the [File] menu shows the names of up to 8 most recently closed files, each with a number. You can select a file here to open it.
+
+h
+BASTERMの終了h
+  EN: Exit BASTERMh
+[BASTERMの終了] コマンド ([ファイル] メニュー)
+  EN: [Exit BASTERM] Command ([File] Menu)
+BASTERMでの作業を終了します。文書に加えた変更点がまだ保存されていないときは、BASTERMは保存するかどうか確認するダイアログ ボックスを表示します。
+  EN: Ends your BASTERM session. If there are changes to the document that have not yet been saved, BASTERM displays a dialog box asking whether to save them.
+ショートカット
+  EN: Shortcut
+マウス:
+  EN: Mouse:
+アプリケーション ウィンドウのコントロール メニュー ボックスをダブルクリックします。
+  EN: Double-click the application window's control-menu box.
+
+[編集] メニューﾝ
+  EN: [Edit] Menuﾝ
+[編集]メニューのコマンド
+  EN: [Edit] Menu Commands
+元に戻す
+  EN: Undo
+切り取り
+  EN: Cut
+貼り付け
+  EN: Paste
+すべて選択
+  EN: Select All
+次を検索
+  EN: Find Next
+
+&
+元に戻す
+  EN: Undo
+[元に戻す] コマンド ([編集] メニュー)
+  EN: [Undo] Command ([Edit] Menu)
+可能であれば、直前に行った編集操作をキャンセルし、文書を元に戻します。ただし、操作によってはキャンセルできないものもあります。
+  EN: If possible, cancels the last editing operation and restores the document. Note that some operations cannot be undone.
+ショートカット
+  EN: Shortcut
+キーボード:
+  EN: Keyboard:
+CTRL+Z もしくは ALT-BACKSPACE
+  EN: CTRL+Z or ALT-BACKSPACE
+{
+切り取り｣
+  EN: Cut｣
+ｂｂｂ
+現在選択しているデータを文書から削除してクリップボードに保存します。データが選択されていないときは、このコマンドは使用できません。
+  EN: Deletes the currently selected data from the document and stores it on the clipboard. This command is unavailable when no data is selected.
+データをクリップボードに切り取ると、それまでクリップボードに保存されていた内容は新たに切り取った内容に置換されてしまいます。
+  EN: When you cut data to the clipboard, whatever was previously stored on the clipboard is replaced with the newly cut content.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+X
+U
+ｂｂｂ
+文書内で選択されたデータをコピーしてクリップボードに保存します。データが選択されていないときは、このコマンドは使用できません。
+  EN: Copies the data selected in the document and stores it on the clipboard. This command is unavailable when no data is selected.
+データをクリップボードにコピーすると、それまでクリップボードに保存されていた内容は新たにコピーした内容に置換されてしまいます。
+  EN: When you copy data to the clipboard, whatever was previously stored on the clipboard is replaced with the newly copied content.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+C
+-
+貼り付け
+  EN: Paste
+クリップボードの内容をカーソル位置に挿入します。クリップボードに何も保存されていないときは、このコマンドは使用できません。
+  EN: Inserts the contents of the clipboard at the cursor position. This command is unavailable when the clipboard is empty.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+V
+♂
+すべて選択ﾀ
+  EN: Select Allﾀ
+ [すべて選択] コマンド ([編集] メニュー)
+  EN:  [Select All] Command ([Edit] Menu)
+現在ウィンドウに表示されているテキストを全部選択します。
+  EN: Selects all the text currently shown in the window.
+ショートカット
+  EN: Shortcut
+キーボード:
+  EN: Keyboard:
+CTRL+A
+y
+文字列を検索します。
+  EN: Searches for a string.
+ショートカット
+  EN: Shortcut
+キーボード:
+  EN: Keyboard:
+CTRL+F
+J
+次を検索ｽ
+  EN: Find Nextｽ
+[検索...] コマンドで設定した内容で次を検索します。
+  EN: Finds the next match using the settings made with the [Find...] command.
+ショートカット
+  EN: Shortcut
+キーボード:
+  EN: Keyboard:
+
+<
+文字列を置換します。
+  EN: Replaces a string.
+ショートカット
+  EN: Shortcut
+キーボード:
+  EN: Keyboard:
+CTRL+H
+
+[表示] メニューｱ
+  EN: [View] Menuｱ
+[表示] メニューのコマンド
+  EN: [View] Menu Commands
+ツールバー
+  EN: Toolbar
+ツールバー機能
+  EN: Toolbar Features
+ステータス バー
+  EN: Status Bar
+ステータス バー機能
+  EN: Status Bar Features
+
+
+ツールバーo
+  EN: Toolbaro
+ｂｂ紲>
+ｂｂｂ
+[ツールバー] コマンド ([表示] メニュー)
+  EN: [Toolbar] Command ([View] Menu)
+ツールバーの表示、非表示を切り替えます。ツールバーには、[送信］などの、BASTERMで最もよく使われるコマンドと同じ機能を持ったツールが含まれています。ツールバーが表示されているときは、このコマンド名の横にチェックマークが表示されます。
+  EN: Shows or hides the toolbar. The toolbar contains tools with the same functions as the commands most often used in BASTERM, such as [Send]. When the toolbar is shown, a check mark appears next to this command name.
+ツールバー機能
+  EN: Toolbar Features
+ｫ
+ツールバー機能
+  EN: Toolbar Features
+ツールバー機能
+  EN: Toolbar Features
+ツールバーは、アプリケーション ウィンドウ上部で、メニュー バーのすぐ下に表示されます。BASTERM内で使用する多くのツールをマウスでクリックして操作します。
+  EN: The toolbar appears at the top of the application window, directly below the menu bar. Many of the tools used in BASTERM are operated by clicking them with the mouse.
+文書を新規に作成します。
+  EN: Creates a new document.
+既存の文書を開きます。BASTERMは [開く] ダイアログ ボックスを表示しますので、開きたいファイルを選択します。
+  EN: Opens an existing document. BASTERM displays the [Open] dialog box so you can select the file you want to open.
+作業中の文書を上書きして保存します。まだ文書に名前を付けていないとき、BASTERMは [名前を付けて保存] ダイアログ ボックスを表示します。
+  EN: Saves the current document, overwriting it. If the document has not been named yet, BASTERM displays the [Save As] dialog box.
+選択した範囲を切り取って、クリップボードに保存します。
+  EN: Cuts the selected range and stores it on the clipboard.
+選択した範囲をコピーして、クリップボードに保存します。
+  EN: Copies the selected range and stores it on the clipboard.
+クリップボードのデータをカーソルの位置に挿入します。
+  EN: Inserts the clipboard data at the cursor position.
+GAME BASIC for SEGASATURNと接続・切断をします。
+  EN: Connects to / disconnects from GAME BASIC for SEGASATURN.
+プログラムを実行します。
+  EN: Runs the program.
+プログラムの実行を中断します。
+  EN: Interrupts program execution.
+GAME BASIC for SEGASATURNからプログラムを受信します。
+  EN: Receives a program from GAME BASIC for SEGASATURN.
+GAME BASIC for SEGASATURNへプログラムを送信します。
+  EN: Sends a program to GAME BASIC for SEGASATURN.
+GAME BASIC for SEGASATURNへキー入力を送信します。
+  EN: Sends key input to GAME BASIC for SEGASATURN.
+|ﾄ
+ステータス バー
+  EN: Status Bar
+ｂｂ缸>
+[ステータス バー] コマンド ([表示] メニュー)
+  EN: [Status Bar] Command ([View] Menu)
+ステータス バーの表示、非表示を切り替えます。ステータス バーには、メニュー コマンドやツールバーのボタンを選択したときにコマンドの簡単な説明や、キーボードの特殊キーのON/OFF の状態などが表示されます。ステータス バーが表示されているときは、このコマンド名の横にチェックマークが表示されます。
+  EN: Shows or hides the status bar. The status bar shows a short description of a command when you select a menu command or toolbar button, as well as the ON/OFF state of special keyboard keys. When the status bar is shown, a check mark appears next to this command name.
+ステータス バー機能
+  EN: Status Bar Features
+
+Yﾆ
+ステータス バー機能4
+  EN: Status Bar Features4
+ステータス バー機能
+  EN: Status Bar Features
+ステータス バーは、BASTERM のウィンドウの一番下に表示されます。ステータス バーの表示、非表示を切り替えるには、[表示] メニューの [ステータス バー] コマンドを選択してください。
+  EN: The status bar is displayed at the very bottom of the BASTERM window. To show or hide the status bar, choose the [Status Bar] command from the [View] menu.
+ステータス バーの左側の部分には、メニューコマンドを選択したときにそれぞれの簡単な説明が表示されます。同様に、ツールバーのボタンを押したままにしても簡単な説明が表示されます。説明を見た後でそのツールバーのコマンドの実行を中止したいときは、マウス ポインタをそのツールバー ボタン以外の位置に移動してマウス ボタンを離します。
+  EN: The left part of the status bar shows a short description of each menu command as you select it. Likewise, a short description appears if you hold down a toolbar button. If, after reading the description, you do not want to run that toolbar command, move the mouse pointer away from the toolbar button and then release the mouse button.
+ｂｃｃｃｃｃｃｃｂ
+ステータス バーの右側の部分には、以下のキーの ON/OFF の状態が表示されます。
+  EN: The right part of the status bar shows the ON/OFF state of the following keys.
+GAME BASIC for SEGASATURNへのデータ送信があった時に点滅します。
+  EN: Flashes when data is sent to GAME BASIC for SEGASATURN.
+GAME BASIC for SEGASATURNからのデータ受信があった時に点滅します。
+  EN: Flashes when data is received from GAME BASIC for SEGASATURN.
+[カナ] キーが ON の状態
+  EN: [Kana] key is ON
+[Caps Lock] キーが ON の状態
+  EN: [Caps Lock] key is ON
+[Num Lock] キーが ON の状態
+  EN: [Num Lock] key is ON
+SCRL
+[Scroll Lock] キーが ON の状態
+  EN: [Scroll Lock] key is ON
+kﾊ
+[通信] メニューｷ
+  EN: [Communication] Menuｷ
+[通信] メニューのコマンド
+  EN: [Communication] Menu Commands
+プログラム実行
+  EN: Run Program
+実行中止
+  EN: Stop Execution
+キー送信
+  EN: Send Keys
+%
+Wﾋ
+SATURN との接続・切断を行います。GAME BASIC for SEGASATURNで
+  EN: Connects to / disconnects from the SATURN. When GAME BASIC for SEGASATURN performs
+ASTERM
+をファイルサーバーとする一連のファイルアクセスコマンド
+  EN: a series of file access commands that use it as a file server
+(COM
+に対する
+  EN: targeting
+fopen,
+fread,
+fwrite,
+fclose
+を行う場合には、本コマンドによりあらかじめGAME
+  EN: when doing so, you must first use this command to connect to GAME
+BASIC for SEGASATURN
+と接続しておかなければなりません。
+  EN: beforehand.
+本コマンドを実行し接続が確立されている間は、本コマンドにチェックマークがつけられ、ツールバーの
+  EN: While this command has been run and the connection is established, the command shows a check mark and the toolbar
+ボタンがひっこんだ状態になります。この状態で本コマンドをもう一度実行するとGAME BASIC for SEGASATURNとの接続が切断されます。
+  EN: button appears pressed in. Running this command again in this state disconnects from GAME BASIC for SEGASATURN.
+接続中でもプログラムの修正などの操作は可能です。ただし接続中は通信の監視のためにマシンパワーが使われますので、編集などの処理が遅く感じられる場合には切断しておいてください（通常は接続しっぱなしでも問題ありません）。また、接続中には通信ポートや通信ボーレートの変更はできませんので、変更する場合には一度切断をしてください。
+  EN: You can still edit your program and do other work while connected. However, monitoring the connection uses machine power, so if editing and other operations feel slow, disconnect (normally there is no problem staying connected all the time). Also, the communication port and baud rate cannot be changed while connected, so disconnect first if you want to change them.
+なお、一度切断するとGAME BASIC for SEGASATURNがオープン中のファイルはWindows側で一方的にクローズされますので、再接続後にGAME BASIC for SEGASATURNからそのファイルにアクセスするとエラーになります。重要なデータをアクセス中は切断する前にGAME BASIC for SEGASATURN側でオープンしているファイルを忘れずにクローズしてください。
+  EN: Note that once you disconnect, any files GAME BASIC for SEGASATURN has open are closed unilaterally on the Windows side, so accessing those files from GAME BASIC for SEGASATURN after reconnecting will cause an error. If you are accessing important data, be sure to close the files that are open on the GAME BASIC for SEGASATURN side before disconnecting.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+'
+ｂｂゅq>
+編集ウィンドウに開かれているプログラムをGAME BASIC for SEGASATURNに送ります。
+  EN: Sends the program open in the editing window to GAME BASIC for SEGASATURN.
+GAME BASIC for SEGASATURNと接続されていない状態でこのコマンドが実行された場合には、送信前に接続処理を行い、送信後に切断処理を行います。
+  EN: If this command is run while not connected to GAME BASIC for SEGASATURN, BASTERM connects before sending and disconnects after sending.
+送信が開始されると送信の状態を示す進捗パネルが表示されます。送信を中断する時には進捗パネルの[キャンセル]ボタンをクリックします。
+  EN: When sending starts, a progress panel showing the send status is displayed. To abort the send, click the [Cancel] button on the progress panel.
+[送信設定]コマンド
+  EN: With the [Send Settings] command
+で[送信後にRＵＮする]などの送信オプションが指定でき、
+  EN: you can specify send options such as [RUN after sending], and with the
+[フィルタ指定]コマンド
+  EN: [Filter Settings] command
+で送信内容にユーザーの指定するフィルタをかけることができます。
+  EN: you can apply a user-specified filter to the content being sent.
+【注意】
+  EN: [Caution]
+通信エラーが発生した場合や
+  EN: If a communication error occurs, or if communication is interrupted by key input from the
+SATURN
+キーボードからのキー入力で通信を中断した場合に、BASTERMに送信エラーが表示されない場合があります。送信が成功したかについては、必ずGAME BASIC for SEGASATURN側のメッセージもご確認ください。
+  EN: keyboard, BASTERM may not display a send error. Always also check the messages on the GAME BASIC for SEGASATURN side to confirm whether the send succeeded.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+P
+
+GAME BASIC for SEGASATURNのプログラムを編集ウィンドウに取り込みます。
+  EN: Pulls the GAME BASIC for SEGASATURN program into the editing window.
+GAME BASIC for SEGASATURNと接続されていない状態でこのコマンドが実行された場合には、受信前に接続処理を行い、受信後に切断処理を行います。
+  EN: If this command is run while not connected to GAME BASIC for SEGASATURN, BASTERM connects before receiving and disconnects after receiving.
+受信が開始されると受信の状態を示す進捗パネルが表示されます。受信を中断する時には進捗パネルの[キャンセル]ボタンをクリックしてください。一度受信を開始すると現在編集中の文書は失われます（ファイル名は保持されます）。１つのプログラムを送受信している時には問題はありませんが、複数のファイルをGAME BASIC for SEGASATURNからコピーするような時には同じファイルに上書きしないように
+  EN: When receiving starts, a progress panel showing the receive status is displayed. To abort the receive, click the [Cancel] button on the progress panel. Once receiving starts, the document currently being edited is lost (the file name is kept). This is not a problem when sending and receiving a single program, but when copying several files from GAME BASIC for SEGASATURN, use the
+[名前を付けて保存..]コマンド
+  EN: [Save As..] command
+を使用してください。
+  EN: so that you do not overwrite the same file.
+ｃｂｂ
+【注意】
+  EN: [Caution]
+通信エラーが発生した場合や
+  EN: If a communication error occurs, or if communication is interrupted by key input from the
+SATURN
+キーボードからのキー入力で通信を中断した場合に、BASTERMに送信エラーが表示されない場合があります。受信が成功したかについては、必ずGAME BASIC for SEGASATURN側のメッセージもご確認ください。
+  EN: keyboard, BASTERM may not display a send error. Always also check the messages on the GAME BASIC for SEGASATURN side to confirm whether the receive succeeded.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+G
+}
+プログラム実行4
+  EN: Run Program4
+[プログラム実行] コマンド ([通信] メニュー)
+  EN: [Run Program] Command ([Communication] Menu)
+GAME BASIC for SEGASATURNにRUNコマンドを送信します。プログラムが実行中の場合には一度ストップしてから、RUNコマンドを送信します。
+  EN: Sends the RUN command to GAME BASIC for SEGASATURN. If a program is already running, it is stopped first and then the RUN command is sent.
+このメニューは同時にGAME BASIC for SEGASATURNがプログラムを実行中かの状態を示します。プログラムを実行中はこのコマンドにチェックが付けられ、またツールバーの
+  EN: This menu item also indicates whether GAME BASIC for SEGASATURN is currently running a program. While a program is running, this command shows a check mark and the toolbar
+ボタンが押し込まれた状態になります。
+  EN: button appears pressed in.
+【注意】
+  EN: [Caution]
+プログラムを実行中か停止中か不明な時にはボタンのチェック状態は不定になります。このボタンのチェック状態は目安としてお考えください。
+  EN: When it is unknown whether the program is running or stopped, the button's checked state is undefined. Treat the checked state of this button only as a rough guide.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+R
+Z
+実行中止
+  EN: Stop Execution
+[実行中止] コマンド ([通信] メニュー)
+  EN: [Stop Execution] Command ([Communication] Menu)
+GAME BASIC for SEGASATURNにStopを送信します。実際にストップするまでStopを送信しつづけます。
+  EN: Sends Stop to GAME BASIC for SEGASATURN. Stop keeps being sent until the program actually stops.
+このメニューは同時にSaturnがプログラムを非実行中かの状態を示します。プログラムが実行中でない場合にはこのコマンドにチェックが付けられ、またツールバーの
+  EN: This menu item also indicates whether the Saturn is not running a program. When no program is running, this command shows a check mark and the toolbar
+ボタンが押し込まれた状態になります。
+  EN: button appears pressed in.
+【注意】
+  EN: [Caution]
+プログラムを実行中か停止中か不明な時にはボタンのチェック状態は不定になります。このボタンのチェック状態は目安としてお考えください。
+  EN: When it is unknown whether the program is running or stopped, the button's checked state is undefined. Treat the checked state of this button only as a rough guide.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+CTRL+B
+
+
+キー送信
+  EN: Send Keys
+[キー送信] コマンド ([通信] メニュー)
+  EN: [Send Keys] Command ([Communication] Menu)
+キー送信コマンドのダイアログが表示されている間、BASTERMに入力されたキーをそのままGAME BASIC for SEGASATURNに送信します。通常の文字の他にカーソルキー・コントロールキー・ファンクションキーなどの送信も可能ですが、F10やCTRL+Breakなどの一部のキーは使用できません。
+  EN: While the Send Keys dialog is displayed, keys typed into BASTERM are sent as-is to GAME BASIC for SEGASATURN. Besides normal characters you can also send cursor keys, control keys, function keys and so on, but some keys such as F10 and CTRL+Break cannot be used.
+キー送信中には他のコマンドは使用できません。キー送信を止めるにはダイアログをクリックするか、ALT-Kをキー入力します。
+  EN: No other commands can be used while sending keys. To stop sending keys, click the dialog or press ALT-K.
+【注意】
+  EN: [Caution]
+[キー送信]を開始する時に　ALT-Kのショートカットを使った場合、内部の処理の関係でタイミングによって[キー送信]ダイアログを開いてすぐ閉じてしまったり、逆になかなか開かないことがあります。このような時は　CTRL-K で[キー送信]ダイアログを開き、閉じるときに ALT-K を使用してみてください。
+  EN: If you use the ALT-K shortcut to start [Send Keys], then because of internal processing, depending on timing the [Send Keys] dialog may open and immediately close, or conversely may be slow to open. In that case, try opening the [Send Keys] dialog with CTRL-K and using ALT-K to close it.
+キー送信はGAME BASIC for SEGASATURNのポリゴン表示など重たいプロセスが走っている場合には、エラーになる（タイプした文字が出ない、意図しない文字が出る）場合があります。このような場合は F12 を押せばポリゴン表示をオフにすることができます（ただしキー操作によりポリゴン表示をオフにした場合には、その後にプログラムをContinueしたり、ダイレクトコマンドでオブジェクトを操作しても、ポリゴンは再表示されません）。
+  EN: Key sending may fail (typed characters do not appear, or unintended characters appear) when GAME BASIC for SEGASATURN is running a heavy process such as polygon display. In that case you can press F12 to turn polygon display off (however, if polygon display is turned off by a key press, the polygons will not be redisplayed even if you then Continue the program or manipulate objects with direct commands).
+また[キー送信] はGAME BASIC for SEGASATURNに対してのみ有効です。他のキーボードを使用するソフトウェアでこの機能を使ってキーボードの代わりにすることはできません。
+  EN: Also, [Send Keys] works only with GAME BASIC for SEGASATURN. You cannot use this feature as a keyboard substitute for other software that uses the keyboard.
+ショートカット
+  EN: Shortcut
+ツールバー:
+  EN: Toolbar:
+キーボード:
+  EN: Keyboard:
+ALT-K (CTRL-Kがキー送信をONにする時のみ有効）
+  EN: ALT-K (only valid when CTRL-K turns key sending ON)
+;E
+[設定] メニューｫ
+  EN: [Settings] Menuｫ
+[設定] メニューのコマンド
+  EN: [Settings] Menu Commands
+カレントディレクトリ変更
+  EN: Change Current Directory
+通信条件
+  EN: Communication Settings
+フィルタ指定
+  EN: Filter Settings
+送信設定
+  EN: Send Settings
+9
+/F
+カレントディレクトリ変更e
+  EN: Change Current Directorye
+[カレントディレクトリ変更] コマンド ([設定] メニュー)
+  EN: [Change Current Directory] Command ([Settings] Menu)
+カレントディレクトリを変更します。カレントディレクトリは、GAME BASIC for SEGASATURNからのファイルアクセスが実際に行われるフォルダとなります。
+  EN: Changes the current directory. The current directory is the folder where file access from GAME BASIC for SEGASATURN actually takes place.
+本コマンドを実行すると[カレントディレクトリ変更]ダイアログが表示されます。ダイアログには現在のカレントディレクトリが表示されます。カレントディレクトリを変更するには、この内容を修正します。例えばＣドライブのﾙｰﾄに変更したい場合には "C:\" と入力します。もし、存在しないディレクトリを指定した場合はダイアログを閉じる時にアラートが表示され、内容は最初の設定値に戻されます。
+  EN: Running this command displays the [Change Current Directory] dialog, which shows the current directory. To change the current directory, edit this value. For example, to change to the root of drive C, enter "C:\". If you specify a directory that does not exist, an alert is displayed when the dialog closes and the value reverts to its original setting.
+
+通信条件6
+  EN: Communication Settings6
+[通信条件] コマンド ([設定] メニュー)
+  EN: [Communication Settings] Command ([Settings] Menu)
+通信条件を変更します。
+  EN: Changes the communication settings.
+本コマンドは通信ポートがオープンされている（GAME BASIC for SEGASATURNと接続している）時には実行できません。ポートがオープンされている時には「接続」コマンドを実行し切断してから実行してください。
+  EN: This command cannot be run while the communication port is open (i.e. while connected to GAME BASIC for SEGASATURN). If the port is open, run the "Connect" command to disconnect first, then run this command.
+ポート番号
+  EN: Port number
+GAME BASIC for SEGASATURNとケーブルを接続した通信ポートを選択します。
+  EN: Select the communication port the cable to GAME BASIC for SEGASATURN is connected to.
+デフォルトの値は「COM1」になっています。
+  EN: The default value is "COM1".
+ボーレート
+  EN: Baud rate
+GAME BASIC for SEGASATURNと接続するボーレートを選択します。この値はGAME BASIC for SEGASATURNの設定と同じにします。19200の方が9600より高速にプログラムの送受信ができますが、通信条件（ＣＰＵへの負荷やノイズ）はより厳しくなります。19200でコミュニケーションエラーやロード・セーブエラーが多発するときにはボーレートを9600にしてご使用ください。デフォルトの値は9600です。
+  EN: Select the baud rate for connecting to GAME BASIC for SEGASATURN. This value must match the GAME BASIC for SEGASATURN setting. 19200 sends and receives programs faster than 9600, but the communication conditions (CPU load and noise) are more demanding. If communication errors or load/save errors occur frequently at 19200, use a baud rate of 9600. The default value is 9600.
+jL
+フィルタ指定O
+  EN: Filter SettingsO
+[フィルタ指定] コマンド ([設定] メニュー)
+  EN: [Filter Settings] Command ([Settings] Menu)
+フィルタプログラムはBASTERMだけでは足りない機能を補うためのもので、BASTERMだけで作業する場合には必要ありません。フィルタはMS-DOS環境下で実行されるコンソールタイプのプログラムに限られます。フィルタプログラムの利用例としては、構造化BASICをGAME BASIC for SEGASATURNに変換するツールなどが考えられます。
+  EN: Filter programs supplement functions that BASTERM alone lacks; they are not needed if you work with BASTERM alone. Filters are limited to console-type programs that run under the MS-DOS environment. An example use of a filter program would be a tool that converts structured BASIC into GAME BASIC for SEGASATURN.
+なお、フィルタプログラムを使用するには基本的なMS-DOSの知識などが必要となる場合もありますので、それが理解できる場合にのみ本コマンドを利用するようにしてください。また、フィルタプログラム自体に関する事項はサポート外になりますので、あらかじめ御了承ください。
+  EN: Note that using filter programs may require basic MS-DOS knowledge and the like, so please use this command only if you understand it. Please also be aware in advance that matters relating to filter programs themselves are not supported.
+間違ってフィルタを設定してしまい動作が変になった場合には、[フィルタプログラム設定]ダイアログの[フィルタプログラムを使用する]チェックボックスをオフ（チェックのない状態）にしてください。
+  EN: If you set up a filter by mistake and things start behaving strangely, turn off (uncheck) the [Use filter program] checkbox in the [Filter Program Settings] dialog.
+[フィルタプログラムを使用]
+  EN: [Use filter program]
+フィルタを使用する場合にチェックします。ここがチェックされていないと他の項目は設定できません。
+  EN: Check this to use a filter. The other items cannot be set unless this is checked.
+[ﾌｨﾙﾀへの入力ﾌｧｲﾙ名]
+  EN: [Input file name for filter]
+BASTERMで編集中のファイルの内容が指定されたファイル名に保存されます。フィルタプログラムはこのファイル名を入力ファイルとして指定することができます。[選択]ボタンで選ぶこともできます。
+  EN: The contents of the file being edited in BASTERM are saved under the specified file name. The filter program can specify this file name as its input file. You can also choose it with the [Select] button.
+[ﾌｨﾙﾀからの出力ﾌｧｲﾙ名]
+  EN: [Output file name from filter]
+フィルタが変換した結果を保存するファイル名を指定します。ここで作成されたファイルが GAME BASIC for SEGASATURNにロードされます。[選択]ボタンで選ぶこともできます。
+  EN: Specifies the file name in which the filter saves its converted result. The file created here is what gets loaded into GAME BASIC for SEGASATURN. You can also choose it with the [Select] button.
+[実行する内容]
+  EN: [Command to run]
+実行するプログラム内容をここで指定します。この入力欄は実行可能なファイル名（.com, .exe, .bat）で始まらなければなりません。[ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑ名選択]ボタンで実行ﾌｧｲﾙ名を選ぶことができます。[入力ﾌｧｲﾙ名]と[出力ﾌｧｲﾙ名]は文字カーソルが[実行する内容]に表示されている時に選択でき、現在のそれぞれに対応する内容をカーソル位置に挿入します。
+  EN: Specify the program command to execute here. This field must start with an executable file name (.com, .exe, .bat). You can choose the executable name with the [Select filter program name] button. [Input file name] and [Output file name] can be selected while the text cursor is in [Command to run]; each inserts its current corresponding value at the cursor position.
+[標準ｴﾗｰ出力をｴﾗｰ情報に追加]
+  EN: [Add standard error output to error information]
+ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑの標準ｴﾗｰ出力をｴﾗｰ情報に追加します。標準出力と標準ｴﾗｰ出力の両方ともｴﾗｰ情報に追加しないことはできません。必ずどちらか１つ（もしくは２つ両方）を選んでください。
+  EN: Adds the filter program's standard error output to the error information. You cannot leave both standard output and standard error output out of the error information. Be sure to choose one of them (or both).
+[標準出力をｴﾗｰ情報に追加]]
+  EN: [Add standard output to error information]]
+ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑの標準出力をｴﾗｰ情報に追加します。標準出力と標準ｴﾗｰ出力の両方ともｴﾗｰ情報に追加しないことはできません。必ずどちらか１つ（もしくは２つ両方）を選んでください。
+  EN: Adds the filter program's standard output to the error information. You cannot leave both standard output and standard error output out of the error information. Be sure to choose one of them (or both).
+[ﾌｨﾙﾀのｶﾚﾝﾄﾃﾞｨﾚｸﾄﾘ]
+  EN: [Filter current directory]
+ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑを実行する時のﾃﾞｨﾚｸﾄﾘを指定します。
+  EN: Specifies the directory in which the filter program is run.
+[入力ﾌｧｲﾙ・出力ﾌｧｲﾙを削除]
+  EN: [Delete input and output files]
+ﾌｨﾙﾀの処理が終わったら入力ﾌｧｲﾙと出力ﾌｧｲﾙを削除します。通常はチェックしておいて問題ありません。ﾌｨﾙﾀの出力内容をチェックしたい時にはこのチェックをはずしてください。
+  EN: Deletes the input and output files when filter processing finishes. Normally it is fine to leave this checked. Uncheck it if you want to inspect the filter's output.
+[実行ウィンドウを表示]
+  EN: [Show execution window]
+ﾁｪｯｸするとﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑの実行ウィンドウ（MS-DOSのコンソール)を表示します。ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑでなんらかのタイプを必要とするような場合は表示しておく必要があります。ほとんどのケースでは実行ウィンドウを表示する必要はありません。
+  EN: When checked, the filter program's execution window (the MS-DOS console) is displayed. It must be shown if the filter program requires any typing. In most cases there is no need to show the execution window.
+【注意】
+  EN: [Caution]
+ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑはBASTERMの子ﾌﾟﾛｾｽとして動作していますが、もしﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑが暴走してしまった時には、BASTERMを強制終了させなければならなくなることがあります。最悪の場合ﾌｨﾙﾀﾌﾟﾛｸﾞﾗﾑ内の問題によりWindowsシステムがリセットされる危険性もあります。ﾌｨﾙﾀを使用される時には必ず作業中のﾌｧｲﾙをセーブしてから行うようにしてください。
+  EN: The filter program runs as a child process of BASTERM, but if the filter program runs out of control, you may have to force BASTERM to quit. In the worst case, a problem within the filter program could even cause the Windows system to reset. Always save the file you are working on before using a filter.
+ｂｂｂｂ
+【補足】
+  EN: [Supplement]
+フィルタを使用した場合の送信までのプロセスを示します。
+  EN: The process up to sending when a filter is used is as follows.
+1. 編集中の内容を保存。
+  EN: 1. Save the content being edited.
+2. フィルタが有効な場合にはフィルタプログラムを呼び出す（フィルタ指定の設定によりオフできる）。
+  EN: 2. If the filter is enabled, call the filter program (can be turned off in Filter Settings).
+3. 行番号を付ける（送信設定の設定によりオフできる）。
+  EN: 3. Add line numbers (can be turned off in Send Settings).
+4. ファイルチェックを行う（送信設定の設定によりオフできる）。
+  EN: 4. Perform file checks (can be turned off in Send Settings).
+5. 前回送信の内容との差分を取る（送信設定の指定によりオフできる）。
+  EN: 5. Take the difference from the previously sent content (can be turned off in Send Settings).
+6. GAME BASIC for SEGASATURNにLoad（もしくはLoad　,M）命令を発行し、Loadさせる。
+  EN: 6. Issue a Load (or Load ,M) instruction to GAME BASIC for SEGASATURN to make it load.
+#
+E
+送信設定~
+  EN: Send Settings~
+ｂｂｂｂ
+[送信設定] コマンド ([設定] メニュー)
+  EN: [Send Settings] Command ([Settings] Menu)
+送信の方法について設定します。なお、BASTERMでは送信前に簡単なチェックを行います。チェック内容は下記の通りで、問題がある場合はエラー情報として指定の方法で処理されます。
+  EN: Configures how sending is done. Before sending, BASTERM performs some simple checks. The checks are listed below; if there is a problem, it is handled as error information in the specified way.
+・行番号の有無のチェック
+  EN: - Check for presence of line numbers
+・行番号の重複チェック
+  EN: - Check for duplicate line numbers
+・行番号の値チェック
+  EN: - Check of line number values
+・1行の文字数
+  EN: - Number of characters per line
+[送信後に実行する]
+  EN: [Run after sending]
+プログラムを送信後、自動的に
+  EN: After the program is sent, it is automatically
+します。
+  EN: . [translator's note: the word "RUN" appears to have been lost from the extracted text here, i.e. the program is automatically RUN]
+[送信後と実行後にキー送信をオンにする]
+  EN: [Turn on Send Keys after sending and after running]
+プログラムを実行するアクション（「ﾌﾟﾛｸﾞﾗﾑ実行」ボタンのクリック・送信後に実行がチェックされている時の送信後）を起こした後にキーボードを表示しキー送信モードに移行します。
+  EN: After an action that runs the program (clicking the "Run Program" button, or after sending when Run after sending is checked), the keyboard is displayed and BASTERM switches to Send Keys mode.
+[差分送信を行う]
+  EN: [Use differential sending]
+一度送信したファイルをBASTERM側で修正した時に、次回からは差分のみを送信するようにします。グラフィックなどかなり大きなデータ部を含むプログラムなどでは、本機能を有効にしておけば修正部分だけを送信しますので高速に編集結果を送信できます。
+  EN: When a file that has already been sent is modified in BASTERM, only the differences are sent from then on. For programs containing fairly large data sections such as graphics, enabling this feature means only the modified parts are sent, so edits can be sent quickly.
+差分転送を有効にすると、場合に応じて「
+  EN: When differential transfer is enabled, the "
+LOAD
+」コマンドと「
+  EN: " command and the "
+LOAD
+」コマンドが使い分けられます。[差分送信を行う]をチェックしていても、ファイルをオープンした後と送信を中断した後の送信には差分ではなく、全ての内容が「LOAD」コマンドで送信されます。また差分転送量が大きくなりすぎた時は通常の送信に自動的に切り替わり通常の送信よりは極端には遅くならない方法が選択されます。
+  EN: " command are used as appropriate. [translator's note: the ",M" suffix appears to have been lost from the extracted text; the two forms are LOAD and LOAD ,M] Even if [Use differential sending] is checked, sends made after opening a file or after an aborted send transmit the entire content with the "LOAD" command rather than a difference. Also, when the amount of differential data becomes too large, BASTERM automatically switches to normal sending, choosing a method that is not drastically slower than normal sending.
+ただし、GAME BASIC for SEGASATURN側で別にプログラムを編集してもそれを知ることができませんので、BASTERMが保持している送信情報とGAME BASIC for SEGASATURNの編集テキスト間で整合性が取れなくなり、正しく情報が送られなくなることがあります。このような場合には、SHIFTキーを押しながら[送信]コマンドを実行すれば、本項目がチェックされていても、差分ではなく全ての内容が送信されます。必要に応じて切り替えてお使いください。
+  EN: However, BASTERM cannot know if the program has been edited separately on the GAME BASIC for SEGASATURN side, so the send information BASTERM keeps and the text being edited in GAME BASIC for SEGASATURN can become inconsistent, and information may not be sent correctly. In that case, if you run the [Send] command while holding down the SHIFT key, the entire content is sent rather than a difference, even if this item is checked. Switch between the two as needed.
+[行番号を付加して送る]
+  EN: [Add line numbers when sending]
+送信する時に各行の行頭に行番号を[開始行番号]から[行番号増分]刻みで自動的に付加します。ラベルのみ使用してプログラムを書いている時には、ここをチェックしておけば自分で行番号をつけなくてもすみます。自分で行番号をつけている場合やフィルタなどでつける場合にはオンにしないでください。ただしそれらで行番号を付加した場合には、差分送信の効率が悪くなる場合もありますのでご注意ください。
+  EN: When sending, line numbers are automatically added at the start of each line, starting from [Start line number] in steps of [Line number increment]. If you write programs using only labels, checking this saves you from adding line numbers yourself. Do not turn this on if you add line numbers yourself or add them with a filter etc. Note, however, that if line numbers are added by those means, differential sending may become less efficient.
+・＊で始まる行（通常はラベル行）の時は[行頭が＊の時の増分間隔]の倍数に切り上げられます。これは差分送信の効率化のためのｵﾌﾟｼｮﾝですので、自分のﾌﾟﾛｸﾞﾗﾑに合わせて値を決めてください。
+  EN: - For lines starting with * (normally label lines), the number is rounded up to a multiple of [Increment when line starts with *]. This option is for making differential sending more efficient, so choose a value that suits your program.
+例えば行番号がないソースに 100行から1行刻みで行生成した場合、３行目は *から始まっているので125ではなく200になります。
+  EN: For example, if line numbers are generated for a source without line numbers starting at 100 in steps of 1, the third line starts with *, so it becomes 200 rather than 125.
+・行番号が既にある場合には、この欄をﾁｪｯｸしてもその行番号が有効になり、それ以降の行はその次の行番号から自動的にふられるようになります。データ部分の先頭に行番号をおくなどにより、効率的な差分情報を得るﾌｧｲﾙが作成できます。
+  EN: - If a line already has a line number, that line number takes effect even when this box is checked, and the following lines are numbered automatically from the next number. By placing a line number at the start of a data section, for example, you can create files that produce efficient difference information.
+ｃモャｃモャｃｃモャｃモャｃｂ
+   例：オリジナルの内容が下記で
+  EN:    Example: if the original content is as below
+ print i
+1234 print j
+print z
+100行から1行刻みで行生成した場合
+  EN: and line numbers are generated starting at 100 in steps of 1,
+100 print i
+101 '
+1234 print j
+1235 print z
+となります
+  EN: is the result.
+・行番号を付加して送るがチェックされている時は空行（改行以外の内容が空白文字も含めて何もない行）はコメントにされます。行番号を付加しない場合には空行は自動的に削除されます。
+  EN: - When Add line numbers when sending is checked, empty lines (lines with nothing other than the line break, including no whitespace) are turned into comments. When line numbers are not added, empty lines are deleted automatically.
+[送信後にｴﾗｰ情報がある時にﾀﾞｲｱﾛｸﾞで表示]
+  EN: [Show error information in a dialog after sending]
+ﾌｨﾙﾀが出したｴﾗｰや送信前に内容チェックをした時に検出されたエラーを、送信終了後にまとめて表示します。
+  EN: After sending finishes, shows together any errors output by the filter and any errors detected by the content check performed before sending.
+[ｴﾗｰ情報がある時送信中止]
+  EN: [Abort sending when there is error information]
+ｴﾗｰが発見された時には送信を中断します。ここがﾁｪｯｸされていない時にはあるだけの内容を送信します。
+  EN: Aborts sending when an error is found. If this is not checked, whatever content there is gets sent.
+[ｴﾗｰ情報ﾌｧｲﾙを削除しない]
+  EN: [Do not delete error information file]
+送信後にｴﾗｰ情報ﾌｧｲﾙを削除しない時にはここをﾁｪｯｸします。後でｴﾗｰ情報を参照したい時にはここをﾁｪｯｸしてください。ｴﾗｰ情報ﾌｧｲﾙはこの下の[ﾌｧｲﾙ名]で指定します。
+  EN: Check this if you do not want the error information file deleted after sending. Check it if you want to refer to the error information later. The error information file is specified with [File name] below.
+[送受信のテンポラリファイルを削除しない]
+  EN: [Do not delete temporary send/receive files]
+送信後もしくは受信後にテンポラリファイルを削除しない場合にはここをチェックします。テンポラリファイルは実際の送受信に使用されるﾌｧｲﾙで、GAME BASIC for SEGASATURNに送る Load, Saveのパラメータにもなります。ここで指定するﾌｧｲﾙ名はGAME BASIC for SEGASATURNが認識できるファイル名にしてください(ファイル名８文字＋".b")。
+  EN: Check this if you do not want the temporary files deleted after sending or receiving. The temporary files are the files actually used for sending and receiving, and they are also the parameters of the Load and Save sent to GAME BASIC for SEGASATURN. The file name specified here must be one GAME BASIC for SEGASATURN can recognise (8-character file name + ".b").
+LOAD
+を発行する]チェックボックス
+  EN: Issue] checkbox [translator's note: the full option name appears to be "[Always issue LOAD ,M]"; parts were lost in extraction]
+GAME BASIC for SEGASATURNに対して発行するロードコマンドを常に「
+  EN: Makes the load command issued to GAME BASIC for SEGASATURN always "
+LOAD
+　"ファイル名"
+  EN:   "filename"
+」にします。このコマンドはプログラムのマージを意味するもので、ロードの開始前に
+  EN: ". This command means merging the program, so
+NEW(
+プログラム消去
+  EN: program erase
+を行いません。この設定は差分送信のLOADとLOAD,Mの自動切換えよりも優先されます。
+  EN: is not performed before loading starts. This setting takes priority over the automatic switching between LOAD and LOAD,M in differential sending.
+Sﾍ
+[ヘルプ]メニュー}
+  EN: [Help] Menu}
+[ヘルプ]メニューのコマンド
+  EN: [Help] Menu Commands
+バージョン情報...
+  EN: About...
+
+
+ヘルプq
+  EN: Helpq
+[ヘルプ] コマンド ([ヘルプ] メニュー)
+  EN: [Help] Command ([Help] Menu)
+本ファイルを呼び出します。
+  EN: Opens this file.
+&
+ｺﾎ
+バージョン情報...
+  EN: About...
+BASTERMのバージョンや版権などについての情報を表示します。
+  EN: Displays information about BASTERM such as its version and copyright.
+'
+珂
+拡張ｺﾏﾝﾄﾞ
+  EN: Extended Commands
+(
+F
+拡張ｺﾏﾝﾄﾞ
+  EN: Extended Commands
+ｂｂモｂｃｃｃ
+拡張ｺﾏﾝﾄﾞに関して
+  EN: About Extended Commands
+GAME BASIC for SEGASATURNの命令ではないのですが、BASTERMの独自機能として、データをソースプログラム中に取り込むﾌﾟﾛｸﾞﾗﾑｺﾏﾝﾄﾞを用意しています。命令は行番号をつけないで下記のｺﾏﾝﾄﾞを指定します。
+  EN: Although it is not a GAME BASIC for SEGASATURN instruction, BASTERM provides, as its own feature, a program command that pulls data into the source program. Specify the command below without a line number.
+#include "ﾌｧｲﾙ名"
+  EN: #include "filename"
+ﾌｧｲﾙ名の部分には取り込むﾌｧｲﾙ名を指定します。例えばモデラで作成したデータを読み込む時には下記のようなソースを記載すればﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀのﾒﾝﾃﾅﾝｽを別に行うことができ、開発を効率化できます。
+  EN: In the filename part, specify the name of the file to include. For example, when reading data created with a modeller, writing source like the following lets you maintain the program and data separately, making development more efficient.
+DIM TESTD$(10)
+RESTORE *TESTDATA
+FOR I = 1 TO 10
+ャｃｃｃｃｃｂ
+READ TESTD$(I)
+NEXT I
+10000 ' Start Data Part
+*TESTDATA
+#include "TESTDATA.B"
+1
+)
+
