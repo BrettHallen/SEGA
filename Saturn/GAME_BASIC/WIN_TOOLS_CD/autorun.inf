@@ -1,0 +1,3 @@
+[autorun]
+OPEN=ToolLoad.exe /1 instbt10.exe instdc10.exe
+ICON=toolLoad.exe,0

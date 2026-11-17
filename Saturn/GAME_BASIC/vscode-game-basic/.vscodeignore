@@ -1,0 +1,6 @@
+node_modules/**
+test/**
+scripts/**
+.vscode/**
+**/__pycache__/**
+*.vsix

@@ -1,0 +1,249 @@
+{
+  "name": "game-basic",
+  "displayName": "GAME BASIC",
+  "description": "Edit, check and send GAME BASIC for SEGASATURN programs to a Sega Saturn over a serial cable.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "sega",
+    "saturn",
+    "basic",
+    "game basic",
+    "basterm"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "languages": [
+      {
+        "id": "game-basic",
+        "aliases": [
+          "GAME BASIC",
+          "GAME BASIC for SEGASATURN"
+        ],
+        "extensions": [
+          ".b",
+          ".B",
+          ".gbas"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "game-basic",
+        "scopeName": "source.game-basic",
+        "path": "./syntaxes/game-basic.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "game-basic",
+        "path": "./snippets/game-basic.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[game-basic]": {
+        "files.encoding": "shiftjis",
+        "files.autoGuessEncoding": true,
+        "files.eol": "\r\n",
+        "editor.wordBasedSuggestions": "off"
+      }
+    },
+    "commands": [
+      {
+        "command": "gameBasic.send",
+        "title": "Send to Saturn",
+        "category": "GAME BASIC",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "gameBasic.sendAndRun",
+        "title": "Send to Saturn and Run",
+        "category": "GAME BASIC",
+        "icon": "$(play)"
+      },
+      {
+        "command": "gameBasic.run",
+        "title": "Run Program on Saturn",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.stop",
+        "title": "Stop Program on Saturn",
+        "category": "GAME BASIC",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "gameBasic.receive",
+        "title": "Receive Program from Saturn",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.typeText",
+        "title": "Type Text on Saturn",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.serve",
+        "title": "Start COM: File Server and Saturn Console",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.selectPort",
+        "title": "Select Serial Port",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.showProcessed",
+        "title": "Show Program as It Will Be Sent",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.selfTest",
+        "title": "Run Self-Test (Mock Saturn)",
+        "category": "GAME BASIC"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "gameBasic.send",
+          "when": "editorLangId == game-basic",
+          "group": "navigation@1"
+        },
+        {
+          "command": "gameBasic.sendAndRun",
+          "when": "editorLangId == game-basic",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "gameBasic.send",
+          "when": "editorLangId == game-basic"
+        },
+        {
+          "command": "gameBasic.sendAndRun",
+          "when": "editorLangId == game-basic"
+        },
+        {
+          "command": "gameBasic.showProcessed",
+          "when": "editorLangId == game-basic"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "gameBasic.send",
+        "key": "f6",
+        "when": "editorLangId == game-basic"
+      },
+      {
+        "command": "gameBasic.sendAndRun",
+        "key": "shift+f6",
+        "when": "editorLangId == game-basic"
+      },
+      {
+        "command": "gameBasic.stop",
+        "key": "ctrl+f6",
+        "when": "editorLangId == game-basic"
+      }
+    ],
+    "configuration": {
+      "title": "GAME BASIC",
+      "properties": {
+        "gameBasic.port": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Serial port of the USB-TTL adapter, e.g. `/dev/cu.usbserial-1410` (Mac), `/dev/ttyUSB0` (Linux) or `COM3` (Windows). Use **GAME BASIC: Select Serial Port** to pick one."
+        },
+        "gameBasic.baudRate": {
+          "type": "number",
+          "enum": [
+            9600,
+            19200
+          ],
+          "default": 9600,
+          "description": "Must match the rate set in GAME BASIC. Drop to 9600 if 19200 gives errors."
+        },
+        "gameBasic.useMockSaturn": {
+          "type": "boolean",
+          "default": false,
+          "description": "Talk to a built-in pretend Saturn instead of the serial port. For trying the extension without hardware."
+        },
+        "gameBasic.autoLineNumbers": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Number lines that have no line number when sending, like BASTERM's *Add line numbers* option. A line that has a number resets the counter."
+        },
+        "gameBasic.lineNumberStart": {
+          "type": "number",
+          "default": 10,
+          "description": "First automatic line number."
+        },
+        "gameBasic.lineNumberStep": {
+          "type": "number",
+          "default": 10,
+          "description": "Step between automatic line numbers."
+        },
+        "gameBasic.labelLineInterval": {
+          "type": "number",
+          "default": 0,
+          "markdownDescription": "With automatic numbering, round lines starting with `*` (labels) up to a multiple of this. 0 turns it off."
+        },
+        "gameBasic.maxLineBytes": {
+          "type": "number",
+          "default": 255,
+          "description": "Longest line allowed, in Shift-JIS bytes including the line number. The real GAME BASIC limit is not confirmed yet."
+        },
+        "gameBasic.keyDelayMs": {
+          "type": "number",
+          "default": 30,
+          "description": "Pause between keystrokes typed at the Saturn (for the LOAD command and Type Text). Raise it if characters go missing."
+        },
+        "gameBasic.serveDirectory": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Folder the Saturn's own `COM:` file accesses use. Empty means the folder of the file being sent."
+        },
+        "gameBasic.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "Python 3 interpreter with pyserial installed. Empty tries python3, then python, then py -3."
+        },
+        "gameBasic.senderScript": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to `saturn_send.py`. Empty uses the copy bundled with the extension, or `../tools/saturn_send.py` next to the extension folder."
+        },
+        "gameBasic.trace": {
+          "type": "boolean",
+          "default": false,
+          "description": "Log every byte on the serial link to the GAME BASIC output panel."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "grammar": "node scripts/build-grammar.js",
+    "test": "node --test",
+    "bundle-tools": "node scripts/bundle-tools.js",
+    "vscode:prepublish": "node scripts/build-grammar.js && node scripts/bundle-tools.js",
+    "package": "vsce package --allow-missing-repository --skip-license"
+  },
+  "devDependencies": {
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.2.0",
+    "@vscode/vsce": "^3.2.0"
+  }
+}

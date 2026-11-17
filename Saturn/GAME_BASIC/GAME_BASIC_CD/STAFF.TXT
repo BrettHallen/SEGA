@@ -1,0 +1,106 @@
+ＧＡＭＥ ＢＡＳＩＣ ｆｏｒ ＳＥＧＡＳＡＴＵＲＮ スタッフ
+
+プロデューサー
+ 杉山 一郎 / ASCII Corp.
+
+企画/ディレクター
+ 宮崎 暁 / Bits Laboratory
+
+進行管理
+ 秋田 隆行 / ASCII Corp.
+
+進行管理アシスタント
+ 清水 祐一 / ASCII Corp.
+
+BASICインタープリタ･メイン･システム･デザイン & プログラム
+ 金山 素志 / Bits Laboratory
+
+BASICインタープリタ･サウンド･システム･デザイン & プログラム
+ 本間 直純 / Bits Laboratory
+
+通信ソフト "BASTERM" デザイン & プログラム
+ Ikkou.Noku
+
+モデリング･データ変換ツール作成
+ 三橋 正邦
+ Ikkou.Noku
+
+サンプル･プログラム
+ 蜷川 幸広（MMLサンプル作成）
+ 三橋 正邦（MMLサンプル / サンプル･ゲーム作成）
+ 山田 康二 / ASCII Corp.（サンプル曲作成）
+ 村上 博美 / ASCII Corp.（サンプル音作成）
+ 小沼 卓児 / ASCII Corp.（３Ｄサンプル提供）
+ 大味 健一郎 / ScriptArts（サンプル･ゲーム / ツール作成）
+ 津田 真吾 / ScriptArts（サンプル･ゲーム / ツール作成）
+ 小林 圭太 / ScriptArts（サンプル･ゲーム / ツール作成）
+ 関根 伸和 / ScriptArts（サンプル･ゲーム / ツール作成）
+ 佐々木 勝教 / ScriptArts（サンプル･ゲーム / ツール作成）
+ 宮崎 暁   / Bits Laboratory（サンプル･ゲーム作成）
+ 金光 正敏 / Bits Laboratory（サンプル･ゲーム作成）
+ 金山 素志 / Bits Laboratory（３Ｄサンプル作成）
+ 本間 直純 / Bits Laboratory（MMLチュートリアル / オート･デモ作成）
+
+PCM音源提供
+ (有)ツーファイブ
+
+FM変調波形作成
+ 國島 憲一
+
+FM音源チューニング
+ 國島 憲一
+ 三橋 正邦
+ 本間 直純 / Bits Laboratory
+
+音楽提供
+ (株)ゲーム アーツ
+ (有)ツーファイブ 
+
+作詞
+ 溝口 功 / TWO FIVE
+
+作曲
+ MECANO ASSOCIATES
+ 岩垂 徳行 / TWO FIVE
+ 三橋 正邦
+ Hibiki Godai / TECHNICAL ARTS
+ Masahiko Yoshimura
+
+マニュアル
+ 今関 かおり / DOCUMENT SYSTEM LIMITED
+ 岩崎 敦志   / DOCUMENT SYSTEM LIMITED
+ 秋田 隆行   / ASCII Corp.
+ 清水 祐一   / ASCII Corp.
+ 宮崎 暁     / Bits Laboratory
+ 金山 素志   / Bits Laboratory
+ 本間 直純   / Bits Laboratory
+
+パッケージデザイン
+ 大沼 隆一 / ASCII Corp.
+ 野村 美香 / ASCII Corp.
+
+パッケージロゴデザイン
+ 田中 良太 / ASCII Corp.
+
+デバッグ
+ 山田 康二 / ASCII Corp.（音楽担当）
+ 吉野 敬信 / ASCII Corp.
+ 守本 達哉 / ASCII Corp.
+ 大味 健一郎 / ScriptArts
+ 津田 真吾 / ScriptArts
+ 小林 圭太 / ScriptArts
+ 関根 伸和 / ScriptArts
+ 佐々木 勝教 / ScriptArts
+
+
+協力
+ 金光 正敏   / Bits Laboratory
+ 清水 真佐志 / Bits Laboratory
+ 召田 英紀   / Bits Laboratory
+ 大野 直子   / Pianist
+ 嶋田 智幸   / ESP
+ 吉田 行宏   / Bits Laboratory
+ 上条 有     / GAME ARTS
+ 本間 直嗣
+
+...........................

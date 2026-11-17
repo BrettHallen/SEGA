@@ -1,0 +1,116 @@
+'use strict';
+// npm test  (or: node --test)
+const test = require('node:test');
+const assert = require('node:assert');
+const { analyze, effectiveNumbers } = require('../src/diagnostics');
+
+const codes = (text, opts) => analyze(text, opts).map((d) => `${d.line}:${d.code}`);
+
+test('clean program has no problems', () => {
+  const src = [
+    '10 REM HELLO',
+    '20 FOR I=1 TO 10',
+    '30 PRINT "I=";I',
+    '40 NEXT I',
+    '50 IF I>5 THEN 70',
+    '60 GOSUB 100',
+    '70 END',
+    '100 OBJ(1,@ATR) = 1,1:RETURN',
+  ].join('\n');
+  assert.deepStrictEqual(analyze(src), []);
+});
+
+test('line number errors match BASTERM checks', () => {
+  const src = '10 A=1\nB=2\n10 C=3\n100000 D=4\n';
+  assert.deepStrictEqual(codes(src), [
+    '1:no-line-number', '2:duplicate-line-number', '3:line-number-range',
+  ]);
+});
+
+test('auto numbering follows the BASTERM help example', () => {
+  const src = 'print i\n\n1234 print j\nprint z\n';
+  const opts = { autoNumber: true, start: 100, step: 1 };
+  assert.deepStrictEqual(analyze(src, opts), []);
+  const nums = effectiveNumbers(src, opts);
+  assert.deepStrictEqual([...nums.entries()], [[0, 100], [2, 1234], [3, 1235]]);
+});
+
+test('auto numbering can collide with an explicit number', () => {
+  const src = 'A=1\nB=2\n20 C=3\n';
+  assert.deepStrictEqual(codes(src, { autoNumber: true, start: 10, step: 10 }), [
+    '2:duplicate-line-number',
+  ]);
+});
+
+test('labels and jump targets', () => {
+  const src = '*START\nPRINT 1\nGOTO *START\nGOTO *NOWHERE\nGOSUB 9999\nRESTORE *START\n';
+  assert.deepStrictEqual(codes(src, { autoNumber: true }), ['3:unknown-label', '4:unknown-line']);
+  assert.deepStrictEqual(codes('10 ON A GOTO 10,20,30\n20 END\n'), ['0:unknown-line']);
+});
+
+test('strings, comments and brackets', () => {
+  assert.deepStrictEqual(codes('10 PRINT "(((":REM )))\n20 A=(1+2\n30 B=1)\n'), [
+    '1:unbalanced-paren', '2:unbalanced-paren',
+  ]);
+  assert.deepStrictEqual(codes('10 PRINT "OPEN\n'), ['0:unclosed-string']);
+  assert.deepStrictEqual(codes("10 ' GOTO 999 (\n"), []);
+  assert.deepStrictEqual(codes('10 PRINT "GOTO 999"\n'), []);
+});
+
+test('IF without THEN', () => {
+  assert.deepStrictEqual(codes('10 IF A=1 PRINT 2\n'), ['0:if-without-then']);
+  assert.deepStrictEqual(codes('10 IF A=1 GOTO 10\n'), []);
+});
+
+test('Shift-JIS and line length', () => {
+  assert.deepStrictEqual(codes('10 PRINT "セガサターン"\n'), []);
+  assert.deepStrictEqual(codes('10 PRINT "😀"\n'), ['0:not-shift-jis']);
+  const long = '10 PRINT "' + 'あ'.repeat(130) + '"';
+  assert.deepStrictEqual(codes(long), ['0:line-too-long']);
+  assert.deepStrictEqual(codes(long, { maxLineBytes: 512 }), []);
+});
+
+test('#include is expanded for numbering and missing files are errors', () => {
+  const files = { 'DATA.B': '10000 DATA 1\n10010 DATA 2\n' };
+  const readInclude = (n) => files[n.toUpperCase()] ?? null;
+  const src = '10 RESTORE 10000\n#include "data.b"\n#include "NOPE.B"\n20 GOTO 10010\n';
+  assert.deepStrictEqual(codes(src, { readInclude }), ['2:include-missing']);
+  const dup = '10000 REM CLASH\n#include "DATA.B"\n';
+  assert.deepStrictEqual(codes(dup, { readInclude }), ['1:duplicate-line-number']);
+});
+
+test('variables named like Saturn fields are not flagged (GIRL.B style)', () => {
+  const src = '1004 TYPE = 0: FLAG = 1\n1006 ATR = 16: POLYGON = 17\n4013 OBJ(1,ATR)  = 1,1\n';
+  assert.deepStrictEqual(analyze(src), []);
+});
+
+test('DATA items are literal text', () => {
+  assert.deepStrictEqual(codes("10 DATA \\a=\\(N46'8 N30'8\n20 DATA 1,(2:A=(3\n"), ['1:unbalanced-paren']);
+});
+
+test('ON ERROR GOTO 0 and a DOS end-of-file mark are fine', () => {
+  assert.deepStrictEqual(codes('10 ON ERROR GOTO 0\n20 RESUME 0\n\x1a\n'), []);
+});
+
+// Runs over the sample programs on the GAME BASIC CD when they sit next to
+// this folder (GAME_BASIC/GAME_BASIC_CD). They should come up clean apart
+// from the developers' unnumbered LOAD "COM:..." lines, which BASTERM itself
+// would refuse to send, and two strings with no closing quote.
+const fs = require('fs');
+const path = require('path');
+const cd = path.join(__dirname, '..', '..', 'GAME_BASIC_CD');
+test('GAME BASIC CD samples', { skip: !fs.existsSync(cd) && 'GAME_BASIC_CD not found' }, () => {
+  const allowed = new Set(['no-line-number', 'unclosed-string', 'out-of-order']);
+  const files = fs.readdirSync(cd).filter((f) => /\.B$/i.test(f));
+  assert.ok(files.length > 0);
+  for (const f of files) {
+    const text = new TextDecoder('shift_jis').decode(fs.readFileSync(path.join(cd, f)));
+    const lines = text.split(/\r?\n/);
+    for (const d of analyze(text)) {
+      assert.ok(allowed.has(d.code), `${f}:${d.line + 1} ${d.code}: ${d.message}`);
+      if (d.code === 'no-line-number') {
+        assert.match(lines[d.line], /^\s*'?LOAD/i, `${f}:${d.line + 1}`);
+      }
+    }
+  }
+});
