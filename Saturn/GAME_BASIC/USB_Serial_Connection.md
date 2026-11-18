@@ -83,4 +83,11 @@ With the Saturn **on** and nothing plugged into the port, use a multimeter to ch
 
 ## Still to find out
 
-- **Baud rate, data format and transfer protocol.** These aren't in the cable documentation. The next step is to capture a real GAME BASIC transfer with a logic analyser on pins 5 and 6, using the original cable and the original Windows software (or a capture from the Saturn side). That capture is what the new Mac/Linux/Windows transfer tool will need to reproduce.
+- **Confirm the protocol on hardware.** The baud rate, data format and protocol are no longer unknown (see below), but nothing has been tested on a real Saturn yet. A logic-analyser capture on pins 5 and 6 of a real transfer, with the original cable and Windows software, would still be the best check.
+
+## Serial settings (now known)
+
+- **Baud rate: 9600 (default) or 19200.** Set on the Saturn in GAME BASIC's system settings screen: from the edit screen hold **L+R+Z** on a pad in port 1, or **Q+E+D** on the Saturn keyboard; change **Baudrate**, then move to **Exit** and press **C** (Reference Manual pp. 19–20). The PC must use the same rate. Use 9600 if 19200 gives errors.
+- The setting is saved in the Saturn's backup RAM as `GBASICSS_01` (comment `Config`). Deleting it in the Saturn's memory manager puts GAME BASIC back to its defaults, including 9600.
+- **Data format: 8 data bits, no parity, 1 stop bit, no flow control.** This comes from `Basterm.exe`, not the manuals. See `BASTERM/BASTERM_serial_protocol.md`, which also describes the transfer protocol.
+- The FTDI cable and the tools in `tools/` and `vscode-game-basic/` handle both rates.
