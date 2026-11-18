@@ -179,7 +179,7 @@ Now try these commands:
 | `LIST` | Show the whole program. `LIST 30` shows one line, which you can then edit |
 | `RUN` | Run the program |
 | `RENUM` | Renumber the program from 100 in steps of 10, fixing `GOTO` and `GOSUB` targets (TM p. 34) |
-| `DELETE 30` | Remove line 30 (typing just `30` and Enter also removes it) |
+| `DELETE 30` | Remove line 30 |
 | `NEW` | Clear the program |
 
 **Stopping a program.** Press **A+Start** on the pad or **Ctrl+C** on the keyboard. GAME BASIC prints something like `Break at 130` (the line it stopped on) and then `Ready.` (TM p. 28). Type `CONT` to carry on from there. If the program left the screen in a strange state, press **F12** or type `SCREEN 0`.
@@ -329,7 +329,7 @@ The `!` versions (`AND!`, `OR!`, `XOR!`, `NOT!`) also work on the fraction bits 
 | Group | Functions |
 |---|---|
 | Maths | `ABS INT FIX SGN SQR RND SIN COS TAN ATN EXP LOG FRAC` |
-| Fast fixed-point maths | `XSIN XCOS XTAN XATN XSQR XDIST`. Angles are in **turns**: 1 = a full circle, 0.25 = 90 degrees |
+| Fast fixed-point maths | `XSIN XCOS XTAN XATN XSQR XDIST`, used throughout the samples for movement and animation |
 | Strings | `LEFT$ RIGHT$ MID$ LEN INSTR STR$ VAL CHR$ ASC STRING$ SPACE$ HEX$ BIN$` |
 | Input | `INKEY$` (the key being pressed, or `""`), `INPUT`, `PAD()` (section 10) |
 | System | `DATE$`, `FRE(0)` (free program memory), `TIMER` |
@@ -685,7 +685,7 @@ python3 saturn_send.py selftest                            # test with the mock 
 | Message | Meaning |
 |---|---|
 | `Ready.` | Waiting for input |
-| `Syntax error` | GAME BASIC could not understand the line. It shows the line again for you to fix. Inside a program, the error names the line number |
+| `Syntax error` | GAME BASIC could not understand the line. Typed directly, it shows the line again for you to fix. In a program, it is reported when that line runs |
 | `Break at 130` | The program was stopped at line 130 (A+Start or Ctrl+C). `CONT` continues |
 | `Line 120` | Shown after a program arrives from the PC: the last line loaded |
 | `Overflow` | A number became too big for its type (for example when a floating-point result is turned back into fixed-point) |
@@ -731,7 +731,7 @@ The CD is full of programs to run and study. List them with `FILES "CD:"` and ru
 | `T_` | Tools | `T_KAMI` (paint program), `T_OTO` (song editor), `T_HIBIKI` (instrument editor), `TRANSFOR` (copies a data file to the PC) |
 | | Other | `LAUNCH` (file launcher) |
 
-The Tutorial Manual walks through `G_MOBIL.B` line by line (TM pp. 89–101). Even without reading Japanese, its listing is a good model of how a GAME BASIC game is organised: set-up, a main loop driven by labels, `PAD` input and object updates.
+The Tutorial Manual walks through `G_MOBIL.B` line by line (TM pp. 87–103). Even without reading Japanese, its listing is a good model of how a GAME BASIC game is organised: set-up, a main loop driven by labels, `PAD` input and object updates.
 
 ## 22. Quick reference
 
