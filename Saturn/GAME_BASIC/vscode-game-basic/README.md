@@ -16,6 +16,7 @@ The extension does the editing side itself. Anything that touches the serial por
 | Send to Saturn | **F6**, or the upload button in the editor title. Saves, checks, then types `LOAD "COM:TBASTERM.B"` at the Saturn and serves the file |
 | Send and Run | **Shift+F6**. Same, with `,R` |
 | Stop | **Ctrl+F6** |
+| Show Error Line | **Alt+F6**, or the warning button in the editor title. After a program stops on an error, presses F12 (readable edit screen) and types `ERROR`, so the Saturn shows the failing line again (Reference Manual p. 36) |
 | Other commands | Run, Receive (pulls the Saturn's program back with `SAVE "COM:..."`), Type Text, Show Program as It Will Be Sent, Select Serial Port, Run Self-Test, and a COM: file server console |
 
 All commands are under **GAME BASIC:** in the Command Palette.

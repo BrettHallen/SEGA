@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """A pretend Saturn running GAME BASIC, for testing without hardware.
 
 It speaks the Saturn side of the protocol as BASTERM expects it: answers the
@@ -38,6 +40,7 @@ class MockSaturn(threading.Thread):
         self.running = False
         self.screen: List[str] = []  # lines the Saturn "printed"
         self.commands: List[str] = []  # command lines typed at it
+        self.keys: List[tuple] = []  # every (modifier, key) pair received
         self.nak_first_block = nak_first_block
         self.naks_sent = 0
         self._stop = threading.Event()
@@ -98,6 +101,7 @@ class MockSaturn(threading.Thread):
             self._on_key(mod, key)
 
     def _on_key(self, mod: int, key: int) -> None:
+        self.keys.append((mod, key))
         if key == 0x03 and mod in (0x04, 0x05):
             self.t.write(P.keystroke(mod, 0x03))  # echo STOP
             self.line.clear()
@@ -146,6 +150,15 @@ class MockSaturn(threading.Thread):
             return
         if word == "LIST":
             for n in sorted(self.program):
+                self._print(f"{n:5d} {self.program[n]}")
+            self._print("Ready.")
+            self._cmd(P.STATUS_DONE)
+            return
+        if word == "ERROR":
+            # Ref. p. 36: re-shows the line the last error stopped on. The
+            # mock never stops on an error, so it shows the last line.
+            if self.program:
+                n = max(self.program)
                 self._print(f"{n:5d} {self.program[n]}")
             self._print("Ready.")
             self._cmd(P.STATUS_DONE)

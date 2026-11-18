@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """Turns the incoming byte stream into events. Used by both the PC side and the mock Saturn."""
 
 from __future__ import annotations

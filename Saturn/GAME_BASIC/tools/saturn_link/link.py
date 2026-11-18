@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """PC side of the link: a cross-platform stand-in for BASTERM's comms code.
 
 The PC is a file server. To send a program we type LOAD "COM:TBASTERM.B" at
@@ -563,6 +565,19 @@ class SaturnLink:
         for ln in self.stats.saturn_text:
             self.log(f"  Saturn: {ln}")
         return self.stats
+
+    def show_error_line(self) -> None:
+        """Press F12, then type ERROR and Enter.
+
+        Straight after a program stops on an error, a bare ERROR shows the
+        failing line again (Ref. p. 36, not for errors inside DATA). F12 first
+        gives a readable edit screen, as the manual suggests. No STOP is sent,
+        so the Saturn keeps the error it stopped on.
+        """
+        f12 = P.SPECIAL_KEYS["F12"]
+        self.key(f12, f12)
+        self.pump_for(0.5)
+        self._type_command("ERROR")
 
     def run_program(self) -> None:
         self.stop()

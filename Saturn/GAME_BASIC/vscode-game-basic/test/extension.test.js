@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // Loads extension.js against a stub of the VS Code API and drives the real
 // commands end to end: Send / Send and Run go through the Python sender to the
@@ -116,7 +118,7 @@ test('extension commands drive the sender against the mock Saturn', { skip: !has
     editor: { document: fakeDoc(good) },
   };
   const ext = load(state);
-  for (const id of ['send', 'sendAndRun', 'run', 'stop', 'receive', 'typeText', 'serve',
+  for (const id of ['send', 'sendAndRun', 'run', 'stop', 'showError', 'receive', 'typeText', 'serve',
     'selectPort', 'showProcessed', 'selfTest']) {
     assert.ok(state.commands[`gameBasic.${id}`], `command ${id} registered`);
   }

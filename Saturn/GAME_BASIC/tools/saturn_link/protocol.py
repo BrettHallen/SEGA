@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """Wire format of the BASTERM <-> GAME BASIC for SEGASATURN serial link.
 
 Everything here is pure (no I/O) so it can be unit tested. The layouts come

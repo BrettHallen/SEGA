@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // Tokenises sample lines with the same engine VS Code uses.
 // Needs the dev dependencies: npm install

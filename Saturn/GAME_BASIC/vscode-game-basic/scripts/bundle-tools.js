@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // Copies ../tools (saturn_send.py + saturn_link) into ./python so a packaged
 // .vsix carries its own sender. Run automatically by `npm run package`.

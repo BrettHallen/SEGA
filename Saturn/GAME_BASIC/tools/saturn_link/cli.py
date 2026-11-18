@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """Command line front end: python3 saturn_send.py <command> ...
 
 Exit codes: 0 ok, 1 link or transfer error, 2 program check errors, 3 usage,
@@ -179,6 +181,13 @@ def cmd_send(a) -> int:
 
 def cmd_run(a) -> int:
     return _simple(a, lambda link: link.run_program(), "RUN sent.")
+
+
+def cmd_show_error(a) -> int:
+    def go(link):
+        link.show_error_line()
+        link.pump_for(0.5)
+    return _simple(a, go, "Sent F12, then ERROR.")
 
 
 def cmd_stop(a) -> int:
@@ -375,6 +384,10 @@ def main(argv=None) -> int:
     p = sub.add_parser("stop", help="send STOP")
     link_args(p)
     p.set_defaults(fn=cmd_stop)
+
+    p = sub.add_parser("show-error", help="press F12, then type ERROR: show the line a program stopped on")
+    link_args(p)
+    p.set_defaults(fn=cmd_show_error)
 
     p = sub.add_parser("type", help="type text at the Saturn")
     link_args(p)

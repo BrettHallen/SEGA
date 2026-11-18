@@ -86,6 +86,12 @@
         "icon": "$(debug-stop)"
       },
       {
+        "command": "gameBasic.showError",
+        "title": "Show Error Line on Saturn",
+        "category": "GAME BASIC",
+        "icon": "$(warning)"
+      },
+      {
         "command": "gameBasic.receive",
         "title": "Receive Program from Saturn",
         "category": "GAME BASIC"
@@ -127,6 +133,11 @@
           "command": "gameBasic.sendAndRun",
           "when": "editorLangId == game-basic",
           "group": "navigation@2"
+        },
+        {
+          "command": "gameBasic.showError",
+          "when": "editorLangId == game-basic",
+          "group": "navigation@3"
         }
       ],
       "commandPalette": [
@@ -158,6 +169,11 @@
       {
         "command": "gameBasic.stop",
         "key": "ctrl+f6",
+        "when": "editorLangId == game-basic"
+      },
+      {
+        "command": "gameBasic.showError",
+        "key": "alt+f6",
         "when": "editorLangId == game-basic"
       }
     ],

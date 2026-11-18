@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """BASTERM's pre-send processing: #include, auto line numbers and checks.
 
 Mirrors the "Send settings" dialog described in BASTERM.HLP:

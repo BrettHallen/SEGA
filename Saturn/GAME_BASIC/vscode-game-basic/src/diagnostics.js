@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // Checks for GAME BASIC for SEGASATURN source. No VS Code dependency, so it
 // runs under plain `node --test`.

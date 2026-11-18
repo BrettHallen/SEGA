@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // npm test  (or: node --test)
 const test = require('node:test');

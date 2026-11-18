@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """Byte transports: a real serial port (pyserial) or an in-process pipe pair."""
 
 from __future__ import annotations

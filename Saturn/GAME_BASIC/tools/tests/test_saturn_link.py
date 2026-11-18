@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """Tests for saturn_link. Run from the tools folder:  python3 -m unittest discover tests"""
 
 import os
@@ -168,6 +170,15 @@ class LinkTests(unittest.TestCase):
         self.assertTrue(mock.running)
         link.stop()
         self.assertFalse(mock.running)
+
+    def test_show_error_line(self):
+        # Ref. p. 36: F12, then ERROR + Enter re-shows the failing line.
+        link, mock = _session()
+        link.show_error_line()
+        link.pump_for(0.3)
+        self.assertEqual(mock.commands[-1], "ERROR")
+        self.assertIn((0x07, 0x07), mock.keys)
+        mock.stop_thread()
         mock.stop_thread()
 
     def test_nak_resends_same_block(self):

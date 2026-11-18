@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // Regenerates syntaxes/game-basic.tmLanguage.json from src/keywords.js.
 //   node scripts/build-grammar.js

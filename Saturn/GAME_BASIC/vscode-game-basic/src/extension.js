@@ -1,3 +1,5 @@
+// Created with Claude Opus 5.5, Nov 2026
+// Guided by Brett Hallen
 'use strict';
 // VS Code front end for GAME BASIC for SEGASATURN.
 // Live checks run in-process (diagnostics.js). Anything that touches the
@@ -559,6 +561,7 @@ function activate(context) {
     reg('gameBasic.sendAndRun', () => send(true)),
     reg('gameBasic.run', () => simple(['run'], 'Run')),
     reg('gameBasic.stop', () => simple(['stop'], 'Stop')),
+    reg('gameBasic.showError', () => simple(['show-error'], 'Show error line')),
     reg('gameBasic.receive', receive),
     reg('gameBasic.typeText', typeText),
     reg('gameBasic.serve', serve),

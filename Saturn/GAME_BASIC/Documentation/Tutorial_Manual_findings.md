@@ -333,7 +333,7 @@ Scans 25–58 (Ref. p. = scan − 4). Scan 26 is blank.
 
 **Other points for the terminal.**
 - `DELETE`, `EDIT`, `FIND`, `CONT` are direct-only, so they make sense as terminal commands but not in a sent program.
-- After a program stops on an error, F12 then `ERROR` + Enter re-shows the failing line. A "show error line" button could send exactly that.
+- After a program stops on an error, F12 then `ERROR` + Enter re-shows the failing line. This is now the Show Error Line command (change 14).
 - Ctrl+S / Pause, Ctrl+C, Ctrl+E and Ctrl+X control `FIND` and `LIST` output, so a terminal should pass these through.
 
 **CLEAR (p. 30), useful for the sender.** CLEAR wipes variables, undeclares arrays, closes open files and resets FOR/GOSUB stacks. File areas are counted in 256-byte blocks, 1–2048, and default to 256 (64 KB) when left out; they set the largest file `OPEN` can handle. They share memory with the user area and the program store. If both file areas are 1360 or more and unused, `PLAYINIT`/`TARG` use them as a sound cache.
@@ -375,6 +375,7 @@ Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 i
 11. Reference pp. 31–32 and the error list applied to the extension: hover syntax for `CONT`, `COS`, `DATA` and `DATE$`; the full error table (`ERRORS`, `MML_DETAILS`, `explainError`) in `src/reference.js`; when the Saturn reports an error after a send, VS Code now adds the code and cause, e.g. "Sent, but the Saturn reported: Syntax error (error 2: the statement is written wrongly …)". Tests added for both.
 12. The Python sender matches the manual's exact error messages: a new `tools/saturn_link/errors.py` (same table as the extension) replaces the old loose pattern in `link.py`, and `cli.py` adds the code and cause to "The Saturn reported: …". Two tests added (27 Python tests pass).
 13. Reference pp. 33–54 applied to hover help: `DELETE`, `DIM`, `EDIT`, `END`, `ERL`, `ERR`, `ERROR`, `EXP`, `FIND`, `FIX`, `FOR`, `FRAC`, `GOSUB`, `GOTO`, `HEX$`, `HEXBIN$`, `IF`, `INKEY$`, `INPUT`, `INPUT$`, `INSTR`, `INT`, `INTERVAL`, `LEFT$`, `LEN`, `LET` added; `DATE$`, `FKEY`, `FRE` updated (FRE 0 also counts variables; 1–3 are sizes, not free space). `THEN`/`ELSE`/`ENDIF` show the IF entry and `TO`/`STEP` the FOR entry. 50 commands now have syntax.
+14. Show Error Line (Brett's request): **Alt+F6** or the warning button in the editor title runs `saturn_send.py show-error`, which presses F12 (keystroke 07,07) and then types `ERROR` + Enter, with no STOP first so the Saturn keeps its error state. The mock answers `ERROR` by listing a line. One Python test added (28 pass); README updated. Still to test on hardware: whether F12 sent over the link acts like the keyboard's F12.
 
 ---
 

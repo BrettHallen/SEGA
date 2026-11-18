@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """Send GAME BASIC for SEGASATURN programs over a serial cable.
 
 Run `python3 saturn_send.py --help` for commands.

@@ -1,3 +1,5 @@
+# Created with Claude Opus 5.5, Nov 2026
+# Guided by Brett Hallen
 """GAME BASIC error messages (Reference Manual appendix, pp. 391-406).
 
 ERRORS maps each error code to (message as the Saturn prints it, cause).
