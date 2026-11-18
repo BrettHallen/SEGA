@@ -36,7 +36,7 @@ The port is plain 8N1 with no flow control, which fits a TX/RX/GND-only 5 V TTL 
 
 | Setting | Value | Note |
 | --- | --- | --- |
-| Baud | 9600 (default) or 19200 | Must match the rate set on the Saturn side; help says drop to 9600 if 19200 gives errors |
+| Baud | 9600 (default) or 19200 | Must match the Saturn's setting (system settings screen: L+R+Z on the pad or Q+E+D on the keyboard, Reference Manual pp. 19–20); drop to 9600 if 19200 gives errors |
 | Framing | 8 data bits, no parity, 1 stop bit | `fBinary` on |
 | Flow control | None | CTS, DSR, XON/XOFF all off |
 | DTR / RTS | Both asserted while open | DTR raised on connect, dropped on disconnect; harmless on a 3-wire cable |
@@ -168,7 +168,8 @@ Open questions to check on hardware with a logic analyser:
 - [ ] The meaning of status codes 1 and 2 (frames 0x06 and 0x07). BASTERM only ever tests for 3 and 4, so it treats 1 and 2 as plain "not running".
 - [ ] Whether STOP modifiers 4 and 5 differ on the Saturn side.
 - [ ] How the Saturn reacts to a NAK on a data block (resend or re-request).
-- [ ] The baud setting and `COM:` device syntax in the GAME BASIC manual, which is not on this CD.
+- [x] The baud setting: found in the GAME BASIC Reference Manual, pp. 19–20. It is on the Saturn's system settings screen (L+R+Z on the pad, Q+E+D on the keyboard): 9600 (default) or 19200, saved in backup RAM as `GBASICSS_01`. See `../Documentation/Tutorial_Manual_findings.md`.
+- [ ] The `COM:` device syntax beyond `LOAD`/`SAVE`/`OPEN`/`FILES`, which the Reference Manual may document.
 
 Addresses such as `0x4011C0` are virtual addresses in `Basterm.exe` (image base `0x400000`), for anyone re-checking the disassembly.
 
