@@ -69,9 +69,139 @@ const COMMANDS = {
     source: 'Ref. pp. 31-32',
   },
   'DATE$': {
-    syntax: 'DATE$',
-    summary: 'Date and time from the Saturn\'s clock as a fixed-format string: year, month, day, weekday, hour (24 h), minute, second.',
-    source: 'Ref. p. 32',
+    syntax: "DATE$",
+    summary: "Date and time from the Saturn's clock, as \"YYYY MM/DD DDD hh:mm:ss\" with a 24-hour clock and the weekday as SUN to SAT, e.g. \"1997 02/27 THU 19:52:01\". Reading the clock takes a moment, so it can be slightly off.",
+    source: "Ref. pp. 32-33",
+  },
+  DELETE: {
+    syntax: "DELETE {<start line>|<label>},{<end line>|<label>}",
+    summary: "Direct command. Deletes the lines from start to end. Both must be lines that exist, given as plain line numbers 1-99999 or labels, and end can't come before start. E.g. DELETE 100,200.",
+    source: "Ref. p. 33",
+  },
+  DIM: {
+    syntax: "DIM <name>(<max subscript>[,<max subscript>...])[,<name>(<max subscript>[,<max subscript>...])...]",
+    summary: "Declares arrays. Subscripts run from 0 to the maximum given, so DIM A(10) gives A(0) to A(10); up to 16 dimensions in practice. Add # for a float array and $ for a string array. Arrays must be declared before use; FRE() shows how much room is left.",
+    source: "Ref. pp. 33-34",
+  },
+  EDIT: {
+    syntax: "EDIT [{<line>|<label>}]\nEDIT .",
+    summary: "Direct command. Re-edits the program from the given line, from the top if none, or from the last line used with a period. Press Enter to store a changed line; Page Up and Page Down move to the lines above and below.",
+    source: "Ref. p. 34",
+  },
+  END: {
+    syntax: "END",
+    summary: "Ends the program. Closes open files and clears the FOR/NEXT and GOSUB stacks; ends normally even inside an ON ERROR GOTO handler.",
+    source: "Ref. p. 35",
+  },
+  ERL: {
+    syntax: "ERL",
+    summary: "Line number of the last error (fixed point). Works with or without ON ERROR GOTO; 0 for an error in direct mode. Reset to 0 by RESUME or by changing the program.",
+    source: "Ref. p. 35",
+  },
+  ERR: {
+    syntax: "ERR",
+    summary: "Code of the last error (fixed point), with or without ON ERROR GOTO, including errors in direct mode. Reset to 0 by RESUME or by changing the program. The codes are in the error list (Ref. pp. 391-406).",
+    source: "Ref. pp. 35-36",
+  },
+  ERROR: {
+    syntax: "ERROR [<error number>]",
+    summary: "Raises error 0-255 as if it had happened; an undefined number gives \"Unprintable error\". Typed on its own straight after a program stops on an error, it shows the line in error again (not for errors in DATA), handy after pressing F12 to get a readable edit screen.",
+    source: "Ref. p. 36",
+  },
+  EXP: {
+    syntax: "EXP(<numeric expression>)",
+    summary: "e to the given power, returned as float (e = 2.7182818284588). The argument can be up to about 709.",
+    source: "Ref. pp. 36-37",
+  },
+  FIND: {
+    syntax: "FIND [<start line>][{,|-}[<end line>]] [,]<search string>[,P]",
+    summary: "Direct command. Lists the program lines containing the string, with the match in colour; case is ignored. P pauses after each page. Otherwise Ctrl+S or Pause pauses, Ctrl+C stops, Ctrl+E or Up slows down, Ctrl+X or Down speeds up. E.g. FIND \"GOSUB\",P.",
+    source: "Ref. p. 37",
+  },
+  FIX: {
+    syntax: "FIX(<numeric expression>)",
+    summary: "Drops the fraction, rounding toward zero: FIX(-1.01) = -1, FIX(-0.99) = 0. The result keeps the type of the argument.",
+    source: "Ref. p. 38",
+  },
+  FOR: {
+    syntax: "FOR <numeric variable>=<start> TO <end> [STEP <step>]",
+    summary: "Starts a loop closed by NEXT. STEP defaults to +1; a step of 0 loops forever. The loop also ends if the counter passes the fixed-point limit of +/-131071.999. Fractional steps build up rounding errors, so count in whole numbers or use hex fractions such as &H0.1. In direct mode the whole loop must be on the one line.",
+    source: "Ref. pp. 39-40",
+  },
+  FRAC: {
+    syntax: "FRAC(<numeric expression>)",
+    summary: "The fraction part of a number, as fixed point.",
+    source: "Ref. p. 40",
+  },
+  GOSUB: {
+    syntax: "GOSUB {<line>|<label>}",
+    summary: "Calls a subroutine at a line (1-99999) or a label, e.g. GOSUB *CHECKSUB. RETURN goes back to the statement after the GOSUB.",
+    source: "Ref. p. 41",
+  },
+  GOTO: {
+    syntax: "GOTO {<line>|<label>}",
+    summary: "Jumps to a line (1-99999) or a label, e.g. GOTO *GAMEOVER. Statements after it on the line never run, though DATA there still counts.",
+    source: "Ref. pp. 41-42",
+  },
+  'HEX$': {
+    syntax: "HEX$(<numeric expression>[,<suppress>])",
+    summary: "Number to hex string, with \".\" before the fraction. A value that is not negative gets a leading space, a negative one a \"-\". Suppress pads with 0s: 0 = none (default), 1 = integer part, 2 = fraction, 3 = both. HEX$(123.25) gives \" 7B.4\"; with 3, \" 0007B.4000\".",
+    source: "Ref. p. 42",
+  },
+  'HEXBIN$': {
+    syntax: "HEXBIN$(<source string>)",
+    summary: "Hex string to binary data, one character per pair of digits: HEXBIN$(\"414243\") = \"ABC\". Commas can separate items, so HEXBIN$(\"41,4,43\") = \"A\"+CHR$(4)+\"C\"; an odd last digit counts as the low digit.",
+    source: "Ref. p. 43",
+  },
+  IF: {
+    syntax: "IF <condition> THEN [{<line>|<label>|<statement>...}][ELSE [{<line>|<label>|<statement>...}]]\nIF <condition> GOTO {<line>|<label>}[ELSE [{<line>|<label>|<statement>...}]]\nIF <condition> THEN [:<statement>...]\n  [<statement>...]\n[ELSE]\n  [<statement>...]\nENDIF",
+    summary: "Non-zero is true (fractions dropped). A one-line IF ends at the end of the line. If THEN is followed by the line end or \":\", the IF runs over several lines until ENDIF, and ELSE IF chains are allowed. The two forms can be mixed. Errors: ELSE/ENDIF without IF, IF/ELSE without ENDIF.",
+    source: "Ref. pp. 43-46",
+  },
+  'INKEY$': {
+    syntax: "INKEY$",
+    summary: "One character from the key buffer, or \"\" if none. Special keys: Backspace 8, Tab 9, Home 11, Insert 18, End 24, Esc 27, right 28, left 29, up 30, down 31, Delete 127, F1-F12 224-235 (&HE0-&HEB; F10 can't be sent from BASTERM), Page Up 250, Page Down 251.",
+    source: "Ref. pp. 47-48",
+  },
+  INPUT: {
+    syntax: "INPUT [<prompt>,]{<string variable>|<numeric variable>}[,<default>]",
+    summary: "Shows the prompt (\"?\" if left out) and reads a line from the keyboard; the key buffer is cleared first. Commas, colons and quotes are taken as typed and trailing spaces dropped. The default text is shown ready to edit. A numeric variable repeats the input until a number is typed. E.g. INPUT \"ENTRY NAME ?\",N$,\"SEGA\".",
+    source: "Ref. pp. 48-49",
+  },
+  'INPUT$': {
+    syntax: "INPUT$(<number of characters>)",
+    summary: "Waits for 1-255 key presses and returns them as a string. Every key with a character code counts except Ctrl+C; see INKEY$ for special keys.",
+    source: "Ref. p. 49",
+  },
+  INSTR: {
+    syntax: "INSTR(<target string>,<search string>[,<start position>])",
+    summary: "Position of the search string in the target, counting from 1, or 0 if not found, if the target is \"\", or if the start is past its end. An empty search string returns the start position.",
+    source: "Ref. p. 50",
+  },
+  INT: {
+    syntax: "INT(<numeric expression>)",
+    summary: "Largest whole number not above the value, so INT(-0.01) = -1. The result keeps the type of the argument.",
+    source: "Ref. p. 51",
+  },
+  INTERVAL: {
+    syntax: "INTERVAL[<timer number>] ON [,<interval>]\nINTERVAL[(<timer number>)] <interval>\nINTERVAL[(<timer number>)] OFF",
+    summary: "Interval timers 0-23 (0 if left out), counting in 1/60 s. ON allows the interrupt and starts the count, and a new interval resets it; a bare interval changes only the interval; OFF blocks the interrupt (it isn't queued). An interval of 0 stops the count. Set the handler with ON INTERVAL GOSUB first. Lower timer numbers go first, then countdown timers, then ON MMLSTAT GOSUB.",
+    source: "Ref. pp. 51-53",
+  },
+  'LEFT$': {
+    syntax: "LEFT$(<target string>,<numeric expression>)",
+    summary: "The first n characters of the string; the whole string if n is longer, \"\" if n is 0.",
+    source: "Ref. p. 53",
+  },
+  LEN: {
+    syntax: "LEN(<string expression>)",
+    summary: "Number of characters in the string (fixed point), 0 for \"\".",
+    source: "Ref. pp. 53-54",
+  },
+  LET: {
+    syntax: "[LET] <numeric variable>=<numeric expression>\n[LET] <string variable>=<string expression>",
+    summary: "Assignment; LET can be left out. A fixed-point variable holds -&H1FFFF.FFFC to +&H1FFFF.FFFC, beyond which you get Overflow; mixing strings and numbers gives Type mismatch.",
+    source: "Ref. p. 54",
   },
   FILES: {
     syntax: 'FILES "<device>:[<name>]"',
@@ -79,14 +209,14 @@ const COMMANDS = {
     source: 'Tut. pp. 29-30; Ref. p. 8',
   },
   FKEY: {
-    syntax: 'FKEY <key 1-12>,<string>',
-    summary: 'Defines a function key. At start-up F5 is RUN, F7 CONT, F12 CHR$(16) (Ctrl+P, the panic key).',
-    source: 'Ref. p. 18',
+    syntax: "FKEY <function key number>,<string expression>\nFKEY PRINT   (or FKEY ?)",
+    summary: "Defines function key 1-12 with a string of up to 31 characters (anything after a CHR$(0) is ignored), e.g. FKEY 1,\"RUN\"+CHR$(13)+CHR$(10). FKEY PRINT lists the keys, with control codes shown as X. At start-up F5 is RUN, F7 CONT, F12 CHR$(16) (Ctrl+P, the panic key).",
+    source: "Ref. pp. 18, 38",
   },
   FRE: {
-    syntax: 'FRE(<n>)',
-    summary: 'Free memory: 0 = program area, 1 = user area, 2 and 3 = file area.',
-    source: 'Ref. pp. 7-8',
+    syntax: "FRE(<number>)",
+    summary: "Memory in 256-byte blocks, rounded up: 0 = free space in the variable and program area; 1 = size of the user area; 2 and 3 = size of file areas 1 and 2 (sizes, not free space). See also SFRE, TFRE.",
+    source: "Ref. pp. 7-8, 40-41",
   },
   KPRINT: {
     syntax: 'KPRINT [(x,y[,xpitch,ypitch,halfwidth])],[FIX][string][;][,colour][,SCALE][,bgcolour]',
@@ -176,6 +306,10 @@ const CONSTANTS = {
   NOISE: [3, 'waveform', 'noise'],
 };
 
+
+// Words that belong to a larger statement show that statement's entry.
+for (const w of ['THEN', 'ELSE', 'ENDIF']) COMMANDS[w] = COMMANDS.IF;
+for (const w of ['TO', 'STEP']) COMMANDS[w] = COMMANDS.FOR;
 
 // Error messages, Reference Manual appendix pp. 391-406: code -> [message as
 // the Saturn prints it, cause]. Codes 33, 38, 40 and 49 are not listed.

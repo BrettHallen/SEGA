@@ -280,9 +280,9 @@ These pages are the language definition, so they settle several things the sampl
 
 ---
 
-## 10a. Reference Manual command pages (Ref. pp. 23–32)
+## 10a. Reference Manual command pages (Ref. pp. 23–54)
 
-Scans 25–34 (Ref. p. = scan − 4). Scan 26 is blank.
+Scans 25–58 (Ref. p. = scan − 4). Scan 26 is blank.
 
 **Notation (p. 23).** `[]` optional; `<>` required, unless inside an outer `[]`; `{a|b}` choose one (in the sound chapters `{}` means "can repeat"). When a middle parameter is left out and a later one follows, keep its comma. These rules are what `src/reference.js` follows.
 
@@ -302,7 +302,39 @@ Scans 25–34 (Ref. p. = scan − 4). Scan 26 is blank.
 | CONT | `CONT` | Direct command only. Won't resume if the program was changed after it stopped (error 17), so a send ends any chance of CONT | 31 |
 | COS | `COS(<angle>)` | Radians, float result | 31 |
 | DATA | `DATA [<data item>][,[<data item>]...]` | Program only. Quote strings holding `,` `:` or spaces; a `"` can't be included; left-out items are 0 or "" | 31–32 |
-| DATE$ | `DATE$` | Year, month, day, weekday, hour (24 h), minute, second; the exact layout continues on p. 33 | 32 |
+| DATE$ | `DATE$` | `"1997 02/27 THU 19:52:01"`: year, month/day, SUN–SAT, 24-hour time | 32–33 |
+| DELETE | `DELETE {<start line>|<label>},{<end line>|<label>}` | Direct only; both lines must exist | 33 |
+| DIM | `DIM <name>(<max>[,<max>...])[,...]` | Subscripts 0..max; up to 16 dimensions | 33–34 |
+| EDIT | `EDIT [{<line>|<label>}]` / `EDIT .` | Direct only; Page Up/Down move between lines | 34 |
+| END | `END` | Closes files, clears stacks | 35 |
+| ERL / ERR | `ERL` / `ERR` | Last error's line / code; reset by RESUME or a program change | 35–36 |
+| ERROR | `ERROR [<error number>]` | 0–255. Bare `ERROR` right after a stop re-shows the failing line (use after F12) | 36 |
+| EXP | `EXP(<numeric expression>)` | Float; argument up to about 709 | 36–37 |
+| FIND | `FIND [<start>][{,|-}[<end>]] [,]<search string>[,P]` | Direct only; Ctrl+S pause, Ctrl+C stop, Ctrl+E/X slower/faster | 37 |
+| FIX | `FIX(<numeric expression>)` | Toward zero | 38 |
+| FKEY | `FKEY <key>,<string>` / `FKEY PRINT` (`FKEY ?`) | Keys 1–12, up to 31 characters | 38 |
+| FOR | `FOR <var>=<start> TO <end> [STEP <step>]` | Fixed-point limit ±131071.999; in direct mode the loop must fit on one line | 39–40 |
+| FRAC | `FRAC(<numeric expression>)` | Fraction part | 40 |
+| FRE | `FRE(<number>)` | 0 = free variable+program area; 1–3 = sizes of user area and file areas (not free space) | 40–41 |
+| GOSUB / GOTO | `GOSUB {<line>|<label>}` / `GOTO {<line>|<label>}` | Lines 1–99999 or `*LABEL` | 41–42 |
+| HEX$ | `HEX$(<numeric expression>[,<suppress>])` | Same suppress codes as BIN$ | 42 |
+| HEXBIN$ | `HEXBIN$(<source string>)` | Hex text to bytes; commas allowed | 43 |
+| IF | `IF <cond> THEN … [ELSE …]`, `IF <cond> GOTO … [ELSE …]`, block `IF … THEN` / `[ELSE]` / `ENDIF` | THEN followed by line end or `:` starts a block IF; ELSE IF chains allowed | 43–46 |
+| INKEY$ | `INKEY$` | Key codes table (below) | 47–48 |
+| INPUT | `INPUT [<prompt>,]{<string var>|<numeric var>}[,<default>]` | Commas, colons and quotes are taken as typed | 48–49 |
+| INPUT$ | `INPUT$(<number of characters>)` | 1–255 keys; all but Ctrl+C | 49 |
+| INSTR | `INSTR(<target>,<search>[,<start>])` | 1-based, 0 if not found | 50 |
+| INT | `INT(<numeric expression>)` | Floor | 51 |
+| INTERVAL | `INTERVAL[<n>] ON [,<interval>]`, `INTERVAL[(<n>)] <interval>`, `INTERVAL[(<n>)] OFF` | Timers 0–23, 1/60 s units | 51–53 |
+| LEFT$ / LEN | `LEFT$(<string>,<n>)` / `LEN(<string>)` | | 53–54 |
+| LET | `[LET] <var>=<expression>` | Fixed-point range ±&H1FFFF.FFFC | 54 |
+
+**Key codes the Saturn sees (INKEY$, pp. 47–48).** This matters for a live key-send mode. Backspace 8, Tab 9, Home 11, Insert 18, End 24, Esc 27, right 28, left 29, up 30, down 31, Delete 127, F1–F12 224–235 (&HE0–&HEB), Page Up 250, Page Down 251. The manual notes that **F10 can't be sent from BASTERM**. The F-key codes are shared with some graphic characters.
+
+**Other points for the terminal.**
+- `DELETE`, `EDIT`, `FIND`, `CONT` are direct-only, so they make sense as terminal commands but not in a sent program.
+- After a program stops on an error, F12 then `ERROR` + Enter re-shows the failing line. A "show error line" button could send exactly that.
+- Ctrl+S / Pause, Ctrl+C, Ctrl+E and Ctrl+X control `FIND` and `LIST` output, so a terminal should pass these through.
 
 **CLEAR (p. 30), useful for the sender.** CLEAR wipes variables, undeclares arrays, closes open files and resets FOR/GOSUB stacks. File areas are counted in 256-byte blocks, 1–2048, and default to 256 (64 KB) when left out; they set the largest file `OPEN` can handle. They share memory with the user area and the program store. If both file areas are 1360 or more and unused, `PLAYINIT`/`TARG` use them as a sound cache.
 
@@ -342,6 +374,7 @@ Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 i
 10. Hover syntax added from Reference pp. 23–30: `ABS`, `ASC`, `ATN`, `BIN$`, `BINHEX$`, `BITW$`, `CHR$`, `CINT`, and `CLEAR` rewritten with its argument order and defaults. A hover test for `BIN$` was added.
 11. Reference pp. 31–32 and the error list applied to the extension: hover syntax for `CONT`, `COS`, `DATA` and `DATE$`; the full error table (`ERRORS`, `MML_DETAILS`, `explainError`) in `src/reference.js`; when the Saturn reports an error after a send, VS Code now adds the code and cause, e.g. "Sent, but the Saturn reported: Syntax error (error 2: the statement is written wrongly …)". Tests added for both.
 12. The Python sender matches the manual's exact error messages: a new `tools/saturn_link/errors.py` (same table as the extension) replaces the old loose pattern in `link.py`, and `cli.py` adds the code and cause to "The Saturn reported: …". Two tests added (27 Python tests pass).
+13. Reference pp. 33–54 applied to hover help: `DELETE`, `DIM`, `EDIT`, `END`, `ERL`, `ERR`, `ERROR`, `EXP`, `FIND`, `FIX`, `FOR`, `FRAC`, `GOSUB`, `GOTO`, `HEX$`, `HEXBIN$`, `IF`, `INKEY$`, `INPUT`, `INPUT$`, `INSTR`, `INT`, `INTERVAL`, `LEFT$`, `LEN`, `LET` added; `DATE$`, `FKEY`, `FRE` updated (FRE 0 also counts variables; 1–3 are sizes, not free space). `THEN`/`ELSE`/`ENDIF` show the IF entry and `TO`/`STEP` the FOR entry. 50 commands now have syntax.
 
 ---
 
