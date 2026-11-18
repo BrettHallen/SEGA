@@ -128,9 +128,16 @@ const grammar = {
     },
     number: {
       patterns: [
-        { match: '(?i)&H[0-9A-F]+', name: 'constant.numeric.hex.game-basic' },
-        { match: '(?i)&O[0-7]+', name: 'constant.numeric.octal.game-basic' },
-        { match: '(?i)&B[01]+', name: 'constant.numeric.binary.game-basic' },
+        {
+          comment: 'Hex, with an optional fixed-point fraction: &H1F, &H0.0E, &HFFFF.FFFC',
+          match: '(?i)&H(?:[0-9A-F]+(?:\\.[0-9A-F]*)?|\\.[0-9A-F]+)',
+          name: 'constant.numeric.hex.game-basic',
+        },
+        {
+          comment: 'Binary, with an optional fixed-point fraction: &B101, &B101.01 (no octal in GAME BASIC)',
+          match: '(?i)&B(?:[01]+(?:\\.[01]*)?|\\.[01]+)',
+          name: 'constant.numeric.binary.game-basic',
+        },
         {
           match: '(?i)(?<![A-Za-z0-9_$%!#.])(?:\\d+\\.?\\d*|\\.\\d+)(?:E[+-]?\\d+)?[!#%]?',
           name: 'constant.numeric.decimal.game-basic',

@@ -24,6 +24,7 @@ The scans are in `Documentation/Tutorial_Manual_JP/`, one TIFF per sheet. They w
 | 110–149 | 104–143 | Guide to every sample program and tool on the CD |
 | 151–178 | 145–172 | **Chapter 3: BASTERM** (the PC communication software) |
 | 179–184 | 173–176, back | Index, back matter, back cover |
+| Ref. 1–22 | Ref. front matter, 1–18 | **Basic specification**: contents, characters, numbers, strings, operators and precedence, variables, line and label limits, memory, devices and file names, **reserved word list**, `@` constant table, editing keys, function keys, soft reset |
 | Ref. 23–24 | Ref. 19–20 | **System settings screen**: baud rate, keyboard repeat, edit width, where the settings are stored |
 | Ref. 420–425 | Ref. 416–421 | **Reference Manual index**: every keyword with its page |
 
@@ -201,6 +202,7 @@ The index (Reference Manual pp. 416–421) lists every GAME BASIC command with i
 - **Confirmed (16)** words we only had from standard BASIC: `ATN`, `BIN$`, `CINT`, `CONT`, `DELETE`, `ERL`, `EXP`, `KILL`, `LET`, `LIST`, `LOG`, `POS`, `RANDOMIZE`, `RENUM`, `STOP`, `TAN`.
 - **Removed (27).** `TIME` and `MSTR$` are user variables in the CD's games (`TIME = TIME + .05`; `DIM MSTR$(…)`). `TIME$` is in neither the index nor the CD. Standard BASIC words that aren't in GAME BASIC: `AUTO`, `CDBL`, `CSNG`, `CSRLIN`, `DEF`, `FN`, `EOF`, `EQV`, `IMP`, `ERASE`, `FIELD`, `GET`, `PUT`, `LLIST`, `MERGE`, `OCT$`, `PRESET`, `SOUND`, `SPC`, `TAB`, `TRON`, `TROFF`, `WHILE`, `WEND`. The index has no structured loops at all.
 - **Kept although not indexed:** operators (`AND`, `OR`, `XOR`, `NOT`, `MOD`, `AND!`) and parts of other statements (`USING`, `AS`, `OUTPUT`, `APPEND`), which indexes don't list on their own.
+- **Checked again against the full reserved-word list (Ref. pp. 9–10), Nov 18.** It has 203 words. Missing from the extension: `COPY`, `OFF` (as in `INTERVAL OFF`, used 79 times on the CD), `OPTION` and `VERTEXID` (used on the CD: `SYS_I=VERTEXID(-1)`). `VERTEX` was a misreading of the index: it isn't a keyword, and on the CD it only appears in comments. `REM` isn't in the keyword list but is already coloured as a comment. Operators missing: `NOT!`, `OR!`, `XOR!`. `AS`, `OUTPUT` and `APPEND` aren't reserved words, but `OPEN … FOR OUTPUT AS 2` uses them, so they stay. The number grammar also needs `&B` with a fraction (`&B101.01`), and doesn't need `&O` octal, which GAME BASIC doesn't have. *Done Nov 18 (not committed).*
 - `OBJ` and `TPROP()` take numbered `@` fields (`@TYPE`, `@FLAG`, `@XP`…, `@ATR`, `@PARENT`, `@CHILD`, `@RADIUS`…; `@BEND`, `@LAYER`, `@TONE`, `@LOOP`, `@DPAN`…). The grammar colours any `@NAME` the same way, which covers these and the `@PAD_…` constants.
 
 ---
@@ -220,9 +222,65 @@ The index (Reference Manual pp. 416–421) lists every GAME BASIC command with i
 
 The rest (G_HATA, G_MOBIL/G_MOBILS, G_BOMB, G_BOU, G_JUMP/_A/_M, G_MAZE, G_SABA, G_TEKE, G_THESEU, P_DOLL, P_DLPLAY, P_HERI, P_TANK, P_NEKO, P_SHOWER, P_TEXMAP, the S_ music samples and PLAYMIDI) are games and demos. Their pages explain how to play them.
 
+## 10. Reference Manual basic specification (Ref. pp. 1–18)
+
+These pages are the language definition, so they settle several things the samples only hinted at.
+
+**Characters (p. 1).** Program text may use only character codes 32–126; codes 128–255 are allowed only inside `"…"` strings. Lower-case letters are allowed when typing but are turned into capitals when the line is stored, except inside strings. Keywords and names are not case-sensitive.
+
+**Numbers (pp. 1–3).**
+- Two types. **Fixed-point** is the default: −131071.9999 to +131071.9999, with a fraction in 1/16384 steps and 4 decimal places shown. **Floating-point** (double) is marked with a `#` suffix on the number or variable, e.g. `1.5#`, `A#`. There is no integer type.
+- Below 1, fixed-point drops the leading 0 (`.123`); floating-point keeps it (`0.123`).
+- Exponents: `<mantissa>E{+|-}<exponent>`, for both types.
+- **Binary** `&B…`: up to 17 integer digits and up to 14 fraction digits after a `.`, e.g. `&B101.01`. **Hex** `&H…`: up to 5 integer digits (the top one 0 or 1) and up to 4 fraction digits; range −&H1FFFF.FFFC to &H1FFFF.FFFC. There is no octal form.
+- A fixed-point number typed beyond the range gets `#` added automatically.
+- Mixed fixed/float arithmetic becomes float. `^` always works in float. `¥` and `MOD` need fixed-point. A float that doesn't fit when converted back gives an `Overflow` error.
+
+**Strings (p. 3).** Up to 65535 characters; joined with `+`. The manual names special kinds used by functions: binary strings (one byte per value 0–255), word strings (two bytes per value 0–65535, high byte first), "binary-form" strings of `0`/`1` and hex-form strings of `0`–`9`/`A`–`F`.
+
+**Operators (pp. 4–5, 11).** The full list is `AND NOT OR XOR AND! NOT! OR! XOR! MOD ¥ ^ * / + - = < > <= >= <> ( )`. The `!` forms work on the fraction bits as well. `¥` (byte 0x5C, shown as `\` in ASCII) is integer division. `MOD` returns a fraction too. Comparisons give −1 (true) or 0 (false) and work on two numbers or two strings. Precedence, highest first: `()`; `^`; unary `+ -`, `NOT`, `NOT!`; `* /`; `MOD ¥`; `+ -`; comparisons; `AND AND! XOR XOR!`; `OR OR!` lowest. Equal precedence goes left to right.
+
+**Variables (p. 6).** A name starts with a letter, then letters, digits and `_`, up to **31** characters. Type suffix: none = fixed-point, `#` = float, `$` = string. Arrays need `DIM`, have up to 16 dimensions, and each subscript can go up to 131071 (memory permitting).
+
+**Programs (p. 7).**
+- `<line number> <statement>[:<statement>]…`. A whole line, line number included, can be at most **255 characters** (leading and trailing spaces not counted, p. 15).
+- Line numbers are whole numbers **1–99999**.
+- Labels start with `*`, then a letter, letters, digits and `_`, up to 31 characters. A label goes right after the line number. Any command that takes a line number also takes a label. A label may be defined only once.
+
+**Memory (pp. 7–8).** Memory is counted in 256-byte blocks. `FRE(0)` = free program area. The user area is reserved with `CLEAR`, read and written with `USERDATA`, `POKE` and `PEEK`, and saved and loaded with `BSAVE`/`BLOAD`; `FRE(1)` gives what's left. The file area, also reserved with `CLEAR`, limits the size of any file a program can read or write; `FRE(2)` and `FRE(3)` report it.
+
+**Devices and files (pp. 8–9).**
+
+| Device | Meaning |
+|---|---|
+| `BRAM:` | Saturn internal backup RAM |
+| `CRAM:` | Cartridge RAM |
+| `FD0:` / `FD1:` | Floppy disk, partitions 1 and 2 |
+| `COM:` | **The host PC's current drive. Needs the dedicated communication software `BASTERM.EXE`** |
+| `CD:` | The built-in CD drive |
+
+- File names: letters, digits and `_`, up to **8 characters**; the 9th character is `.` and the 10th is the type letter. Types: `.D` data (written by `OPEN` or `BSAVE`), `.B` BASIC program, `.0` 256-colour bitmap, `.1` 32768-colour bitmap. Only `FILES` and `FILES$()` take an explicit extension; every other command adds it automatically.
+- Wildcards: `?` = one character, `*` = the rest of the 8 characters plus extension (`"*"` = `"????????.?"`). Only the first 8 characters of a search name count.
+- At most **2 files open** at once, as `#1` and `#2` (the `#` is optional). Files can't be larger than the file area set by `CLEAR`.
+
+**Reserved words (pp. 9–10).** The full list has 203 words; section 8 compares it with the extension.
+
+**`@` constants (pp. 11–14).** `@NAME` gives a fixed value. Object fields: `@TYPE`=0, `@FLAG`=1, `@GROUP`=2, `@XP` `@YP` `@ZP`=4–6, `@XR` `@YR` `@ZR`=8–10, `@XS` `@YS` `@ZS`=12–14, `@ATR`=16, `@POLYGON`=17, `@ORDER`=18, `@TIME`=19, `@PARENT` `@CHILD` `@LEFT` `@RIGHT`=20–23, velocities `@XV`…=24–26, accelerations `@XA`…=28–30, limits `@XL`…=32–34, spin `@XRV`…=36–38, sprite corners `@XP0`…`@YP3`=48–55, screen position `@XD` `@YD` `@ZD`=56–58, `@RD`=59, `@GTEST`=60, `@RADIUS`=61, `@COLIDIST`=62, `@COLIOBJ`=63, `@MATRIX`=64. Pad bits: `@PAD_A`=&H400, `@PAD_B`=&H100, `@PAD_C`=&H200, `@PAD_X`=&H40, `@PAD_Y`=&H20, `@PAD_Z`=&H10, `@PAD_R`=&H80, `@PAD_L`=&H8, `@PAD_RIGHT`=&H8000, `@PAD_LEFT`=&H4000, `@PAD_DOWN`=&H2000, `@PAD_UP`=&H1000, `@PAD_START`=&H800. Sound (`TPROP` and others): `@BEND`, `@LAYER`, `@TONE`, `@SN`, `@EN`, `@BN`, `@FT`, `@AR` `@DR` `@SR` `@RR` `@SL`, `@EGHOLD`, `@LSLINK`, `@KS`, `@SDIR`, `@SB`, `@SS`, `@LOOP`, `@PCM8B`, `@LSA`, `@LEA`, `@RE`, `@LFOF`, `@ALFOWS`, `@ALFOS`, `@PLFOWS`, `@PLFOS`, `@MDX`, `@MDY`, `@MDL`, `@ISEL`, `@IMIX`, `@DSEND`, `@DPAN`; effects `@REV` `@DEL` `@DST`; waves `@SAW` `@SQU` `@TRI` `@NOISE`. A table like this would make good hover text.
+
+**Editing keys (pp. 15–18).**
+- `100 PRINT 10/2` + Enter stores a line; `PRINT 10/2` + Enter runs it at once.
+- A line longer than the screen width wraps and is joined automatically.
+- **Ctrl+C** on the edit screen cancels the line being typed and moves to the next line; during `INPUT` it stops input, and while a program runs it breaks the program. So BASTERM's Stop key (Ctrl+C) is safe to send when nothing is running.
+- **Ctrl+P is the "panic" key: it runs `SCREEN 0` and brings back the text screen.** F12 is defined as `CHR$(16)`, which is Ctrl+P, so F12 and Ctrl+P do the same thing.
+- Other control keys: Ctrl+H Backspace, Ctrl+V Insert, Ctrl+G Delete, Ctrl+B Home, Ctrl+N End, Ctrl+I Tab (jump to matching bracket), Ctrl+Q clear screen (Shift+Home), Ctrl+U restore the previous line (Shift+End), Ctrl+W/Ctrl+Z show the previous/next program line, Ctrl+D/S/E/X cursor right/left/up/down, Ctrl+F/Ctrl+A next/previous word, Ctrl+M Enter, Ctrl+J new line below, Ctrl+K delete to end, Ctrl+L paste what Ctrl+K deleted, Ctrl+T delete word.
+
+**Function keys at start-up (p. 18), set with `FKEY`.** F1 `EDIT .`⏎, F2 `EDIT`⏎, F3 `LIST `, F4 `LIST`⏎, F5 `RUN`⏎, F6 `DELETE `, F7 `CONT`⏎, F8 `FILES"`, F9 `RENUM`, F10 `LOAD"` followed by cursor moves, F11 `FIND"`, F12 Ctrl+P. Most start with `CHR$(10)`.
+
+**Soft reset (p. 18).** If BASIC locks up, hold A+B+C and press Start on the lowest-numbered pad: BASIC restarts showing `HOT START`. Do it again to go to the Saturn's multiplayer screen. The program may not survive.
+
 ---
 
-## 10. Changes made from these notes (Nov 18, not committed)
+## 11. Changes made from these notes (Nov 18, not committed)
 
 1. `PUTSPRITE` added, and `AND!` highlighted as one operator.
 2. Fixed-point hex (`&H0.0E`, `&HFFFF.FFFC`) highlights as one number.
@@ -231,10 +289,12 @@ The rest (G_HATA, G_MOBIL/G_MOBILS, G_BOMB, G_BOU, G_JUMP/_A/_M, G_MAZE, G_SABA,
 5. `OBJTYPE`, `OBJATR`, `OBJPOS`, `OBJTURN` and `FRAC` added, and `HEX$` confirmed.
 6. Keyword list brought in line with the Reference Manual index (section 8), with a grammar test for the new words and for `TIME`/`MSTR$` staying uncoloured.
 7. Baud-rate docs updated from Reference pp. 19–20: `USB_Serial_Connection.md` (new "Serial settings" section), `BASTERM_serial_protocol.md` (open item closed), the extension README's setup step, and the sender's "No answer from the Saturn" message, which now says where to find the setting (L+R+Z or Q+E+D).
+8. Reference Manual pp. 1–18 applied: `COPY`, `OFF`, `OPTION`, `VERTEXID` and the operators `NOT!`, `OR!`, `XOR!` added; `VERTEX` removed (214 keywords); `&B` binary numbers with fractions highlighted and `&O` octal dropped.
+9. Hover help: a new `src/reference.js` holds per-command syntax (manual wording, summary, page) and the `@` constant values. Hovering a keyword shows its syntax where known; hovering `@PAD_START` and the like shows the value. It is seeded with the commands whose syntax is already confirmed (`KPRINT`, `SCREEN`, `LOAD`, `FILES`, `OPEN`, `FKEY`, `FRE`, `RGB`, `PUTSPRITE`, `RENUM`, `SAVE`, `CLEAR`), and will grow as Reference Manual pages are scanned.
 
 ---
 
-## 11. Still open
+## 12. Still open
 
 **To build.**
 - Diff send, following the rules in section 6.

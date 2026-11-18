@@ -84,4 +84,41 @@ test('grammar scopes', async () => {
 
   t = tokens(g, '60 print "unterminated');
   assert.strictEqual(scopeOf(t, 'print'), 'keyword.other.statement.game-basic');
+  // Tutorial manual p. 55: fixed-point hex and the AND! operator
+  t = tokens(g, '410 N=(N+&H0.001) AND! &HFFFF.FFFC');
+  assert.strictEqual(scopeOf(t, '&H0.001'), 'constant.numeric.hex.game-basic');
+  assert.strictEqual(scopeOf(t, '&HFFFF.FFFC'), 'constant.numeric.hex.game-basic');
+  assert.strictEqual(scopeOf(t, 'AND!'), 'keyword.operator.word.game-basic');
+
+  t = tokens(g, '130 PUTSPRITE 1,(100,100),0:Y=&H0.0E');
+  assert.strictEqual(scopeOf(t, 'PUTSPRITE'), 'keyword.other.statement.game-basic');
+  assert.strictEqual(scopeOf(t, '&H0.0E'), 'constant.numeric.hex.game-basic');
+
+  // Tutorial manual pp. 65 and 72
+  t = tokens(g, '350 OBJTURN OBJ_NO,.002:N=FRAC(N+&H0.002):P$=HEX$(C)');
+  assert.strictEqual(scopeOf(t, 'OBJTURN'), 'keyword.other.statement.game-basic');
+  assert.strictEqual(scopeOf(t, 'FRAC'), 'support.function.builtin.game-basic');
+  assert.strictEqual(scopeOf(t, 'HEX$'), 'support.function.builtin.game-basic');
+
+  // Reference manual index (pp. 416-421)
+  t = tokens(g, '400 WINDOW 0:S$=SPRITE$(1):V=VERSION:N=MMLSTAT(0)');
+  assert.strictEqual(scopeOf(t, 'WINDOW'), 'keyword.other.statement.game-basic');
+  assert.strictEqual(scopeOf(t, 'SPRITE$'), 'support.function.builtin.game-basic');
+  assert.strictEqual(scopeOf(t, 'VERSION'), 'support.function.builtin.game-basic');
+  assert.strictEqual(scopeOf(t, 'MMLSTAT'), 'support.function.builtin.game-basic');
+
+  // Reference manual pp. 2-4 and 9-10
+  t = tokens(g, '410 INTERVAL OFF:N=&B101.01 XOR! M:I=VERTEXID(-1)');
+  assert.strictEqual(scopeOf(t, 'OFF'), 'keyword.other.statement.game-basic');
+  assert.strictEqual(scopeOf(t, '&B101.01'), 'constant.numeric.binary.game-basic');
+  assert.strictEqual(scopeOf(t, 'XOR!'), 'keyword.operator.word.game-basic');
+  assert.strictEqual(scopeOf(t, 'VERTEXID'), 'support.function.builtin.game-basic');
+
+  // TIME and MSTR$ are ordinary variables in the CD's programs (G_JUMP.B,
+  // S_F_HAWK.B), and WHILE is not in GAME BASIC.
+  t = tokens(g, '6290 TIME = TIME + .05:KPRINT (10,Y),MSTR$(I):WHILE=1');
+  for (const w of ['TIME', 'MSTR$', 'WHILE']) {
+    const sc = scopeOf(t, w) || '';
+    assert.ok(!/^(keyword|support)/.test(sc), `${w} should not be a keyword (${sc})`);
+  }
 });

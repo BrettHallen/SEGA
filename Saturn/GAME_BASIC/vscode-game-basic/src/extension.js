@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const { analyze, effectiveNumbers } = require('./diagnostics');
 const K = require('./keywords');
+const R = require('./reference');
 
 const LANG = 'game-basic';
 let output;
@@ -190,7 +191,36 @@ const completionProvider = {
     add(K.STATEMENTS, vscode.CompletionItemKind.Keyword, 'statement');
     add(K.OPERATORS, vscode.CompletionItemKind.Operator, 'operator');
     add(K.FUNCTIONS, vscode.CompletionItemKind.Function, 'function');
+    for (const it of items) {
+      const c = R.COMMANDS[it.label];
+      if (c) it.documentation = `${c.syntax}\n\n${c.summary} (${c.source})`;
+    }
     return items;
+  },
+};
+
+// Hover text for keywords (syntax from reference.js when known) and @NAME
+// constants (values from the Reference Manual, pp. 11-14).
+function hoverText(word) {
+  if (word.startsWith('@')) {
+    const c = R.CONSTANTS[word.slice(1).toUpperCase()];
+    return c ? `**${word.toUpperCase()}** = ${c[0]}: ${c[1]}, ${c[2]} (Ref. pp. 11-14)` : null;
+  }
+  const w = word.toUpperCase();
+  if (!K.ALL.includes(w)) return null;
+  const c = R.COMMANDS[w];
+  if (c) return '```game-basic\n' + c.syntax + '\n```\n' + c.summary + ` *(${c.source})*`;
+  const kind = K.FUNCTIONS.includes(w) ? 'function' : K.OPERATORS.includes(w) ? 'operator'
+    : K.CONTROL.includes(w) ? 'control' : 'statement';
+  return `**${w}**: GAME BASIC ${kind}`;
+}
+
+const hoverProvider = {
+  provideHover(doc, pos) {
+    const range = doc.getWordRangeAtPosition(pos, /@?[A-Za-z_][A-Za-z0-9_]*[$!#]?/);
+    if (!range) return null;
+    const text = hoverText(doc.getText(range));
+    return text ? new vscode.Hover(new vscode.MarkdownString(text), range) : null;
   },
 };
 
@@ -349,9 +379,20 @@ async function send(run) {
   if (run) args.push('--run');
   const res = await runTool(args, `${run ? 'Send and run' : 'Send'} ${path.basename(doc.uri.fsPath)}`);
   if (!res) return;
+  const warning = (res.stdout.match(/^Warning: .*$/m) || [])[0];
   if (res.code === 0) {
     const summary = (res.stdout.match(/^Sent .*$/m) || ['Sent.'])[0];
     vscode.window.setStatusBarMessage(`$(check) Saturn: ${summary}`, 8000);
+    if (warning) {
+      const pick = await vscode.window.showWarningMessage(warning.replace(/^Warning: /, ''), 'Show Log');
+      if (pick) output.show(true);
+    }
+  } else if (res.code === 4) {
+    // Sent, but the Saturn printed an error (tutorial manual p. 163: BASTERM
+    // itself may miss these, so check what the Saturn says).
+    const msg = (res.stderr.trim().split(/\r?\n/).pop() || '').replace(/^Error: /, '');
+    const pick = await vscode.window.showErrorMessage(`Sent, but ${msg.charAt(0).toLowerCase()}${msg.slice(1)}`, 'Show Log');
+    if (pick) output.show(true);
   } else {
     await reportFailure(res, 'Send');
   }
@@ -525,6 +566,7 @@ function activate(context) {
     vscode.languages.registerInlayHintsProvider(sel, inlayHintsProvider),
     vscode.languages.registerDocumentSymbolProvider(sel, symbolProvider),
     vscode.languages.registerCompletionItemProvider(sel, completionProvider),
+    vscode.languages.registerHoverProvider(sel, hoverProvider),
     vscode.workspace.onDidOpenTextDocument(refresh),
     vscode.workspace.onDidChangeTextDocument((e) => later(e.document)),
     vscode.workspace.onDidCloseTextDocument((doc) => diagnostics.delete(doc.uri)),
@@ -545,4 +587,4 @@ function deactivate() {
   if (busy) busy.kill();
 }
 
-module.exports = { activate, deactivate };
+module.exports = { activate, deactivate, hoverText };

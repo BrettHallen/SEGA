@@ -8,9 +8,10 @@ The extension does the editing side itself. Anything that touches the serial por
 
 | Feature | Notes |
 |---|---|
-| Highlighting | Line numbers, keywords, built-in functions, strings, `'` and `REM` comments, `*labels`, `@ATR`-style object fields, `&H` hex numbers, BASTERM's `#include` |
+| Highlighting | Line numbers, keywords, built-in functions, strings, `'` and `REM` comments, `*labels`, `@ATR`-style object fields, `&H` hex and `&B` binary numbers (with fixed-point fractions), BASTERM's `#include` |
 | Live checks | Unnumbered direct commands such as `LOAD"COM:DDD"` and unnumbered comments are shown as notes and left out when sending. Otherwise, the same checks BASTERM makes before sending (missing, duplicate or too-big line numbers, over-long lines), plus characters Shift-JIS can't carry, missing `#include` files, unbalanced brackets, unclosed strings, `GOTO`/`GOSUB`/`RESTORE` to a line or `*label` that doesn't exist, and `IF` without `THEN` |
 | Automatic line numbers | Optional, BASTERM style: unnumbered lines get numbers when sent, a numbered line resets the counter, and inlay hints show the number each line will get |
+| Hover and completion help | Hover a keyword for its syntax and manual page where known (`src/reference.js`), or an `@NAME` constant such as `@PAD_START` for its value |
 | Go to definition | On a `GOTO 100` target or a `*LABEL`. Labels also show in the Outline view |
 | Send to Saturn | **F6**, or the upload button in the editor title. Saves, checks, then types `LOAD "COM:TBASTERM.B"` at the Saturn and serves the file |
 | Send and Run | **Shift+F6**. Same, with `,R` |
@@ -25,7 +26,7 @@ All commands are under **GAME BASIC:** in the Command Palette.
 2. Install the extension, using either way:
    - **Try it from source:** run `code --extensionDevelopmentPath="$PWD" examples` in this folder (or open the folder in VS Code and press **F5**, choosing *VS Code Extension Development*). A second VS Code window opens on `examples/`. Run **GAME BASIC: Select Serial Port** there and pick *Use the mock Saturn* to try everything without hardware, and turn on **gameBasic.autoLineNumbers** for `HELLO.B`.
    - **Install it:** run `npm install` and then `npm run package` in this folder, and install the `.vsix` it makes with **Extensions: Install from VSIX...**. The package carries its own copy of the Python sender.
-3. Plug in the adapter, run **GAME BASIC: Select Serial Port**, and set **gameBasic.baudRate** to the rate set in GAME BASIC (9600 or 19200).
+3. Plug in the adapter, run **GAME BASIC: Select Serial Port**, and set **gameBasic.baudRate** to the rate set in GAME BASIC (9600 or 19200). To see or change the Saturn's rate, open GAME BASIC's system settings screen with **L+R+Z** on the pad (or **Q+E+D** on the Saturn keyboard), change **Baudrate**, then go to **Exit** and press **C**. A fresh install uses 9600.
 4. Open a `.B` file and press **F6**.
 
 Files ending in `.b` (any case) and `.gbas` open as GAME BASIC. For `.bas` files, add `"files.associations": { "*.bas": "game-basic" }` to your settings.
@@ -51,7 +52,9 @@ The extension also sets Shift-JIS as the file encoding (with encoding guessing o
 
 ## Where the keyword list comes from
 
-The GAME BASIC manual isn't in this project, so [`src/keywords.js`](src/keywords.js) was built from how the 67 sample programs in `../GAME_BASIC_CD` use each word: in statement position and never assigned to, or called like a function. That gives about 140 confirmed words, including the Saturn-specific ones (`KPRINT`, `SETTEX`, `ROTZOOM`, `CAMERA`, `PLAYINIT`, `ENDIF` and so on). A few standard BASIC words that never appear on the CD are kept and marked as such. Highlighting a word GAME BASIC doesn't have does no harm, and the checker never flags an unknown word. Once you have the manual, edit `src/keywords.js` and run `npm run grammar` to rebuild the grammar.
+[`src/keywords.js`](src/keywords.js) was first built from how the 67 sample programs in `../GAME_BASIC_CD` use each word (in statement position and never assigned to, or called like a function), then checked against the Reference Manual's reserved-word list (pp. 9–10) and keyword index (pp. 416–421). Every word now comes from the CD, the Tutorial Manual or the Reference Manual, 214 in all, including the operators `AND! OR! XOR! NOT!`. Standard BASIC words that GAME BASIC doesn't have (`WHILE`/`WEND`, `DEF FN`, `TRON` and so on) were removed, and so were `TIME` and `MSTR$`, which the sample games use as ordinary variables. See `../Documentation/Tutorial_Manual_findings.md` for the details. The checker never flags an unknown word. After editing `src/keywords.js`, run `npm run grammar` to rebuild the grammar.
+
+[`src/reference.js`](src/reference.js) holds the hover help: each command's syntax as the manual writes it, a one-line summary and the page it came from, plus the values of the `@` constants (Reference Manual pp. 11–14). It is meant to grow as more Reference Manual pages are scanned; a command without an entry still gets a plain hover.
 
 The CD samples also serve as a test: `npm test` runs the checker over all of them when `../GAME_BASIC_CD` exists. They come up with no errors. The only warnings are two strings with no closing quote. There are also notes for out-of-order line numbers, and for the unnumbered `LOAD "COM:..."` lines and comments that the original developers left in some files.
 

@@ -46,6 +46,7 @@ function makeVscode(state) {
       registerInlayHintsProvider: (s, p) => { state.providers.inlay = p; return disposable; },
       registerDocumentSymbolProvider: (s, p) => { state.providers.symbols = p; return disposable; },
       registerCompletionItemProvider: (s, p) => { state.providers.completion = p; return disposable; },
+      registerHoverProvider: (s, p) => { state.providers.hover = p; return disposable; },
     },
     workspace: {
       getConfiguration: () => ({
@@ -140,4 +141,17 @@ test('extension commands drive the sender against the mock Saturn', { skip: !has
   await state.commands['gameBasic.send']();
   assert.match(state.errors[0], /1 error/);
   ext.deactivate();
+});
+
+test('hover text: command syntax, @ constants, plain keywords', () => {
+  const state = { config: {}, commands: {}, providers: {}, diags: new Map(), errors: [], info: [], opened: [], log: '', editor: null };
+  const ext = load(state);
+  assert.ok(state.providers.hover, 'hover provider registered');
+  assert.match(ext.hoverText('kprint'), /KPRINT \[\(x,y/);
+  assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
+  assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
+  assert.match(ext.hoverText('VERTEXID'), /function/);
+  assert.match(ext.hoverText('NOT!'), /operator/);
+  assert.strictEqual(ext.hoverText('TIME'), null);
+  assert.strictEqual(ext.hoverText('@NOPE'), null);
 });
