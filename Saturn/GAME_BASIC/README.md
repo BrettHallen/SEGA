@@ -6,7 +6,7 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 ## Folders
 | Folder | What it contains |
 |---|---|
-| [WIN_TOOLS_CD](WIN_TOOLS_CD) | The original Windows 95 tools CD, as shipped. Japanese InstallShield 3 installers. |
+| [WIN_TOOLS_CD](WIN95_TOOLS_CD) | The original Windows 95 tools CD, as shipped. Japanese InstallShield 3 installers. |
 | [BASTERM](BASTERM) | BASTERM 1.0, the editor and serial terminal, unpacked from `Instbt10.exe`, plus my analysis of it. |
 | [DXFCONV](DXFCONV) | The DXF to BASIC 3D model converters, unpacked from `Instdc10.exe`, with their C source and samples. |
 | [vscode-game-basic](vscode-game-basic) | VS Code extension: highlighting, live checks and Send/Run/Stop/Receive for GAME BASIC, on macOS, Linux and Windows. |
