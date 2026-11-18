@@ -148,6 +148,7 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   const ext = load(state);
   assert.ok(state.providers.hover, 'hover provider registered');
   assert.match(ext.hoverText('kprint'), /KPRINT \[\(x,y/);
+  assert.match(ext.hoverText('bin$'), /BIN\$\(<numeric expression>\[,<suppress>\]\)/);
   assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
   assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
   assert.match(ext.hoverText('VERTEXID'), /function/);

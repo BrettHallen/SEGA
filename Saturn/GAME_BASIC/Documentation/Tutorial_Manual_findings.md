@@ -280,6 +280,32 @@ These pages are the language definition, so they settle several things the sampl
 
 ---
 
+## 10a. Reference Manual command pages (Ref. pp. 23–30)
+
+Scans 25–34 (Ref. p. = scan − 4). Scan 26 is blank.
+
+**Notation (p. 23).** `[]` optional; `<>` required, unless inside an outer `[]`; `{a|b}` choose one (in the sound chapters `{}` means "can repeat"). When a middle parameter is left out and a later one follows, keep its comma. These rules are what `src/reference.js` follows.
+
+**Each page gives** the type (statement, string function, fixed-point or float function), what it does (機能), syntax (書式), examples, parameters, return value and details.
+
+| Word | Syntax | Notes | Page |
+|---|---|---|---|
+| ABS | `ABS(<numeric expression>)` | Keeps fixed/float type | 24 |
+| ASC | `ASC(<string expression>)` | Code of the first character | 24 |
+| ATN | `ATN(<ratio>)` | Radians, float result | 25 |
+| BIN$ | `BIN$(<numeric expression>[,<suppress>])` | Leading space if not negative, `-` if negative; `.` between integer and fraction. Suppress: 0 no padding (default), 1 pad integer part, 2 pad fraction, 3 both | 25–26 |
+| BINHEX$ | `BINHEX$(<source string>[,<separator>])` | 2 hex digits per character; first character of the separator between pairs | 26–27 |
+| BITW$ | `BITW$(<source string>,<input bit width>,<output bit width>[,<add value>])` | Widths 4, 8 or 16; for converting the colour depth of dot data | 27–28 |
+| CHR$ | `CHR$(<character code>)` | 0–255. Control codes: &H05 erase to end of line, &H09 tab, &H0A LF, &H0B home, &H0C clear screen, &H0D CR, &H13 scroll down, &H1C–&H1F cursor right/left/up/down | 28 |
+| CINT | `CINT(<numeric expression>)` | Rounds halves away from zero (−0.5 → −1); keeps type | 29 |
+| CLEAR | `CLEAR [<blocks>[,[<file area 1>][,<file area 2>]]]` | Direct or program statement. File areas 1–2048 blocks. Examples `CLEAR 10`, `CLEAR 100,256,256`, `CLEAR ,,1024` | 29–30 |
+
+**CLEAR (p. 30), useful for the sender.** CLEAR wipes variables, undeclares arrays, closes open files and resets FOR/GOSUB stacks. File areas are counted in 256-byte blocks, 1–2048, and default to 256 (64 KB) when left out; they set the largest file `OPEN` can handle. They share memory with the user area and the program store. If both file areas are 1360 or more and unused, `PLAYINIT`/`TARG` use them as a sound cache.
+
+**For the terminal.** `CHR$(&H0C)` clears the screen and `CHR$(&H0B)` homes the cursor, so a program's output can contain these control codes. If the Saturn echoes screen text over the link (still untested), the receive view should treat them as screen controls, not text.
+
+---
+
 ## 11. Changes made from these notes (Nov 18, not committed)
 
 1. `PUTSPRITE` added, and `AND!` highlighted as one operator.
@@ -291,6 +317,7 @@ These pages are the language definition, so they settle several things the sampl
 7. Baud-rate docs updated from Reference pp. 19–20: `USB_Serial_Connection.md` (new "Serial settings" section), `BASTERM_serial_protocol.md` (open item closed), the extension README's setup step, and the sender's "No answer from the Saturn" message, which now says where to find the setting (L+R+Z or Q+E+D).
 8. Reference Manual pp. 1–18 applied: `COPY`, `OFF`, `OPTION`, `VERTEXID` and the operators `NOT!`, `OR!`, `XOR!` added; `VERTEX` removed (214 keywords); `&B` binary numbers with fractions highlighted and `&O` octal dropped.
 9. Hover help: a new `src/reference.js` holds per-command syntax (manual wording, summary, page) and the `@` constant values. Hovering a keyword shows its syntax where known; hovering `@PAD_START` and the like shows the value. It is seeded with the commands whose syntax is already confirmed (`KPRINT`, `SCREEN`, `LOAD`, `FILES`, `OPEN`, `FKEY`, `FRE`, `RGB`, `PUTSPRITE`, `RENUM`, `SAVE`, `CLEAR`), and will grow as Reference Manual pages are scanned.
+10. Hover syntax added from Reference pp. 23–30: `ABS`, `ASC`, `ATN`, `BIN$`, `BINHEX$`, `BITW$`, `CHR$`, `CINT`, and `CLEAR` rewritten with its argument order and defaults. A hover test for `BIN$` was added.
 
 ---
 

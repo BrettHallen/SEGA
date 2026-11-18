@@ -8,10 +8,50 @@
 // entry still get a plain "statement" / "function" hover.
 
 const COMMANDS = {
+  ABS: {
+    syntax: 'ABS(<numeric expression>)',
+    summary: 'Absolute value. The result keeps the type of the argument (fixed or float).',
+    source: 'Ref. p. 24',
+  },
+  ASC: {
+    syntax: 'ASC(<string expression>)',
+    summary: 'Character code of the first character of the string (fixed point).',
+    source: 'Ref. p. 24',
+  },
+  ATN: {
+    syntax: 'ATN(<ratio>)',
+    summary: 'Arctangent in radians, returned as float. A fixed-point argument is converted to float first.',
+    source: 'Ref. p. 25',
+  },
+  'BIN$': {
+    syntax: 'BIN$(<numeric expression>[,<suppress>])',
+    summary: 'Number to binary string, with "." between the integer and fraction parts. A value that is not negative gets a leading space, a negative one a "-". Suppress pads with 0s: 0 = none (default), 1 = integer part, 2 = fraction part, 3 = both. BIN$(123.25) gives " 1111011.01".',
+    source: 'Ref. pp. 25-26',
+  },
+  'BINHEX$': {
+    syntax: 'BINHEX$(<source string>[,<separator>])',
+    summary: 'Treats the string as binary data and returns 2 hex digits per character. Only the first character of the separator is used, placed between each pair. BINHEX$("ABC",",") gives "41,42,43".',
+    source: 'Ref. pp. 26-27',
+  },
+  'BITW$': {
+    syntax: 'BITW$(<source string>,<input bit width>,<output bit width>[,<add value>])',
+    summary: 'Re-packs string data from one bit width to another (4, 8 or 16), adding the add value to each item. Used to convert the colour depth of dot data. Fractions are truncated.',
+    source: 'Ref. pp. 27-28',
+  },
+  'CHR$': {
+    syntax: 'CHR$(<character code>)',
+    summary: 'The character for a code 0-255 (fraction truncated). Codes 0-31 are control codes: &H05 erase to end of line, &H09 tab (8 columns), &H0A line feed, &H0B home, &H0C clear screen, &H0D carriage return, &H13 scroll down, &H1C-&H1F cursor right/left/up/down.',
+    source: 'Ref. p. 28',
+  },
+  CINT: {
+    syntax: 'CINT(<numeric expression>)',
+    summary: 'Rounds the fraction to the nearest whole number, halves away from zero (CINT(0.5) = 1, CINT(-0.5) = -1). The result keeps the type of the argument.',
+    source: 'Ref. p. 29',
+  },
   CLEAR: {
-    syntax: 'CLEAR <n>,<n>,<n>   (e.g. CLEAR 0,64,64)',
-    summary: 'Reserves the user area (USERDATA, POKE, PEEK) and the file area (largest file a program can read or write). A soft reset does CLEAR 0,64,64. Argument order to be confirmed from the CLEAR page.',
-    source: 'Ref. pp. 7-8, 19',
+    syntax: 'CLEAR [<blocks>[,[<file area 1>][,<file area 2>]]]   (e.g. CLEAR 100,256,256 or CLEAR ,,1024)',
+    summary: 'Direct or program statement. Clears all variables, undeclares arrays, closes open files and resets the FOR/GOSUB stacks. <blocks> sets the user area for POKE, PEEK and USERDATA (none if left out). The file areas are buffers for file numbers 1 and 2, in 256-byte blocks, 1-2048 (256 if left out), and set the largest file OPEN can handle. If both file areas are 1360 or more and unused, PLAYINIT and TARG use them as a sound cache: CLEAR ,1360,1360 lets you switch 3 sets of tone data without the CD. These areas share memory with each other and with the program. A soft reset does CLEAR 0,64,64.',
+    source: 'Ref. pp. 7-8, 19, 29-30',
   },
   FILES: {
     syntax: 'FILES "<device>:[<name>]"',
