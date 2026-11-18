@@ -17,20 +17,18 @@ import time
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Optional
 
+from . import errors as E
 from . import protocol as P
 from .reader import Reader
 from .transport import Transport
 
 TRANSFER_NAME = "TBASTERM.B"
 
-# Screen messages that mean a LOAD went wrong. The GAME BASIC Tutorial Manual
-# only shows "Syntax error" (p. 17); the full list is in the Reference Manual,
-# which we don't have, so this matches the usual BASIC wording too. The
-# manual says BASTERM itself may miss such errors and to read the Saturn's
-# screen (p. 163), which is what this is for.
-SATURN_ERROR_RE = re.compile(
-    r"\berror\b|not found|denied|out of (?:memory|data|string space)|"
-    r"overflow|illegal|undefined|mismatch|time ?out", re.I)
+# Screen messages that mean a LOAD went wrong: the exact GAME BASIC error
+# messages from the Reference Manual appendix (pp. 391-406), see errors.py.
+# The tutorial says BASTERM itself may miss such errors and to read the
+# Saturn's screen (p. 163), which is what this is for.
+SATURN_ERROR_RE = E.ERROR_RE
 # "Line 120": the last line number loaded (tutorial manual p. 152).
 SATURN_LINE_RE = re.compile(r"^\s*Line\s+(\d+)\s*$", re.I)
 

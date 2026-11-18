@@ -280,7 +280,7 @@ These pages are the language definition, so they settle several things the sampl
 
 ---
 
-## 10a. Reference Manual command pages (Ref. pp. 23–30)
+## 10a. Reference Manual command pages (Ref. pp. 23–32)
 
 Scans 25–34 (Ref. p. = scan − 4). Scan 26 is blank.
 
@@ -299,10 +299,32 @@ Scans 25–34 (Ref. p. = scan − 4). Scan 26 is blank.
 | CHR$ | `CHR$(<character code>)` | 0–255. Control codes: &H05 erase to end of line, &H09 tab, &H0A LF, &H0B home, &H0C clear screen, &H0D CR, &H13 scroll down, &H1C–&H1F cursor right/left/up/down | 28 |
 | CINT | `CINT(<numeric expression>)` | Rounds halves away from zero (−0.5 → −1); keeps type | 29 |
 | CLEAR | `CLEAR [<blocks>[,[<file area 1>][,<file area 2>]]]` | Direct or program statement. File areas 1–2048 blocks. Examples `CLEAR 10`, `CLEAR 100,256,256`, `CLEAR ,,1024` | 29–30 |
+| CONT | `CONT` | Direct command only. Won't resume if the program was changed after it stopped (error 17), so a send ends any chance of CONT | 31 |
+| COS | `COS(<angle>)` | Radians, float result | 31 |
+| DATA | `DATA [<data item>][,[<data item>]...]` | Program only. Quote strings holding `,` `:` or spaces; a `"` can't be included; left-out items are 0 or "" | 31–32 |
+| DATE$ | `DATE$` | Year, month, day, weekday, hour (24 h), minute, second; the exact layout continues on p. 33 | 32 |
 
 **CLEAR (p. 30), useful for the sender.** CLEAR wipes variables, undeclares arrays, closes open files and resets FOR/GOSUB stacks. File areas are counted in 256-byte blocks, 1–2048, and default to 256 (64 KB) when left out; they set the largest file `OPEN` can handle. They share memory with the user area and the program store. If both file areas are 1360 or more and unused, `PLAYINIT`/`TARG` use them as a sound cache.
 
 **For the terminal.** `CHR$(&H0C)` clears the screen and `CHR$(&H0B)` homes the cursor, so a program's output can contain these control codes. If the Saturn echoes screen text over the link (still untested), the receive view should treat them as screen controls, not text.
+
+---
+
+## 10b. Error messages (Ref. pp. 391–406)
+
+Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 is the Appendix title (p. 389) and scan 394 is blank; the list runs from scan 395 (p. 391) to scan 410 (p. 406).
+
+- Codes 1–95, with 33, 38, 40 and 49 not listed: 91 messages. Error 67 "Sound: MML command error" is followed by one of 35 detail lines, such as `Bad octave value(0 <=> 8)`.
+- The Saturn prints the message text exactly as listed, in English. One typo is genuine: 41 is "Unusable charactor".
+- **20 Communication error** is the one for the link. The manual's fix: check the cable, check that the PC's speed matches the Saturn's setting (L+R+Z), then press the link software's connect button to reconnect.
+- **50 File access error**: the PC's link software couldn't read or write the host file (a `COM:` problem on the PC side).
+- **42 Buffer full**: FWRITE to BRAM:, CRAM:, FD0:, FD1: or COM: overran the buffer set by `CLEAR`.
+- **15 String too long** also covers a line typed on the edit screen that is too long, which matches the 255-character limit.
+- **29 Data statement**: outside DATA and comments, a missing closing `"` is added automatically, so a missing quote only fails in DATA.
+- **17 Can't continue**: changing the program after a stop blocks `CONT`.
+- The full table, with the cause of each error, is in `vscode-game-basic/src/reference.js` (`ERRORS`).
+
+**For the sender.** `tools/saturn_link` now spots Saturn errors by these exact messages (`errors.py`), so program output that merely contains "error" or "not found" no longer counts as a failed send.
 
 ---
 
@@ -318,6 +340,8 @@ Scans 25–34 (Ref. p. = scan − 4). Scan 26 is blank.
 8. Reference Manual pp. 1–18 applied: `COPY`, `OFF`, `OPTION`, `VERTEXID` and the operators `NOT!`, `OR!`, `XOR!` added; `VERTEX` removed (214 keywords); `&B` binary numbers with fractions highlighted and `&O` octal dropped.
 9. Hover help: a new `src/reference.js` holds per-command syntax (manual wording, summary, page) and the `@` constant values. Hovering a keyword shows its syntax where known; hovering `@PAD_START` and the like shows the value. It is seeded with the commands whose syntax is already confirmed (`KPRINT`, `SCREEN`, `LOAD`, `FILES`, `OPEN`, `FKEY`, `FRE`, `RGB`, `PUTSPRITE`, `RENUM`, `SAVE`, `CLEAR`), and will grow as Reference Manual pages are scanned.
 10. Hover syntax added from Reference pp. 23–30: `ABS`, `ASC`, `ATN`, `BIN$`, `BINHEX$`, `BITW$`, `CHR$`, `CINT`, and `CLEAR` rewritten with its argument order and defaults. A hover test for `BIN$` was added.
+11. Reference pp. 31–32 and the error list applied to the extension: hover syntax for `CONT`, `COS`, `DATA` and `DATE$`; the full error table (`ERRORS`, `MML_DETAILS`, `explainError`) in `src/reference.js`; when the Saturn reports an error after a send, VS Code now adds the code and cause, e.g. "Sent, but the Saturn reported: Syntax error (error 2: the statement is written wrongly …)". Tests added for both.
+12. The Python sender matches the manual's exact error messages: a new `tools/saturn_link/errors.py` (same table as the extension) replaces the old loose pattern in `link.py`, and `cli.py` adds the code and cause to "The Saturn reported: …". Two tests added (27 Python tests pass).
 
 ---
 

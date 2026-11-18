@@ -156,3 +156,13 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.strictEqual(ext.hoverText('TIME'), null);
   assert.strictEqual(ext.hoverText('@NOPE'), null);
 });
+
+test('error list: Saturn messages get their cause (Ref. pp. 391-406)', () => {
+  const R = require('../src/reference');
+  assert.strictEqual(Object.keys(R.ERRORS).length, 91);
+  assert.match(R.explainError('The Saturn reported: Syntax error in 100'), /^error 2: /);
+  assert.match(R.explainError('Communication error'), /L\+R\+Z/);
+  assert.match(R.explainError('Sound: MML command error'), /^error 67: /);
+  assert.match(R.explainError('Bad octave value(0 <=> 8)'), /error 67/);
+  assert.strictEqual(R.explainError('Line 120'), null);
+});

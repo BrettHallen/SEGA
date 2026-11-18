@@ -184,7 +184,7 @@ Now try these commands:
 
 **Stopping a program.** Press **A+Start** on the pad or **Ctrl+C** on the keyboard. GAME BASIC prints something like `Break at 130` (the line it stopped on) and then `Ready.` (TM p. 28). Type `CONT` to carry on from there. If the program left the screen in a strange state, press **F12** or type `SCREEN 0`.
 
-**If you mistype**, GAME BASIC prints `Syntax error`, shows your line again with the cursor on it, and returns to `Ready.`. Fix the line and press Enter again. A mistake inside a numbered line (for example `40 NAXT I`) is only noticed when the program reaches that line.
+**If you mistype**, GAME BASIC prints `Syntax error`, shows your line again with the cursor on it, and returns to `Ready.`. Fix the line and press Enter again. A mistake inside a numbered line (for example `40 NAXT I`) is only noticed when the program reaches that line. Section 20 lists every error message and what it means.
 
 ## 8. Saving and loading: devices and files
 
@@ -685,22 +685,176 @@ python3 saturn_send.py selftest                            # test with the mock 
 | Message | Meaning |
 |---|---|
 | `Ready.` | Waiting for input |
-| `Syntax error` | GAME BASIC could not understand the line. Typed directly, it shows the line again for you to fix. In a program, it is reported when that line runs |
 | `Break at 130` | The program was stopped at line 130 (A+Start or Ctrl+C). `CONT` continues |
 | `Line 120` | Shown after a program arrives from the PC: the last line loaded |
-| `Overflow` | A number became too big for its type (for example when a floating-point result is turned back into fixed-point) |
 | `HOT START` | GAME BASIC restarted after A+B+C+Start |
 
-The Tutorial Manual only shows `Syntax error` and refers to the Reference Manual for the complete list of error messages. That part of the Reference Manual has not been scanned yet, so this table will grow as messages are seen on the Saturn. In the meantime, most messages are plain English and say what is wrong (for example a missing file or an undefined line).
+Anything else is an error message. When you type a bad line directly, GAME BASIC shows the line again with the cursor on it so you can fix it. In a program, the error is reported when the line runs.
 
-To handle errors in your own program:
+### Error codes
+
+Every error has a code number as well as a message. The full list is in the Reference Manual's appendix (RM pp. 391–406). It is summarised below in our own words. Codes 33, 38, 40 and 49 are not listed in the manual.
+
+**Program and language errors**
+
+| Code | Message | Cause |
+|---|---|---|
+| 1 | `NEXT without FOR` | A `NEXT` has no matching `FOR` |
+| 2 | `Syntax error` | The line breaks the grammar: wrong command format, unbalanced brackets, a misplaced comma, a missing `:` and so on |
+| 3 | `RETURN without GOSUB` | `RETURN` was reached without a `GOSUB` |
+| 4 | `Out of DATA` | `READ` (or a command reading `DATA`, such as `SETCHR` or `SETPOLYGON`) ran out of data |
+| 5 | `Illegal function call` | A command or function was called the wrong way, or with a value it can't accept |
+| 6 | `Overflow` | A number became too big for fixed-point while calculating or when setting up polygons |
+| 7 | `Out of memory` | Not enough memory: `CLEAR` or `DIM` asked for too much, a program is too big for the program area (when typing or with `LOAD`), or `PEEK`/`POKE` went outside the user area. **Fix:** change how memory is shared out with `CLEAR` |
+| 8 | `Undefined line number` | A `GOTO`, `GOSUB` or similar points at a line number or label that doesn't exist |
+| 9 | `Subscript out of range` | An array index is bigger than the size given in `DIM` |
+| 10 | `Variable already defined` | `DIM` on an array that already exists |
+| 11 | `Division by 0` | Dividing by zero |
+| 12 | `Illegal direct` | This command can't be typed directly; it only works inside a program |
+| 13 | `Type mismatch` | Wrong kind of value, for example a number put into a string variable |
+| 15 | `String too long` | A string over 65535 characters, or a line typed on the edit screen that is too long |
+| 16 | `Formula too complex` | An expression is too complicated, or functions are nested too deeply. Split it into steps |
+| 17 | `Can't continue` | `CONT` can't resume the program from where it stopped |
+| 18 | `Undefined array` | An array was used without `DIM` |
+| 19 | `Dimension size error` | An array was used with a different number of dimensions from its `DIM` |
+| 21 | `No RESUME` | The program ran off the end while handling an error from `ON ERROR`, without a `RESUME`. Ending with `END` is fine |
+| 22 | `RESUME without error` | `RESUME` was used when there was no error to resume from |
+| 23 | `Illegal line number` | An invalid line number, such as 0 or one above 99999 |
+| 24 | `Stack overflow` | `FOR`/`NEXT` loops or `GOSUB` calls are nested too deeply, or a `PAINT` shape is too complicated |
+| 25 | `IF stack overflow` | Block `IF`s are nested too deeply |
+| 26 | `ELSE/ENDIF without IF` | An `ELSE` or `ENDIF` has no matching `IF` |
+| 27 | `FOR without NEXT` | A `FOR` has no matching `NEXT` |
+| 28 | `Direct statement only` | This command can only be typed directly, not used inside a program |
+| 29 | `Data statement` | A string in a `DATA` line has no closing `"`. (Other commands add a missing closing quote for you, but `DATA` lines and comments don't) |
+| 30 | `String format error` | The string given to `GCOPY` or `CCOPY` is not in the right format |
+| 31 | `Parameter mismatch` | The values don't fit the format, for example in `PRINT USING` |
+| 32 | `IF/ELSE without ENDIF` | A block `IF` or `ELSE` has no closing `ENDIF` |
+| 39 | `Version mismatch` | The BASIC program was made by a different version of GAME BASIC |
+| 41 | `Unusable charactor` | The line contains a character that can't be stored (the spelling is the Saturn's own) |
+| 51 | `Internal error` | An error inside GAME BASIC itself |
+| 58 | `Duplicated label` | The same `*label` is defined twice |
+| 78 | `Invalid USERDATA` | Bad `USERDATA` |
+
+**Graphics and polygon errors**
+
+| Code | Message | Cause |
+|---|---|---|
+| 34 | `Undefined vertex` | A vertex ID that hasn't been set up was used by `SETVERTEX`, `SETPOLYGON` or `VERTEXID` |
+| 35 | `Undefined polygon` | A polygon ID that hasn't been set up was used by `SETPOLYGON`, given to an object, or read with `POLYGONID` |
+| 36 | `Undefined attribute` | An attribute ID that hasn't been set up was used by `SETATR` or given to an object |
+| 37 | `Undefined texture` | A texture ID that hasn't been set up was used by `SETTEX`, `SETATR`, `PUTSPRITE` or `TEXID`. For `PUTSPRITE`, define the pattern with `SPRITE$` first |
+| 79 | `Vertex size mismatch` | `SETVERTEX` redefined an ID with a different number of vertices |
+| 80 | `Vertex number` | `SETPOLYGON` used a corner number that is not in the vertex group. Corner numbers must be 0 to (number of vertices − 1), and a polygon joins 3 or 4 of them |
+| 81 | `Vertex ID over` | No more vertex IDs are available |
+| 82 | `Vertex data over` | No room for more vertex data (too many vertices in one ID) |
+| 83 | `Vertex out of area` | More vertices were given than `SETVERTEX` reserved |
+| 84 | `Texture size mismatch` | `SETTEX` redefined a texture with a different size |
+| 85 | `Texture ID over` | No more texture IDs are available |
+| 86 | `Texture data over` | More texture data was given than the size in `SETTEX` |
+| 89 | `Polygon size mismatch` | `SETPOLYGON` redefined an ID with a different size |
+| 90 | `Polygon ID over` | No more polygon IDs are available |
+| 91 | `Polygon data over` | No room for more polygon data |
+| 92 | `Attribute size mismatch` | `SETATR` or `SETPFONT` redefined an attribute with a different size |
+| 93 | `Attribute ID over` | No more attribute IDs are available |
+| 94 | `Attribute data over` | No room for more attribute data |
+| 95 | `Attribute out of area` | More data was given than the size in `SETATR` |
+
+**File and device errors**
+
+| Code | Message | Cause |
+|---|---|---|
+| 20 | `Communication error` | The PC link failed. **Fix:** check the cable, check that the PC's speed matches **Baudrate** on the settings screen (L+R+Z), then reconnect from the PC software |
+| 42 | `Buffer full` | `FWRITE` wrote more than the file buffer reserved by `CLEAR` |
+| 43 | `Device not connected` | `CRAM:` or the floppy drive isn't connected, or the Saturn was started without a floppy disk in the drive |
+| 44 | `Device not formatted` | The floppy disk isn't formatted. **Fix:** if its contents can be erased, set the write-protect tab to writable and use `FORMAT` |
+| 45 | `Device write protected` | The floppy disk's write-protect tab is set |
+| 46 | `Device verify error` | The file is damaged |
+| 47 | `Not enough space` | Not enough free space on `BRAM:`, `CRAM:` or the floppy disk |
+| 48 | `Backup RAM error` | Any other error on `BRAM:`, `CRAM:` or the floppy disk |
+| 50 | `File access error` | The PC couldn't read or write the file over `COM:` |
+| 53 | `File not found` | No file with that name |
+| 54 | `File already open` | `OPEN`, `KILL` or similar on a file that is already open |
+| 55 | `Access past EOF` | Reading past the end of a file |
+| 56 | `Bad file name` | The file name is not valid (section 8) |
+| 57 | `Invalid BASIC file` | `LOAD` was used on a file that isn't a BASIC program |
+| 59 | `File not OPEN` | A file number was used before `OPEN` |
+| 60 | `Already formatted` | The disk is already formatted |
+| 61 | `Bad file mode` | The file mode is not valid |
+| 62 | `Bad device name` | The device name is not valid |
+| 64 | `File still open` | A file was used while it was still open, where that isn't allowed |
+| 69 | `File read error` | The file couldn't be read |
+| 70 | `File write error` | The file couldn't be written |
+
+**Sound errors**
+
+| Code | Message | Cause |
+|---|---|---|
+| 14 | `Sound: MML String too short` | The MML string plays for too short a time |
+| 52 | `Sound: Out of layer memory` | Not enough room for sound layers |
+| 63 | `Sound: Not layer mode` | The command needs layer editing mode |
+| 65 | `Sound: Command buffer full` | The sound driver's command buffer is full |
+| 66 | `Sound: Out of sound memory` | Sound memory couldn't be reserved |
+| 67 | `Sound: MML command error` | A mistake in an MML string. A second line gives the details (see below) |
+| 68 | `Sound:Out of MML data` | The MML string ended too soon |
+| 71 | `Sound: Song bank full` | The song data is bigger than the space reserved for it |
+| 72 | `Sound: Layer overflow` | No more layers can be registered |
+| 73 | `Sound: Tone overflow` | No more instruments can be registered |
+| 74 | `Sound: VL overflow` | No more velocity-level data can be registered (layer area full) |
+| 75 | `Sound: PEG overflow` | No more pitch-envelope data can be registered (layer area full) |
+| 76 | `Sound: PLFO overflow` | No more pitch-LFO data can be registered (layer area full) |
+| 77 | `Sound: No layer` | No layers have been registered |
+| 87 | `Sound: Invalid WAVE file` | The file is not wave data |
+| 88 | `Sound: Bad WAVE file format` | The wave data is in a format GAME BASIC doesn't accept |
+
+**MML details shown with error 67.** The second line says what is wrong in the MML string. Ranges are shown in brackets.
+
+| Detail | Meaning |
+|---|---|
+| `MML Syntax error` | General mistake in the MML |
+| `Bad note length` | Invalid note length |
+| `Velocity value(0 <=> 127)` | Velocity out of range |
+| `Not gate time ratio` / `Bad gate time ratio` | The gate time (how long a note sounds within its length) is badly written / out of range |
+| `Bad pitch bend value` | Invalid pitch bend |
+| `Not chord '(...)'` | Badly written chord |
+| `Can't nest -plets` | Triplets and other tuplets can't be nested |
+| `Bad note number(0 <=> 127)` | Note out of range |
+| `Bad tone number` | Invalid instrument number |
+| `Bad signature(-7 <=> 7)` | Invalid key signature |
+| `Bad transpose value(-127 <=> 127)` | Transpose out of range |
+| `Bad tempo value(40 <=> 300)` | Tempo out of range |
+| `Tempo change over` | Too many tempo changes |
+| `Bad volume value(0 <=> 15 @:127)` | Volume out of range (`V` 0–15, `@V` 0–127) |
+| `Bad direct pan value(0 <=> 127)` | Pan out of range |
+| `Bad octave value(0 <=> 8)` | Octave out of range |
+| `Not MML command` | Not an MML command |
+| `Bad damper value(0 or 1)` | Damper must be 0 or 1 |
+| `Macro error` | Error defining a macro |
+| `Software layer error` | Invalid software-layer settings |
+| `Pitch bend cmd.buffer overflow` | Too many pitch bends |
+| `Not base track` | This command can only go on the base track |
+| `Bad label(0 <=> 7)` | Label number out of range |
+| `D.S. without '$'` | A dal segno has no matching segno (`$`) |
+| `Bad '$'or'*'or'ds'position` | Segno, coda and dal segno are in the wrong order |
+| `Repeat command error` | Badly written repeat |
+| `Bad effect pan value(0 <=> 127)` | Effect pan out of range |
+| `Bad effect level(0 <=> 7)` | Effect level out of range |
+| `Bad effect number(0 <=> 15)` | Effect number out of range |
+| `Not DSP mode` | The command needs DSP mode |
+| `Bad DSP mixer number(0 <=> 15)` | DSP output mixer number out of range |
+| `Bad status value(0 <=> 127)` | Status value out of range |
+| `Not code name` | Invalid chord name |
+| `Chord note over(2<=>32)` | Too many notes in a chord |
+
+### Handling errors in your program
+
+`ON ERROR GOTO` sends errors to your own handler. There, `ERR` holds the code from the tables above and `ERL` the line number. Finish the handler with `RESUME`, or error 21 (`No RESUME`) follows.
 
 ```basic
 10 ON ERROR GOTO *OOPS
 20 LOAD "BRAM:NOFILE.B"
 30 END
 40 *OOPS
-50 PRINT "ERROR";ERR;"IN LINE";ERL
+50 IF ERR=53 THEN PRINT "NO SUCH FILE" ELSE PRINT "ERROR";ERR;"IN LINE";ERL
 60 RESUME 30
 ```
 
@@ -709,10 +863,10 @@ To handle errors in your own program:
 | Problem | What to try |
 |---|---|
 | The screen is garbled or the listing is hidden after a program | Press **F12** (or Ctrl+P), or type `SCREEN 0` |
-| `SAVE "BRAM:..."` fails | Backup RAM is full. Free space in the Saturn's memory manager, or save to `CRAM:` or `COM:` |
+| `SAVE "BRAM:..."` fails with `Not enough space` | Backup RAM is full. Free space in the Saturn's memory manager, or save to `CRAM:` or `COM:` |
 | The PC gets no answer from the Saturn | Check the cable and that the Saturn is at `Ready.`. Check the **Baudrate** on the settings screen (L+R+Z) matches the PC. If unsure, use 9600 on both |
 | Transfers fail at 19200 | Use 9600 on both sides. Keep the cable away from mains equipment |
-| BASTERM: "Connection to the Saturn failed. Check the connection." | As above: port, cable and baud rate |
+| BASTERM: "Connection to the Saturn failed. Check the connection.", or `Communication error` on the Saturn | As above: port, cable and baud rate, then reconnect |
 | A program that uses `COM:` files gives errors | The PC software must be connected (BASTERM's Connect, or `saturn_send.py serve`). Close files in your program before disconnecting |
 | The PC said the send worked, but the program is wrong | Look at the Saturn's screen; errors may only be shown there |
 | Characters are missing when the PC types commands | Raise the key delay (`--key-delay` or `gameBasic.keyDelayMs`) |

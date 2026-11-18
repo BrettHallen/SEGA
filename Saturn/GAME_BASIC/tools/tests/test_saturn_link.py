@@ -10,6 +10,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from saturn_link import errors as E  # noqa: E402
 from saturn_link import protocol as P  # noqa: E402
 from saturn_link.link import SaturnLink, LinkError  # noqa: E402
 from saturn_link.mock import MockSaturn  # noqa: E402
@@ -282,6 +283,24 @@ class PySerialPtyTest(unittest.TestCase):
         link.close()
         mock.stop_thread()
         os.close(slave)
+
+
+class ErrorTableTests(unittest.TestCase):
+    # Reference Manual appendix, pp. 391-406.
+    def test_explain(self):
+        self.assertEqual(len(E.ERRORS), 91)
+        self.assertTrue(E.explain("Syntax error in 100").startswith("error 2: "))
+        self.assertIn("L+R+Z", E.explain("Communication error"))
+        self.assertTrue(E.explain("Sound: MML command error").startswith("error 67: "))
+        self.assertIn("error 67", E.explain("Bad octave value(0 <=> 8)"))
+        self.assertIsNone(E.explain("Line 120"))
+        self.assertIsNone(E.explain("Ready."))
+
+    def test_only_exact_messages(self):
+        # Program output that merely mentions "error" is not a Saturn error.
+        self.assertIsNone(E.ERROR_RE.search("PRINT error count: 3"))
+        self.assertIsNone(E.ERROR_RE.search("Player not found"))
+        self.assertTrue(E.ERROR_RE.search("Undefined line number in 40"))
 
 
 if __name__ == "__main__":

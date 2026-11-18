@@ -16,6 +16,7 @@ import time
 
 from . import __version__
 from . import protocol as P
+from . import errors as E
 from .link import LinkError, SaturnLink
 from .preprocess import Options, build
 from .transport import SerialTransport, Tap, pipe_pair
@@ -151,7 +152,9 @@ def cmd_send(a) -> int:
             print(f"Warning: the last line sent was {expect}, but the Saturn reports "
                   f"Line {st.last_line}. Check its screen.", flush=True)
         if st.saturn_errors:
-            _err("Error: The Saturn reported: " + "; ".join(st.saturn_errors[:3]))
+            why = E.explain(st.saturn_errors[0])
+            _err("Error: The Saturn reported: " + "; ".join(st.saturn_errors[:3])
+                 + (f" ({why})" if why else ""))
             return 4
         if a.run:
             print("Program is running.", flush=True)

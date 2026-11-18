@@ -390,8 +390,11 @@ async function send(run) {
   } else if (res.code === 4) {
     // Sent, but the Saturn printed an error (tutorial manual p. 163: BASTERM
     // itself may miss these, so check what the Saturn says).
+    // The cause comes from the manual's error list (Ref. pp. 391-406).
     const msg = (res.stderr.trim().split(/\r?\n/).pop() || '').replace(/^Error: /, '');
-    const pick = await vscode.window.showErrorMessage(`Sent, but ${msg.charAt(0).toLowerCase()}${msg.slice(1)}`, 'Show Log');
+    const why = R.explainError(msg);
+    const pick = await vscode.window.showErrorMessage(
+      `Sent, but ${msg.charAt(0).toLowerCase()}${msg.slice(1)}${why ? ` (${why})` : ''}`, 'Show Log');
     if (pick) output.show(true);
   } else {
     await reportFailure(res, 'Send');
