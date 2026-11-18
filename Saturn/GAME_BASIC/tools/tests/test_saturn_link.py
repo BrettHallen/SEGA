@@ -182,7 +182,28 @@ class LinkTests(unittest.TestCase):
         link.on_char = lambda m, k: out.append(k)
         link.send_program(b"10 A=1\r\n")
         link.pump_for(0.2)
-        self.assertIn(b"Ok", bytes(out))
+        self.assertIn(b"Ready.", bytes(out))
+        mock.stop_thread()
+
+    def test_reads_back_line_and_errors(self):
+        # Tutorial manual p. 152: after a load the Saturn shows "Line 120".
+        link, mock = _session()
+        st = link.send_program(b"100 SCREEN\r\n110 PRINT 1\r\n120 GOTO 110\r\n")
+        self.assertEqual(st.last_line, 120)
+        self.assertEqual(st.saturn_errors, [])
+        self.assertIn("Line 120", st.saturn_text)
+        # The mock says "Syntax error" for a line it can't take.
+        st = link.send_program(b"10 A=1\r\nNAXT\r\n")
+        self.assertEqual(st.saturn_errors, ["Syntax error"])
+        mock.stop_thread()
+
+    def test_break_reports_line(self):
+        # Tutorial manual p. 28: Ctrl+C (BASTERM's STOP) prints "Break at N".
+        link, mock = _session()
+        link.send_program(b"120 *LOOP\r\n130 GOTO *LOOP\r\n", run=True)
+        st = link.send_program(b"10 A=1\r\n")  # sends STOP first
+        self.assertIn("Break at 130", link.screen_lines)
+        self.assertEqual(st.last_line, 10)
         mock.stop_thread()
 
     def test_serves_other_files_from_folder_only(self):

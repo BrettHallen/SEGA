@@ -11,6 +11,7 @@ from __future__ import annotations
 import fnmatch
 import io
 import os
+import re
 import shutil
 import time
 from dataclasses import dataclass, field
@@ -21,6 +22,17 @@ from .reader import Reader
 from .transport import Transport
 
 TRANSFER_NAME = "TBASTERM.B"
+
+# Screen messages that mean a LOAD went wrong. The GAME BASIC Tutorial Manual
+# only shows "Syntax error" (p. 17); the full list is in the Reference Manual,
+# which we don't have, so this matches the usual BASIC wording too. The
+# manual says BASTERM itself may miss such errors and to read the Saturn's
+# screen (p. 163), which is what this is for.
+SATURN_ERROR_RE = re.compile(
+    r"\berror\b|not found|denied|out of (?:memory|data|string space)|"
+    r"overflow|illegal|undefined|mismatch|time ?out", re.I)
+# "Line 120": the last line number loaded (tutorial manual p. 152).
+SATURN_LINE_RE = re.compile(r"^\s*Line\s+(\d+)\s*$", re.I)
 
 
 class LinkError(Exception):
@@ -46,6 +58,9 @@ class Stats:
     blocks_received: int = 0
     naks_received: int = 0
     naks_sent: int = 0
+    saturn_text: List[str] = field(default_factory=list)  # lines it printed
+    saturn_errors: List[str] = field(default_factory=list)  # ones that look like errors
+    last_line: Optional[int] = None  # from "Line N"
 
 
 class SaturnLink:
@@ -77,6 +92,8 @@ class SaturnLink:
         self._nul_run = 0
         self._dir_matches: List[str] = []
         self._last_rx = time.monotonic()
+        self.screen_lines: List[str] = []  # complete lines the Saturn printed
+        self._screen_buf = bytearray()
 
     # ------------------------------------------------------------------ I/O
     def _send(self, data: bytes) -> None:
@@ -105,7 +122,9 @@ class SaturnLink:
                 ev = self.r.next_event(0)
         raise LinkError(
             "No answer from the Saturn. Check the cable, the port, the baud rate "
-            "(9600 or 19200, same as GAME BASIC) and that GAME BASIC is at its prompt."
+            "(9600 or 19200, same as GAME BASIC; to see or change it on the Saturn, "
+            "press L+R+Z on the pad or Q+E+D on the keyboard) and that GAME BASIC "
+            "is at its prompt."
         )
 
     def _drain_nuls(self, quiet: float) -> None:
@@ -205,6 +224,7 @@ class SaturnLink:
                 return
             if (mod, key) in ((0x12, 0x12), (0x59, 0x59), (0x14, 0x14), (0x18, 0x18)):
                 return  # shift / ctrl state reports
+            self._capture(key)
             self.on_char(mod, key)
             return
         n = ev[1]
@@ -217,6 +237,29 @@ class SaturnLink:
             self.log(f"  Saturn status {n - P.STATUS_1 + 1} ({P.command_name(n)})")
         else:
             self.log(f"  ignoring {P.command_name(n)}")
+
+    def _capture(self, key: int) -> None:
+        """Collect the Saturn's echoed text into lines (Shift-JIS)."""
+        if key in (0x0D, 0x0A):
+            if self._screen_buf:
+                self.screen_lines.append(
+                    self._screen_buf.decode("cp932", errors="replace").rstrip())
+                self._screen_buf.clear()
+            return
+        self._screen_buf.append(key)
+        if len(self._screen_buf) > 256:  # no line end coming; keep it bounded
+            self._capture(0x0D)
+
+    def _screen_report(self, start: int) -> None:
+        """Copy what the Saturn printed since screen_lines[start] into stats."""
+        self._capture(0x0D)  # flush a part line
+        lines = [ln for ln in self.screen_lines[start:] if ln.strip()]
+        self.stats.saturn_text = lines
+        self.stats.saturn_errors = [ln for ln in lines if SATURN_ERROR_RE.search(ln)]
+        for ln in lines:
+            m = SATURN_LINE_RE.match(ln)
+            if m:
+                self.stats.last_line = int(m.group(1))
 
     def _handlers(self):
         return {
@@ -472,6 +515,14 @@ class SaturnLink:
     # ----------------------------------------------------------- commands
     def send_program(self, data: bytes, run: bool = False, merge: bool = False,
                      timeout: float = 120.0) -> Stats:
+        """Type LOAD "COM:TBASTERM.B" and serve the file.
+
+        Afterwards stats.saturn_text holds what the Saturn printed during the
+        load, stats.saturn_errors the lines that look like error messages and
+        stats.last_line the number from its "Line N" message. Output from the
+        program itself (with run=True) comes after the status that ends the
+        send, so it is not included.
+        """
         self.virtual[TRANSFER_NAME] = data
         self.stats = Stats()
         self.stop()
@@ -479,6 +530,7 @@ class SaturnLink:
         cmd = f'LOAD "COM:{TRANSFER_NAME}"{opts}'
         self.log(f"Typing: {cmd}")
         seq = self.status_seq
+        screen_start = len(self.screen_lines)
         self._type_command(cmd)
 
         closed_at = None
@@ -497,12 +549,21 @@ class SaturnLink:
                     break
             elif (self.status == P.STATUS_DONE and self.status_seq > seq
                   and TRANSFER_NAME not in [n.upper() for n in self.stats.opened]):
+                self._screen_report(screen_start)
+                said = "; ".join(self.stats.saturn_text[-3:])
                 raise LinkError("The Saturn finished the command without asking for "
-                                "the file. Check its screen for an error message.")
+                                "the file. " + (f"It printed: {said}" if said else
+                                                "Check its screen for an error message."))
             left = deadline - time.monotonic()
             if left <= 0:
                 raise LinkError("Timed out during the transfer.")
             self.pump(min(left, 0.1))
+        # Events arrive in order, so text the Saturn printed before its
+        # status is already in screen_lines; don't pump on, or a running
+        # program's own output would be mixed in.
+        self._screen_report(screen_start)
+        for ln in self.stats.saturn_text:
+            self.log(f"  Saturn: {ln}")
         return self.stats
 
     def run_program(self) -> None:

@@ -1,6 +1,7 @@
 """Command line front end: python3 saturn_send.py <command> ...
 
-Exit codes: 0 ok, 1 link or transfer error, 2 program check errors, 3 usage.
+Exit codes: 0 ok, 1 link or transfer error, 2 program check errors, 3 usage,
+4 sent, but the Saturn printed an error message.
 """
 
 from __future__ import annotations
@@ -8,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -114,6 +116,12 @@ def cmd_build(a) -> int:
     return 0
 
 
+def _last_line_number(data: bytes):
+    """Line number of the last numbered line in the program text, or None."""
+    nums = re.findall(rb"^\s*(\d+)", data, re.M)
+    return int(nums[-1]) if nums else None
+
+
 def cmd_send(a) -> int:
     res = build(a.file, _options(a))
     for p in res.problems:
@@ -135,8 +143,16 @@ def cmd_send(a) -> int:
         dt = time.monotonic() - t0
         term.flush()
         extra = f", {st.naks_received} block(s) resent" if st.naks_received else ""
-        print(f"Sent {st.bytes_sent} bytes in {st.blocks_sent} blocks, {dt:.1f} s{extra}.",
-              flush=True)
+        loaded = f"; the Saturn says Line {st.last_line}" if st.last_line is not None else ""
+        print(f"Sent {st.bytes_sent} bytes in {st.blocks_sent} blocks, {dt:.1f} s{extra}"
+              f"{loaded}.", flush=True)
+        expect = _last_line_number(data)
+        if st.last_line is not None and expect is not None and st.last_line != expect:
+            print(f"Warning: the last line sent was {expect}, but the Saturn reports "
+                  f"Line {st.last_line}. Check its screen.", flush=True)
+        if st.saturn_errors:
+            _err("Error: The Saturn reported: " + "; ".join(st.saturn_errors[:3]))
+            return 4
         if a.run:
             print("Program is running.", flush=True)
         if a.serve:

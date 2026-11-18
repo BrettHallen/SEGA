@@ -22,7 +22,7 @@ python3 saturn_send.py send GAME.B --mock --run        # pretend Saturn
 | `ports` | Lists serial ports |
 | `selftest` | Sends and receives a program with the mock Saturn, including a NAK and resend |
 
-Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATURN_BAUD`), `--mock`, `--trace` (hex dump), `-v`, `--key-delay`, and for programs `-n/--auto-number`, `--start`, `--step`, `--label-interval`, `--max-line-bytes`. Exit codes: 0 ok, 1 link error, 2 program errors, 3 usage.
+Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATURN_BAUD`), `--mock`, `--trace` (hex dump), `-v`, `--key-delay`, and for programs `-n/--auto-number`, `--start`, `--step`, `--label-interval`, `--max-line-bytes`. Exit codes: 0 ok, 1 link error, 2 program errors, 3 usage, 4 sent but the Saturn printed an error (such as `Syntax error`). After a send, `send` reports the Saturn's `Line N` message and any error lines it printed.
 
 `TBASTERM.B` is kept in memory, so nothing is written to your folder on a send. Other `COM:` names the program opens are served from one folder only (`--serve-dir`, by default the program's folder), matched without regard to case, and paths that try to leave that folder are refused.
 

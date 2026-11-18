@@ -5,6 +5,11 @@ NUL probe, takes keystrokes, and runs LOAD "COM:..." / SAVE "COM:..." / RUN /
 LIST by issuing file requests to the PC. It is an emulation of the protocol as
 read from Basterm.exe, not of the real Saturn firmware, so it proves the PC
 side is self-consistent; it cannot prove the real Saturn behaves the same.
+
+Its screen messages follow the GAME BASIC Tutorial Manual: "Ready." after a
+command (p. 15), "Line 120" for the last line loaded (p. 152), "Syntax error"
+(p. 17), "Break at 130" (p. 28), and LIST with 5-wide line numbers (p. 24).
+File-error wording such as "File not found" is a guess.
 """
 
 from __future__ import annotations
@@ -98,7 +103,10 @@ class MockSaturn(threading.Thread):
             self.line.clear()
             if self.running:
                 self.running = False
-                self._print("Break")
+                # The mock doesn't execute the program, so it reports the
+                # last line as the one it stopped on.
+                self._print(f"Break at {max(self.program)}" if self.program else "Break")
+                self._print("Ready.")
             self._cmd(P.STATUS_1)
             return
         if (mod, key) == P.KEY_LINE_RESET:
@@ -131,22 +139,25 @@ class MockSaturn(threading.Thread):
         if word == "RUN":
             if self.program:
                 self.running = True
-                self._print("(running)")
                 self._cmd(P.STATUS_RUNNING)
             else:
+                self._print("Ready.")
                 self._cmd(P.STATUS_DONE)
             return
         if word == "LIST":
             for n in sorted(self.program):
-                self._print(f"{n} {self.program[n]}")
+                self._print(f"{n:5d} {self.program[n]}")
+            self._print("Ready.")
             self._cmd(P.STATUS_DONE)
             return
         if word == "NEW":
             self.program.clear()
+            self._print("Ready.")
             self._cmd(P.STATUS_DONE)
             return
         if word:
             self._print("Syntax error")
+        self._print("Ready.")
         self._cmd(P.STATUS_DONE)
 
     def _open(self, verb: int, name: str) -> Optional[int]:
@@ -168,6 +179,7 @@ class MockSaturn(threading.Thread):
 
     def _load(self, name: str, run: bool, merge: bool) -> None:
         if self._open(P.OPEN_READ, name) is None:
+            self._print("Ready.")
             self._cmd(P.STATUS_DONE)
             return
         data = bytearray()
@@ -176,6 +188,7 @@ class MockSaturn(threading.Thread):
             self._cmd(P.READ_BLOCK)
             if self._expect((P.DATA,)) is None:
                 self._print("Device timeout")
+                self._print("Ready.")
                 self._cmd(P.STATUS_DONE)
                 return
             raw = self.r.read_raw(P.BLOCK_SIZE, 2.0)
@@ -186,6 +199,7 @@ class MockSaturn(threading.Thread):
                 self._cmd(P.NAK)
                 if retries > 5:
                     self._print("Device I/O error")
+                    self._print("Ready.")
                     self._cmd(P.STATUS_DONE)
                     return
                 continue
@@ -197,19 +211,26 @@ class MockSaturn(threading.Thread):
         self._expect((P.ACK, P.NAK))
         if not merge:
             self.program.clear()
+        last = None
         for line in data.decode("cp932", errors="replace").splitlines():
             m = re.match(r"\s*(\d+)\s?(.*)$", line)
             if m:
-                self.program[int(m.group(1))] = m.group(2)
-        self._print("Ok")
+                last = int(m.group(1))
+                self.program[last] = m.group(2)
+            elif line.strip():
+                self._print("Syntax error")
+        if last is not None:
+            self._print(f"Line {last}")
         if run:
             self.running = True
             self._cmd(P.STATUS_RUNNING)
         else:
+            self._print("Ready.")
             self._cmd(P.STATUS_DONE)
 
     def _save(self, name: str) -> None:
         if self._open(P.OPEN_WRITE, name) is None:
+            self._print("Ready.")
             self._cmd(P.STATUS_DONE)
             return
         text = "".join(f"{n} {self.program[n]}\r\n" for n in sorted(self.program))
@@ -222,5 +243,5 @@ class MockSaturn(threading.Thread):
                     break
         self._cmd(P.CLOSE)
         self._expect((P.ACK, P.NAK))
-        self._print("Ok")
+        self._print("Ready.")
         self._cmd(P.STATUS_DONE)
