@@ -412,6 +412,28 @@ Scans 411–419 (p. = scan − 4). Scans 418 and 419 were the wrong way round (t
 
 ---
 
+## 10d. Sections 1.2 and 1.3, file commands and functions (Ref. pp. 96–115)
+
+Scans 100–119, all named correctly (p. = scan − 4). Section 1.2 (file commands) runs pp. 96–112 and section 1.3 (file functions) pp. 113–115. Section 1.4 (BG, text and bitmap screens) comes next.
+
+**General rules (pp. 96–97).**
+- Devices: `COM:` (the PC), `BRAM:` (internal RAM), `CRAM:` (cartridge RAM), `FD0:`/`FD1:` (floppy partitions 1 and 2), `CD:`. Leaving the device out means the last one used.
+- File names are `XXXXXXXX.Y`: a base of 1–8 characters from A–Z, 0–9 and `_`, with no spaces; lower case is made upper case. When a period is given the base is padded with spaces to 8 characters (the sender already strips this, `clean_filename`).
+- Extensions: `B` program, `0` 256-colour bitmap, `1` 32768-colour bitmap, `D` anything else. SAVE/LOAD add `B`, GSAVE/GLOAD add `0` or `1`, everything else adds `D`. `FILES`/`FILES$` accept `*` as the extension.
+- Only 2 files can be open (numbers 1 and 2). Ending the program, or any error, closes and discards open files, and FWRITE data only reaches the file at CLOSE.
+- **Busy Saturn:** "If LOAD, SAVE or other reads and writes to the PC are run while the Saturn is under heavy load, they may not work. Then press Ctrl+P or F12, or run SCREEN 0." This note appears four times in the section.
+
+**For the sender and file transfer.**
+- **LOAD (p. 109).** `.B` is always added, even if another extension is typed. `M` merges over `COM:`: lines with the same number are replaced, new ones added, and lines without a line number are ignored. A text program made outside the Saturn needs CR+LF at the end of every line (CR is ignored and LF ends the line). The sender already sends `\r\n`. An error during a plain LOAD loses the program in memory, because memory is cleared first.
+- **SAVE is direct-only (p. 111).** It can't be used inside a program; Receive types it, so that is fine. `SAVE "…",A` (text as `.D`) works only on FD0:, FD1:, BRAM: and CRAM:, not on COM:.
+- **FILES over COM: (pp. 100–101).** It shows names in 12-character columns and, except on CD:, a last line "Free size <free> / <total> file blocks", where 1 block is 64 bytes. `FILES$` puts spaces in place of the size on COM:. So the free-space answer the sender gives (`_on_disk`, currently free bytes in hex) needs a hardware check that it shows sensibly. `DSKF("COM:")` also returns free space in 64-byte blocks.
+- **Directory listing.** The sender lists any PC file name up to 12 characters. Names that break the Saturn rules (over 8 characters before the dot, a dash, a space, other extensions) show up but can't be loaded. Filtering the list to valid `XXXXXXXX.Y` names would be cleaner. I haven't changed anything.
+- **Slow transfers.** `GSAVE` of a large area to `COM:` takes 1–2 minutes or more (p. 107). GLOAD/GSAVE need a free file buffer from `CLEAR` larger than the picture: 282 blocks (.0) or 560 blocks (.1) for 320 × 224.
+- **Bitmap file format (pp. 105–106).** `.0`: width and height (2 bytes each, high byte first, up to 512 × 256), a 512-byte palette (256 RGB words), then 1 byte per dot with 0 transparent. `.1`: width, height, then 2 bytes per dot, high byte first, with bit 15 set (black is &H8000; 0 is transparent). Colour words are 5 bits each: red in bits 0–4, green 5–9, blue 10–14. A PC-side PNG ↔ `.0`/`.1` converter would be straightforward from this.
+- Misprint: p. 113 says "Device no connected"; the error list (code 43) has "Device not connected".
+
+---
+
 ## 11. Changes made from these notes (Nov 18, not committed)
 
 1. `PUTSPRITE` added, and `AND!` highlighted as one operator.
@@ -432,6 +454,8 @@ Scans 411–419 (p. = scan − 4). Scans 418 and 419 were the wrong way round (t
 16. Reference pp. 69–89 applied to hover help: `POS`, `PRINT`, `RANDOMIZE`, `RESTORE`, `RESUME`, `RETURN`, `RIGHT$`, `RND`, `RUN`, `SGN`, `SHIFT`, `SIN`, `SKCLOSE`, `SPACE$`, `SQR`, `STOP`, `STR$`, `STRING$`, `STRW$`, `SWAP`, `TAN`, `TIMER`, `USERDATA`, `VAL`, `VERSION` added; `POKE`, `PRINT USING` and `RENUM` completed. 95 commands now have syntax.
 17. Reference pp. 90–95 applied: `WADD$`, `WANDOR$`, `WIDTH`, `WMUL$`, `WXOR$`, `XATN`, `XCOS`, `XDIST`, `XSIN`, `XSQR`, `XTAN`. Section 1.1 is complete: 106 commands have syntax, and 108 keywords from later sections (graphics, sprites, 3D, sound, files) still have only a plain hover.
 
+18. Reference pp. 96–115 (sections 1.2 and 1.3) applied to hover help: `BLOAD`, `BSAVE`, `CLOSE`, `FORMAT`, `FREAD`, `FWRITE`, `GLOAD`, `GSAVE`, `KILL`, `SEEK`, `DSKF`, `FILES$`, `LOC`, `LOF` added; `FILES`, `LOAD`, `OPEN` and `SAVE` rewritten from the manual. `OUTPUT`, `APPEND` and `AS` show the OPEN entry. 115 commands now have syntax, and 91 keywords still have only a plain hover. Two hover tests added (17 pass).
+
 ---
 
 ## 12. Still open
@@ -440,11 +464,13 @@ Scans 411–419 (p. = scan − 4). Scans 418 and 419 were the wrong way round (t
 - Diff send, following the rules in section 6.
 - A live key-send mode, with F12 as a "reset display" key.
 - A "Saturn charset" mode for files using the graphic characters 0x80–0x9F/0xE0–0xFF (section 10c), and a warning when a non-`KPRINT` string contains kanji.
+- Filter the sender's `COM:` directory list to valid Saturn names (section 10d); optionally a PNG ↔ `.0`/`.1` bitmap converter.
 - Optionally: a check for variable names over 31 characters; an option to auto-number from 100/10 like `RENUM`; hover notes (texture colour bit 15, `RGB` ranges); MML highlighting inside strings.
 
 **To test on hardware.**
 - Whether the Saturn echoes its screen text over the link at all. If it doesn't, change 4 above simply finds nothing.
 - `FILES "COM:"`, to confirm the 0x11–0x13 directory calls and what units 0x1A/0x1B use.
+- What `FILES "COM:"` and `DSKF("COM:")` show for free space with the sender's current answer (section 10d).
 - TRANSFOR.B against `saturn_link serve`, for Saturn→PC writes one byte at a time.
 - Whether Receive copes with `LIST`-style leading spaces before line numbers.
 
