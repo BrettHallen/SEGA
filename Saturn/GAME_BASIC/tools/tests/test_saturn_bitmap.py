@@ -99,6 +99,33 @@ class BitmapTests(unittest.TestCase):
         digits = "".join(l[5:] for l in lines if l.startswith("DATA "))
         self.assertLessEqual(len(set(digits) - {"0"}), 15)
 
+    def test_sprite(self):
+        # Ref. p. 177: SPRITE$ is 16x16, one byte per dot in row order (as G_BOMB.B builds it).
+        px = [(0, 255, 0) if x == 15 else None for y in range(16) for x in range(32)]
+        lines, count, reduced = B.sprite_lines(32, 16, px, first=10, palette=1)
+        self.assertEqual((count, reduced), (2, False))
+        self.assertIn("PALETTE 10,257,RGB(0,31,0)", lines)
+        i = lines.index("SPRITE$(10)=READHEX$(256)")
+        self.assertEqual(lines[i + 1:i + 17], ["DATA " + "00" * 15 + "01"] * 16)
+        j = lines.index("SPRITE$(11)=READHEX$(256)")
+        self.assertEqual(lines[j + 1:j + 17], ["DATA " + "00" * 16] * 16)
+        with self.assertRaises(B.BitmapError):
+            B.sprite_lines(8, 16, [None] * 128)
+        with self.assertRaises(B.BitmapError):
+            B.sprite_lines(32, 16, [None] * 512, first=255)
+
+    def test_sprite_cli(self):
+        with tempfile.TemporaryDirectory() as d:
+            src = os.path.join(d, "SHIP.png")
+            with open(src, "wb") as fh:
+                fh.write(B.write_png_rgba(16, 16, [(255, 255, 255)] * 256))
+            self.assertEqual(B.main([src, "--sprite", "--start", "100"]), 0)
+            with open(os.path.join(d, "SHIP_spr.B"), "rb") as fh:
+                text = fh.read().decode("ascii")
+            self.assertIn("\r\n120 PALETTE 10,1,RGB(31,31,31)\r\n", text)
+            self.assertIn("SPRITE$(0)=READHEX$(256)", text)
+            self.assertEqual(text.count("DATA " + "01" * 16), 16)
+
     @unittest.skipUnless(os.path.isdir(CD), "GAME_BASIC_CD folder not present")
     def test_cd_files_round_trip(self):
         for name in ("SABA_BG.0", "HIBIKI_0.0", "TEKST.1", "TEKEND.1"):
