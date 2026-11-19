@@ -1,6 +1,6 @@
 # GAME BASIC Reference Manual: notes for the BASTERM replacement
 
-> **Work in progress.** This covers these pages so far: pp. 1–20 (basic specification and system settings), Chapter 1 sections 1.1–1.6 (pp. 23–178), the start of section 1.7 (pp. 179–190), Chapter 2 sections 2.1–2.4 (pp. 229–251) and the Appendix (pp. 389–421).
+> **Work in progress.** This covers these pages so far: pp. 1–20 (basic specification and system settings), all of Chapter 1 (pp. 23–227), Chapter 2 sections 2.1–2.4 (pp. 229–251) and the Appendix (pp. 389–421).
 
 These are notes from the Japanese *GAME BASIC for SEGASATURN Reference Manual* (リファレンスマニュアル), with attention to what matters for a PC-side replacement for BASTERM. Notes from the *Tutorial Manual* are in `Tutorial_Manual_findings.md`.
 
@@ -227,9 +227,7 @@ These pages don't affect the serial link.
 
 ---
 
-## 6a. Section 1.7, OBJ commands (Ref. pp. 179–190, first part)
-
-The per-item descriptions continue past p. 190; only TYPE is covered here.
+## 6a. Section 1.7, OBJ commands (Ref. pp. 179–223)
 
 - **OBJ is the table behind every sprite and polygon.** Each object number has numbered items. `OBJ(n,<item>)=` writes them and `OBJ(n,<item>)` reads them. OBJPOS, OBJROT and the other OBJ… commands are shorthands, so `OBJPOS 1,X,Y,Z` is the same as `OBJ(1,@XP)=X,Y,Z`. Extra values go into the following items, and an empty one is skipped.
 - **Forms:** `OBJ COPY <from> TO <to>[,…]`, `OBJ CLEAR`, `OBJ NEW` and `OBJ PRINT n[,P]` (or `OBJ ?`). P pauses the listing.
@@ -261,7 +259,102 @@ The per-item descriptions continue past p. 190; only TYPE is covered here.
   - Types 1–3 ignore parent rotation and movement and are placed around SPRWINDOW's CX,CY.
   - Setting a type on an unused object (parent −1) links it to object 0 automatically. Types 4 and 5 then show the built-in cube until a polygon is set.
 
-## 6b. Chapter 2, sound reference, sections 2.1–2.4 (Ref. pp. 229–251)
+### The OBJ items (pp. 191–214)
+
+Every item takes `OBJ(<object no>,<item>)=<value>` and reads back with `OBJ(<object no>,<item>)`; the object number is −1 to 255 unless noted. Items in a group of three (X, Y, Z) are described once for X, and the manual says to read the others the same way.
+
+- **FLAG (1), values 0–7.**
+  - Bit 0 copies the translation part of the perspective matrix into M30–M32. It is set automatically when GTEST is non-zero. M30–M32 are relative to the viewpoint, not to object 0, and by default include object 0's ZP of 200.
+  - Bit 1 copies the whole 4×3 matrix into M00–M32.
+  - Bit 2 writes the screen position into XD/YD (from the top-left corner), the Z distance into ZD and radius/Z into RD. Values for objects far off screen are not guaranteed, and it only works for types 4–7.
+  - After setting a bit, wait at least 1 VSYNC (one frame) before reading. Reading FLAG returns the bits that are active (currently 0–3).
+- **GROUP (2), 16 bits.** Each bit is a collision group, so an object can be in up to 16. A non-zero value makes the matrix be written to M00–M32 on every display. Objects not shown are not tested, and objects 0 and −1 never collide. Default 0.
+- **XP, YP, ZP (4–6).** Position relative to the parent. `OBJ(1,4)=100,200,300` sets all three.
+- **XR, YR, ZR (8–10).** Rotation relative to the parent. The example `OBJ(1,8)=0.125` tilts a character 45°, and OBJROT's `0.5` turns 180°, which confirms that the unit is turns. Default 0.
+- **XS, YS, ZS (12–14).** Scale, default 1.0. On objects 1 and up the scale does not pass to children. It is faster to build a model at its final size and keep the scale at 1.0. Orthographic polygons (type 5) and sprites (type 7) need XS and YS of 0.99995 (`&H0.FFFC`) instead of 1 to show at true size.
+- **ATR (16) and POLYGON (17).** Attribute ID (SETATR) and polygon ID (SETPOLYGON). An undefined ID gives Undefined attribute or Undefined polygon. The attribute must have at least as many faces as the polygon, or the object is not shown. Types 1–3 do not need a polygon. Both default to −1, and reading returns the last ID written.
+- **ORDER (18), 0–11.** The order of translation (T) and the X, Y and Z rotations: 0 TXYZ, 1 TXZY, 2 TYXZ, 3 TYZX, 4 TZXY, 5 TZYX, 6 XYZT, 7 XZYT, 8 YXZT, 9 YZXT, 10 ZXYT, 11 ZYXT. Default 0.
+- **TIME (19), 0–&HFFFF.** VSYNCs since the object was linked to object 0, counting from 0 when it is first shown. Fixed-point values outside the range do not raise Overflow; bits above 16 and the fraction are dropped.
+- **PARENT (20), and the links CHILD (21), LEFT (22), RIGHT (23).**
+  - `OBJ(n,20)=<parent>` links object 1–255 under a parent (−1 to 255). Its children move with it. Linking to the same parent again does nothing.
+  - Parent −1 also copies object −1's contents into the object and all its descendants, which normally makes them unused again. Linking a used object to −1 breaks up the tree below it, and every descendant becomes a sibling.
+  - Internally each object has parent and child pointers (vertical) and left/right pointers (siblings). The parent points at its eldest child, the one whose left is NULL. CHILD, LEFT and RIGHT are read-only functions returning the eldest child, the older sibling and the younger sibling, or −1 for none.
+  - After `SCREEN`, object −1 holds objects 1 to max and object 0 has none. Setting TYPE 4 on an unused object links it to object 0.
+  - The next free object is `OBJ(-1,21)`. All siblings can be walked with `N1=OBJ(N0,21)` and then `OBJ(N,23)` until −1.
+  - A loop (an object that is its own parent or ancestor) just stops that branch being shown, and it stops moving and colliding, until it is linked back to object 0. More than 16 generations are not shown because of an internal stack limit.
+  - Object 0 sets the world coordinates. Turning it turns everything "like a washing machine". The viewpoint is moved by changing object 0's XP, YP, ZP, XR, YR, ZR and ORDER, which is also what CAMERA does.
+- **OBJ PRINT and `OBJ?` (p. 198)** print the tree as text in the text window, for example `0->2`, `1->3->5`, `4->6`, `7`, one chain per line. With P it pauses at [HIT KEY] each window height − 3 lines, and Ctrl+C stops it.
+- **XV, YV, ZV (24–26).** Speed, added to the position every VSYNC. Default 0. Objects keep moving until the program stops them.
+- **XA, YA, ZA (28–30).** Acceleration, added to the speed every VSYNC. Set the speed limit first.
+- **XL, YL, ZL (32–34).** Speed limit, applied only while the acceleration is non-zero: `XV=XV+XA`, then XV is clamped to ±XL.
+- **XRV, YRV, ZRV (36–38).** Spin, added to the angle every VSYNC. Default 0.
+- **XP0–YP3 (48–55).** Corners of a 4-point sprite (type 3), relative to XP/YP, clockwise from top left: (XP0,YP0) top left, (XP1,YP1) top right, (XP2,YP2) bottom right, (XP3,YP3) bottom left. Changing the order rotates, flips, scales or twists the sprite. `OBJ(1,48)=-10,-10,+10,-10,+10,+10,-10,+10` sets all eight. For type 3, XP/YP are screen positions from SPRWINDOW's CX,CY, ZP is the priority against polygons, and parent rotation and movement have no effect.
+- **XD, YD, ZD, RD (56–59).** Read only, filled in when FLAG bit 2 is set (see FLAG). The example draws a circle on an object: `OBJ(1,1)=4: CIRCLE (OBJ(1,56),OBJ(1,57)),10`.
+- **GTEST (60), 16 bits.** Groups to test against. A non-zero value starts collision tests between this object and every displayed object of type 4–7, other than itself and object 0, whose GROUP shares a bit with it. Only the first object hit is reported. The test is a sphere test; the manual prints it as `SQR(dx^2+dy^2+dz^2) <= SQR(r1+r2)`, which is presumably meant to be the sum of the radii. Default 0, no testing.
+- **RADIUS (61).** Collision radius, default 10.0. The syntax box prints the item number as 60, a misprint for 61.
+- **COLIDIST (62).** −1 for no contact, otherwise the distance to the object hit. After a hit, no more tests are made until GTEST is written again, which keeps BASIC in step.
+- **COLIOBJ (63).** The object hit, valid when COLIDIST is 0 or more. Both examples on pp. 212–213 print "COLLSION", a typo in the manual.
+- **M00–M32 (64–75).** The perspective matrix, read only (see FLAG). M30–M32 are the object's centre relative to the viewpoint and are what the collision test uses. The example `XATN(OBJ(2,73)-OBJ(1,73),OBJ(2,75)-OBJ(1,75))` finds the direction from object 1 to object 2 in the XZ plane.
+
+### The alias commands (pp. 215–218)
+
+Each is a shorthand for writing one OBJ item. Values in a group can be left out with commas, but at least one must be given.
+
+| Command | Syntax | Same as |
+|---|---|---|
+| OBJATR | `OBJATR <object no>[,<polygon ID>][,<attribute ID>]` | ATR (16) |
+| OBJLINK | `OBJLINK <object no>,<parent object no>` | PARENT (20) |
+| OBJPOS | `OBJPOS <object no>,[<X>],[<Y>],[<Z>]` | XP (4) |
+| OBJROT | `OBJROT <object no>[,<X angle>][,<Y angle>][,<Z angle>]` | XR (8) |
+| OBJTURN | `OBJTURN <object no>,[<X spin>],[<Y spin>],[<Z spin>]` | XRV (36) |
+| OBJTYPE | `OBJTYPE <object no>,<TYPE>` | TYPE (0) |
+| OBJZOOM | `OBJZOOM <object no>,[<X scale>],[<Y scale>],[<Z scale>]` | XS (12) |
+
+- OBJATR's syntax puts the polygon ID first, but it is described as an alias of `OBJ(n,16)=…`, which would put the attribute ID (16) before the polygon ID (17). The parameter list also names the attribute first. Which order the Saturn uses needs checking on hardware.
+- OBJPOS's example `OBJPOS 1,200` is described as setting X to 100, a misprint.
+- OBJZOOM does not rescale normal vectors.
+- OBJTYPE takes 0–7 and drops any fraction.
+
+### SETATR, polygon face attributes (pp. 218–221)
+
+- **Forms:** (1) `SETATR [<attribute ID>],<count>[,(<parameter 1>)][,(<parameter 2>)…]` starts a new ID; (2) `SETATR (<parameter 1>)[,(<parameter 2>)…]` continues after the last face written; (3) `SETATR <attribute ID>,<count>,READ` reads the groups from DATA.
+- **Each group** is `(<TYPE>,<SURFACE>,<SORT>,<texture ID>,<COLOR>,<MODE>)` and applies to one face of the SETPOLYGON polygon, in order. The count must be at least the polygon's face count.
+- **TYPE:** 0–3 texture with no flip, left-right flip, up-down flip or both; 4 polygon; 5 polyline; 6 a line through the first two points.
+- **SURFACE:** 0 one-sided (back faces hidden using the normal), 1 two-sided.
+- **SORT**, the point used for depth sorting: 0 the previous polygon's, 1 the nearest of the 4 points, 2 the farthest, 3 the average.
+- **Texture ID:** a SETTEX texture, which must already exist; ignored for non-texture types. Adding a priority register value sets the face's priority (PRIORITY). A textured polygon is what is usually called a sprite.
+- **COLOR:**
+  - For 16- and 256-colour textures, the palette offset, in multiples of 16 (palette 1 = 16, … 31 = 496) or 256 (palette 1 = 256). The sprite palette has 512 entries, shared by 16- and 256-colour textures and palette polygons; the address is offset + dot colour code. They are changed with `PALETTE 10,…` (10 and up are sprite logical BGs).
+  - For plain polygons (types 4–6), an RGB value as from RGB(): R + G×32 + B×32×32, each 0–31.
+  - For 32768-colour textures, 0 (ignored).
+- **MODE bits:** 0–1 draw mode (0 overwrite, 1 shadow, 2 half-bright, 3 half-transparent); 3 lit by the light source, using the normal (RGB textures and polygons only); 5 use the palette for polygon colour; 6–7 window (0 ignore, 1 inside, the default, 2 outside); 8 mesh. So half-transparent is 3 and mesh is 256 (&H100). Normally 0.
+- **IDs:** Left out in form (1), the lowest free ID is used, which ATRID(−1) returns. Define IDs in order from 0: after 0 and 2, ID 1 can no longer be defined. No more IDs gives Attribute ID over, continuing with no current ID gives Undefined attribute, and too many faces gives Attribute data over. In form (3), too little DATA gives Out of DATA; a new ID is only registered if no error occurs, but redefining an existing one can leave the data up to the error.
+- **Defaults:** In form (1) the first group is applied to every face of the new ID. With no group, every face starts as TYPE 4, SURFACE 1, SORT 2, texture 0, COLOR RGB(0,15,15), MODE 72 (inside the window, lit).
+- **Redefining** works with the same ID and count; a different size gives Attribute size mismatch. SCREEN clears all attribute data.
+
+### SETTEX, textures (pp. 222–223)
+
+These details matter for the PNG converter, because a texture is uploaded as hex data.
+
+- **Forms:** (1) `SETTEX [<texture ID>],<XS>,<YS>,<COLOR_DEPTH>[,<string>]` defines a new texture; (2) `SETTEX <string>` continues after the last data, with anything beyond the texture's size ignored; (3) `SETTEX <texture ID>,<XS>,<YS>,<COLOR_DEPTH>,READ` reads hex from DATA. Example: `SETTEX 1,8,8,256,HEXBIN$(STRW$(64,"FF"))`.
+- **Sizes:** XS 8–504 in steps of 8 (anything else is an error), YS 1–255. Colour depth 16, 256 or 32768.
+- **Data:** 16 colours is palette data, 1 byte per 2 dots; 256 colours is 1 byte per dot; 32768 colours is RGB, 2 bytes per dot. An 8×8 texture is 32, 64 or 128 bytes.
+- **32768-colour format:** `&b1BBBBB_GGGGG_RRRRR`, high byte first. A dot is shown only when bit 15 is 1, and all zeros is transparent; anything from &H0001 to &H7FFF is not guaranteed.
+- **DATA formats (as HEXBIN$):** comma-separated hex bytes (`DATA AA,BB,CC,…`) or a run of hex digits (`DATA AABBCC…`), 2 digits per byte, with a leading 0 added to an odd final digit. Form (3) reads exactly the amount needed; too little is an error and any extra is discarded.
+- **IDs:** Left out in form (1), the lowest free ID is used, which TEXID(−1) returns. Texture data is laid out in sprite VRAM in ID order, so define IDs from 0. Starting at 10 means 0–9 can no longer be added (Table size error). No more IDs gives Texture ID over, and continuing with no current texture gives Undefined texture.
+- **Redefining** works with the same ID, size and depth; anything else gives Texture size mismatch. Too much data gives Texture data over.
+- **SCREEN** resets the texture allocation but leaves the pixel data as last defined. `CLS <texture ID + 10>` clears a texture, and bitmap commands can draw into one through logical BG texture ID + 10 (see ACTIVE).
+
+## 6b. Section 1.8, sprite and 3D functions (Ref. pp. 224–227)
+
+Pages 224–227 cover the four lookup functions. All parameters are fixed point with the fraction dropped, and all return integers. Page 228 is blank.
+
+- **ATRID(<attribute ID>)** returns the next attribute ID after the highest defined, for a new SETATR. Only −1 is supported.
+- **POLYGONID(<polygon ID>[,<element>[,<item>]])**: −1 returns the next free polygon ID. For a defined ID, no element gives its face count (0 = undefined); an element alone gives the vertex ID the polygon uses; items 0–3 give that face's vertices p1–p4 and items 4–6 its normal X, Y, Z. An element on an undefined ID gives Undefined polygon.
+- **TEXID(<texture ID>[,<item>])**: −1 returns the next free texture ID. For a defined ID, item 0 is the width in dots, 1 the height and 2 the colour depth (16, 256 or 32768). The text says only "attribute ID" −1 is supported, copied from ATRID.
+- **VERTEXID(<vertex ID>[,<element>[,<item>]])**: −1 returns the next free vertex ID. For a defined ID, no element gives its vertex count (0 = undefined), and an element with item 0, 1 or 2 gives that vertex's X, Y or Z. An element on an undefined ID gives Undefined vertex. The heading box says VERTEX, and the text says SETVERTEX defines "textures"; both are slips for VERTEXID and vertices.
+
+## 6c. Chapter 2, sound reference, sections 2.1–2.4 (Ref. pp. 229–251)
 
 Pages 228 and 230 are blank, and p. 229 is the Chapter 2 title page.
 

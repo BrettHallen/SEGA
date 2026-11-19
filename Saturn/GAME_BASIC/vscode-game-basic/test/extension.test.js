@@ -167,7 +167,10 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.match(ext.hoverText('@type'), /6 invisible pivot/);
   assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
   assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
-  assert.match(ext.hoverText('VERTEXID'), /function/);
+  assert.match(ext.hoverText('MMLSTAT'), /function/);
+  assert.match(ext.hoverText('vertexid'), /Undefined vertex/);
+  assert.match(ext.hoverText('settex'), /BBBBB GGGGG RRRRR/);
+  assert.match(ext.hoverText('@order'), /0 TXYZ/);
   assert.match(ext.hoverText('NOT!'), /operator/);
   assert.strictEqual(ext.hoverText('TIME'), null);
   assert.strictEqual(ext.hoverText('@NOPE'), null);

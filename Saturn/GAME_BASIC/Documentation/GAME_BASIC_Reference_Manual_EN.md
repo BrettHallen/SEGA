@@ -10,7 +10,7 @@ Terms used throughout:
 - **Program-mode command** (間接実行命令): can be used in a program line.
 - **Fixed-point / floating-point** (固定小数点型 / 浮動小数点型): the two numeric types; see the basic specification.
 
-> **Work in progress.** Translated so far: the front matter, the basic specification (pp. 1–20), Chapter 1 sections 1.1–1.6 and the start of 1.7 (pp. 21–190), Chapter 2 sections 2.1–2.4 (pp. 228–251) and the Appendix (pp. 389–421). Pages 191–227 and 252–388 are marked *pending*.
+> **Work in progress.** Translated so far: the front matter, the basic specification (pp. 1–20), Chapter 1 (pp. 21–227), Chapter 2 sections 2.1–2.4 (pp. 228–251) and the Appendix (pp. 389–421). Pages 252–388 are marked *pending*.
 
 ---
 
@@ -26,6 +26,7 @@ Terms used throughout:
     - [1.5 BG/text/video functions](#15-bgtextvideo-functions)
     - [1.6 Sprite/3D commands](#16-sprite3d-commands)
     - [1.7 OBJ commands/functions](#17-obj-commandsfunctions)
+    - [1.8 Sprite/3D functions](#18-sprite3d-functions)
 - [Chapter 2: Sound reference](#chapter-2-sound-reference)
     - [2.1 Sound system specification](#21-sound-system-specification)
     - [2.2 Explanation of terms](#22-explanation-of-terms)
@@ -6951,7 +6952,7 @@ The following values are defined as initial values after the SCREEN command is e
 
 In GAME BASIC for SEGASATURN, polygons and sprites are called OBJECTs and are managed through the OBJ commands and functions.
 
-Each OBJ-related command is almost equivalent to an OBJ item number "OBJ(n,<item>)=". The 3D-related commands work using numbers. Frequently used items have alias definitions. For details, see the OBJPOS command, the OBJROT command and so on.
+Each OBJ-related command is almost equivalent to an OBJ item number `OBJ(n,<item>)=`. The 3D-related commands work using numbers. Frequently used items have alias definitions. For details, see the OBJPOS command, the OBJROT command and so on.
 
 For example, the command that writes the coordinates of a polygon or sprite is
 
@@ -6969,7 +6970,7 @@ OBJ(<オブジェクト番号>,@XP)=X,Y,Z
 
 *[p. 180]*
 
-**<OBJECT number>**
+**`<OBJECT number>`**
 
 A fixed-point integer. The fractional part is cut off. The valid range differs between commands and functions.
 
@@ -7347,9 +7348,1522 @@ Sprite display, rotation, translation, orthographic projection.
   - 1 attribute is reserved at an unused attribute ID using the SETATR command.
   - These IDs are set in `<OBJECT number>` and a square is displayed.
 
-*[pp. 191–227]*
+*[p. 191]*
 
-> **Pending.** The rest of section 1.7 (the remaining OBJ item entries) and the rest of Chapter 1 are not yet translated.
+**■ FLAG (auxiliary flag)**
+
+### 1 (Auxiliary flag: @FLAG)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies how an OBJECT behaves when it is displayed.
+
+**Syntax:** `OBJ(<OBJECT number>,1)=<numeric expression>`
+
+**Example:** `OBJ(1,1)=&B10` → makes the matrix readable.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: a value from 0 to 7.
+
+**[Return value]** The bits for which matrix reading is enabled are "1" (specifically, at present a value from 0 to 3).
+
+**[Details]**
+
+When bit 0 is "1", the translation components of the matrix used at perspective transformation are written to M30 to M32. To read the values of M30 to M32, you must wait at least 1 VSYNC after setting the value. This flag automatically becomes "1" when the collision-test setting (GTEST) is set to a value other than 0.
+
+Note that the coordinates used for an OBJECT's hit detection (M30, M31, M32) are strictly coordinates from the viewpoint, and differ from coordinates relative to OBJECT 0 (in the sense that a matrix operation between the unit vector of the line of sight and OBJECT 0 comes in between). In the standard state, the ZP value of OBJECT 0, 200, is added in the Z direction.
+
+When bit 1 is "1", the whole matrix used at perspective transformation (4×3) is saved in M00 to M32. To read these values, you must wait at least 1 VSYNC after setting the value.
+
+```
+M00  M01  M02
+M10  M11  M12
+M20  M21  M22
+M30  M31  M32
+```
+
+**[Caution]** These bits are flags for taking out the matrix used for display, because following the hierarchy of 3D objects and calculating the matrices with ordinary BASIC expressions, for collision detection and the like, needs a great deal of calculation.
+
+When bit 2 is "1", the position on screen when the OBJECT has been perspective-transformed onto the screen is written to XD and YD, taking the top left (0,0) as the reference; the Z distance of the OBJECT is written to ZD, and the OBJECT's radius/Z distance to RD. The position of an OBJECT that would be projected off the screen is also returned, but the values are not guaranteed if it is far off the screen. To read these values,
+
+*[p. 192]*
+
+you must wait at least one drawing frame after setting the value. The values are valid for OBJECTs of TYPE 4, 5, 6 and 7.
+
+**■ GROUP (OBJECT group)**
+
+### 2 (OBJECT group: @GROUP)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies the group of an OBJECT for collision detection.
+
+**Syntax:** `OBJ(<OBJECT number>,2)=<numeric expression>`
+
+**Example:** `OBJ(1,2)=&B101` → sets OBJECT 1 to belong to the groups of bit 0 and bit 2.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: a 16-bit integer.
+
+**[Return value]** Returns the current group value, as a 16-bit integer in fixed-point form.
+
+**[Details]** Holds a 16-bit value and is used to specify the group of a 3D OBJECT for collision detection. Each bit means one group, so OBJECTs can be sorted into up to 16 groups. An OBJECT can also belong to more than one group. When a value other than 0 is written here, the values of the OBJECT's matrix are written to M00 to M32 at each display, as the basis for contact testing. The coordinates are not calculated for an OBJECT that is not displayed. The initial value is 0, meaning that the OBJECT is not subject to contact testing. Values can be written to and read from OBJECT 0 and OBJECT −1, but these OBJECTs are not displayed, so they are not subject to testing.
+
+*[p. 193]*
+
+**■ XP, YP, ZP (position) [OBJPOS]**
+
+### 4 (X position: @XP)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 5 (Y position: @YP)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 6 (Z position: @ZP)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+The following describes item number 4. Read it accordingly for 5 and 6.
+
+**Function:** Specifies XP (the relative position (X coordinate)) from the parent OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,4)=<numeric expression>`
+
+**Example:**
+```
+OBJ(1,4)=200              → sets XP to 100
+OBJ(1,4)=100,200,300      → sets XP to 100, YP to 200 and ZP to 300
+```
+(The first example sets 200, although the comment says 100 (sic).)
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the relative position coordinate.
+
+**[Return value]** Coordinate: the X-coordinate distance from the parent OBJECT (the value written).
+
+**[Details]** Specifies the X-coordinate distance from the parent OBJECT with a numeric expression.
+
+**■ XR, YR, ZR (rotation angle) [OBJROT]**
+
+### 8 (X rotation angle: @XR)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 9 (Y rotation angle: @YR)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 10 (Z rotation angle: @ZR)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+*[p. 194]*
+
+The following describes item number 8. Read it accordingly for 9 and 10.
+
+**Function:** Specifies the XR (rotation angle about the X axis) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,8)=<numeric expression>`
+
+**Example:** `OBJ(1,8)=0.07`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the angle.
+
+**[Return value]** Angle: the rotation angle about the X axis relative to the parent OBJECT.
+
+**[Details]** Specifies the rotation angle about the X axis relative to the parent OBJECT with a numeric expression. The initial value is 0.
+
+**[Example]** Tilts the character "B" 45 degrees towards the viewer.
+
+```
+SCREEN 0
+SETPFONT 1,66         → 66 is the ASCII code of the character B; 1 means display it as OBJECT 1
+OBJ(1,8)=0.125        → tilts it towards the viewer
+```
+
+**■ XS, YS, ZS (scale) [OBJZOOM]**
+
+### 12 (X scale: @XS)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 13 (Y scale: @YS)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 14 (Z scale: @ZS)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+The following describes item number 12. Read it accordingly for 13 and 14.
+
+**Function:** Specifies the XS (scale factor in the X-axis direction) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,12)=<numeric expression>`
+
+**Example:**
+```
+OBJ(1,14)=0           → makes the thickness in the Z direction 0
+OBJ(1,12)=2,2,2       → doubles the size of the whole OBJECT
+```
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the scale factor.
+
+*[p. 195]*
+
+**[Return value]** Returns the current scale factor in the X-axis direction.
+
+**[Details]** Specifies the scale factor of the OBJECT in the X-axis direction with a numeric expression. The scale of OBJECT 1 and later does not affect their children. The initial value is 1.0. If the size of an OBJECT to be displayed is decided in advance, processing time is shorter if the scale is fixed when it is defined and XS, YS and ZS are left at 1.0. To display the correct scale with an orthographic polygon (OBJECT TYPE = 5) or a sprite (OBJECT TYPE = 7), XS and YS must be set to 0.99995 (&h0.FFFC) rather than 1.
+
+**■ ATR (attribute ID number) [OBJATR]**
+
+### 16 (Attribute ID number: @ATR)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies ATR (the ID number of the face information for sprites or polygons made with the SETATR command).
+
+**Syntax:** `OBJ(<OBJECT number>,16)=<numeric expression>`
+
+**Example:**
+```
+OBJ NEW                          → initialises the 3D tables (0 entries registered)
+SETATR 5,10,(4,1,3,0,7399,8)     → defines 10 faces in attribute ID 5
+OBJ(1,16)=5                      → defines attribute ID 5 for OBJECT 1
+```
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: an integer in the range from 0 to the maximum number of definable attribute IDs − 1.
+
+**[Return value]** Returns the attribute ID last defined (written). Returns −1 if undefined.
+
+**[Details]** Specifies the ID number of the face information for sprites or polygons made with the SETATR command. If an undefined number is given, an Undefined attribute error occurs. The number of attribute faces of the attribute ID number given here must be equal to or greater than the number of polygons of the polygon ID defined for the same OBJECT.
+
+```
+アトリビュート面数 >= ポリゴン数
+```
+(Number of attribute faces >= number of polygons.)
+
+If there are fewer attribute faces, the OBJECT is not displayed. The initial value is −1.
+
+*[p. 196]*
+
+**■ POLYGON (polygon ID number) [OBJATR]**
+
+### 17 (Polygon ID number: @POLYGON)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies POLYGON (the ID number of the position information for polygons made with the SETPOLYGON command).
+
+**Syntax:** `OBJ(<OBJECT number>,17)=<numeric expression>`
+
+**Example:** `OBJ(1,17)=0`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: an integer in the range from 0 to the maximum number of definable polygon IDs − 1.
+
+**[Return value]** Returns the polygon ID last defined. Returns −1 if undefined.
+
+**[Details]** Specifies the ID number of polygons made with the SETPOLYGON command. If an undefined number is given, an Undefined polygon error occurs. The number of attribute faces of the attribute ID number given here must be equal to or greater than the number of polygons of the polygon ID defined for the same OBJECT.
+
+```
+アトリビュート面数 >= ポリゴン数
+```
+(Number of attribute faces >= number of polygons.)
+
+If there are fewer attribute faces, the OBJECT is not displayed. This need not be specified for the 2D sprites of OBJECT types 1, 2 and 3, or when the OBJECT is not displayed. The initial value is −1.
+
+**■ ORDER (move/rotate conversion order)**
+
+### 18 (Move/rotate conversion order: @ORDER)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies ORDER (the conversion order of a 3D OBJECT).
+
+**Syntax:** `OBJ(<OBJECT number>,18)=<numeric expression>`
+
+**Example:** `OBJ(0,18)=7`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: a numeric expression giving one of the values that specify the display method. Valid values are integers from 00 to 11.
+
+**[Return value]** Returns the conversion order currently set, a value from 0 to 11.
+
+*[p. 197]*
+
+**[Details]** A shape defined for an OBJECT is displayed based on the position obtained by translating by the OBJECT's (XP,YP,ZP) from the position of the parent OBJECT and rotating by the OBJECT's (XR,YR,ZR). The displayed position then differs depending on the order of conversion, and the shape may be displayed at an unintended position. This parameter is given to change the order of conversion in such cases. The meanings of the parameter values are as follows.
+
+| Value | Order |
+|---|---|
+| 00 | T,X,Y,Z |
+| 01 | T,X,Z,Y |
+| 02 | T,Y,X,Z |
+| 03 | T,Y,Z,X |
+| 04 | T,Z,X,Y |
+| 05 | T,Z,Y,X |
+| 06 | X,Y,Z,T |
+| 07 | X,Z,Y,T |
+| 08 | Y,X,Z,T |
+| 09 | Y,Z,X,T |
+| 10 | Z,X,Y,T |
+| 11 | Z,Y,X,T |
+
+※ T = translation, X = rotation about the X axis, Y = rotation about the Y axis, Z = rotation about the Z axis. The initial value is 0.
+
+**■ TIME (display time)**
+
+### 19 (Display time: @TIME)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Sets the display time (TIME) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,19)=<numeric expression>`
+
+**Example:** `OBJ(1,19)=0`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: an integer from 0 to &hFFFF. In fixed-point form, going outside this range does not cause an Overflow error. The part beyond 16 bits of the integer part, and the bits of the fractional part, are ignored.
+
+**[Return value]** Returns the current count value, an integer from 0 to &HFFFF.
+
+**[Details]** Rewrites the display time of an OBJECT. The display time expresses, in VSYNC units, the time elapsed while the OBJECT of `<OBJECT number>` has been connected to OBJECT 0. Counting starts from 0 when the OBJECT is first displayed.
+
+*[p. 198]*
+
+**■ PARENT (parent OBJECT) [OBJLINK]**
+
+### 20 (Link structure: parent OBJECT: @PARENT)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies the association (PARENT) of an OBJECT.
+
+**Syntax:**
+```
+(1) OBJ(<OBJECT number>,20)=<parent OBJECT number>
+(2) OBJ(<OBJECT number>,20)
+(3) OBJ PRINT <OBJECT number>[,P]  or
+    OBJ ?[ <OBJECT number>][,P]
+```
+
+**Example:** `OBJ(1,20)=2` → displays OBJECT 1 based on OBJECT 2.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from 1 to 255.
+- `<parent OBJECT number>`: the number of the OBJECT with which the OBJECT of `<OBJECT number>` is associated. An integer from −1 to 255.
+- `P`: displays one screen and pauses.
+
+**[Return value]** Returns the `<OBJECT number>` of the `<parent OBJECT>` if there is one, or −1 if there is none.
+
+**[Details]**
+
+Syntax (1) associates the OBJECT of `<OBJECT number>` so that it is displayed based on the position of `<parent OBJECT number>`.
+
+Syntax (2) is the syntax as a function.
+
+Syntax (3), in the syntax as a function (sic), displays the relationships of the objects connected as children to `<OBJECT number>`. When the P option is given, it displays [HIT KEY] and stops at the height of the display text WINDOW − 3 lines. Pressing [Ctrl]+[C] interrupts the display.
+
+Normally OBJECT 0 is given as `<parent OBJECT number>` (the world coordinates become the reference). If the previous parent number of `<OBJECT number>` is the same as the new number nothing is done, but when a new `<parent OBJECT number>` is given, the CHILD of `<parent OBJECT number>` is set to `<OBJECT number>`. When the CHILD of `<parent OBJECT number>` is other than −1 (when it has children), for example when you want to display a moon going round an earth going round a sun, specify the following.
+
+```
+OBJ(<太陽 OBJECT番号>, 20)=0                    →太陽の親は OBJ 0(ワールド座標)
+OBJ(<地球 OBJECT番号>, 20)=<太陽 OBJECT番号>    →地球の親は太陽(太陽を基準に動く)
+OBJ(<月   OBJECT番号>, 20)=<地球 OBJECT番号>    →月の親は地球(地球を基準に動く)
+```
+(太陽 = sun, 地球 = earth, 月 = moon, OBJECT番号 = OBJECT number. The comments read: the sun's parent is OBJ 0 (the world coordinates); the earth's parent is the sun (it moves based on the sun); the moon's parent is the earth (it moves based on the earth).)
+
+*[p. 199]*
+
+Only when −1 is given as `<parent OBJECT number>`, the following is done in addition to the above. First, the contents of OBJECT −1 are copied to all items of `<OBJECT number>` except the connection information (normally this returns it to the initial state). If the CHILD of `<OBJECT number>` is other than −1 (if children are connected), the same is done for the OBJECT numbers from CHILD downwards.
+
+**[About the parent-child relationships of OBJECTs]** The parent-child relationships of OBJECTs represent the display hierarchy used when displaying 3D bodies. Display is done in order from the top downwards. Before any OBJECT is displayed, the matrix set for the line-of-sight direction is, in the example in the figure below, translated by the (XP,YP,ZP) of OBJECT 0 and rotated by (XR,YR,ZR), then translated by the (XP,YP,ZP) of OBJECT 1, the child of OBJECT 0, and rotated by its (XR,YR,ZR), and then rotation and translation are repeated with the parameters of OBJECT 3, the child of OBJECT 1. When a shape is specified for an OBJECT (when its TYPE is 4, 5 or 7), the shape is displayed based on the matrix after the movement.
+
+**[Example of parent-child relationships]**
+
+*[Figure: a tree headed "Top" and ending "Bottom". Under "OBJECTs in use": OBJECT 0 has children OBJECT 1 and OBJECT 2; OBJECT 1 has child OBJECT 3; OBJECT 3 has children OBJECT 4, OBJECT 5 and OBJECT 7; OBJECT 4 has child OBJECT 6. Under "Free OBJECTs": OBJECT −1, under which OBJECT 10 − OBJECT 11 − OBJECT 12 … are chained.]*
+
+| OBJECT \<ID\> | OBJECT number |
+|---|---|
+| OBJECT 0 | World coordinates |
+| OBJECT 0 | Parent of OBJECT 1 and OBJECT 2 |
+| OBJECT 1 | Parent of OBJECT 3 |
+| OBJECT 3 | Parent of OBJECT 4, OBJECT 5 and OBJECT 7 |
+| OBJECT 4 | Parent of OBJECT 6 |
+| OBJECT 4, OBJECT 5, OBJECT 7 | Siblings |
+
+*[p. 200]*
+
+To actually produce this state, execute the following commands.
+
+```
+FOR I=1 TO 7: OBJ(I,0)=4 : NEXT   → giving TYPE 4 to an unused OBJECT connects it to OBJECT 0
+OBJ(3, 20)=1                       → 20 is PARENT (the parent OBJECT number)
+OBJ(7, 20)=3
+OBJ(4, 20)=3
+OBJ(5, 20)=3
+OBJ(6, 20)=4
+
+OBJ?
+```
+
+Executing this displays the following (the actual display may differ in the order of siblings).
+
+```
+      0-> 2
+Top   1-> 3-> 5     Bottom
+            4-> 6
+            7
+```
+
+**[Sibling relationships of OBJECTs]**
+
+*[Figure: headed "Top" and ending "Bottom". OBJECT 0 has a line down to OBJECT 1, which is joined horizontally to OBJECT 2 and then to OBJECT 3.]*
+
+| | |
+|---|---|
+| OBJECT 0 | Parent |
+| OBJECT 1 | Eldest son of OBJECT 0 |
+| OBJECT 2 | Second son of OBJECT 0 |
+| OBJECT 3 | Youngest child of OBJECT 0 |
+| ID of the \<child\> of OBJECT 0 | 1 (OBJECT 1 = eldest son) |
+| ID of the \<elder sibling\> of OBJECT 1 | −1 (the eldest son has no elder sibling) |
+| ID of the \<younger sibling\> of OBJECT 1 | 2 (OBJECT 2) |
+| ID of the \<elder sibling\> of OBJECT 2 | 1 (OBJECT 1) |
+| ID of the \<younger sibling\> of OBJECT 2 | 3 (OBJECT 3) |
+| ID of the \<elder sibling\> of OBJECT 3 | 2 (OBJECT 2) |
+| ID of the \<younger sibling\> of OBJECT 3 | −1 (the youngest child has no younger sibling) |
+| ID of the \<parent\> of OBJECT 1, OBJECT 2 and OBJECT 3 | OBJECT 0 |
+
+*[p. 201]*
+
+**[State of the OBJECTs immediately after initialisation by the SCREEN command]**
+
+*[Figure: OBJECT −1 has children OBJECT 1 … OBJECT max. Next to it, OBJECT 0 with "none" beneath it.]*
+
+Internally:
+
+- left means the elder sibling and right the younger sibling.
+- \<parent\> and child are bidirectional list pointers representing the vertical relationship.
+- left and right are bidirectional list pointers representing the horizontal relationship.
+- \<parent\> holds the pointer child to the eldest sibling (whose left is NULL).
+- The next younger sibling is pointed to by the elder sibling's right, and the youngest sibling's pointer is NULL.
+- The \<parent\> of all siblings points to the same parent.
+
+**[About OBJECT 0]** OBJECT 0 is a special OBJECT used to define the world coordinates. All displayed OBJECTs are children of OBJECT 0. For example, if the Y axis of OBJECT 0 is rotated in the default state, the OBJECTs displayed on the screen rotate just like a washing machine. To move the viewpoint or use a camera viewpoint, change XP, YP, ZP, XR, YR, ZR, ORDER and so on of OBJECT 0. The CAMERA command also rewrites the items of OBJECT 0.
+
+```
+OBJ(<OBJECT番号>,20) = <親OBJECT番号>
+```
+(OBJECT番号 = OBJECT number, 親OBJECT番号 = parent OBJECT number.)
+
+Makes the parent of the OBJECT of `<OBJECT number>` the `<parent OBJECT number>`. All the OBJECTs below the OBJECT of `<OBJECT number>` (children and grandchildren) move with it as child OBJECTs of `<parent OBJECT number>`.
+
+*[Figure: OBJECT 0 has children OBJECT 1 and OBJECT 6; OBJECT 1 has child OBJECT 2; OBJECT 2 has children OBJECT 3, OBJECT 4 and OBJECT 5.]*
+
+*[p. 202]*
+
+For example, if OBJECT 6 is the right arm, OBJECT 1 the left arm, OBJECT 2 the hand, and OBJECT 3, OBJECT 4 and OBJECT 5 the fingers, to create the state in the figure above:
+
+```
+OBJ(6,20)=0     ワールド座標にOBJECT 6を結び付ける
+OBJ(1,20)=0     ワールド座標にOBJECT 1を結び付ける
+OBJ(2,20)=1     OBJECT 2の親はOBJECT 1
+OBJ(3,20)=2     OBJECT 3の親はOBJECT 2
+OBJ(4,20)=2     OBJECT 4の親はOBJECT 2
+OBJ(5,20)=2     OBJECT 5の親はOBJECT 2
+```
+(The comments read: attach OBJECT 6 to the world coordinates; attach OBJECT 1 to the world coordinates; the parent of OBJECT 2 is OBJECT 1; the parent of OBJECT 3, 4 and 5 is OBJECT 2.)
+
+Executing `OBJ(2,20)=6` in this state gives the following.
+
+*[Figure: OBJECT 0 has children OBJECT 1 and OBJECT 6; OBJECT 6 has child OBJECT 2; OBJECT 2 has children OBJECT 3, OBJECT 4 and OBJECT 5.]*
+
+You can also make an OBJECT its own parent, or register its own child or grandchild as its parent, but when the connections loop like this, the OBJECT can no longer be reached from OBJECT 0, so its display simply stops. To display it again, just give OBJECT 0 as its parent. While it is not displayed, movement, rotation, contact testing and so on are not performed, as for an unused OBJECT.
+
+*[Figure: OBJECT 0 above OBJECT 1, with an arrow from OBJECT 1 looping back to itself.]*
+
+**[Example]**
+
+```
+SETPFONT 1,65     → displays "A" using OBJECT 1
+OBJ(1,20)=1       → the OBJECTs connected to OBJECT 1 are no longer displayed
+OBJ(1,20)=0       → they are displayed again
+```
+
+*[p. 203]*
+
+**[About OBJECT −1]**
+
+```
+OBJ(<OBJECT番号>,20) = -1
+```
+(OBJECT番号 = OBJECT number.)
+
+OBJECT ID −1 is a special OBJECT used to hold unused OBJECTs. In the initial state, all OBJECTs other than OBJECT 0 are connected as children of OBJECT −1. To return a displayed OBJECT to its initial values, give OBJECT −1 as its parent. For example, if OBJECT −1 is registered as the parent of OBJECT 2 in the arm model above, the OBJECTs OBJECT 2, OBJECT 3, OBJECT 4 and OBJECT 5 are returned to their initial values. When a used OBJECT is connected to OBJECT −1, the structure of grandchildren and below connected to its children is destroyed, and they all become siblings.
+
+```
+OBJ(2,20)=-1
+```
+
+To remove only OBJECT 2 and keep its children, connect OBJECT 3, OBJECT 4 and OBJECT 5 to OBJECT 6 and then remove OBJECT 2.
+
+```
+OBJ(3,20)=6       OBJECT 2の子供をOBJECT 2の親とつなげてから
+OBJ(4,20)=6
+OBJ(5,20)=6
+OBJ(2,20)=-1      OBJECT 2を消去する
+```
+(The comments read: after connecting the children of OBJECT 2 to the parent of OBJECT 2 … delete OBJECT 2.)
+
+**[How to examine the connections]**
+
+```
+N = OBJ(<OBJECT番号>,20)
+```
+
+Returns the ID of the parent of `<OBJECT number>`.
+
+```
+N = OBJ(<OBJECT番号>,21)
+```
+
+To get a free OBJECT number, look up the number of the first child of OBJECT −1. Returns the first child of `<ID>`. If there are no children, returns −1. If you know the OBJECT number you most want to use, you can use any OBJECT number.
+
+```
+N = OBJ(<OBJECT番号>,22)
+```
+
+Returns the ID of the elder sibling of `<OBJECT number>`. For example, one way to examine all the siblings of the OBJECT of a given `<OBJECT number>` is:
+
+```
+N0 = OBJ(<OBJECT番号>,20) →N0は 親IDを表す。
+N1 = OBJ(N0,21)           →親N0の最初の子供を調べる。
+N2 = OBJ(N1,23)           →N1の次の弟を調べる。-1なら弟はいない。
+N3 = OBJ(N2,23)           →N2の次の弟を調べる。-1なら弟はいない。
+...
+```
+(OBJECT番号 = OBJECT number. The comments read: N0 is the parent ID; look up the first child of parent N0; look up the next younger sibling of N1, and if −1 there is no younger sibling; the same for N2.)
+
+and so on. There is also a way of examining them using the fact that the value of the eldest son's \<elder sibling\> is −1.
+
+**[Caution]** Objects whose parent-child generations exceed 16 are not displayed, because of an internal stack limit.
+
+*[p. 204]*
+
+**■ CHILD (child OBJECT)**
+
+### 21 (Link structure: child OBJECT: @CHILD)
+
+*Fixed-point function*
+
+**Function:** Returns the association (CHILD) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,21)`
+
+**Example:** `IF OBJ(1,21) <> -1 THEN BEEP` → sounds BEEP if a child is connected to OBJECT 1.
+
+**[Parameters]**
+- `<OBJECT number>`: the number of the OBJECT whose child is examined. An integer from −1 to 255.
+
+**[Return value]** Returns the first `<OBJECT number>` if there is a `<child OBJECT>`, or −1 if there is none. For details, see [About the parent-child relationships of OBJECTs] under `<item number>`=20.
+
+**[Details]** Examines whether a `<child OBJECT>` is connected to the OBJECT of `<OBJECT number>`, and returns its `<OBJECT number>`. A child is an OBJECT in the level below `<OBJECT number>`. A child OBJECT is displayed based on the position of the parent `<OBJECT number>`. If several children are connected to `<OBJECT number>`, the OBJECT number of the first child (the eldest) is returned.
+
+**■ LEFT (elder sibling OBJECT)**
+
+### 22 (Link structure: elder sibling OBJECT: @LEFT)
+
+*Fixed-point function*
+
+**Function:** Returns the association (LEFT) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,22)`
+
+**Example:** `? OBJ(1,22)`
+
+**[Parameters]**
+- `<OBJECT number>`: the number of the OBJECT whose elder sibling OBJECT is examined. An integer from −1 to 255.
+
+**[Return value]** Returns the `<OBJECT number>` if an elder sibling OBJECT is connected, or −1 if there is none.
+
+**[Details]** Examines whether an elder sibling OBJECT is connected to the OBJECT of `<OBJECT number>`, and returns its `<OBJECT number>`. An elder sibling is an OBJECT at the same level connected to the same parent. Sibling OBJECTs are displayed based on the position and angle of the parent OBJECT, and the positions
+
+*[p. 205]*
+
+and angles of siblings operate independently of each other. Also, when several OBJECTs are connected to the same parent, they are automatically connected as sibling OBJECTs. In normal operation, all displayed OBJECTs are connected as children of OBJECT 0, as siblings at the same level.
+
+**■ RIGHT (younger sibling OBJECT)**
+
+### 23 (Link structure: younger sibling OBJECT: @RIGHT)
+
+*Fixed-point function*
+
+**Function:** Returns the association (RIGHT) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,23)`
+
+**Example:** `? OBJ(1,23)`
+
+**[Parameters]**
+- `<OBJECT number>`: the number of the OBJECT whose younger sibling OBJECT is examined. An integer from −1 to 255.
+
+**[Return value]** Returns its `<OBJECT number>` if a younger sibling OBJECT is connected, or −1 if there is none. For details, see [About the parent-child relationships of OBJECTs] under `<item number>`=20.
+
+**[Details]** Examines whether a younger sibling OBJECT is connected to the OBJECT of `<OBJECT number>`, and returns its `<OBJECT number>`. A younger sibling is an OBJECT at the same level connected to the same parent. Sibling OBJECTs are displayed based on the position and angle of the parent OBJECT, and the positions and angles of siblings operate independently of each other.
+
+**■ XV, YV, ZV (speed)**
+
+### 24 (X speed: @XV)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 25 (Y speed: @YV)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 26 (Z speed: @ZV)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+The following describes item number 24. Read it accordingly for 25 and 26.
+
+**Function:** Gives the value (XV) added to the X coordinate of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,24)=<numeric expression>`
+
+**Example:**
+```
+OBJ(1,24)=0.2
+OBJ(1,24)=0.2, 1, 0
+```
+
+*[p. 206]*
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the speed. Gives, as a numeric expression, the value added to the X coordinate at each VSYNC.
+
+**[Return value]** Returns the current speed, the value added to XP at each VSYNC.
+
+**[Details]** Gives the value added to XP at each VSYNC. The initial value is 0. Once a value is given here, the OBJECT keeps moving, so the program must take responsibility for stopping it.
+
+**■ XA, YA, ZA (acceleration)**
+
+### 28 (X acceleration: @XA)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 29 (Y acceleration: @YA)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 30 (Z acceleration: @ZA)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+The following describes item number 28. Read it accordingly for 29 and 30.
+
+**Function:** Gives the acceleration (XA) added to the X speed (XV) of an OBJECT.
+
+**Syntax:** `OBJ(<OBJECT number>,28)=<numeric expression>`
+
+**Example:**
+```
+OBJ(1,32)=4                    → sets the maximum speed to 4 dots per VSYNC
+OBJ(1,28)=0.01                 → gives an acceleration in the positive direction of the X axis
+OBJ(1,28)=0.01,0.01,0.01       → gives an acceleration of 0.01 in each of the positive X, Y and Z directions
+```
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the acceleration. Gives, as a numeric expression, the value added to the X speed at each VSYNC.
+
+**[Return value]** Returns the current acceleration, the value added to the X speed (XV) at each (VSYNC).
+
+*[p. 207]*
+
+**[Details]** Gives the value added to XV at each VSYNC. The initial value is 0. When XA is specified, the maximum speed must be given in XL beforehand. Once a value is given here, the OBJECT keeps moving, so the program must take responsibility for stopping it.
+
+```
+XV = XV + XA
+IF (XV < 0) AND (XV < -XL) THEN XV = -XL
+IF (XV > 0) AND (XV > +XL) THEN XV = +XL
+```
+
+**■ XL, YL, ZL (speed limiter)**
+
+### 32 (X speed limiter: @XL)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 33 (Y speed limiter: @YL)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 34 (Z speed limiter: @ZL)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+The following describes item number 32. Read it accordingly for 33 and 34.
+
+**Function:** Specifies that the absolute value of the X speed (XV) of an OBJECT must not exceed this value.
+
+**Syntax:** `OBJ(<OBJECT number>,32)=<numeric expression>`
+
+**Example:**
+```
+OBJ(1,32)=3
+OBJ(1,32)=3,3,3   → sets the speed limiter of each of X, Y and Z to 3
+```
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the speed.
+
+**[Return value]** The speed limit value. The limit value of the X speed (XV) of the OBJECT.
+
+**[Details]** When XA is other than 0 and the value of XA (acceleration) is added to XV (speed) at each VSYNC, limits the absolute value of XV so that it does not exceed XL. When XA is 0, XL has no effect on XV. The initial value of XA is 0.
+
+```
+XV = XV + XA
+IF (XV < 0) AND (XV < -XL) THEN XV = -XL
+IF (XV > 0) AND (XV > +XL) THEN XV = +XL
+```
+
+*[p. 208]*
+
+**■ XRV, YRV, ZRV (rotation speed) [OBJTURN]**
+
+### 36 (X rotation speed: @XRV)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 37 (Y rotation speed: @YRV)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 38 (Z rotation speed: @ZRV)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+The following describes item number 36. Read it accordingly for 37 and 38.
+
+**Function:** Gives the value added to the XR (rotation angle about the X axis) of an OBJ.
+
+**Syntax:** `OBJ(<OBJECT number>,36)=<numeric expression>`
+
+**Example:** `OBJ(1,36)=0.01`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the angular speed.
+
+**[Return value]** Angular speed. The X rotation speed of the OBJECT.
+
+**[Details]** Gives the value added to XR at each VSYNC. The initial value is 0. Once a value is given here, the OBJECT keeps rotating, so the program must take responsibility for stopping it.
+
+**■ XP0, YP0, XP1, YP1, XP2, YP2, XP3, YP3 (4-point sprite vertices)**
+
+### 48 (4-point sprite vertex X0: @XP0)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 49 (4-point sprite vertex Y0: @YP0)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 50 (4-point sprite vertex X1: @XP1)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 51 (4-point sprite vertex Y1: @YP1)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+*[p. 209]*
+
+### 52 (4-point sprite vertex X2: @XP2)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 53 (4-point sprite vertex Y2: @YP2)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 54 (4-point sprite vertex X3: @XP3)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+### 55 (4-point sprite vertex Y3: @YP3)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies the positions for displaying a 2D sprite of TYPE=3 (4-point specification).
+
+**Syntax:**
+```
+OBJ(<OBJECT number>,48)=<numeric expression>
+OBJ(<OBJECT number>,49)=<numeric expression>
+OBJ(<OBJECT number>,50)=<numeric expression>
+OBJ(<OBJECT number>,51)=<numeric expression>
+OBJ(<OBJECT number>,52)=<numeric expression>
+OBJ(<OBJECT number>,53)=<numeric expression>
+OBJ(<OBJECT number>,54)=<numeric expression>
+OBJ(<OBJECT number>,55)=<numeric expression>
+```
+
+**Example:** `OBJ(1,48)= -10,-10, +10,-10, +10,+10, -10,+10` → specifies the 4 vertices at once.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: a coordinate.
+
+**[Return value]** The coordinate is the position of each vertex written.
+
+**[Details]** When the OBJECT type is the 2D sprite display of TYPE=3, specifies the positions of the 4 points of the sprite. The 4 points are given as positions relative to the X position (XP) and Y position (YP), in the order top left (XP0,YP0), top right (XP1,YP1), bottom right (XP2,YP2), bottom left (XP3,YP3) (clockwise). By changing the order in which they are given, effects such as rotation, flipping, enlargement, reduction and twisting can be applied to the sprite. The items used in the OBJ() structure are as follows.
+
+*[p. 210]*
+
+| Item | Meaning |
+|---|---|
+| XP | Position on screen, relative to the CX parameter of SPRWINDOW |
+| YP | Position on screen, relative to the CY parameter of SPRWINDOW |
+| ZP | Priority against polygons by Z position |
+| ATR | Attribute ID made with the SETATR command |
+| XP0,YP0 | Position of the 4 points of the sprite relative to XP,YP |
+| XP1,YP1 | 〃 |
+| XP2,YP2 | 〃 |
+| XP3,YP3 | 〃 |
+
+It is not affected by rotation or translation.
+
+**■ XD, YD, ZD, RD (position on screen)**
+
+### 56 (X position projected on screen: @XD)
+
+*Fixed-point function*
+
+### 57 (Y position projected on screen: @YD)
+
+*Fixed-point function*
+
+### 58 (Z position from screen: @ZD)
+
+*Fixed-point function*
+
+### 59 (RADIUS/ZD: @RD)
+
+*Fixed-point function*
+
+The following describes item number 56. Read it accordingly for 57 to 59.
+
+**Function:** Reads the coordinates at which an OBJECT is projected onto the screen.
+
+**Syntax:** `OBJ(<OBJECT number>,56)`
+
+**Example:**
+```
+FLAG = 1
+OBJ(1, FLAG)=4                       → sets the flag so the values can be read
+CIRCLE (OBJ(1,56),OBJ(1,57)),10      → draws a circle centred on the OBJECT's display position
+```
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+
+**[Return value]** A fixed-point number.
+
+*[p. 211]*
+
+**[Details]** When bit 2 of FLAG is "1", the position on screen when the OBJECT has been perspective-transformed onto the screen is written to XD and YD, taking the top left (0,0) as the reference; the Z distance of the OBJECT is written to ZD, and the OBJECT's radius/Z distance to RD. The position of an OBJECT that would be projected off the screen is also returned, but the values are not guaranteed if it is far off the screen. To read these values, you must wait at least 1 VSYNC after setting the value. The values are valid for OBJECTs of TYPE 4, 5, 6 and 7.
+
+**■ GTEST (collision-test group setting)**
+
+### 60 (Collision-test group setting: @GTEST)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies the collision-test group.
+
+**Syntax:** `OBJ(<OBJECT number>,60)=<numeric expression>`
+
+**Example:** `OBJ(1,60)=1` → starts testing for collision with the group belonging to bit 0.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the collision-test group bits.
+
+**[Return value]** Fixed-point. The 16-bit value written.
+
+**[Details]**
+
+Holds a 16-bit value and is used to specify the groups for collision testing. When a value other than 0 is written here, contact testing between this OBJECT and other OBJECTs starts.
+
+Each bit represents one group, and collision is tested with other displayed OBJECTs that have the same bit set to 1. Several groups can be examined together, but only the first OBJECT collided with can be detected. The results of the test are stored in "contact flag and its distance" (COLIDIST) and "number of the OBJECT contacted" (COLIOBJ).
+
+The test algorithm is as follows.
+
+- For all displayed OBJECTs (TYPE=4, TYPE=5, TYPE=6, TYPE=7),
+- other than itself and the WORLD OBJECT (0),
+- for OBJECTs where the AND of this OBJECT's GTEST and the examined OBJECT's GROUP is other than 0,
+- when the distance between the 2 OBJECTs is equal to or less than the sum of their radii.
+
+```
+SQR((OBJ1_X-OBJ2_X)^2 + (OBJ1_Y-OBJ2_Y)^2 + (OBJ1_Z-OBJ2_Z)^2) <=
+SQR(OBJ1_RADIUS+OBJ2_RADIUS)
+```
+
+The initial value is 0, meaning no contact testing.
+
+*[p. 212]*
+
+**■ RADIUS (radius for contact test)**
+
+### 61 (Radius for contact test: @RADIUS)
+
+*Direct-mode command / Program-mode command / Fixed-point function*
+
+**Function:** Specifies the collision radius used by GTEST.
+
+**Syntax:** `OBJ(<OBJECT number>,60)=<numeric expression>` (sic: the item number is 61)
+
+**Example:** `OBJ(1,61)=20`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<numeric expression>`: the radius.
+
+**[Return value]** Distance. Returns the current radius.
+
+**[Details]** Distance. Specifies the radius of the OBJECT for collision testing. The initial value is 10.0.
+
+**■ COLIDIST (contact flag and its distance)**
+
+### 62 (Contact flag and its distance: @COLIDIST)
+
+*Fixed-point function*
+
+**Function:** Examines the result of an OBJECT's collision test.
+
+**Syntax:** `OBJ(<OBJECT number>,62)`
+
+**Example:** `IF OBJ(1,62) <> -1 THEN ?"COLLISION DISTANCE=";OBJ(1,62)`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+
+**[Return value]** Fixed-point. The result of the GTEST contact test is stored here.
+
+**[Details]** −1 is stored when there is no contact, and the distance to the OBJECT contacted when it is 0 or more. Once contact has occurred, no collision test is done until a value is written to GTEST again (this is also to keep in step with BASIC).
+
+*[p. 213]*
+
+**■ COLIOBJ (number of the OBJECT contacted)**
+
+### 63 (Number of the OBJECT contacted: @COLIOBJ)
+
+*Fixed-point function*
+
+**Function:** Gets the OBJECT number of the other party collided with in an OBJECT's collision test.
+
+**Syntax:** `OBJ(<OBJECT number>,63)`
+
+**Example:** `IF OBJ(1,63) <> -1 THEN ?"COLLSION OBJECT=";OBJ(1,63)`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+
+**[Return value]** Fixed-point. Gets the OBJECT number of the other party collided with.
+
+**[Details]** When the contact test flag (COLIDIST) is 0 or more, the number of the OBJECT contacted is written here.
+
+**■ M00 to M32 (matrix at perspective transformation)**
+
+### 64 (Matrix at perspective transformation M00)
+
+*Fixed-point function*
+
+### 65 (Matrix at perspective transformation M01)
+
+*Fixed-point function*
+
+### 66 (Matrix at perspective transformation M02)
+
+*Fixed-point function*
+
+### 67 (Matrix at perspective transformation M10)
+
+*Fixed-point function*
+
+### 68 (Matrix at perspective transformation M11)
+
+*Fixed-point function*
+
+### 69 (Matrix at perspective transformation M12)
+
+*Fixed-point function*
+
+### 70 (Matrix at perspective transformation M20)
+
+*Fixed-point function*
+
+### 71 (Matrix at perspective transformation M21)
+
+*Fixed-point function*
+
+*[p. 214]*
+
+### 72 (Matrix at perspective transformation M22)
+
+*Fixed-point function*
+
+### 73 (Matrix at perspective transformation M30)
+
+*Fixed-point function*
+
+### 74 (Matrix at perspective transformation M31)
+
+*Fixed-point function*
+
+### 75 (Matrix at perspective transformation M32)
+
+*Fixed-point function*
+
+The following describes item number 64. Read it accordingly for 65 to 75.
+
+**Function:** Reads the matrix values of an OBJECT at perspective transformation.
+
+**Syntax:** `OBJ(<OBJECT number>,64)`
+
+**Example:** `?XATN(OBJ(2,73)-OBJ(1,73), OBJ(2,75)-OBJ(1,75))` → finds the direction in the XZ plane of OBJECT 2 as seen from OBJECT 1.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+
+**[Return value]** The matrix value at perspective transformation.
+
+**[Details]**
+
+When bit 0 of FLAG is "1", the translation components of the matrix at perspective transformation are written to M30 to M32. To read the values of M30 to M32, you must wait at least 1 VSYNC after setting the value. This flag automatically becomes "1" when the collision-test setting (GTEST) is set to a value other than 0.
+
+Note that the coordinates used for an OBJECT's hit detection (M30, M31, M32) are strictly coordinates from the viewpoint, and differ from coordinates relative to OBJECT 0 (in the sense that a matrix operation between the unit vector of the line of sight and OBJECT 0 comes in between). In the standard state, the ZP value of OBJECT 0, 200, is added in the Z direction. When bit 1 is "1", the whole matrix at perspective transformation (4×3) is saved in M00 to M32. To read these values, you must wait at least 1 VSYNC after setting the value.
+
+```
+M00  M01  M02
+M10  M11  M12
+M20  M21  M22
+M30  M31  M32   → translation components
+```
+
+M30 to M32 are the centre position of the OBJECT relative to the viewpoint, and are also used for collision testing.
+
+*[p. 215]*
+
+### OBJATR
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the attribute ID and polygon ID of an OBJECT.
+
+**Syntax:** `OBJATR <OBJECT number>[,<polygon ID number>][,<attribute ID>]`
+
+**Example:** `OBJATR 1,1,4`
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from 1 to 255.
+- `<attribute ID>`: an integer in the range from 0 to the maximum number of definable attribute IDs − 1.
+- `<polygon ID>`: an integer in the range from 0 to the maximum number of definable polygon IDs − 1.
+
+**[Details]**
+
+Specifies the attribute ID and polygon ID for an OBJECT. The attribute ID holds the information on each face of a polygon made with the SETATR command, and the polygon ID holds the shape information of a polygon made with the SETPOLYGON command.
+
+`<attribute ID>` and `<polygon ID number>` can be omitted by separating them with ",", but at least one must be given. This command is an alias of `OBJ(<OBJECT number>,16)=<numeric expression>...` and behaves the same way.
+
+**[See also]** The ATR (16) and POLYGON (17) items of the OBJ command.
+
+### OBJLINK
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the "parent-child relationship" of an OBJECT.
+
+**Syntax:** `OBJLINK <OBJECT number>,<parent OBJECT number>`
+
+**Example:** `OBJLINK 1,2` → makes the parent of OBJECT 1 OBJECT 2.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from 1 to 255.
+- `<parent OBJECT number>`: the number of the OBJECT with which the OBJECT of `<OBJECT number>` is associated. An integer from −1 to 255.
+
+**[Details]** Makes the parent OBJECT of the OBJECT of `<OBJECT number>` the `<parent OBJECT number>`. If child OBJECTs are connected to `<OBJECT number>`, all the child OBJECTs are also connected to the OBJECT of `<parent OBJECT number>`. If `<parent OBJECT number>` is −1, the parent-child structure of all the OBJECTs from the children of `<OBJECT number>`
+
+*[p. 216]*
+
+downwards is discarded and the values of OBJECT −1 are copied (normally they return to the unused state). This command is an alias of `OBJ(<OBJECT number>,20)=<numeric expression>...` and behaves the same way.
+
+**[See also]** The PARENT (20) item of the OBJ command.
+
+### OBJPOS
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the "relative position" from the parent OBJECT.
+
+**Syntax:** `OBJPOS <OBJECT number>,[<X position>],[<Y position>],[<Z position>]`
+
+**Example:**
+```
+OBJPOS 1,200      → sets the X position of OBJECT 1 to 100
+OBJPOS 1,,,300    → sets the ZP of OBJECT 1 to 300
+```
+(The first example sets 200, although the comment says 100 (sic).)
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<X position>`, `<Y position>`, `<Z position>`: coordinates.
+
+**[Details]** Specifies the X-, Y- and Z-coordinate distances from the parent OBJECT with numeric expressions. `<X position>`, `<Y position>` and `<Z position>` can be omitted by separating them with ",", but at least one must be given. This command is an alias of `OBJ(<OBJECT number>,4)=<numeric expression>...` and behaves the same way.
+
+**[See also]** The XP (4), YP (5) and ZP (6) items of the OBJ command.
+
+### OBJROT
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the "rotation angle" relative to the angle of the parent OBJECT.
+
+**Syntax:** `OBJROT <OBJECT number> [,<X-axis angle>][,<Y-axis angle>][,<Z-axis angle>]`
+
+**Example:** `OBJROT 1,,0.5` → rotates OBJECT 1 by 180 degrees about the Y axis of the parent OBJECT.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<X-axis angle>`, `<Y-axis angle>`, `<Z-axis angle>`: angles.
+
+**[Details]** Specifies the rotation angles about the X, Y and Z axes relative to the parent OBJECT with numeric expressions. `<X-axis angle>`, `<Y-axis angle>` and `<Z-axis angle>` can be omitted by separating them with ",", but at least one must be
+
+*[p. 217]*
+
+given. This command is an alias of `OBJ(<OBJECT number>,8)=<numeric expression>...` and behaves the same way.
+
+**[See also]** The XR (8), YR (9) and ZR (10) items of the OBJ command.
+
+### OBJTURN
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the "rotation angle" relative to the angle of the parent OBJECT.
+
+**Syntax:** `OBJTURN <OBJECT number>,[<X-axis angular speed>],[<Y-axis angular speed>],[<Z-axis angular speed>]`
+
+**Example:** `OBJTURN 1,,,&H0.01` → rotates OBJECT 1 in the Z-axis direction.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<X-axis angular speed>`, `<Y-axis angular speed>`, `<Z-axis angular speed>`: angular speeds.
+
+**[Details]** Specifies the values added to the X-axis, Y-axis and Z-axis angles at each VSYNC. When a value other than 0 is given, an OBJECT connected to OBJECT 0 keeps rotating. `<X-axis angular speed>`, `<Y-axis angular speed>` and `<Z-axis angular speed>` can be omitted by separating them with ",", but at least one must be given. This command is an alias of `OBJ(<OBJECT number>,36)=<numeric expression>...` and behaves the same way.
+
+**[See also]** The XRV (36), YRV (37) and ZRV (38) items of the OBJ command.
+
+### OBJTYPE
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the OBJECT type.
+
+**Syntax:** `OBJTYPE <OBJECT number>,<TYPE>`
+
+**Example:** `OBJTYPE 1,4` → displays OBJECT 1 as a polygon.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from 1 to 255.
+- `<TYPE>`: a numeric expression giving one of the values that specify the display method. Valid values are integers from 0 to 7. Anything after the decimal point is cut off.
+
+**[Details]** This command is an alias of `OBJ(<OBJECT number>,0)=<numeric expression>...` and behaves the same way.
+
+*[p. 218]*
+
+**[See also]** The TYPE (0) item of the OBJ command.
+
+### OBJZOOM
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Specifies the "display scale" of an OBJECT.
+
+**Syntax:** `OBJZOOM <OBJECT number>,[<X-axis scale>],[<Y-axis scale>],[<Z-axis scale>]`
+
+**Example:** `OBJZOOM 1,2,2,2` → doubles the display size of OBJECT 1.
+
+**[Parameters]**
+- `<OBJECT number>`: the OBJECT number concerned. An integer from −1 to 255.
+- `<X-axis scale>`, `<Y-axis scale>`, `<Z-axis scale>`: scale factors.
+
+**[Details]** Specifies the scale factors of the OBJECT in the X-, Y- and Z-axis directions with numeric expressions. The scale of OBJECT 1 and later does not affect child OBJECTs. Changing the scale does not change the normal vectors. To display the correct scale with an orthographic polygon (OBJECT TYPE=5) or a sprite (OBJECT TYPE=7), XS and YS must be set to 0.99995 (&h0.FFFC) rather than 1. `<X-axis scale>`, `<Y-axis scale>` and `<Z-axis scale>` can be omitted by separating them with ",", but at least one must be given. This command is an alias of `OBJ(<OBJECT number>,12)=<numeric expression>...` and behaves the same way.
+
+**[See also]** The XS (12), YS (13) and ZS (14) items of the OBJ command.
+
+### SETATR
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Defines the attributes given to each face of a polygon.
+
+**Syntax:**
+```
+(1) SETATR [<attribute ID>],<number of attributes>[,(<parameter 1>)][,(<parameter 2>)...]
+(2) SETATR (<parameter 1>)[,(<parameter 2>)...]
+(3) SETATR <attribute ID>,<number of attributes>,READ
+    ...
+    DATA (<parameter>)[,(<parameter>)...]
+    ...
+```
+
+**Example:**
+```
+(1)SETATR 1,1,(0,1,3,1,0,0)
+(2)SETATR (0,1,3,1,0,0)
+(3)SETATR 1,1,READ
+```
+
+*[p. 219]*
+
+**[Parameters]** Each `<parameter>` corresponds one-to-one with a face of the polygon defined by SETPOLYGON, and specifies how that face is displayed.
+- `<attribute ID>`: the group number of the attributes to define, from 0 upwards.
+- `<number of attributes>`: the number of attributes defined in this group. It must be equal to or greater than the number of faces of the target polygon defined by SETPOLYGON.
+- `<parameter>`: the attribute parameters (`<TYPE>`, `<SURFACE>`, `<SORT>`, `<texture ID>`, `<COLOR>`, `<MODE>`). See [Details].
+- `<READ>`: reads the parameters from DATA statements.
+
+**[Details]**
+
+In syntax (1), new attributes are created. If `<attribute ID>` is omitted, the smallest definable group number is assigned. This number can be read with the ATRID(−1) function. If no more `<attribute ID>`s can be registered, an Attribute ID over error occurs.
+
+When syntax (2) is used, writing continues from where the last defined attribute ended. When the rest of the data is written to the attribute table address being written, an Undefined attribute error occurs if the address is undefined. Trying to define more than the given number of attributes causes an Attribute data over error.
+
+In syntax (3), attribute data defined in DATA statements is defined instead of a string. The data must be defined in DATA statements in the amount needed for the definition. If there is not enough data, an Out of DATA error occurs. When registering new data, the `<attribute ID>` is registered only if no error occurred during the definition. When registering existing data, the data up to the point where the error occurred may be registered.
+
+`<TYPE>`: shows the state of the polygon.
+
+| Value | Meaning |
+|---|---|
+| 0 | Texture display, no flip |
+| 1 | Texture display, flipped left-right |
+| 2 | Texture display, flipped top-bottom |
+| 3 | Texture display, flipped top-bottom and left-right |
+| 4 | Polygon |
+| 5 | Polyline display |
+| 6 | Straight line through the first 2 points |
+
+*[p. 220]*
+
+`<SURFACE>`: specifies how (POLYGON, TEXTURE) is displayed.
+
+| Value | Meaning |
+|---|---|
+| 0 | One-sided (polygons facing away, judged by the normal vector, are not displayed) |
+| 1 | Two-sided |
+
+`<SORT>`: specifies the reference point used to sort polygon faces.
+
+| Value | Meaning |
+|---|---|
+| 0 | Use the position of the Polygon displayed just before |
+| 1 | Use the nearest of the 4 points |
+| 2 | Use the farthest of the 4 points |
+| 3 | Use the average position of the 4 points |
+
+`<texture ID>`: specifies the texture ID, defined by SETTEX, to paste onto the polygon face. The texture ID must already be defined. A polygon with a texture is the same as what is generally called a sprite. Ignored if `<TYPE>` is not a texture. The priority of the face can also be specified by adding the value of a priority register to `<texture ID>` (see the PRIORITY command).
+
+`<COLOR>`: when `<TYPE>` is a texture (0, 1, 2, 3) and its number of colours (the number of colours of the texture of `<texture ID>`) is 16 or 256, specifies the palette number. The palette number is given as follows. Multiples of 16 or 256 are used so that the same area can be shared by attributes with different numbers of colours.
+
+If the texture has 16 colours, give a multiple of 16:
+
+```
+Palette 0  = 0
+Palette 1  = 16
+Palette 2  = 32
+...
+Palette 31 = 496
+```
+
+If the texture has 256 colours, a multiple of 256:
+
+```
+Palette 0 = 0
+Palette 1 = 256
+```
+
+Addresses 0 to 511 of the sprite palette are obtained with the following formula.
+
+```
+<パレット番号>+<テクスチャのドットのカラーコード>
+```
+(\<palette number\> + \<colour code of the texture dot\>.)
+
+A total of 512 colours are allocated to the sprite palette, shared by 16-colour textures, 256-colour textures and polygons that use a palette.
+
+To change the colour data of the sprite palette, use `PALETTE 10, ....` (numbers 10 and up are the logical BG numbers for sprites). When `<TYPE>` is a plain polygon (4, 5, 6), give an RGB colour. The colour format is the same as the RGB function. RGB data is the value `<R>+<G>×32+<B>×32×32`, each colour taking a value from 0 to 31. When `<TYPE>` (sic) is a 32768-colour texture, the full colour can be decided on the texture side, so
+
+*[p. 221]*
+
+set `<COLOR>` to 0 (it is ignored).
+
+`<MODE>`: sets the various drawing modes of the polygon. Normally set to 0.
+
+| Bits | Meaning |
+|---|---|
+| Bits 0 and 1 | Drawing mode: 0 = overwrite mode; 1 = shadow mode; 2 = half-luminance mode; 3 = semi-transparent mode |
+| Bit 3 | Polygon affected by the light source (uses the normal vector). Limited to RGB-specified textures or polygons. |
+| Bit 5 | Uses a palette for the polygon colour |
+| Bits 6 and 7 | Window mode: 0 = not restricted by the window; 1 = displayed inside the window (default); 2 = displayed outside the window |
+| Bit 8 | Mesh display |
+
+For example, semi-transparent mode is 3 (or &H03, &B00000011), and mesh display is 256 (or &H100, &B100000000).
+
+As a rule, `<attribute ID>`s are defined in order from 0. For example, if ID 2 is defined after ID 0, ID 1 cannot be defined afterwards. When registration of attributes is started with syntax (1), `<parameter 1>` is applied to all the attribute data of the `<attribute ID>` reserved by SETATR. When a new `<attribute ID>` is reserved with syntax (1) with the parameters omitted, all the data of the `<attribute ID>` is first initialised with the following data.
+
+| Parameter | Initial value |
+|---|---|
+| `<TYPE>` | =4 (polygon) |
+| `<SURFACE>` | =1 (two-sided) |
+| `<SORT>` | =2 (use the farthest of the 4 points) |
+| `<texture ID>` | =0 (not relevant) |
+| `<COLOR>` | =RGB(0,15,15) |
+| `<MODE>` | =72 (displayed inside the window, affected by the light source) |
+
+If `<attribute ID>` and `<number of attributes>` are the same, it can be redefined later. When redefining existing attributes, if the attributes are already defined and their size differs, an Attribute size mismatch error occurs. Attribute data is initialised (erased) by the SCREEN command.
+
+**[See also]** The ATR (16) item of the OBJ command.
+
+*[p. 222]*
+
+### SETTEX
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Defines a texture.
+
+**Syntax:**
+```
+(1) SETTEX [<texture ID>],<XS>,<YS>,<COLOR_DEPTH>[,<string>]
+(2) SETTEX <string>
+(3) SETTEX <texture ID>,<XS>,<YS>,<COLOR_DEPTH>,READ
+```
+
+**Example:**
+```
+(1)SETTEX 1,8,8,256,HEXBIN$(STRW$(64,"FF")
+(2)SETTEX A$
+(3)SETTEX 1,8,8,256,READ
+```
+
+**[Parameters]**
+- `<texture ID>`: the group number of the texture to define, from 0 upwards.
+- `<XS>`, `<YS>`: the dot size of the texture defined in this group. The range of `<XS>` is 8 to 504, but it causes an error if it is not in units of 8 dots. The range of `<YS>` is 1 to 255.
+- `<COLOR_DEPTH>`: the number of colours per dot. One of 16, 256 and 32768.
+- `<string>`: the texture data to define. The string format is described below.
+- `READ`: reads the texture data from DATA statements.
+
+**[Details]**
+
+Syntax (1) defines a new texture. If `<texture ID>` is omitted, the smallest undefined texture ID is assigned. This number can be read with the TEXID(−1) function. If no more `<texture ID>`s can be registered, a Texture ID over error occurs.
+
+Syntax (2) writes from where the last defined address ended. If the definition goes beyond the size of the texture, the excess part is ignored. If the texture address being written is undefined, an Undefined texture error occurs.
+
+Syntax (3) defines texture data defined in DATA statements instead of a string. Because the hexadecimal strings are read and converted in one go, the data must be defined in DATA statements in the amount needed for the definition. If there is not enough data an error occurs, and if the amount needed for the definition is reached partway through a DATA statement, the remaining data is discarded. When the SCREEN command is executed, the area reserved by the SETTEX command is initialised, but the texture data itself is kept in its last defined state.
+
+The DATA statement formats allowed by SETTEX are as follows (following HEXBIN$).
+
+1. Comma-separated hexadecimal strings. `DATA AA,BB,CC,DD,EE,...FF`
+2. A continuous hexadecimal string. Every 2 characters are converted as 1 byte. A final odd character is converted with a 0 added in the upper position.
+
+*[p. 223]*
+
+   Example: `DATA AABBCCDDEE...FF`
+
+Defines `<string>` as texture data. A texture is bitmap data pasted onto a polygon face. `<COLOR_DEPTH>` gives the number of colours per dot.
+
+- For 16, palette format, with 1 byte holding the data for 2 dots.
+- For 256, palette format, with 1 byte holding the data for 1 dot.
+- For 32768, RGB format, with 2 bytes holding the data for 1 dot.
+
+As an example, the amount of data to register is calculated as follows.
+
+```
+1. <XS> = 8, <YS> = 8, <COLOR_DEPTH> = 16     → 8 × 8 × 0.5 = 32 bytes
+2. <XS> = 8, <YS> = 8, <COLOR_DEPTH> = 256    → 8 × 8 × 1   = 64 bytes
+3. <XS> = 8, <YS> = 8, <COLOR_DEPTH> = 32768  → 8 × 8 × 2   = 128 bytes
+```
+
+Because texture data is defined in order in SPRITE VRAM, as a rule `<texture ID>`s are defined in order from 0. It is possible to start defining at number 10, but then the data for numbers 0 to 9 can no longer be registered afterwards (a Table size error occurs).
+
+If the `<XS>`, `<YS>` and `<COLOR_DEPTH>` of a `<texture ID>` are the same, it can be redefined later. When redefining an existing texture, if the texture is already defined in a different format, a Texture size mismatch error occurs.
+
+If texture data being defined goes beyond the defined area, a Texture data over error occurs. To initialise texture data, execute `CLS <texture number + 10>`.
+
+A defined texture can also be rewritten with the bitmap drawing commands.
+
+**[String format]** For 32768 colours (RGB format), each dot is colour data with 5 bits each for R, G and B, &b0BBBBB_GGGGG_RRRRR, upper byte first, then lower byte. A dot to be displayed has the most significant bit (&H8000 = &b1_00000_00000_00000) set to "1", and a transparent dot has all bits "0". Display of any other data (values &H0001 to &H7FFF) is not guaranteed.
+
+**[See also]** The ACTIVE command.
+
+*[p. 224]*
+
+## 1.8 Sprite/3D functions
+
+### ATRID
+
+*Fixed-point function*
+
+**Function:** Returns an unused attribute ID.
+
+**Syntax:** `ATRID(<attribute ID>)`
+
+**Example:** `NEXT_ATTR = ATRID(-1)`
+
+**[Parameters]**
+- `<attribute ID>`: fixed-point (everything after the decimal point is cut off).
+
+**[Return value]** Returns an unused attribute ID, as a fixed-point integer.
+
+**[Details]**
+
+Returns the number following the largest attribute ID defined so far. Used when defining new attributes with SETATR, when getting an undefined attribute ID, and so on.
+
+The only parameter currently supported is `<attribute ID>` = −1.
+
+### POLYGONID
+
+*Fixed-point function*
+
+**Function:** Reads the contents of a polygon ID.
+
+**Syntax:** `POLYGONID(<polygon ID>[,<element number>[,<item number>]])`
+
+**Example:**
+```
+POLYGONID(-1)   → returns the next unused polygon ID
+POLYGONID(0)    → finds the number of faces of polygon ID 0
+```
+
+**[Parameters]**
+- `<polygon ID>`: fixed-point (everything after the decimal point is cut off).
+- `<element number>`: fixed-point (everything after the decimal point is cut off).
+
+*[p. 225]*
+
+- `<item number>`: fixed-point (everything after the decimal point is cut off).
+
+**[Return value]** Returns a fixed-point integer.
+
+**[Details]**
+
+When `<polygon ID>` = −1, returns the number following the largest polygon ID defined so far. Used when defining a new polygon with SETPOLYGON, and so on.
+
+When `<polygon ID>` >= 0, giving `<element number>` and `<item number>` gets the following contents from the polygon defined in `<polygon ID>`.
+
+| \<element number\> | \<item number\> | Remarks |
+|---|---|---|
+| None | None | The number of elements of the polygon with this ID. 0 means undefined (the number of elements is the number of faces of the polygon). |
+| 0 to \<number of elements − 1\> | None | The vertex ID used by this polygon |
+| 0 to \<number of elements − 1\> | 0,1,2,3 | The list of vertices (p1,p2,p3,p4) making up the polygon face of \<element number\> |
+| | 4,5,6 | The normal vector (X,Y,Z) of the polygon face of \<element number\> |
+
+When `<element number>` is given, an Undefined polygon error occurs unless an existing polygon ID is given.
+
+If the element number and item number are omitted, the number of elements of `<POLYGON ID>` is returned.
+
+Example:
+
+```
+POLYGONID(0)   → returns the number of elements of POLYGON ID = 0
+```
+
+If only the item number is omitted, the vertex ID used by `<POLYGON ID>` is returned.
+
+### TEXID
+
+*Fixed-point function*
+
+**Function:** Reads the contents of a texture ID.
+
+**Syntax:** `TEXID(<texture ID>[,<item number>])`
+
+**Example:** `TEXID(-1)`
+
+**[Parameters]**
+- `<texture ID>`: fixed-point (everything after the decimal point is cut off).
+- `<item number>`: fixed-point (everything after the decimal point is cut off).
+
+*[p. 226]*
+
+**[Return value]** Returns a fixed-point integer.
+
+**[Details]**
+
+When `<texture ID>` = −1, returns the number following the largest texture ID defined so far. Used when defining a new texture with SETTEX, when getting an undefined texture ID, and so on.
+
+The only parameter currently supported is `<attribute ID>` (sic) = −1.
+
+When `<texture ID>` >= 0, giving `<item number>` as well gets the following information.
+
+| \<item number\> | Information |
+|---|---|
+| 0 | Dot size X of the texture of \<texture ID\> |
+| 1 | Dot size Y of the texture of \<texture ID\> |
+| 2 | Number of colours of the texture of \<texture ID\>: one of 16, 256 and 32768 |
+
+### VERTEX
+
+*Fixed-point function*
+
+**Function:** Reads the contents of a vertex ID.
+
+**Syntax:** `VERTEXID(<vertex ID>[,<element number>[,<item number>]])`
+
+(The heading reads VERTEX, while the syntax and example use VERTEXID.)
+
+**Example:** `PRINT VERTEXID(-1)`
+
+**[Parameters]**
+- `<vertex ID>`: fixed-point (everything after the decimal point is cut off).
+- `<element number>`: fixed-point (everything after the decimal point is cut off).
+- `<item number>`: fixed-point (everything after the decimal point is cut off).
+
+**[Return value]** Returns a fixed-point integer.
+
+**[Details]**
+
+When `<vertex ID>` = −1, returns the number following the largest vertex ID defined so far. Used when defining a texture (sic) with SETVERTEX, when examining an undefined vertex ID, and so on.
+
+When `<vertex ID>` = 0, the following information can also be taken out by giving `<element number>` and `<item number>` as parameters.
+
+*[p. 227]*
+
+| \<element number\> | \<item number\> | Remarks |
+|---|---|---|
+| None | None | The number of vertices of \<vertex ID\>. 0 shows that it is undefined. |
+| 0 to \<number of elements − 1\> | 0,1,2 | The vertex coordinates of each \<element number\> of \<vertex ID\>. \<item number\> 0, 1 and 2 correspond to (X,Y,Z) respectively. |
+
+When `<element number>` is given, an Undefined vertex error occurs unless an existing vertex ID is given.
 
 # Chapter 2: Sound reference
 
@@ -7741,13 +9255,13 @@ The actual flow of sound data when sound commands and functions are executed is 
 
 *The flows between them:*
 
-- *PLAYINIT/TARG → <memory initialisation request> <FM sound source settings> → sound memory: loading voices from the CD (from the CD block), initialising the DSP program and work area.*
-- *TPROP (part 1), EG/LFO ↔ <voice parameters> Read/Write ↔ sound memory.*
-- *PLAY/EFFECT/BGM/SETSONG → <MML registration/play request> → song data in sound memory; sequence playback in the sound control block.*
-- *PLAYSTAT/MMLSTAT and ON MMLSTAT GOSUB ← <status monitoring> ← sound control block.*
+- *PLAYINIT/TARG → \<memory initialisation request> \<FM sound source settings> → sound memory: loading voices from the CD (from the CD block), initialising the DSP program and work area.*
+- *TPROP (part 1), EG/LFO ↔ \<voice parameters> Read/Write ↔ sound memory.*
+- *PLAY/EFFECT/BGM/SETSONG → \<MML registration/play request> → song data in sound memory; sequence playback in the sound control block.*
+- *PLAYSTAT/MMLSTAT and ON MMLSTAT GOSUB ← \<status monitoring> ← sound control block.*
 - *PLAY\*\*\*\* → sequence control in the sound control block ← SCSP.*
-- *TPROP (part 2) / DSP mixer control <input select> <Direct Level/Pan>, and the mixer control commands in MML <Effect Level/Pan>, → <setting of each mixer parameter> → ● DSP/mixer block.*
-- *Sound memory → <waveform data> → ● SCSP: 32-channel sound slots, PCM/FM switching → <direct component output> (/32).*
+- *TPROP (part 2) / DSP mixer control \<input select> \<Direct Level/Pan>, and the mixer control commands in MML \<Effect Level/Pan>, → \<setting of each mixer parameter> → ● DSP/mixer block.*
+- *Sound memory → \<waveform data> → ● SCSP: 32-channel sound slots, PCM/FM switching → \<direct component output> (/32).*
 - *Note in the DSP/mixer block: "Waveforms set in the layer data are assigned to free slots when sounded."*
 
 *Bottom half (p. 246). The DSP/mixer block in detail:*
