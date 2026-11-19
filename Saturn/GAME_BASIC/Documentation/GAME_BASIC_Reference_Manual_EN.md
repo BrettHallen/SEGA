@@ -10,7 +10,7 @@ Terms used throughout:
 - **Program-mode command** (間接実行命令): can be used in a program line.
 - **Fixed-point / floating-point** (固定小数点型 / 浮動小数点型): the two numeric types; see the basic specification.
 
-> **Work in progress.** Translated so far: the front matter, the basic specification (pp. 1–20), Chapter 1 (pp. 21–227), Chapter 2 sections 2.1–2.4 (pp. 228–251) and the Appendix (pp. 389–421). Pages 252–388 are marked *pending*.
+> **Work in progress.** Translated so far: the front matter, the basic specification (pp. 1–20), Chapter 1 (pp. 21–227), Chapter 2 pp. 228–273 and 355–388, and the Appendix (pp. 389–421). Pages 274–354 are marked *pending*.
 
 ---
 
@@ -32,6 +32,9 @@ Terms used throughout:
     - [2.2 Explanation of terms](#22-explanation-of-terms)
     - [2.3 Sound memory map](#23-sound-memory-map)
     - [2.4 Sound system block structure](#24-sound-system-block-structure)
+    - [2.5 Sound commands](#25-sound-commands)
+    - [2.7 Repeat structure details](#27-repeat-structure-details)
+    - [2.8 Voice data details](#28-voice-data-details)
 - [Appendix](#appendix)
     - [Error message and code table](#error-message-and-code-table)
     - [List of BASIC files (sample programs)](#list-of-basic-files-sample-programs)
@@ -9362,9 +9365,1908 @@ In every case, the value is set in the direct data localisation mixer of the dia
 
 > **Caution:** It has no effect when mono is selected on the user settings screen.
 
-*[pp. 252–388]*
+*[p. 252]*
 
-> **Pending.** Sections 2.5 onward of Chapter 2 (the sound commands and the remaining sound reference) are not yet translated.
+## 2.5 Sound commands
+
+### BEEP
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Sounds the warning beep. Returns the error sound registered as song number "0" to the default warning sound.
+
+**Syntax:** `BEEP [0|1]`
+
+**Example:**
+```
+BEEP
+BEEP 1
+```
+
+**[Parameters]**
+- `0|1`: switch.
+
+**[Details]** If no switch is given, it sounds briefly, as on an error. It does not go on to the next processing until it has finished sounding. If the switch is "1", the warning sound is left sounding and processing continues without waiting. If the switch is "0", the warning sound is stopped.
+
+**[Caution]** If the BEEP sound (error sound) has been changed by registering song "0" with the EFFECT/SETSONG command, executing this BEEP command returns it to the default.
+
+*[p. 253]*
+
+### BGM
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Plays MML already registered in sound memory by the SETSONG command. The difference from the PLAY/EFFECT commands is that it plays on the sequence number reserved for BGM (number 0), so playback is not interrupted even when all 7 sequences are occupied by the EFFECT command. This command does not take an MML string.
+
+**Syntax:** `BGM [song number[,volume[,fade-in rate]]]`
+
+**Example:**
+```
+BGM 5,127,70    → plays the tune registered as song number 5, fading in towards volume 127
+BGM ,,70
+```
+
+**[Parameters]**
+- Song number: specifies the song number to play. From "0" (for BEEP) up to the number of tunes given by "number of songs to register" in the PLAYINIT command. Default = 1.
+- Volume: specifies the volume during playback. "0 to 255"; the larger the value, the louder. Default = 127. A value of 128 or more makes it louder than the original volume of the waveform data. Normally give 127 or less.
+- Fade-in rate: specifies the speed of the fade-in. The final volume of the fade-in is the value given by "volume". "0 to 255"; the smaller the value, the faster the fade-in. If 0 is given, playback starts at the "volume" value from the beginning, without fade-in processing. Default = 0.
+
+**[Details]**
+
+The BGM command is used mainly to play music. Because it uses sequence number "0", give sequence number "0" when using sequence control commands such as PLAYFADE on a song sounded by BGM. Each time it is executed, the BGM command stops the song on sequence number "0" and then starts.
+
+"Song number" specifies the song number to play. The maximum value that can be given is the number of tunes given by "number of songs to register" in the PLAYINIT command.
+
+"Fade-in rate" specifies the interval at which the volume is brought closer to the value given by "volume". "0" means no fade-in processing.
+
+*[p. 254]*
+
+### DSP
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Performs DSP control.
+
+**Syntax:**
+```
+(1) DSP ON {<voice number>,<layer number|ALL>,<effector number>,<level>}
+(2) DSP OFF {<voice number>,<layer number|ALL>}
+(3) DSP ALL ON <effector number,level>
+(4) DSP ALL OFF
+```
+
+**Example:**
+```
+DSP ALL OFF           → makes all voices of the currently loaded voice data not use the DSP,
+DSP ON 38,0,@REV,7      and sets only the voice of layer 0 of number 38 to have reverb at the maximum.
+DSP ALL ON @DEL,5     → makes all voices of the currently loaded voice data able to use the DSP,
+DSP OFF 5,ALL,24,2      and initialises the effector to delay at level 5.
+                        Then turns OFF all layers of voice number 5 and layer 2 of number 24.
+```
+
+**[Parameters]**
+- `<voice number>`: specifies the voice number for which the DSP effector is to be turned ON or OFF. The number given by the MML "@" command. Cannot be omitted.
+- `<layer number|ALL>`: specifies the layer number for which the DSP effector is to be turned ON or OFF. "ALL" can be given instead of a layer number; in this case all layers of the selected voice number are affected. Cannot be omitted.
+- `<effector number>`: specifies the type of DSP effector. The same as "70: input select" of the TPROP command. Affected if the TPROP command is executed.
+
+  Specifies which channel of the DSP mixer the slot output data is input to. The range is "0 to 15", but in GAME BASIC for SEGASATURN values other than the following are invalid.
+
+  | Value | Effector | |
+  |---|---|---|
+  | 0 | STEREO REVERB [reverb] | @REV |
+  | 1 | STEREO DELAY [delay] | @DEL |
+  | 2 | DISTORTION [distortion] | @DST |
+
+  In DSP mode (single effector), always give "0".
+- `<level>`: specifies the level sent to the DSP input mixer. The same as "71: input mix level" of the TPROP command. Affected if the TPROP command is executed.
+
+*[p. 255]*
+
+  Specifies the input level when the slot output data is input to the DSP mixer.
+
+  The input mixer has no protection against overflow, so set it so that the total for all slots does not exceed "0 dB" (exceeding it causes distortion).
+
+  The number of notes that can properly be input when the "input mix level" value is changed is as follows.
+
+  | Input mix level | Level [dB] | Factor | Notes that can be input |
+  |---|---|---|---|
+  | 0 | −MAX | ×0.000000 | -- notes |
+  | 1 | −36 | ×0.015625 | 64 notes |
+  | 2 | −30 | ×0.031250 | 32 notes |
+  | 3 | −24 | ×0.062500 | 16 notes |
+  | 4 | −18 | ×0.125000 | 8 notes |
+  | 5 | −12 | ×0.250000 | 4 notes |
+  | 6 | −6 | ×0.500000 | 2 notes |
+  | 7 | −0 | ×1.000000 | 1 note |
+
+**[Details]**
+
+Syntax (1) turns the DSP effector "ON", layer by layer, for the voice data currently in sound memory. Constant symbols can be used for the effector number.
+
+Syntax (2) turns the DSP effector "OFF", layer by layer, for the voice data currently in sound memory.
+
+In both syntax (1) and (2), the parameters enclosed in "{…}" can be written repeatedly.
+
+When single-effector mode has been set with `PLAYINIT "DSP",…`, only one type of effector can be used at a time, so give "0" as the effector number. In this case, the effector is switched with the MML command "ec".
+
+Syntax (3) is used to apply the DSP effector to all voices.
+
+Syntax (4) is used when the DSP effector is not to be applied to any voice.
+
+Some voice data files have a "level" set by default. If unintended effects appear, first execute "DSP ALL OFF" and then operate on each voice.
+
+*[p. 256]*
+
+The settings can also be changed in real time during playback. In this case, the rewritten values take effect at note-on timing. Settings can also be made for voice data rearranged by the TARG command and for original PCM sampling data.
+
+**[Caution]**
+
+An error occurs if DSP mode has not been set with `PLAYINIT "DSP"` or `PLAYINIT "DSPEXT"`. Data that has been reset cannot be saved.
+
+If the voice data in sound memory is replaced by the PLAYINIT/TARG commands, values set before that return to the original voice parameters, so to change settings, do so after registering the voice data you want to change in sound memory with the PLAYINIT and TARG commands.
+
+**[Warning]** Depending on how the parameters are given, this command may make the sound stop or become distorted. In that case, execute the PLAYINIT command. If there is still no sound, or communication between the main system and the sound system goes wrong, do a hot start, save the program, reset, and run it again.
+
+**[See also]** "DSP effect module details" in "2.4 Sound system block structure".
+
+### EFFECT
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Plays music (a sound effect) given by an MML string. By setting the volume to "0", it can be registered only, without being sounded at that point.
+
+Unlike the PLAY command, it moves on to the next command without waiting for the sound to finish.
+
+Up to 7 pieces of music (sound effects) can be played at the same time by giving song numbers. If both a song number and an MML string are given, the MML is registered under the given song number, and from the second time on it can be played again by giving the song number only.
+
+**Syntax:**
+```
+(1) EFFECT[(<numeric variable name>),][song number[,volume,]]{[[#<track number>][,"MML string"]]} (repeated for up to 16 tracks)
+(2) EFFECT[(<numeric variable name>),][song number[,volume]]
+```
+
+**Example:**
+```
+EFFECT 2,0,"CDE"  → only registers do-re-mi as song number 2, without playing it
+EFFECT 2          → plays the song data registered as song number 2
+EFFECT -2         → plays the song data registered as song number 2 without waiting
+                    (when using it in a real-time game, play it this way)
+```
+
+*[p. 257]*
+
+**[Parameters]**
+- `(<numeric variable name>)`: specifies the name of a numeric variable to hold the sequence number assigned. The EFFECT command returns a value in the numeric variable given here. "1 to 7" is returned in the numeric variable. The variable type is limited to fixed-point or a fixed-point array.
+- Song number: specifies the song number to play or newly register. Can be from "0" (for BEEP) up to the number of tunes given by "number of songs to register" in the PLAYINIT command.
+
+  If omitted, as with the PLAY statement, the MML is not registered in sound memory and is discarded each time it is executed. If the MML string is also omitted, an error occurs. Only the MML string given in one statement is valid; an EFFECT command spread over 2 or more statements is not recognised as continuing the previous one.
+
+  Registering short song data such as sound effects is convenient as it takes only one statement, but to register a long tune, register it all at once with the SETSONG command and then call it with the EFFECT or BGM command.
+
+  Only the EFFECT command allows a minus (−) sign on the song number. With a minus sign, it does not wait for the sound to start when the sound effect is requested. For details, see [Caution].
+- Volume: specifies the volume during playback. "0 to 255"; the larger the value, the louder. Setting "0" registers only, without sounding at that point. Default = 127. A value of 128 or more makes it louder than the original volume of the waveform data. Normally give 127 or less.
+- `#<track number>`: specifies which track (performance part) the MML string that follows is expanded into. Within the range "0 to 15" the numbers need not be consecutive, so the order can be changed. Unlike the PLAY command, the previous state is not kept, and default values are always set at the start.
+
+  If the track number of the first MML is omitted, it is track "0". If the track of an MML partway through is omitted, it is the previously assigned track + 1. An error occurs if this goes beyond 15.
+- `"MML string"`: defines score data as a string. For details, see "2.6 MML details". MML strings can be given for up to 16 tracks, separated by ",". A track given nothing is a "rest".
+
+*[p. 258]*
+
+**[Details]**
+
+The EFFECT command can play up to 7 kinds of song data at the same time, managing sequence numbers "1 to 7" (sequence number "0" is reserved for the BGM command). When executed, it looks for free sequence numbers and assigns them in order, and returns in "(\<numeric variable name\>)" which sequence number the song data sounded by that EFFECT command was assigned to. Store this return value in a variable and use it as a parameter of other sequence control commands such as PLAYFADE.
+
+"Song number" specifies the song number to register or play. The maximum value that can be given is the number of tunes given by "number of songs to register" in the PLAYINIT command.
+
+"Volume" specifies the volume during playback. Separately from the MML volume commands, it works as the total volume of all tracks (above it there is also a master volume that adjusts the volume of all sequences together; for details, see the VOLUME command). If "song number" and "volume" are omitted and the MML string is written from the start, playback starts with the default values.
+
+An MML string expanded into sound memory stays in memory unless it is initialised with the PLAYINIT command or re-registered under the same song number, so from the second time on it can be played again just by giving the song number.
+
+When using it in an ordinary game program, register the MML in the song area in advance with "volume" set to "0", and give only the "song number" when actually sounding it. To register several sound effects at once, use the SETSONG command.
+
+By executing it in combination with the PLAYPAN command, sound effects coming from different directions can be sounded while sharing song data.
+
+**[Caution]**
+
+Note the following when writing an "expression" with "()" as the song number.
+
+"EFFECT (I),(5-4),…" starts playing with "5−4=1" as the song number and returns the assigned sequence number in the numeric variable "I", but if "(I)" is omitted, an error occurs because it tries to read the bracketed "(5-4)" as a numeric variable name. When writing "(expression)" as the song number, do not omit the numeric variable name.
+
+In this sound system the main CPU and the sound CPU are independent, so a wait is included so that the "PLAYSTAT" function, which returns whether a sound is playing or not, works correctly. Because of this, processing on the main side may stop for a moment just after a request. For the EFFECT command only, this wait can be skipped by putting a minus sign on the "song number", but as a side effect the return value of the "PLAYSTAT" function just after the request may be incorrect.
+
+*[p. 259]*
+
+If a different MML string is written over a song number that is currently playing, it does not play correctly.
+
+```
+EFFECT 1,"CDEFG"     → while this data is playing, the EFFECT below rewrites it,
+EFFECT 1,"ABCDE"       so it does not play correctly.
+```
+
+### EG
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Sets the EG (envelope generator) parameters.
+
+**Syntax:** `EG <voice number,<layer number|ALL>,[AR]>[,DR] [,SR] [,RR] [,SL] [,EGHOLD] [,LSLINK] [,KS]`
+
+**Example:** `EG 44,ALL,31,18,8,16` → sets AR=31, DR=18, SR=8, RR=16 for voice number 44.
+
+Meaning of the symbols:
+
+| Symbol | Meaning |
+|---|---|
+| AR | Attack rate |
+| DR | Decay rate |
+| SR | Sustain rate |
+| RR | Release rate |
+| SL | Sustain level |
+| EGHOLD | EG hold mode |
+| LSLINK | Loop start link |
+| KS | Key rate scaling |
+
+**[Parameters]**
+- `<voice number>`: specifies the voice number to read and rewrite. The number given by the MML "@" command. Cannot be omitted.
+- `<layer number|ALL>`: specifies the layer number to rewrite. "ALL" can be given instead of a layer number; in this case all layers of the selected voice number are affected. Cannot be omitted.
+- `AR`: specifies the amount of change over time from the start of the sound until it reaches its maximum. "0 to 31": 0 = smallest change (level increase), 31 = largest change (level increase).
+- `DR`: specifies the amount of change over time while decaying from maximum volume to the sustain level. "0 to 31": 0 = smallest change (level decay), 31 = largest change (level decay).
+
+*[p. 260]*
+
+- `SR`: specifies the amount of change over time while decaying from the sustain level to silence. "0 to 31": 0 = smallest change (level decay), 31 = largest change (level decay). Setting "0" gives a sustained sound with no decay.
+- `RR`: specifies the amount of change over time while decaying from key-off to silence. "0 to 31": 0 = smallest change (level decay), 31 = largest change (level decay).
+- `SL`: specifies the actual level, in the sustain state, of a sound that has gone through DR from maximum volume. "0 to 31": 0 = minimum level, 31 = maximum level.
+- `EGHOLD`: specifies whether the value at the attack is held or changed.
+  - 0: changes according to the value given for the attack rate.
+  - 1: reaches maximum volume as soon as the sound starts. The time for which maximum volume is held is decided by the attack rate value.
+- `LSLINK`: synchronises "the start of the loop" with "the transition of the EG from the attack state to the decay state" (for loops, see the waveform data control of the TPROP command).
+  - 0: the EG state transition and the position of the loop start point are unrelated.
+  - 1: synchronised.
+
+  If, in the attack state, the EG reaches maximum volume earlier in time than the loop start point, the EG reaches MAX level first. However, it cannot move to the decay state until the waveform read address reaches the loop start point, so the EG keeps holding MAX level. When the loop start point is reached, the EG moves to the decay state.
+
+  If, in the attack state, the EG reaches maximum volume later in time than the loop start point, there are two further patterns. If the loop start point is reached and the EG level at that moment is greater than the sustain level, after reaching the loop start point the EG
+
+*[p. 261]*
+
+  moves to the decay state. Then, when the EG value reaches the sustain level, it moves to the sustain state.
+
+  If the loop start point is reached and the EG level at that moment is less than the sustain level, after reaching the loop start point the EG moves to the decay state. After that, the EG value never reaches the sustain level, so it does not move to the sustain state and keeps holding the silent state.
+- `KS`: key rate scaling has the effect of changing each rate of the envelope according to pitch (note number) (it specifies the rate at which the envelope transition speed becomes faster the higher the note). "0 to 14" and "−1": −1 = scaling OFF, 0 = minimum scaling, 14 = maximum scaling.
+
+**[Details]**
+
+The sound of an instrument changes in volume and tone over time. This change over time is called the envelope, and the function that creates this curve mechanically is called the EG (envelope generator).
+
+Rewrites the EG settings, layer by layer, for the voice data currently in sound memory. They can also be changed in real time during playback. In this case, the rewritten values take effect at note-on timing.
+
+If only "," is given, the item is skipped, and the value of a skipped item does not change.
+
+The EG represents the change over time of the amount of decay of the sound with 4 states.
+
+The EG does not go through all 4 states in every case of sounding; it draws various envelope curves depending on the timing of key-off. If key-off is done during the attack state, the sound decays from the level at that moment according to the release rate setting. So the envelope curve in this case has a shape as if the decay state and sustain state were missing. On entering the decay state, the sound decays towards the sustain level according to the decay rate setting. If key-off is executed partway through, after that it decays from the level at the moment of key-off according to the release rate setting.
+
+The contents of the parameters are the same as item numbers 20 to 27 of the TPROP command. So it is affected if those items are rewritten with the TPROP command.
+
+*[p. 262]*
+
+*[Figure: comparison with conventional envelope generators. A key on/off line at the top goes ON and later OFF. The upper graph, "EG specification of conventional FM sound chips such as the YM2203/YM2608", plots EG against Time: a rise during AR 0–31, a fall during DR 0–31 to the level set by SL 0–15, a slow fall during SR 0–31, and after key-off a fall to zero during RR 0–15. The lower graph, "EG specification of the SEGA Saturn", has the same shape with AR 0–31 (attack state), DR 0–31 (decay state), SR 0–31 (sustain state) and RR 0–31 (release state), and the sustain level SL 0–31.]*
+
+*[p. 263]*
+
+**[Caution]** Data that has been reset cannot be saved. If the voice data in sound memory is replaced by the PLAYINIT/TARG commands, values set before that return to the original voice parameters, so to change settings, do so after registering the voice data you want to change in sound memory with the PLAYINIT and TARG commands.
+
+**[Warning]** Depending on how the parameters are given, this command may make the sound stop or become distorted. In that case, execute the PLAYINIT command. If there is still no sound, or communication between the main system and the sound system goes wrong, do a hot start, save the program, reset, and run it again.
+
+### LFO
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Sets the LFO parameters.
+
+**Syntax:** `LFO <voice number,<layer number|ALL>,[LFO reset]> [,LFO frequency] [,ALFO waveform] [,ALFO depth] [,PLFO waveform] [,PLFO depth]`
+
+**Example:** `LFO 44,ALL,1,16,2,7,1,7` → sets, for voice number 44, LFO reset = ON, LFO frequency = 2.87 Hz, ALFO waveform = triangle wave, ALFO depth = maximum, PLFO waveform = square wave, PLFO depth = maximum.
+
+**[Parameters]**
+- `<voice number>`: specifies the voice number to read and rewrite. The number given by the MML "@" command. Cannot be omitted.
+- `<layer number|ALL>`: specifies the layer number to read and rewrite. "ALL" can be given instead of a layer number; in this case all layers of the selected voice number are affected. Cannot be omitted.
+- LFO reset: specifies whether the LFO is reset at key-on. 0 = not synchronised; 1 = the LFO is reset at key-on.
+- LFO frequency: specifies the oscillation frequency common to ALFO and PLFO.
+
+*[p. 264]*
+
+  | Value set for LFO frequency | Oscillation frequency (Hz) | Value set for LFO frequency | Oscillation frequency (Hz) |
+  |---|---|---|---|
+  | 0 | 0.17 | 16 | 2.87 |
+  | 1 | 0.19 | 17 | 3.31 |
+  | 2 | 0.23 | 18 | 3.92 |
+  | 3 | 0.27 | 19 | 4.79 |
+  | 4 | 0.34 | 20 | 6.15 |
+  | 5 | 0.39 | 21 | 7.18 |
+  | 6 | 0.45 | 22 | 8.6 |
+  | 7 | 0.55 | 23 | 10.8 |
+  | 8 | 0.68 | 24 | 14.4 |
+  | 9 | 0.78 | 25 | 17.2 |
+  | 10 | 0.92 | 26 | 21.5 |
+  | 11 | 1.10 | 27 | 28.7 |
+  | 12 | 1.39 | 28 | 43.1 |
+  | 13 | 1.60 | 29 | 57.4 |
+  | 14 | 1.87 | 30 | 86.1 |
+  | 15 | 2.27 | 31 | 172.3 |
+- ALFO waveform: specifies the amplitude modulation waveform.
+
+  | Value | Waveform | |
+  |---|---|---|
+  | 0 | Sawtooth wave | @SAW |
+  | 1 | Square wave | @SQU |
+  | 2 | Triangle wave | @TRI |
+  | 3 | White noise | @NOISE |
+- ALFO depth: specifies how strongly amplitude modulation by the LFO is applied. This amplitude modulation can produce a tremolo effect (periodic variation of the volume).
+
+*[p. 265]*
+
+  | ALFO depth | Mixing into the EG |
+  |---|---|
+  | 0 | No effect |
+  | 1 | 0.4 dB variation |
+  | 2 | 0.8 dB variation |
+  | 3 | 1.5 dB variation |
+  | 4 | 3 dB variation |
+  | 5 | 6 dB variation |
+  | 6 | 12 dB variation |
+  | 7 | 24 dB variation |
+- PLFO waveform: specifies the frequency modulation waveform.
+
+  | Value | Waveform | |
+  |---|---|---|
+  | 0 | Sawtooth wave | @SAW |
+  | 1 | Square wave | @SQU |
+  | 2 | Triangle wave | @TRI |
+  | 3 | White noise | @NOISE |
+- PLFO depth: specifies how strongly frequency modulation by the LFO is applied. This frequency modulation can produce a vibrato effect (periodic variation of the oscillation frequency of the sound).
+
+  | PLFO depth | Effect on pitch |
+  |---|---|
+  | 0 | No effect |
+  | 1 | ±7 cents variation |
+  | 2 | ±13.5 cents variation |
+  | 3 | ±27 cents variation |
+  | 4 | ±55 cents variation |
+  | 5 | ±112 cents variation |
+  | 6 | ±230 cents variation |
+  | 7 | ±494 cents variation |
+
+*[p. 266]*
+
+**[Details]**
+
+Rewrites the LFO settings, layer by layer, for the voice data currently in sound memory. They can also be changed in real time during playback. In this case, the rewritten values take effect at note-on timing.
+
+If only "," is given, the item is skipped, and the value of a skipped item does not change.
+
+The LFO is a low-frequency oscillator, used to modulate the audio signal. Each slot has one LFO, and each has an output for amplitude modulation and an output for frequency modulation of its slot. The LFO output waveform has 4 types, sawtooth wave, square wave, triangle wave and white noise, and any of these can be chosen.
+
+Except for noise, the sawtooth, square and triangle waves can be reset and have their frequency changed.
+
+The LFO waveform and modulation depth can be set independently for the amplitude modulation side and the frequency modulation side.
+
+The contents of the parameters are the same as item numbers 50 to 55 of the TPROP command. So the values are rewritten if the TPROP command is executed.
+
+**[Caution]** Data that has been reset cannot be saved. If the voice data in sound memory is replaced by the PLAYINIT/TARG commands, values set before that return to the original voice parameters, so to change settings, do so after registering the voice data you want to change in sound memory with the PLAYINIT and TARG commands.
+
+**[Warning]** Depending on how the parameters are given, this command may make the sound stop or become distorted. In that case, execute the PLAYINIT command. If there is still no sound, or communication between the main system and the sound system goes wrong, do a hot start, save the program, reset, and run it again.
+
+*[p. 267]*
+
+### MMLSTAT()
+
+*Fixed-point function*
+
+**Function:** Gets the status during playback.
+
+**Syntax:** `A=MMLSTAT(<track number>,<item number>)`
+
+**Example:**
+```
+X=MMLSTAT(8,1)
+IF MMLSTAT(0,1)THEN
+```
+
+**[Parameters]**
+- `<track number>`: specifies the MML track number to get. "0 to 15", corresponding to the track numbers given for the MML strings.
+- `<item number>`: selects the item to get.
+
+  | Value | Item |
+  |---|---|
+  | 0 | Value given by a control command (the MML "!" command) |
+  | 1 | Note number being sounded |
+  | 2 | Direct data level |
+  | 3 | Direct pan value |
+  | 4 | Total level |
+
+**[Return value]** Differs by item, as follows.
+- Item number = 0: the value given by a control command (the MML "!" command) is returned (trigger form). "0 to 127". It becomes "0" after the value has been read.
+- Item number = 1: the note number currently being sounded is returned. "0 to 127". "0" is returned when nothing is sounding.
+- Item number = 2: the direct data send level. "0 to 7". The value given by "72: direct data send level" of the TPROP command is returned. "0" is returned when nothing is sounding.
+- Item number = 3: the direct pan value. "0 to 31". The value set by the MML "P" command or by the auto-pan option of the note-on command is returned. When no pan command has been executed, the value of "73: direct data localisation" of the TPROP command is returned. "0" is returned when nothing is sounding.
+
+*[p. 268]*
+
+- Item number = 4: the total level. "0 to 255". The final volume setting after the MML "(@)V (volume)" command and "v (velocity)" processing is returned. It is not the value after the envelope generator, so it cannot be used for a precise level meter, but it shows roughly how loud the note was sounded. It is an "amount of attenuation", so note that the smaller the value, the louder the sound. "255" is returned when nothing is sounding. For the correspondence between the values and actual levels, see TL in the FM command of the TARG command.
+
+**[Details]**
+
+Gets the sounding state during MML playback, track by track. Because the note number, volume, localisation and so on currently being sounded can be read, you can make a meter with a simple BASIC program, or move a character in time with the notes. Except for item number "0", the current status can be read in real time.
+
+Item number "0" returns the value embedded by the MML "!\<control command\>". If a value from "0 to 127" following "!" is embedded at any position in the MML string, the value is returned when playback reaches that position. It "holds the value" until a new control command appears in the same track or it is read by this command. Once it has been read, "0" is returned.
+
+Using this function, the program can branch in time with the tune at any chosen moment. Also, item number "0" of track "0" can be watched by interrupt with the "ON MMLSTAT GOSUB" statement. For details, see "ON MMLSTAT GOSUB".
+
+**[Caution]** It can be read track by track, but when several sequences are sounding at the same time, you cannot tell which sequence the status belongs to.
+
+**[Example 1]**
+
+```
+100 EFFECT (I),"CDE"                    → starts playback.
+110 *LOOP
+120 IF PLAYSTAT(I)=0 THEN END           → ends when it has finished sounding.
+130 MN=MMLSTAT(0,1)                     → reads the new status.
+140 IF MN=MO THEN *LOOP ELSE MO=MN      → if the same as the status read last time, go back.
+150 IF MN=60 THEN PRINT "C ";             If different, display the parameter according to
+160 IF MN=62 THEN PRINT "D ";             the new status value.
+170 IF MN=64 THEN PRINT "E ";
+180 GOTO *LOOP
+```
+
+*[p. 269]*
+
+**[Example 2]**
+
+```
+100 EFFECT (I),"CDEFGAB>CD !1 EFGAB>CDEFGAB" → embeds the "!" command.
+110 *LOOP
+120 IF MMLSTAT(0,0)=1 THEN PLAYFADE I,60     → when playback reaches the "!1" position,
+130 GOTO *LOOP                                 starts fade processing.
+```
+
+### ON MMLSTAT GOSUB
+
+*Program-mode command*
+
+**Function:** Watches the MML control command ("!") by interrupt, and sets the subroutine to execute when a value comes back.
+
+**Syntax:** `ON MMLSTAT GOSUB <line number|label>`
+
+**Example:**
+```
+ON MMLSTAT GOSUB 2000
+ON MMLSTAT GOSUB *CHANGE_BGM
+```
+
+**[Parameters]**
+- `<line number>`: the valid range is an integer from 1 to 99999.
+- `<label>`: write the name of a label that exists in the program. The names that can be given follow the label naming rules.
+
+**[Details]**
+
+Specifies the interrupt processing called when an MML "!\<control command\>" is in track "0" and returns a value other than "0". When this command is executed, the MML status starts to be watched at V-Sync timing. When the control command of track "0" becomes other than "0", the interrupt processing subroutine given by this command is called.
+
+The control command sent can be read with "MMLSTAT(0,0)" "inside the interrupt processing" (the "1 to 127" that was set is returned), so finer processing can be done according to the value (for example, changing the BGM at a convenient bar boundary).
+
+**[Caution]**
+
+Interrupts from other interval timers are accepted even during interrupt processing, so when handling the same resources you must disable interrupts temporarily with the LOCK command or do exclusive processing on your own responsibility.
+
+If interrupt processing takes too long, the GOSUB stack overflows, so take care. Also, with heavy processing such as scrolling, screen clearing, PAINT and INPUT, the interrupt processing cannot be done in time and the program pauses, so take care. For the operation of interval timer interrupts, see the INTERVAL command.
+
+*[p. 270]*
+
+Reading of the next control command starts from the moment "MMLSTAT(0,0)" is executed, so if control commands are close together, interrupts occur one after another and the main processing is not done.
+
+**[Note]**
+
+When changing the BGM, it is convenient to use the song number as the control command. Because MML control commands are issued at note-on timing, by the time one has been issued and the interrupt occurs, "the next note may already have started sounding". The technique for switching at exactly the right moment is as follows.
+
+- To make an interrupt occur at the moment these 2 bars finish playing:
+
+```
+DATA #0,"|L4 R1       |R R R R8 R16 R32 !1 R32"
+DATA #1,"|L4 C D E F  |C D E F"
+  :
+```
+
+It varies somewhat with the playback tempo, but the interrupt processing starts after roughly the time of a 32nd note has passed since the control command was issued. So the control command is embedded a 32nd note early, as above.
+
+If track "0" cannot be used only for control, or a finer timing is needed, adjust the note lengths using the direct length "l\<n\>".
+
+### PLAY
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Plays music (a sound effect) given by an MML string. Executes one command at a time, waiting for playback to finish.
+
+**[Caution]** This command is provided to keep compatibility with conventional MML. It cannot make full use of the functions of this sound system.
+
+**Syntax:** `PLAY [volume,]<[#<track number>,]"MML string">{[,<[#<track number>,]"MML string">]}` (repeated for up to 16 tracks)
+
+**Example:** `PLAY 60,"CDE"` → plays do-re-mi at volume "60".
+
+**[Parameters]**
+- Volume: specifies the volume during playback. "0 to 255"; the larger the value, the louder. Default = 127. A value of 128 or more makes it louder than the original volume of the waveform data. Normally give 127 or less.
+
+*[p. 271]*
+
+- `#<track number>`: specifies which track (performance part) the MML string that follows is expanded into. Within the range "0 to 15" the numbers need not be consecutive, and the order can be changed. However, the state of the previously executed PLAY command is kept for each track, so if the track numbers are rearranged partway through, it plays with the voice and note length that were given in the previous PLAY command. If the track number of the first MML is omitted, it is track "0". If the track of an MML partway through is omitted, it is the previously assigned track + 1. An error occurs if this goes beyond 15.
+- `<"MML string">`: defines score data as a string. For details, see "2.6 MML details". MML strings can be given for up to 16 tracks, separated by ",". A track given nothing is a "rest". Also, even if the total playing times of the tracks do not match, they can be forcibly matched by the next PLAY command (the time left over is treated as a rest).
+
+**[Details]**
+
+The PLAY command is provided to carry over the conventional MML specification, so it cannot make full use of the functions of this sound system. It analyses one command at a time, starts playback each time, and waits for it to finish before moving on to the next command. When PLAY commands are written over several lines in a program, the values of the previous PLAY command are carried over as they are (note length, octave and so on). When executed in direct mode, it is initialised to the default values each time before executing.
+
+The format of the MML string is the same as for the other commands that take MML strings, but only 4 blocks of song data are reserved, so if complicated parameter sub-options (such as pitch bend) are given on one line, it stops with a "Sound:Song bank full" error. The number of notes that can be given in 4 blocks is about 150 when quarter notes are sounded as they are. PLAY executes one command at a time, so if this error is displayed, split it over several lines.
+
+**[Caution]** The number of blocks of the song data area reserved for the PLAY command is fixed by the system and cannot be changed. Playback uses a temporary area not assigned to any song number, so song data played by the PLAY command does not remain in sound memory. To call it again by giving a song number, use the EFFECT command or the SETSONG command.
+
+*[p. 272]*
+
+### PLAYSTAT()
+
+*Fixed-point function*
+
+**Function:** Examines whether the given sequence number is playing.
+
+**Syntax:** `A=PLAYSTAT(<sequence number>)`
+
+**Example:**
+```
+BGM 1:VSYNC 2
+*LBL:IF PLAYSTAT(0)=1 THEN *LBL    → loops at *LBL while the BGM is sounding
+```
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number to examine. Give the return value of the EFFECT command. "0 to 7". For a sequence sounded by BGM, give "0".
+
+**[Return value]** "1" while playing, "0" while stopped.
+
+**[Details]** Examines whether the given sequence number is currently playing. Because it is a function for examining whether a new song can be played, a song paused by the PLAYPAUSE command is also treated as "playing".
+
+**[Caution]** When a minus sign is put on the song number in the EFFECT command, or playback is started with the BGM command, the status just after may not be "1" (because the sound system and the main system run in parallel). In this case, leave at least 2 syncs after the start of playback before reading it (see the VSYNC command).
+
+### PLAYCONT
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Resumes playback paused by PLAYPAUSE.
+
+**Syntax:** `PLAYCONT <sequence number>`
+
+**Example:**
+```
+EFFECT(I),"dc CDEFGABdc"   → starts playback with the EFFECT command, pauses it 10 seconds later,
+VSYNC 60*10:PLAYPAUSE I      and resumes 2 seconds after that
+VSYNC 60*2:PLAYCONT I
+```
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number whose playback is to be resumed. Give the return value of the EFFECT command. "0 to 7", and "−1" and "−2".
+
+*[p. 273]*
+
+**[Details]** For a sequence sounded by BGM, give "0". If "−1" is given, all BGM and sound effects are resumed. If "−2" is given, all sound effects except the BGM are resumed.
+
+### PLAYFADE
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Gradually changes the volume of the sound being played on the given sequence number.
+
+**Syntax:** `PLAYFADE <sequence number>,<volume>,<fade rate>`
+
+**Example:**
+```
+PLAYFADE 0,0,50
+PLAYFADE I,64,80
+```
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number to fade. Give the return value of the EFFECT command. "0 to 7", and "−1" and "−2".
+- `<volume>`: specifies the volume during playback. "0 to 255"; the larger the value, the louder. Default = 127. A value of 128 or more makes it louder than the original volume of the waveform data. Normally give 127 or less. Setting the value to "0" stops playback.
+- `<fade rate>`: specifies the fade speed. The final volume of the fade is the value given by "volume". "0 to 255"; the smaller the value, the faster the fade. If "0" is given, it goes straight to the "volume" value without fade processing.
+
+**[Details]** For a sequence sounded by BGM, give "0". If "−1" is given, fade processing is done on all BGM and sound effects. If "−2" is given, fade processing is done on all sound effects except the BGM.
+
+*[pp. 274–354]*
+
+> **Pending.** The rest of section 2.5 (from p. 274) and section 2.6, "MML details", are not yet translated.
+
+*[p. 355]*
+
+## 2.7 Repeat structure details
+
+### Details of segno, dal segno, coda, repeat marks and so on
+
+**[Example 1]**
+```
+A B |: C D :|
+```
+Playing order: AB CD CD
+
+**[Example 2]**
+```
+A B :| C D
+```
+Playing order: AB AB CD
+
+**[Example 3]**
+```
+A B C D :|
+```
+Playing order: ABCD ABCD
+
+**[Example 4]**
+```
+A B :|: C D :|
+```
+Playing order: AB AB CD CD
+
+**[Example 5]**
+```
+A B :|: C D |1 E :|2 F
+```
+Playing order: AB AB CDE CDF
+
+**[Example 6]**
+```
+A B dc C D dc
+```
+Playing order: AB CD CD CD ……
+
+**[Caution]** In standard musical notation you go back to the start of the piece and are affected by D.S. and coda, but in this MML the part enclosed by the two "dc" marks loops endlessly, for game BGM.
+
+*[p. 356]*
+
+**[Example 7]**
+```
+A $ B * C ds D
+```
+Playing order: ABC BD
+
+**[Example 8]**
+```
+A B $ C D * E |: F G |1 H I :|2 J K ds L M
+```
+Playing order: ABCDEFGHI FGJK CDLM
+
+**[Example 9]**
+```
+A $1;3 B *1;3 C $2 D *2 E ds1 F ds2 G |:H |1I :|2J ds3 |: K |1 L :|2 M
+```
+Playing order: ABCDE BF DGHI HJ BKL KM
+
+This is a complicated way of specifying it, so let us follow it in more detail.
+
+- **A**: A is played (the intro part). Segno 1 "`$1`" is registered. Segno 3 "`$3`" is registered.
+- **B** (segno 1, 3): B is played. The first coda mark 1 "*1" is skipped. The first coda mark 3 "*3" is skipped.
+- **C**: C is played. Segno 2 "`$2`" is registered.
+- **D** (segno 2): D is played. The first coda mark 2 "*2" is skipped.
+- **E**: E is played. Dal segno 1 "ds1" returns to the segno 1 "`$1`" point.
+- **B**: B is played (2nd time). The second coda mark 1 "*1" skips to just after "ds1".
+- **F** (coda 1): F is played. Dal segno 2 "ds2" returns to the segno 2 "`$2`" point.
+- **D**: D is played (2nd time). The second coda mark 2 "*2" skips to just after "ds2".
+- **G** (coda 2): G is played. The repeat start point "|:" is registered.
+- **H** (repeat position): H is played. The mark "|1" for the part played the 1st time.
+- **I**: I is played. Returns to the repeat start point "|:" once only.
+- **H**: H is played (2nd time). Skips the part played the 1st time and jumps to the position for the 2nd time.
+
+*[p. 357]*
+
+- **J** (part for the 2nd time): J is played. Dal segno 3 "ds3" returns to the segno 3 "`$3`" point.
+- **B**: B is played (3rd time). The second coda mark 3 "*3" skips to just after "ds3".
+- **Coda 3**: the repeat start point "|1" (sic) is registered.
+- **K** (repeat position): K is played. The mark "|1" for the part played the 1st time.
+- **L**: L is played. Jumps to the repeat start point "|:" once only.
+- **K**: K is played (2nd time). Skips the part played the 1st time and jumps to the position for the 2nd time.
+- **M** (part for the 2nd time): M is played. End.
+
+As you can see by looking closely at the examples shown here, repeats and skips follow these fixed rules.
+
+- **Repeat:** a repeat using segno and dal segno is valid only once.
+- **Skip:** only a part that has been played once can be skipped. For example, in the example above, you cannot jump to the part starting with coda mark 2 "*2" or coda mark 3 "*3" before the part starting with coda mark 1 "*1" has been played.
+
+*[p. 358]*
+
+## 2.8 Voice data details
+
+### Classification of voice data
+
+Voice data files fall broadly into the following 4 groups. Each has 4 sets, so 16 sets in all are provided as standard.
+
+**[Caution]** Note the following about the notation below.
+- "…" is the file name given to the PLAYINIT and TLIST commands.
+- The start of each set of voice data contains the common voice data for the BEEP command (error sound) (except "GM_FM1" to "GM_FM2" (sic)).
+- The sound sources that follow are the sound sources of different instruments depending on the set.
+
+**[1]**
+
+| Set | File name | |
+|---|---|---|
+| Standard Set | "STANDARD" | Standard set |
+| Orchestra Set | "ORCHEST" | Orchestra set |
+| Rock Set | "ROCK" | Rock music set |
+| Dance Set | "DANCE" | Dance music set |
+
+As a game sound set, voice data files containing sound-effect data are provided so they can be used easily without any special registration work (the sound-effect data is duplicated at the start of the 4 files). These voice data files contain many sound sources in one file so that they can handle all-round music.
+
+**[2]**
+
+| Set | File name | |
+|---|---|---|
+| Piano Solo Set | "PIANO" | Piano solo set (piano only) |
+| Heavy Metal Set | "METAL" | Heavy metal set |
+| Ethnic Set | "ETHNIC" | Ethnic instrument set |
+| MUSIC BOX & Pipe Organ Set | "MBOXPO" | Music box & pipe organ set |
+
+*[p. 359]*
+
+These are high-quality sets specialised for particular music genres. The sound-effect data is left out, and the data is sampled giving priority to quality within the limited voice data area.
+
+For example, the piano sound is also in "ORCHEST", but to fit in the sounds of other instruments, only the basic range could be included, and the rest is sounded by changing the frequency on the program side, so the sound quality falls the further you go from the range that was included.
+
+The piano solo set, on the other hand, leaves out all other instrument sounds and uses the full size of a file to sample only the piano sound. Different ranges are sampled separately, to bring it as close as possible to the real sound. The range is divided finely, and the sampling data used is switched according to the scale, reducing frequency changes by the program.
+
+**[3]**
+
+| Set | File name | |
+|---|---|---|
+| Extra Set 1 | "EXTRA1" | Extra set 1 |
+| Extra Set 2 | "EXTRA2" | Extra set 2 |
+| Extra Set 3 | "EXTRA3" | Extra set 3 |
+| Extra Set 4 | "EXTRA4" | Extra set 4 |
+
+Voice sets intended to be rearranged with the TARG command. They can be used as they are, like the sets of [1] and [2], but high-quality BGM can be created by selecting the voice data you need and rearranging it with the TARG command.
+
+**[Caution]** Program number 0 (voice number 0) of the voice files of [1] to [3] contains the voice data used by the BEEP command.
+
+**[4]**
+
+| Set | File name | |
+|---|---|---|
+| GM FM Set 1 | "GM_FM1" | GM-arranged FM sound source set 1 |
+| GM FM Set 2 | "GM_FM2" | GM-arranged FM sound source set 2 |
+| GM FM Set 3 | "GM_FM3" | GM-arranged FM sound source set 3 |
+| GM FM Set 4 | "GM_FM4" | GM-arranged FM sound source set 4 |
+
+These are GM (General MIDI) arranged sets using the FM sound source (voice numbers "0 to 127"). They can also be used in combination with the voice data in the PCM sound source files. The FM sound source does not use much waveform memory, so memory overflow is unlikely when rearranging with the TARG command, and it has the advantage over PCM sampled in particular ranges that the sound quality is constant over the whole range. When playing with the GM arrangement, high-quality playback can be achieved by making up with PCM for drums and for sounds with long releases such as cymbals, which FM is poor at.
+
+**[Caution]** Only these sets have a different BEEP voice.
+
+*[p. 360]*
+
+### Explanation of the common voices (sound effects)
+
+This explains the relatively common voices (sound effects). Use it when using sound effects and so on in a game.
+
+**Voice explanations**
+
+| No. | Voice Name | Layer Name | Recommended range | Voice | |
+|---|---|---|---|---|---|
+| 00 | BEEP | BEEP | 000-127 | | |
+| 01 | HEY!男声 | HEY | 000-127 | Male voice | For fighting games |
+| 02 | HUA男声 | HUA | 000-127 | Male voice | For fighting games |
+| 03 | POH男声 | POH | 000-127 | Male voice | For fighting games |
+| 04 | KYA女声 | KYA | 000-127 | Female voice | For fighting games |
+| 05 | TAH女声 | TAH | 000-127 | Female voice | For fighting games |
+| 06 | TOH女声 | TOH | 000-127 | Female voice | For fighting games |
+| 07 | WAH女声 | WAH | 000-127 | Female voice | For fighting games |
+| 08 | YAH女声 | YAH | 000-127 | Female voice | For fighting games |
+| 09 | HAH男声 | HAH | 000-127 | Male voice | For fighting games |
+| 10 | TOH2男声 | TOH2 | 000-127 | Male voice | For fighting games |
+| 11 | CHUKIN | CHUKIN | 000-127 | "Chukin" (cocking) | |
+| 12 | NOISE | NOISE | 000-127 | White noise (explosion) | |
+| 13 | BA | BA | 000-127 | "Ba" (door) | |
+| 14 | BASHA | BASHA | 000-127 | "Basha" (scratch sound) | |
+| 15 | DOKA | DOKA | 000-127 | "Doka" (hit sound) | |
+| 16 | KACHA | KACHA | 000-127 | "Kacha" (opening/closing sound) | |
+| 17 | SHU | SHU | 000-127 | "Shu" (firing sound) | |
+| 18 | SAW WAVE | SAW WAVE | 000-127 | Sawtooth wave (system sounds etc.) | |
+| 19 | SINE WAVE | SINE WAVE | 000-127 | Sine wave (system sounds etc.) | |
+| 20 | SQUARE WAVE | SQUARE WAVE | 000-127 | Square wave (system sounds etc.) | |
+| 21 | SAW SE1 | SAW SE1 | 000-127 | Sawtooth wave application (energy) | |
+| 22 | SINE SE1 | SINE SE1 | 000-127 | Sine wave application (inside a spaceship) | |
+| 23 | SQUARE SE1 | SQUARE SE1 | 000-127 | Square wave application (futuristic machine sound) | |
+| 24 | SAW SE2 | SAW SE2 | 000-127 | Sawtooth wave application (comical) | |
+| 25 | SINE SE2 | SINE SE2 | 000-127 | Sine wave application (UFO flying) | |
+
+*[p. 361]*
+
+| No. | Voice Name | Layer Name | Recommended range | Voice |
+|---|---|---|---|---|
+| 26 | SQUARE SE2 | SQUARE SE2 | 000-127 | Square wave application (UFO flying) |
+| 27 | SINE SE3 | SINE SE3 | 000-127 | Sine wave application (sound of outer space) |
+| 28 | Crystal Bell | Crystal Bell | 000-127 | Crystal bell |
+| 29 | GLOCKEN | GLOCKEN | 000-127 | Metallic percussion sound |
+| 30 | RUM | RUM | 000-127 | Beam firing sound |
+
+(男声 = male voice, 女声 = female voice.)
+
+### How to read the lists
+
+| Item name | Item number given in TPROP | Explanation |
+|---|---|---|
+| No | | Voice number (voice program number) |
+| Voice Name (Layer Name) | | Instrument name |
+| Bd | 0 | Bend range |
+| Ly | 1 | Layer number |
+| sn | 10 | Start note |
+| en | 11 | End note |
+| bn | 12 | Base note |
+| ft | 13 | Fine tune |
+| AR | 20 | Attack rate |
+| DR | 21 | Decay rate |
+| SR | 22 | Sustain rate |
+| RR | 23 | Release rate |
+| SL | 24 | Sustain level |
+| KS | 27 | Key rate scaling |
+| RE | 50 | LFO reset |
+| LF | 51 | LFO frequency |
+| AW | 52 | LFO amplitude modulation waveform |
+| AS | 53 | LFO amplitude modulation depth |
+| PW | 54 | LFO frequency modulation waveform |
+| PS | 55 | LFO frequency modulation depth |
+| MX | 71 | Input mix level |
+| DS | 72 | Direct data send level |
+| DP | 73 | Direct data localisation |
+
+The number under each item is the item number given in the TPROP command. Where a number is given under the instrument name in the tables below, it is the recommended range. It means that when sounded at note numbers in that range, the characteristics of the given instrument appear, or it can be used for other purposes.
+
+*[p. 362]*
+
+If the voice data you need no longer fits in memory, you can deal with it by using layer edit mode and copying only the waveforms of the range you need.
+
+For example, to use only the high range of the "STANDARD" strings:
+
+```
+DATA "BUILDLAYER"
+DATA "STANDARD"   ,44, 1,-1,-1, -1
+DATA "ENDLAYER"
+```
+
+If the range N56 to N75 of the "PIANO" set is enough:
+
+```
+DATA "BUILDLAYER"
+DATA "PIANO"    , 1, 4,-1,-1, -1
+DATA            , 1, 5,-1,-1, -1
+DATA            , 1, 6,-1,-1, -1
+DATA "ENDLAYER"
+```
+
+### \<STANDARD\> Standard set
+
+In the voice tables, the column headings carry the TPROP item numbers: Bd 0, Ly 1, sn 10, en 11, bn 12, ft 13, AR 20, DR 21, SR 22, RR 23, SL 24, KS 27, RE 50, LF 51, AW 52, AS 53, PW 54, PS 55, MX 71, DS 72, DP 73. The tables are reproduced as printed.
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 HEY!男声             12  0   0-127 : 72/  0 31- 0- 0- 6: 0  0  0  0  0  0  0  0  0  7  0
+ 2 HUA男声              12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+ 3 POH男声              12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+ 4 KYA女声              12  0   0-127 : 72/  0 31- 0- 0-18: 0  0  0  0  0  0  0  0  0  7  0
+ 5 TAH女声              12  0   0-127 : 72/  0 31- 0- 0-21: 0  0  0  0  0  0  0  0  0  7  0
+ 6 TOH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 7 WAH女声              12  0   0-127 : 72/  0 31- 0- 0-19: 0  0  0  0  0  0  0  0  0  7  0
+ 8 YAH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 9 HAH男声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+10 TOH2男声             12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+11 CHUKIN               12  0   0-127 : 72/  0 31-11-24-12:13  0  0  0  0  0  0  0  0  7  0
+12 NOISE                12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  3  0  3  0  0  7  0
+13 BA                   12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+14 BASHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+15 DOKA                 12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+16 KACHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+17 SHU                  12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+```
+
+In the voice names, 男声 means "male voice" and 女声 means "female voice". The same common voices appear at the start of every set that follows.
+
+*[p. 363]*
+
+\<STANDARD\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+18 SAW WAVE             12  0   0- 38 : 48/  0 31-23- 0-20: 2  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/ -6 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 31- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            5  63- 68 : 78/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/-14 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 34 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 31- 0- 0-24: 0  0  0  0  0  0  0  0  0  6  0
+19 SINE WAVE            12  0   0-127 : 95/-62 22- 0- 0-18: 0  0  0  0  0  0  0  0  0  6  0
+20 SQUARE WAVE          12  0   0- 38 : 48/-30 25- 0- 0-20: 0  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/-62 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ -6 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/-12 25- 0- 0-23: 0  0  0 18  2  0  2  0  0  6  0
+                            5  63- 68 : 77/-78 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/ 90 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+21 SAW SE1              12  0   0-127 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  7  0
+22 SINE SE1             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  1  2  0  0  0  2  0  6  0
+23 SQUARE SE1           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  0 18  2  0  2  0  0  6  0
+24 SAW SE2              12  0   0-127 : 72/ 40 31-15-21-14: 9  0  0 21  0  0  1  6  0  7  0
+25 SINE SE2             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  0  0  0  0  0  0  0  6  0
+26 SQUARE SE2           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  1 12  1  0  2  7  0  6  0
+27 SINE SE3             12  0   0-127 : 95/-62 31- 8-12-11:23  0  0 21  1  0  0  3  0  6  0
+28 Crystal Bell         12  0   0-127 : 72/  0 31- 7-15-13: 9  0  0  0  3  0  3  0  0  7  0
+29 GLOCKEN              12  0   0-127 : 74/  0 31- 0- 8-18: 5  0  0  0  0  0  0  0  6  7  0
+```
+
+*[p. 364]*
+
+\<STANDARD\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+30 RUM                  12  0   0-127 : 74/  0 31-11- 0-31:31  0  0  0  0  0  0  0  6  7  0
+31 Drum Set             12
+     kick                   0   0- 36 : 48/-88 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+     Snare                  1  38- 38 : 41/  0 29- 0- 0-13: 0 -1  0  0  0  0  0  0  7  7  0
+     Electric Snare         2  40- 40 : 15/  0 29-10- 3-18: 5 -1  0  0  0  0  0  0  7  7  0
+     close H H              3  42- 44 : 51/  0 31- 3- 0-20: 0  0  0  0  0  0  0  0  2  5  2
+     open H H               4  46- 46 : 56/  0 31-16-15-14:22  0  0  0  0  0  0  0  2  5  2
+     Low Tom                5  41- 41 : 54/  0 28- 9-12-13: 5 -1  0  0  0  0  0  0  4  6 25
+     Mid Tom                6  45- 45 : 49/  0 29- 9-10-14: 5 -1  0  0  0  0  0  0  4  6 19
+     High Tom               7  48- 48 : 46/  0 28- 9-12-14: 5 -1  0  0  0  0  0  0  4  6  5
+     clash Cymbal 1         8  49- 49 : 56/  0 31- 9- 0-11: 0  0  0  0  0  0  0  0  4  7 28
+     Ride Cymbal            9  51- 51 : 55/  0 31-17-26-12:27  0  0  0  0  0  0  0  3  5 12
+     clash Cymbal 2        10  52- 72 : 64/  0 31-13- 0-12: 0  0  0  0  0  0  0  0  4  6 15
+32 Percussion Set       12
+     Cabasa                 0  65- 71 : 67/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  1  7 29
+     Tambourine             1  40- 54 : 58/  0 31-11- 0-16: 7 -1  0  0  0  0  0  0  6  7 13
+     Conga Low              2  64- 64 : 71/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  4  7 23
+     Conga Hi               3  63- 63 : 70/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  4  7 23
+     Conga Mute             4  55- 62 : 70/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  4  7 31
+     808Tom Low             5  72- 72 : 93/  0 31- 0- 0-23: 0 -1  0  0  0  0  0  0  4  7 31
+     808Tom Mid             6  84- 84 : 96/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  4  7  0
+     808Tom Hi              7  96-127 :100/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  4  7 15
+     Hand Clap              8   0- 39 : 56/  0 31- 8-11-18: 4 -1  0  0  0  0  0  0  4  7  0
+                            9   0- 39 : 59/  0 28- 7-19-17: 5 -1  0  0  0  0  0  0  4  7  0
+33 Pick Bass            12  0   0-127 : 62/-50 31- 0- 9-17: 0  0  0  0  0  0  0  0  0  7  0
+     36 - 127
+34 A.Bass               12  0   0-127 : 67/ 36 31-10- 7-16:10 -1  0  0  0  0  0  0  0  7  0
+     36 - 96
+35 Synth Bass           12  0   0-127 : 43/ 70 29-14- 0-23: 3 -1  0  0  0  0  0  0  1  7  0
+     0 - 127
+```
+
+*[p. 365]*
+
+\<STANDARD\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+36 A.Piano              12  0   0-127 : 96/ 84 27-11- 6-24: 9 -1  0  0  0  0  0  0  4  7  0
+     36 - 88
+37 Rhodes E.Piano       12  0   0-127 : 79/ 70 25-11- 6-20: 9 -1  0  0  0  0  0  0  5  7  0
+     24 - 104
+38 Organ                12  0   0- 62 : 55/ 70 28-12- 1-31: 2 -1  0  0  0  0  0  0  6  7  0
+     28 - 62                1  63-127 : 79/ 70 28-12- 1-31: 2 -1  0  0  0  0  0  0  6  7  0
+39 A.Guitar             12  0   0-127 : 84/  0 31-11-11-22: 5 -1  0  0  0  0  0  0  6  7 16
+     28 - 108
+40 Clean Guitar         12  0   0- 72 : 67/ 66 29-12-10-22: 7 -1  0  0  0  0  0  0  5  7  0
+     24 - 72                1  73-127 : 91/ 70 29-12-10-22: 7 -1  0  0  0  0  0  0  5  7  0
+41 Over Drive Guitar    12  0  58-127 : 93/100 31- 0- 0-22: 0 -1  0  0  0  0  0  0  6  7  0
+     36 - 88                1   0- 57 : 73/110 31- 0- 0-31: 0  0  0  0  0  0  0  0  6  7  0
+42 Glocken              12  0   0-127 : 90/ 10 30-11-12-15: 4 -1  0  0  0  0  0  0  6  7  0
+     60 - 95
+43 Marimba              12  0   0-127 : 89/ 60 31-12-10-22: 9 -1  0  0  0  0  0  0  2  7  0
+     48 - 108
+44 Strings              12  0   0- 67 : 66/104 20- 0- 0-15: 0  0  0  0  0  0  0  0  6  6 16
+     28 - 100               1  68-127 : 90/112 26- 0- 0-15: 0  0  0  0  0  0  0  0  6  6 16
+45 Brass Sec.           12  0   0-127 : 97/126 27- 9- 5-19: 0 -1  0 10  0  0  0  2  6  7  0
+     40 - 96
+46 Horn                 12  0   0-127 : 71/ 50 26- 6- 0-15: 1 -1  0  0  0  0  0  0  5  7  0
+     53 - 79
+47 A.Sax                12  0   0-127 : 78/-86 17- 6- 0-23: 4 -1  0 19  0  0  2  3  6  7  0
+     48 - 88
+48 Flute & Piccolo      12  0   0- 44 : 58/ 74 16-13- 3-19: 3 -1  0 19  2  1  2  1  6  7  0
+     60 - 96                1  45-127 :78/-112 16-13- 0-19: 0 -1  0  0  2  0  2  0  6  7  0
+49 Oboe                 12  0   0-127 : 71/  0 25- 7- 0-22: 3 -1  0  0  0  0  0  0  6  7 16
+     48 - 89
+50 Clarinet             12  0   0-127 : 77/ 90 17- 0- 0-22: 0 -1  0 18  2  1  2  3  6  7 16
+     36 - 89
+```
+
+*[p. 366]*
+
+\<STANDARD\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+51 Synth Pad 1          12  0   0-127 : 84/ 10 23- 9- 0-17: 4 -1  0  0  0  0  0  0  6  7  0
+     (Synth Brass)          1   0-127 : 84/ 40 23- 9- 0-17: 4 -1  0  0  0  0  0  0  6  7  0
+     24 - 91
+52 Synth Pad 2          12  0   0-127 : 79/ 86 18- 4- 7-15: 6 -1  0  0  0  0  0  0  5  6 31
+     (Hielm Pad)            1   0-127 : 79/ 74 18- 4- 7-15: 6 -1  0  0  0  0  0  0  5  6 15
+     43 - 96
+53 Brightness           12  0   0-127 :89/-100 29-10- 3-14: 4 -1  0  0  0  0  0  0  6  6  0
+     (Bell Strings)         1   0-127 : 67/ 60 23- 6- 8-14: 5 -1  0  0  0  0  0  0  6  5 16
+     60 - 96                2   0-127 : 79/ 60 31- 6- 8-14: 5 -1  0  0  0  0  0  0  6  5 16
+54 Solo Synth Lead 1    12  0   0-127 :79/-102 18- 7- 0-19: 6  0  0 22  0  1  2  3  6  7  0
+     35 - 98
+55 Solo Synth Lead 2    12  0   0-127 : 79/ 56 27- 7- 0-19: 6  0  0 18  0  0  2  2  6  7  0
+     24 - 103
+```
+
+### \<ORCHEST\> Orchestra set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 HEY!男声             12  0   0-127 : 72/  0 31- 0- 0- 6: 0  0  0  0  0  0  0  0  0  7  0
+ 2 HUA男声              12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+ 3 POH男声              12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+ 4 KYA女声              12  0   0-127 : 72/  0 31- 0- 0-18: 0  0  0  0  0  0  0  0  0  7  0
+ 5 TAH女声              12  0   0-127 : 72/  0 31- 0- 0-21: 0  0  0  0  0  0  0  0  0  7  0
+ 6 TOH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 7 WAH女声              12  0   0-127 : 72/  0 31- 0- 0-19: 0  0  0  0  0  0  0  0  0  7  0
+ 8 YAH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 9 HAH男声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+10 TOH2男声             12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+11 CHUKIN               12  0   0-127 : 72/  0 31-11-24-12:13  0  0  0  0  0  0  0  0  7  0
+```
+
+*[p. 367]*
+
+\<ORCHEST\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+12 NOISE                12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  3  0  3  0  0  7  0
+13 BA                   12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+14 BASHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+15 DOKA                 12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+16 KACHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+17 SHU                  12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+18 SAW WAVE             12  0   0- 38 : 48/  0 31-23- 0-20: 2  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/ -6 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 31- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            5  63- 68 : 78/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/-14 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 34 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 31- 0- 0-24: 0  0  0  0  0  0  0  0  0  6  0
+19 SINE WAVE            12  0   0-127 : 95/-62 22- 0- 0-18: 0  0  0  0  0  0  0  0  0  6  0
+20 SQUARE WAVE          12  0   0- 38 : 48/-30 25- 0- 0-20: 0  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/-62 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ -6 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/-12 25- 0- 0-23: 0  0  0 18  2  0  2  0  0  6  0
+                            5  63- 68 : 77/-78 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/ 90 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+21 SAW SE1              12  0   0-127 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  7  0
+22 SINE SE1             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  1  2  0  0  0  2  0  6  0
+23 SQUARE SE1           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  0 18  2  0  2  0  0  6  0
+```
+
+*[p. 368]*
+
+\<ORCHEST\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+24 SAW SE2              12  0   0-127 : 72/ 40 31-15-21-14: 9  0  0 21  0  0  1  6  0  7  0
+25 SINE SE2             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  0  0  0  0  0  0  0  6  0
+26 SQUARE SE2           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  1 12  1  0  2  7  0  6  0
+27 SINE SE3             12  0   0-127 : 95/-62 31- 8-12-11:23  0  0 21  1  0  0  3  0  6  0
+28 NOISE2               12  0   0-127 : 72/  0 31- 7-15-13: 9  0  0  0  3  0  3  0  0  7  0
+29 GLOCKEN              12  0   0-127 : 74/  0 31- 0- 8-18: 5  0  0  0  0  0  0  0  6  7  0
+30 RUM                  12  0   0-127 : 74/  0 31-11- 0-31:31  0  0  0  0  0  0  0  6  7  0
+31 ORCHEST.PERCUSSION   12
+     大太鼓                 0  36- 36 : 64/  0 31-31- 0-13: 0  0  0  0  0  0  0  0  6  7  0
+     小太鼓                 1  38- 40 : 65/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  6  7  2
+     ｵｰｹｽﾄﾗｼﾝﾊﾞﾙ 1          2  57- 57 : 80/  0 31- 0- 0- 9: 0  0  0  0  0  0  0  0  6  7  1
+     ｵｰｹｽﾄﾗｼﾝﾊﾞﾙ 2          3  59- 59 : 80/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  6  7 17
+     Cabasa                 4  69- 69 : 81/  0 31- 0- 0- 0: 0  0  0  0  0  0  0  0  0  7 21
+     Claves                 5  75- 75 :100/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  6  7 31
+     Mute Triangl           6  80- 80 : 92/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  0  7 31
+     Open Triangl           7  81- 81 : 70/  0 31- 8-14-12:13  2  0  0  0  0  0  0  6  7 31
+     Castanets              8  85- 85 :111/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  6  7 31
+     Tambourine             9  54- 54 : 60/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  0  7 31
+32 A.Piano    : G1      12  0   0- 31 : 60/  0 31- 3- 8-13: 0  0  0 12  2  2  2  1  6  7  0
+                A#2         1  32- 63 : 76/106 31- 0- 9-14: 0  0  0  0  0  0  0  0  6  7  0
+                D#3         2  64- 69 : 81/ 86 31-10-19-21: 7  0  0  0  0  0  0  0  6  7  0
+                C#4         3  70- 89 : 91/100 31-10-10-11: 3  0  0  0  0  0  0  0  6  7  0
+                G6          4  90-127 :121/ 52 31- 8- 4-12: 4  0  0  0  0  0  0  0  6  7  0
+33 Pipe Organ           12  0   0-127 : 78/ 90 31- 0- 0-31: 0  0  0  0  0  0  0  0  6  7  0
+34 Glocken              12  0   0-127 :106/ 18 31-10-18-12:25  1  0  0  0  0  0  0  6  7  0
+35 Strings Arco  : Lo   12  0   0- 67 : 66/104 24- 0- 0-12: 0  0  0  0  0  0  0  0  5  7  0
+                   Hi       1  68-127 : 90/112 24- 0- 0-13: 0  0  0  0  0  0  0  0  5  7  0
+36 Strings Pizz  : C3   12  0   0- 65 : 84/-86 31- 0-11- 1: 0  0  0  0  0  0  0  0  6  7  0
+                   C4       1  66-127 : 97/110 31- 0-11-31: 0  0  0  0  0  0  0  0  6  7  0
+37 Harp                 12  0   0-127 : 65/ -8 31- 0-12-13: 0  0  0  0  0  0  0  0  6  6  0
+```
+
+In voice 31, ORCHEST.PERCUSSION, the layer names 大太鼓, 小太鼓 and ｵｰｹｽﾄﾗｼﾝﾊﾞﾙ mean "bass drum", "snare drum" and "orchestra cymbal".
+
+*[p. 369]*
+
+\<ORCHEST\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+38 Trombone             12  0   0-127 : 67/ 48 31- 0- 0-18: 0  0  0  0  0  0  0  0  6  7  0
+39 Trumpet              12  0   0-127 : 82/ 92 31- 0- 0-16: 0  0  0  0  0  0  0  0  6  7  0
+40 Horn                 12  0   0-127 : 88/-96 31- 0- 0-15: 0  0  0  0  0  0  0  0  6  7  0
+41 BRASS     : Trombone 12  0   0-127 : 82/ 92 31- 0- 0-18: 0  0  0  0  0  0  0  0  6  6  0
+               "Trumpet"     1   0-127 : 67/ 48 31- 0- 0-17: 0  0  0  0  0  0  0  0  6  4  0
+               "Horn"       2   0-127 : 66/ 84 19- 0- 0-18: 0  0  0  0  0  0  0  0  6  5  0
+42 Oboe                 12  0   0-127 : 80/ 90 20- 0- 0-17: 0  0  0  0  0  0  0  0  5  7 17
+43 Clarinet             12  0   0-127 : 80/ 18 16- 0- 0-19: 0  0  0  0  0  0  0  0  6  7  0
+44 Flute                12  0   0-127 : 68/-44 31- 0- 0-21:13  0  0 18  0  0  2  1  5  7  0
+45 Ocarina              12  0   0-127 : 88/-64 31- 1- 0-16: 0  0  0  0  0  0  0  0  6  7  0
+46 Timpani              12  0   0-127 : 64/  0 31-10- 6- 9:29  0  0  0  0  0  0  0  7  7  0
+47 Orche.Cymbal         12  0   0-127 : 80/  0 31- 0- 0- 9: 0  0  0  0  0  0  0  0  6  7  0
+48 Marimba              12  0   0-127 : 89/ 60 31-12-10-22: 9 -1  0  0  0  0  0  0  7  7  0
+```
+
+### \<ROCK\> Rock music set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 HEY!男声             12  0   0-127 : 72/  0 31- 0- 0- 6: 0  0  0  0  0  0  0  0  0  7  0
+ 2 HUA男声              12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+ 3 POH男声              12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+ 4 KYA女声              12  0   0-127 : 72/  0 31- 0- 0-18: 0  0  0  0  0  0  0  0  0  7  0
+ 5 TAH女声              12  0   0-127 : 72/  0 31- 0- 0-21: 0  0  0  0  0  0  0  0  0  7  0
+ 6 TOH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 7 WAH女声              12  0   0-127 : 72/  0 31- 0- 0-19: 0  0  0  0  0  0  0  0  0  7  0
+ 8 YAH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 9 HAH男声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+10 TOH2男声             12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+11 CHUKIN               12  0   0-127 : 72/  0 31-11-24-12:13  0  0  0  0  0  0  0  0  7  0
+```
+
+*[p. 370]*
+
+\<ROCK\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+12 NOISE                12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  3  0  3  0  0  7  0
+13 BA                   12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+14 BASHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+15 DOKA                 12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+16 KACHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+17 SHU                  12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+18 SAW WAVE             12  0   0- 38 : 48/  0 31-23- 0-20: 2  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/ -6 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 31- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            5  63- 68 : 78/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/-14 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 34 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 31- 0- 0-24: 0  0  0  0  0  0  0  0  0  6  0
+19 SINE WAVE            12  0   0-127 : 95/-62 22- 0- 0-18: 0  0  0  0  0  0  0  0  0  6  0
+20 SQUARE WAVE          12  0   0- 38 : 48/-30 25- 0- 0-20: 0  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/-62 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ -6 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/-12 25- 0- 0-23: 0  0  0 18  2  0  2  0  0  6  0
+                            5  63- 68 : 77/-78 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/ 90 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+21 SAW SE1              12  0   0-127 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  7  0
+22 SINE SE1             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  1  2  0  0  0  2  0  6  0
+23 SQUARE SE1           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  0 18  2  0  2  0  0  6  0
+```
+
+*[p. 371]*
+
+\<ROCK\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+24 SAW SE2              12  0   0-127 : 72/ 40 31-15-21-14: 9  0  0 21  0  0  1  6  0  7  0
+25 SINE SE2             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  0  0  0  0  0  0  0  6  0
+26 SQUARE SE2           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  1 12  1  0  2  7  0  6  0
+27 SINE SE3             12  0   0-127 : 95/-62 31- 8-12-11:23  0  0 21  1  0  0  3  0  6  0
+28 NOISE2               12  0   0-127 : 72/  0 31- 7-15-13: 9  0  0  0  3  0  3  0  0  7  0
+29 GLOCKEN              12  0   0-127 : 74/  0 31- 0- 8-18: 5  0  0  0  0  0  0  0  6  7  0
+30 RUM                  12  0   0-127 : 74/  0 31-11- 0-31:31  0  0  0  0  0  0  0  6  7  0
+31 Drums Set            12
+     Kick                   0  36- 36 : 60/  0 31-15-23-16:14  0  0  0  0  0  0  0  2  7  0
+     Snare                  1  37- 38 : 48/  0 31-13-13-13: 0  0  0  0  0  0  0  0  5  7  0
+     Lo Tom                 2  41- 41 : 65/  0 31-15-23-15:14  0  0  0  0  0  0  0  5  7 18
+     Hi Hat                 3  42- 42 : 52/  0 31-17-17-17: 0  0  0  0  0  0  0  0  5  7  2
+     Mid Tom                4  45- 45 : 66/  0 31-16-16-15: 0  0  0  0  0  0  0  0  5  7  4
+     Hi Hat Open            5  46- 46 : 56/  0 31-13-11-16: 0  0  0  0  0  0  0  0  5  7  3
+     Hi Tom                 6  48- 48 : 64/  0 31-16-16-16: 0  0  0  0  0  0  0  0  5  7  8
+     Crash Cym 1            7  49- 49 : 55/-80 31-11-11-11: 0  0  0  0  0  0  0  0  6  7 13
+     Crash Cym 2            8  57- 57 : 62/ 80 31-11-11-12: 0  0  0  0  0  0  0  0  6  7 29
+     Ride Cym 1             9  51- 51 : 55/  0 31-12-12-13: 0  0  0  0  0  0  0  0  7  7 19
+     Ride Cym 2            10  59- 59 : 61/  0 31-12-12-13: 0  0  0  0  0  0  0  0  7  7 20
+     Rim Shot              11  39- 39 : 54/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  5  7  0
+32 Fingered Bass        12  0   0- 45 : 54/ 82 31- 0- 8-18: 0  0  0  0  0  0  0  0  3  7  0
+     36 - 55                1  46- 60 : 66/ 84 31- 0- 9-19: 0  0  0  0  0  0  0  0  3  7  0
+                            2  61-127 : 78/100 31- 0- 9-20: 0  0  0  0  0  0  0  0  3  7  0
+33 Picked Bass          12  0   0-127 : 66/ 60 31- 0- 9-17: 0  0  0  0  0  0  0  0  3  7  0
+     40 - 64
+34 Power Guitar         12  0   0-127 : 68/ 78 31- 0- 0-17: 0  0  0  0  0  0  0  0  5  7  0
+     40 - 84                1   0-127 : 89/ -8 31- 0- 0-17: 0  0  0  0  0  0  0  0  5  7  0
+35 Solo Guitar          12  0   0-127 : 96/ -8 31- 0- 0-17: 0  0  0  0  0  0  0  0  7  7  0
+     57 - 81
+```
+
+*[p. 372]*
+
+\<ROCK\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+36 Clean Guitar         12  0   0-127 : 82/-10 31-11- 9-16: 0  0  0  0  0  0  0  0  7  7  0
+     50 - 86
+37 Organ                12  0   0-127 : 90/112 31- 0- 0-28: 0  0  0  0  0  0  0  0  6  7  0
+     38 - 91
+38 Synth Brass          12  0   0-127 : 68/ 36 18- 0- 0-14: 0  0  0  0  0  0  0  0  5  7  0
+     36 - 84
+39 Choir Pad            12  0   0-127 : 79/ 74 25- 7- 7-16: 3  0  0  0  0  0  0  0  6  4  0
+     47 - 91                1   0-127 : 84/ 80 31- 0- 8-15: 0  0  0  0  0  0  0  0  6  7  0
+```
+
+### \<DANCE\> Dance music set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 HEY!男声             12  0   0-127 : 72/  0 31- 0- 0- 6: 0  0  0  0  0  0  0  0  0  7  0
+ 2 HUA男声              12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+ 3 POH男声              12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+ 4 KYA女声              12  0   0-127 : 72/  0 31- 0- 0-18: 0  0  0  0  0  0  0  0  0  7  0
+ 5 TAH女声              12  0   0-127 : 72/  0 31- 0- 0-21: 0  0  0  0  0  0  0  0  0  7  0
+ 6 TOH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 7 WAH女声              12  0   0-127 : 72/  0 31- 0- 0-19: 0  0  0  0  0  0  0  0  0  7  0
+ 8 YAH女声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+ 9 HAH男声              12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+10 TOH2男声             12  0   0-127 : 72/  0 31- 0- 0-15: 0  0  0  0  0  0  0  0  0  7  0
+11 CHUKIN               12  0   0-127 : 72/  0 31-11-24-12:13  0  0  0  0  0  0  0  0  7  0
+12 NOISE                12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  3  0  3  0  0  7  0
+13 BA                   12  0   0-127 : 72/  0 31- 0- 0-14: 0  0  0  0  0  0  0  0  0  7  0
+14 BASHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+15 DOKA                 12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+16 KACHA                12  0   0-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+```
+
+*[p. 373]*
+
+\<DANCE\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+17 SHU                  12  0   0-127 : 72/  0 31- 0- 0-11: 0  0  0  0  0  0  0  0  0  7  0
+18 SAW WAVE             12  0   0- 38 : 48/  0 31-23- 0-20: 2  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/ -6 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 31- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            5  63- 68 : 78/ 32 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/-14 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 34 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 31- 0- 0-24: 0  0  0  0  0  0  0  0  0  6  0
+19 SINE WAVE            12  0   0-127 : 95/-62 22- 0- 0-18: 0  0  0  0  0  0  0  0  0  6  0
+20 SQUARE WAVE          12  0   0- 38 : 48/-30 25- 0- 0-20: 0  0  0  0  0  0  0  0  0  6  0
+                            1  39- 44 : 54/-62 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            2  45- 50 : 60/ 16 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            3  51- 56 : 66/ -6 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            4  57- 62 : 72/-12 25- 0- 0-23: 0  0  0 18  2  0  2  0  0  6  0
+                            5  63- 68 : 77/-78 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            6  69- 74 : 84/ 90 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            7  75- 80 : 90/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            8  81- 86 : 96/-12 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+                            9  87-127 :102/ 32 25- 0- 0-23: 0  0  0  0  0  0  0  0  0  6  0
+21 SAW SE1              12  0   0-127 : 72/ 40 31- 0- 0-22: 0  0  0  0  0  0  0  0  0  7  0
+22 SINE SE1             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  1  2  0  0  0  2  0  6  0
+23 SQUARE SE1           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  0 18  2  0  2  0  0  6  0
+24 SAW SE2              12  0   0-127 : 72/ 40 31-15-21-14: 9  0  0 21  0  0  1  6  0  7  0
+25 SINE SE2             12  0   0-127 : 95/-62 31- 0- 0-31: 0  0  0  0  0  0  0  0  0  6  0
+26 SQUARE SE2           12  0   0-127 : 72/-12 31- 0- 0-27: 0  0  1 12  1  0  2  7  0  6  0
+27 SINE SE3             12  0   0-127 : 95/-62 31- 8-12-11:23  0  0 21  1  0  0  3  0  6  0
+28 NOISE2               12  0   0-127 : 72/  0 31- 7-15-13: 9  0  0  0  3  0  3  0  0  7  0
+```
+
+*[p. 374]*
+
+\<DANCE\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+29 GLOCKEN              12  0   0-127 : 74/  0 31- 0- 8-18: 5  0  0  0  0  0  0  0  6  7  0
+30 RUM                  12  0   0-127 : 74/  0 31-11- 0-31:31  0  0  0  0  0  0  0  6  7  0
+31 Drums                  
+     Kick               12  0  35- 36 : 64/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  0
+     Snare                  1  38- 40 : 59/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  1
+     Tom-H                  2  48- 48 : 75/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  3
+     Tom-M                  3  45- 45 : 72/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7 18
+     Tom-L                  4  41- 41 : 68/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7 21
+     Cym 1                  5  49- 49 : 70/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7 20
+     Cym 2                  6  57- 57 : 75/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  3
+     HH-Close               7  42- 42 : 63/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  4
+     HH-Open                8  46- 46 : 67/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  4
+     Clap                   9  37- 37 : 64/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7 18
+     Tambourine            10  54- 54 : 70/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7 19
+     Shaker                11  58- 58 : 73/  0 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  3
+     Stab                  12  50- 53 : 83/ 64 31- 0- 0- 5: 0  0  0  0  0  0  0  0  7  7  0
+32 Synth Bass           12  0   0-127 :35/-114 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  6  0
+     0 - 56
+33 Piano                12  0   0- 41 : 51/ 40 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            1  42- 48 : 57/ 14 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            2  49- 55 : 64/-22 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            3  56- 74 : 71/-12 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            4  75- 80 : 78/-44 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            5  81- 89 : 84/-14 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            6  90- 99 : 96/-12 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+                            7 100-127 :104/-90 31-18- 8-16: 0  0  0 20  2  2  1  2  7  6  0
+```
+
+*[p. 375]*
+
+\<DANCE\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+34 Warm Bell            12  0   0- 38 : 48/  2 31- 0- 9-11: 0  0  0  0  0  0  0  0  7  6  0
+     36 - 84                1  39- 44 : 54/ -4 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            2  45- 50 : 60/-10 31- 0- 9-11: 0  0  0  0  0  0  0  0  7  6  0
+                            3  51- 56 : 66/ -4 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            4  57- 62 : 72/-12 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            5  63- 68 : 78/ 32 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            6  69- 74 : 84/-12 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            7  75- 80 : 90/ 32 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            8  81- 86 : 96/-12 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+                            9  87-127 :102/ 34 31- 0- 8-11: 0  0  0  0  0  0  0  0  7  6  0
+35 Vocoder Vox          12  0   0-127 : 77/120 16- 0- 8-10: 0  0  0 19  0  0  2  3  0  6  0
+     36 - 84
+36 Synth Brass          12  0   0-127 : 84/  0 22- 6- 5-13: 6  0  0  0  0  0  0  0  6  7  0
+     36 - 84
+37 Square Wave          12  0   0- 38 : 48/-30 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            1  39- 44 : 54/-62 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            2  45- 50 : 60/ 16 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            3  51- 56 : 66/ -6 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  6  0
+                            4  57- 62 : 72/-12 31- 0- 0-27: 0  0  0 18  2  0  2  0  7  6  0
+                            5  63- 68 : 77/-78 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            6  69- 74 : 84/ 90 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            7  75- 80 : 90/ 32 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            8  81- 86 : 96/-12 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  6  0
+                            9  87-127 :102/ 32 31- 0- 0-27: 0  0  0 17  0  0  0  5  7  6  0
+38 Organ                12  0   0-127 : 83/ 48 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+39 Voice Ahh            12  0   0- 47 : 57/ -8 15- 7- 9-13: 7  0  0  0  0  0  2  0  6  6  0
+     36 - 84                1  48- 53 : 62/-30 15- 7- 9-13: 7  0  0  0  0  0  2  0  6  6  0
+                            2  54- 59 : 69/-10 15- 7- 9-13: 7  0  0  0  0  0  2  0  6  6  0
+                            3  60-127 : 74/ -4 15- 7- 9-13: 7  0  0  0  0  0  2  0  6  6  0
+```
+
+*[p. 376]*
+
+\<DANCE\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+40 Pulse Wave           12  0   0- 37 : 47/-74 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  6  0
+                            1  38- 43 : 53/-62 31- 0- 0-18: 0  0  0  0  0  0  0  0  7  6  0
+                            2  44- 49 : 59/-88 31- 0- 0-18: 0  0  0  0  0  0  0  0  7  6  0
+                            3  50- 55 : 65/-80 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  6  0
+                            4  56- 61 : 71/-62 31- 0- 0-22: 0  0  0  0  0  0  0  0  7  6  0
+                            5  62- 67 : 77/-80 31- 0- 0-21: 0  0  0  0  0  0  0  0  7  6  0
+                            6  68- 73 : 83/-64 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  6  0
+                            7  74- 79 : 89/-80 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  6  0
+                            8  80-127 : 95/-64 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  6  0
+41 Filter 1             12  0   0-127 :35/-114 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  6  0
+42 Filter 2             12  0   0-127 : 84/  0 31-13-31-20:31  0  0  0  0  0  0  0  7  7  0
+43 Space Pad            12  0   0- 61 : 72/ 94 11- 7-15-13:10  0  0 17  0  0  2  2  7  6  0
+     36 - 84                1  62- 65 : 76/ 76 11- 7-15-13:10  0  0 17  0  0  2  2  7  6  0
+                            2  66- 68 : 80/ 80 11- 7-15-13:10  0  0 17  0  0  2  3  7  6  0
+                            3  69- 70 : 82/ 66 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            4  71- 72 : 84/-14 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            5  73- 75 : 86/ 54 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            6  76- 78 : 89/ 62 11- 7-15-13:10  0  0 18  0  0  2  2  7  6  0
+                            7  79- 82 : 93/ -8 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            8  83- 87 : 97/ 26 11- 7-15-13:10  0  0 18  0  0  2  2  7  6  0
+                            9  88-127 :103/-18 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+44 Synth Pad            12  0   0- 61 : 61/  0 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+     36 - 84                1  62- 63 : 63/ 42 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            2  64- 70 : 66/ 36 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            3  67- 73 : 73/ 30 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            4  71- 75 : 75/ 12 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            5  76- 78 : 78/ 32 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            6  79- 80 : 80/ -6 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            7  81- 87 : 85/ 30 11- 7-15-13:10  0  0 18  0  0  2  2  6  6  0
+                            8  88-127 : 90/ 34 11- 7-15-13:10  0  0 18  0  0  2  0  6  6  0
+```
+
+*[p. 377]*
+
+\<DANCE\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+45 Metal Pad            12  0   0- 61 : 72/ 94 11- 7-15-13:10  0  0 17  0  0  2  2  7  6  0
+     36 - 84                1  62- 65 : 76/ 76 11- 7-15-13:10  0  0 17  0  0  2  2  7  6  0
+                            2  66- 68 : 80/ 80 11- 7-15-13:10  0  0 17  0  0  2  3  7  6  0
+                            3  69- 70 : 82/ 66 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            4  71- 72 : 84/-14 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            5  73- 75 : 86/ 54 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            6  76- 78 : 89/ 62 11- 7-15-13:10  0  0 18  0  0  2  2  7  6  0
+                            7  79- 82 : 93/ -8 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                            8  83- 87 : 97/ 26 11- 7-15-13:10  0  0 18  0  0  2  2  7  6  0
+                            9  88-127 :103/-18 11- 7-15-13:10  0  0 18  0  0  2  3  7  6  0
+                           10   0- 38 : 48/  2 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           11  39- 44 : 54/ -4 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           12  45- 50 : 60/-10 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           13  51- 56 : 66/ -4 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           14  57- 62 : 72/-12 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           15  63- 68 : 78/ 32 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           16  69- 74 : 84/-12 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           17  75- 80 : 90/ 32 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           18  81- 86 : 96/-12 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+                           19  87-127 :102/ 34 11- 7-15-13:10  0  0  0  0  0  0  0  7  6  0
+46 Voice Pad            12  0   0- 47 : 57/ -8 15- 0- 0-14: 0  0  0 18  0  0  2  2  7  5  0
+     36 - 84                1  48- 53 : 62/-30 13- 0- 0-16: 0  0  0 18  0  0  2  2  7  5  0
+                            2  54- 59 : 69/-10 15- 0- 0-15: 0  0  0 18  0  0  2  3  7  5  0
+                            3  60-127 : 74/ -4 15- 0- 0-15: 0  0  0 18  0  0  2  3  7  5  0
+                            4   0-127 : 77/120 16- 0- 0-13: 0  0  0 19  0  0  2  3  7  5  0
+```
+
+*[p. 378]*
+
+### \<PIANO\> Piano set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 PIANO                 2  0   0- 33 : 52/-86 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7 16
+                            1  34- 40 : 59/-82 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7 16
+                            2  41- 48 :65/-106 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7 16
+                            3  49- 55 : 73/ 98 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7  0
+                            4  56- 62 : 80/114 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7  0
+                            5  63- 69 : 87/112 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7  0
+                            6  70- 75 : 93/120 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7 16
+                            7  76- 81 : 99/102 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7  0
+                            8  82- 89 :105/112 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7 16
+                            9  90-120 :113/120 31- 0- 8-13: 0  0  0  0  0  0  0  0  4  7  0
+```
+
+### \<METAL\> Heavy metal set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 HEAVY MUTE           12  0   0-127 : 55/100 31-10-17-20: 1  0  0  0  0  0  0  0  0  7  0
+     45 - 64
+ 2 POWER CHORD          12  0   0-127 : 58/100 31- 0- 0-21: 0  0  0  0  0  0  0  0  0  7  0
+     45 - 64
+ 3 ROCK BASS            12  0   0-127 : 76/-20 31- 0- 0-20: 0  0  0  0  0  0  0  0  0  7  0
+     45 - 64
+ 4 PICK SCRATCH         12  0   0-127 : 60/  0 31- 0- 5-25: 0  0  0  0  0  0  0  0  0  7  0
+     48 - 55
+```
+
+*[p. 379]*
+
+\<METAL\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 5 DRUMS                12
+     KICK                   0  36- 36 : 53/  0 31-14-22-16:13  0  0  0  0  0  0  0  0  7  0
+     SNARE                  1  37- 38 : 50/  0 31-13-13-13: 0  0  0  0  0  0  0  0  0  7  0
+     LO TOM                 2  41- 41 : 65/  0 31-15-23-15:14  0  0  0  0  0  0  0  0  7 21
+     HI HAT                 3  42- 42 : 52/  0 31-17-17-17: 0  0  0  0  0  0  0  0  0  6  2
+     MID TOM                4  45- 45 : 66/  0 31-16-16-15: 0  0  0  0  0  0  0  0  0  7  4
+     HI HAT OPEN            5  46- 46 : 56/  0 31-13-11-16: 0  0  0  0  0  0  0  0  0  6  3
+     HI TOM                 6  48- 48 : 64/  0 31-16-16-16: 0  0  0  0  0  0  0  0  0  7  8
+     CRASH1                 7  49- 49 : 57/-80 31-11-11-11: 0  0  0  0  0  0  0  0  0  7 13
+     CRASH2                 8  57- 57 : 64/ 80 31-11-11-12: 0  0  0  0  0  0  0  0  0  7 29
+     RIDE1                  9  51- 51 : 55/  0 31-12-12-13: 0  0  0  0  0  0  0  0  0  7 19
+     RIDE2                 10  59- 59 : 61/  0 31-12-12-13: 0  0  0  0  0  0  0  0  0  6 18
+     CHINA CYM             11  52- 53 : 66/  0 31- 9- 9-10: 0  0  0  0  0  0  0  0  0  7 23
+     COW BELL              12  55- 55 : 68/  0 31-14-14-15: 0  0  0  0  0  0  0  0  0  7  1
+     GONG                  13  60- 60 : 71/-40 31- 0- 6-11: 0  0  0  0  0  0  0  0  0  7  0
+ 6 SOLO GUITAR          12  0   0-127 : 96/  0 31- 0- 0-17: 0  0  0  0  0  0  0  0  0  7  0
+     57 - 81
+ 7 HARMONICS            12  0   0-127 : 62/-90 31- 0- 0-18: 0  0  0 18  0  1  0  3  0  7  0
+     52 - 69
+```
+
+*[p. 380]*
+
+### \<ETHNIC\> Ethnic set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 BAGPIPE               2  0   0- 55 : 65/-16 15- 0- 0-22: 0  1  0 11  0  0  2  0  7  6  0
+     36 - 96                1  56- 59 : 70/-34 15- 0- 0-22: 0  1  0 11  0  0  2  0  7  6  0
+                            2  60- 64 : 74/-30 15- 0- 0-22: 0  1  0 11  0  0  2  0  7  6  0
+                            3  65- 96 : 79/-72 15- 0- 0-22: 0  1  0 11  0  0  2  0  7  6  0
+ 2 BANJO                 2  0   0- 57 :72/-128 31-31- 8-17: 0  0  0  0  0  0  0  0  7  7 16
+     24 - 65                1  58- 67 : 78/112 31-31- 9-17: 0 -1  0  0  0  0  0  0  7  7  0
+                            2  68- 74 : 87/124 31- 0- 9-18: 0 -1  0  0  0  0  0  0  7  7  0
+                            3  75-127 : 94/ 68 31-31- 9-17: 0  0  0  0  0  0  0  0  7  7  0
+ 3 KOTO                  2  0   0-127 : 57/  0 31- 0-12-12: 0  0  0  0  0  0  0  0  6  7  0
+     24 - 65
+ 4 SHAKUHATI             2  0  55- 72 : 81/100 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+     24 - 60                1  73-127 : 71/ 82 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+                            2   0- 54 : 67/-80 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 5 SHAMISEN              2  0   0- 65 :70/-118 31- 0-10-14: 0  0  0  0  0  0  2  0  7  7  0
+     24 - 60                1   0-127 : 84/-16 31- 0-15-11: 0  0  0  0  0  0  2  0  7  7  0
+                            2  76-127 : 88/-48 31- 0-12-14: 0  0  0  0  0  0  0  0  7  7  0
+                            3  66- 75 :74/-116 31- 0-13-14: 0  0  0  0  0  0  0  0  7  7  0
+ 6 KALIMBA               2  0   0- 57 : 55/ 22 31- 0- 8-18: 0  0  0  0  0  0  0  0  7  7  0
+     36 - 96                1  71- 77 : 74/-64 31- 0- 8-18: 0  0  0  0  0  0  0  0  7  7  0
+                            2  58- 63 :60/-118 31- 0- 8-18: 0  0  0  0  0  0  0  0  7  7  0
+                            3  64- 70 : 65/ 64 31- 0- 8-18: 0  0  0  0  0  0  0  0  7  7  0
+                            4  78-127 : 78/-40 31- 0- 8-18: 0  0  0  0  0  0  0  0  7  7  0
+ 7 STEEL DRUM            2  0   0-127 : 80/ 94 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  0
+     36 - 96
+ 8 SITAR                 2  0  72-127 : 91/ 82 31- 0-11-13: 0  0  0  0  0  0  0  0  0  7  0
+     24 - 65                1   0- 71 : 84/106 31- 0-11-13: 0  0  0  0  0  0  0  0  0  7  0
+```
+
+*[p. 381]*
+
+\<ETHNIC\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 9 ACCORDION             2  0   0- 58 : 53/ 10 31- 0- 0-20: 0  0  0  0  0  0  0  0  5  6  0
+                            1  59- 67 : 64/-60 31- 0- 0-20: 0  0  0  0  0  0  0  0  5  6  0
+                            2  68- 77 : 70/-26 31- 0- 0-20: 0  0  0  0  0  0  0  0  5  6  0
+                            3  78-127 : 78/ 32 31- 0- 0-20: 0  0  0  0  0  0  0  0  5  6  0
+10 PERCUSSION            2
+     WADAIKO                0  36- 36 : 57/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  0
+     WADAIKO RIM            1  37- 37 : 58/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  0
+     SHIME TAIKO            2  38- 38 : 59/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 18
+     ATARIGANE              3  39- 39 : 60/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  1
+     HYOUSHIGI              4  40- 40 : 61/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     OHKAWA                 5  41- 41 : 62/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  1
+     TSUZUMI                6  43- 43 : 64/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  1
+     BEND GONG              7  47- 47 : 68/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  0
+     UDO SHORT              8  51- 51 : 72/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     UDO LONG               9  52- 52 : 73/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     TABLA NA              10  58- 58 : 79/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 19
+     TABLA TUN             11  59- 59 : 80/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 18
+     TABLA GE              12  60- 60 : 81/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 17
+     TIMBALES LOW          13  67- 67 : 88/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  0
+     TIMBALES HI           14  69- 69 : 90/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  1
+     BONGO HI              15  71- 71 : 92/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     BONGO LOW             16  72- 72 : 93/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     SURDO OPEN            17  81- 81 :102/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 18
+     SURDO MUTE            18  82- 82 :103/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 18
+     AGOGO HI              19  84- 84 :105/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 18
+     AGOGO LOW             20  85- 85 :106/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 18
+     WHISTLE HI            21  87- 87 :108/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  2
+     WHISTLE LOW           22  88- 88 :109/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  2
+     CUICA MUTE            23  89- 89 :110/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 17
+     CUICA OPEN            24  90- 90 :111/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 17
+```
+
+*[p. 382]*
+
+\<ETHNIC\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+     GUIRO SHORT           25  93- 93 :114/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     GUIRO LONG            26  94- 94 :115/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     WOOD BLOCK HI         27  98- 98 :119/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  1
+     WOOD BLOCK LOW        28  99- 99 :120/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7  2
+     CONGA HI MUTE         29  75- 75 : 87/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 19
+     CONGA HI OPEN         30  74- 74 : 86/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 19
+     CONGA LOW             31  76- 76 : 88/  0 31- 0- 0-10: 0  0  0  0  0  0  0  0  7  7 19
+```
+
+### \<MBOXPO\> Music box/pipe organ set
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 Music Box             2  0   0- 96 : 81/-10 31- 0- 8-12: 0  0  0 11  0  0  2  0  7  7  0
+ 2 Pipe Organ           12  0   0- 54 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+                            1  55- 65 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+                            2  66-127 : 72/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+```
+
+### \<EXTRA1\> Extra set 1
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 Orche.Hit 1           2  0   0-127 : 84/  0 31-12-18-28:10  0  0  0  0  0  0  0  7  7  0
+ 2 Orche.Hit 2           2  0   0-127 : 84/  0 31- 0- 0-24: 0  0  0  0  0  0  0  0  7  7  0
+ 3 Orche.Hit 3           2  0   0-127 : 84/  0 31- 0- 0-24: 0  0  0  0  0  0  0  0  7  7  0
+ 4 Orche.Hit 4           2  0   0-127 : 84/  0 31- 0- 0-22: 0  0  0  0  0  0  0  0  7  7  0
+ 5 Orche.Hit 5           2  0   0-127 : 84/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+ 6 Orche.Hit 6           2  0   0-127 : 84/  0 31- 0- 0-23: 0  0  0  0  0  0  0  0  7  7  0
+ 7 Orche.Hit 7           2  0   0-127 : 84/  0 31- 0- 0-22: 0  0  0  0  0  0  0  0  7  7  0
+```
+
+*[p. 383]*
+
+\<EXTRA1\>
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 8 Cembalo               2  0   0- 40 : 57/  0 31- 8- 9-16:10  0  0  0  0  0  0  0  7  7  0
+                            1  41- 53 : 58/  0 31- 9- 7-20: 5  0  0  0  0  0  0  0  7  7  0
+                            2  54- 65 : 71/  0 31- 9-11-20:13  0  0  0  0  0  0  0  7  7  0
+                            3  66- 81 : 86/  0 31-11-13-21:17  0  0  0  0  0  0  0  7  7  0
+                            4  82-127 : 95/  0 31-10- 9-20:19  0  0  0  0  0  0  0  7  7  0
+ 9 Harmonica             2  0   0-127 : 84/  0 31- 0- 0-27: 0  0  0  0  0  0  0  0  7  7  0
+10 Oboe                  2  0   0- 52 : 71/  0 31- 0- 0-21: 0  0  0  0  0  0  0  0  7  7  0
+                            1  53- 64 : 83/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+                            2  65-127 : 95/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+11 Cow Bell              2  0   0-127 : 60/  0 31- 0- 0-21: 0  0  0  0  0  0  0  0  7  7  0
+12 Gun                   2  0   0-127 : 84/  0 31- 0- 0-19: 0  0  0  0  0  0  0  0  7  7  0
+```
+
+### \<EXTRA2\> Extra set 2
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 Trombone             12  0   0- 45 : 64/  0 27- 0- 0-20: 0  0  0 17  0  0  2  1  7  7  0
+                            1  46- 57 : 76/  0 31- 0- 0-25: 0  0  0 17  0  0  2  1  7  7  0
+                            2  58-127 : 88/  0 31- 0- 0-31: 0  0  0 17  0  0  2  1  7  7  0
+ 2 Trumpet              12  0   0- 60 : 79/  0 31- 0- 0-19: 0  0  0 18  0  0  2  2  7  7  0
+                            1  61- 72 : 91/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+                            2  73-127 :103/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+ 3 Big Brass            12  0   0- 43 : 72/  0 31- 0- 0-18: 0  0  0  0  0  0  0  0  7  7  0
+                            1  44- 55 : 90/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+                            2  56-127 :102/  0 31- 0- 0-20: 0  0  0  0  0  0  0  0  7  7  0
+ 4 Over Drive Guitar    12  0   0- 45 : 64/  0 31- 0- 9-20:12  0  0  0  0  0  0  0  7  7  0
+                            1  46- 57 : 76/  0 31- 0- 9-20:12  0  0  0  0  0  0  0  7  7  0
+                            2  58-127 : 88/  0 31- 0- 9-20:12  0  0  0  0  0  0  0  7  7  0
+```
+
+*[p. 384]*
+
+### \<EXTRA3\> Extra set 3
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 LOOP150A              2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 2 LOOP150B              2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 3 LOOP150C              2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 4 LOOP163               2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 5 LOOP169               2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+```
+
+**About LOOP**
+
+A LOOP voice keeps sounding while it is in the Note On state, so to stop it, cut it with Note Off. For example, when the MML "%\<damper switch\>" is set to "1", no Note Off is issued, so as long as that state continues the voice keeps sounding.
+
+The tempo of every LOOP is set to match at Note No. 60. To make the tempo faster or slower than that, change the Note No. Raising it by one octave doubles the tempo, and lowering it by one octave halves it.
+
+### \<EXTRA4\> Extra set 4
+
+```
+No Voice Name           Bd Ly  sn- en : bn/ ft AR-DR-SR-RR:SL KS RE LF AW AS PW PS MX DS DP
+   ( Layer Name )
+ 0 BEEP                 12  0   0-127 : 72/ 44 15-14- 0-15: 0  0  0  0  0  0  1  0  0  7  0
+ 1 TECHNO SE 1           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 2 TECHNO SE 2           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 3 TECHNO SE 3           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 4 TECHNO SE 4           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 5 TECHNO SE 5           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 6 TECHNO SE 6           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 7 TECHNO SE 7           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 8 TECHNO SE 8           2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+ 9 LOOP149A              2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+10 LOOP149B              2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+11 LOOP201               2  0   0-127 : 72/  0 31- 0- 0-31: 0  0  0  0  0  0  0  0  7  7  0
+```
+
+*[p. 385]*
+
+### \<GM_FM1\> GM FM set 1 to \<GM_FM4\> GM FM set 4
+
+There are four FM sound source files in GM order, numbered 1 to 4. The voice names are the same in every set; the parameters (the sounds) differ.
+
+| No. | Voice name |
+|---|---|
+| 000 | Acoustic Grand Piano |
+| 001 | Bright Acoustic Piano |
+| 002 | Electric grand Piano |
+| 003 | Honky Tonk Piano |
+| 004 | Eiectric Piano 1 (sic) |
+| 005 | Electric Piano 2 |
+| 006 | Harpsichord |
+| 007 | Clavinet |
+| 008 | Celesta |
+| 009 | Glockenspiel |
+| 010 | Music Box |
+| 011 | Vibraphone |
+| 012 | Marimba |
+| 013 | Xylophone |
+| 014 | Tubular bells |
+| 015 | Dulcimer |
+| 016 | Drawbar Organ |
+| 017 | Percussive Organ |
+| 018 | Rock Organ |
+| 019 | Church Organ |
+| 020 | Reed Organ |
+| 021 | Accordion |
+| 022 | Harmonica |
+| 023 | Tango Accordion |
+| 024 | Nylon Accustic Guitar (sic) |
+| 025 | Steel Acoustic Guitar |
+| 026 | Jazz Electric Guitar |
+| 027 | Ciean Electric Guitar (sic) |
+| 028 | Muted Electric Guitar |
+| 029 | Overdrive Guitar |
+| 030 | Distorted Guitar |
+| 031 | Guitar Harmonics |
+| 032 | Acoustic Bass |
+| 033 | Electric Fingered Bass |
+| 034 | Electric Picked Bass |
+
+*[p. 386]*
+
+| No. | Voice name |
+|---|---|
+| 035 | Fretless Bass |
+| 036 | Slap Bass 1 |
+| 037 | Slap Bass 2 |
+| 038 | Syn Bass 1 |
+| 039 | Syn Bass 2 |
+| 040 | Violin |
+| 041 | Viola |
+| 042 | Cello |
+| 043 | Contrabass |
+| 044 | Tremolo Strings |
+| 045 | Pizzicato Strings |
+| 046 | Orchestral Harp |
+| 047 | Timpani |
+| 048 | String Ensemble 1 |
+| 049 | String Ensemble 2 (Slow) |
+| 050 | Syn Strings 1 |
+| 051 | Syn Strings 2 |
+| 052 | Choir Aahs |
+| 053 | Voice Oohs |
+| 054 | Syn Choir |
+| 055 | Orchestral Hit |
+| 056 | Trumpet |
+| 057 | Trombone |
+| 058 | Tuba |
+| 059 | Muted Trumpet |
+| 060 | French Horn |
+| 061 | Brass Section |
+| 062 | Syn Brass 1 |
+| 062 (sic) | Syn Brass 2 |
+| 064 | Soprano Sax |
+| 065 | Alto Sax |
+| 066 | Tenor Sax |
+| 067 | Baritone Sax |
+| 068 | Oboe |
+| 069 | English Horn |
+| 070 | Bassoon |
+| 071 | Clarinet |
+| 072 | Piccolo |
+| 073 | Flute |
+
+*[p. 387]*
+
+| No. | Voice name |
+|---|---|
+| 074 | Recorder |
+| 075 | Pan Flute |
+| 076 | Bottle Blow |
+| 077 | Shakuhachi |
+| 078 | Whistle |
+| 079 | Ocarina |
+| 080 | Syn Square Wave |
+| 081 | Syn Sawtooth Wave |
+| 082 | Syn Calliope |
+| 083 | Syn Chiff |
+| 084 | Syn Charang |
+| 085 | Syn Voice |
+| 086 | Syn Fifths Sawtooth Wave |
+| 087 | Syn Bass & Lead |
+| 088 | New Age Syn Pad |
+| 089 | Warm Syn Pad |
+| 090 | Polysynth Syn Pad |
+| 091 | Choir Syn Pad |
+| 092 | Bowed Syn Pad |
+| 093 | Metal Syn Pad |
+| 094 | Halo Syn Pad |
+| 095 | Sweep Syn Pad |
+| 096 | SFX Rain |
+| 097 | SFX Soundtrack |
+| 098 | SFX Crystal |
+| 099 | SFX Atmosphere |
+| 100 | SFX Brightness |
+| 101 | SFX Goblins |
+| 102 | SFX Echoes |
+| 103 | SFX Sci-fi |
+| 104 | Sitar |
+| 105 | Banjo |
+| 106 | Shamisen |
+| 107 | Koto |
+| 108 | Kalimba |
+| 109 | Bag Pipe |
+| 110 | Fiddle |
+| 111 | Shanai |
+| 112 | Tinkle Bell |
+
+*[p. 388]*
+
+| No. | Voice name |
+|---|---|
+| 113 | Agogo |
+| 114 | Steel Drums |
+| 115 | Woodblock |
+| 116 | Taiko Drum |
+| 117 | Melodic Tom |
+| 118 | Syn Drum |
+| 119 | Reverse Cymbal |
+| 120 | Guitar Fret Noise |
+| 121 | Breath Noise |
+| 122 | Seashore |
+| 123 | Bird Tweet |
+| 124 | Telephone Ring |
+| 125 | Helicopter |
+| 126 | Applause |
+| 127 | Gun Shot |
 
 # Appendix
 
