@@ -205,6 +205,261 @@ const COMMANDS = {
     summary: "Assignment; LET can be left out. A fixed-point variable holds -&H1FFFF.FFFC to +&H1FFFF.FFFC, beyond which you get Overflow; mixing strings and numbers gives Type mismatch.",
     source: "Ref. p. 54",
   },
+  LIST: {
+    syntax: "LIST [<start line>][{,|-}[<end line>]]\nLIST .",
+    summary: "Direct command. Lists lines 1-99999 in the range; with no comma or hyphen only the start line; LIST . shows the last line used. Nothing is shown if end comes before start. Ctrl+S or Pause pauses, Ctrl+C stops, Ctrl+E or Up slows down, Ctrl+X or Down speeds up.",
+    source: "Ref. p. 55",
+  },
+  LOCATE: {
+    syntax: "LOCATE [<X character position>][,<Y character position>]",
+    summary: "Moves the text cursor, 0-127 each, measured from the top left (0,0) of the area set by WIDTH. Affects where PRINT, PRINT USING and INPUT write.",
+    source: "Ref. pp. 55-56",
+  },
+  LOCK: {
+    syntax: "LOCK",
+    summary: "Holds back ON INTERVAL and ON TIMER subroutine calls until UNLOCK. A timer that fires meanwhile is kept and delivered at UNLOCK (only the last one for an interval timer); interval timers keep counting. Keep LOCK...UNLOCK short.",
+    source: "Ref. p. 56",
+  },
+  UNLOCK: {
+    syntax: "UNLOCK",
+    summary: "Ends a LOCK: interrupt subroutines can run again, and any held back are delivered.",
+    source: "Ref. p. 56",
+  },
+  LOG: {
+    syntax: "LOG(<numeric expression>)",
+    summary: "Natural logarithm, returned as float. The argument must be above 0.",
+    source: "Ref. pp. 56-57",
+  },
+  'MID$': {
+    syntax: "MID$(<target string>,<position>[,<length>])\nMID$(<string variable>,<position>[,<length>])=<replacement string>",
+    summary: "As a function: the characters from position (counting from 1) for length, or to the end; \"\" if position is past the end. As a statement: overwrites that part of the variable with the replacement, appending if position is past the end; a left-out or 0 length means the replacement's length.",
+    source: "Ref. pp. 57-58",
+  },
+  NEW: {
+    syntax: "NEW",
+    summary: "Direct command. Erases the program and clears variables and stacks, closing open files. The user area and file areas are kept.",
+    source: "Ref. p. 58",
+  },
+  NEXT: {
+    syntax: "NEXT [<numeric variable>[,<numeric variable>...]]",
+    summary: "Ends a FOR loop: adds the step and tests the end value here. With no variable it closes the most recent FOR; naming an outer loop's variable is an error. In direct mode the whole loop must be on the one line.",
+    source: "Ref. p. 59",
+  },
+  ON: {
+    syntax: "ON ERROR GOTO {{<line>|<label>}|0}\nON <expression> GOSUB [{<line>|<label>}][,[{<line>|<label>}]...]\nON <expression> GOTO [{<line>|<label>}][,[{<line>|<label>}]...]\nON INTERVAL[(<timer number>)] GOSUB {<line>|<label>}\nON TIMER[(<countdown timer number>)] GOSUB {<line>|<label>}\nON <numeric expression> RESTORE [{<line>|<label>}][,[{<line>|<label>}]...]",
+    summary: "ON ERROR GOTO sets an error handler (0 turns it off); an error inside the handler stops the program, RESUME re-arms it, and running off the end gives No RESUME. ON n GOSUB/GOTO/RESTORE picks the nth target (0-131071; 0, too big or a left-out target goes on to the next statement; negative is Illegal function call). ON INTERVAL sets the handler for interval timer 0-23 and ON TIMER for countdown timer 0-7; both start disabled, and ON INTERVAL resets the interval to 60.",
+    source: "Ref. pp. 59-64",
+  },
+  PAD: {
+    syntax: "PAD(<function>[,<item>])",
+    summary: "Control pad ports. Function -1 / -2: number of devices on port 1 / 2 (0 if none). 0-14 = devices on port 1, 15-29 on port 2. Item 0 = device ID (&H00 digital, &H10 analog, &H20 pointing, &H30 keyboard, &HFF none); 1 = buttons held; 2 = buttons newly pressed (cleared on read, so copy it to a variable); 3-6 analog values. Pad bits: right 15, left 14, down 13, up 12, Start 11, A 10, C 9, B 8, R 7, X 6, Y 5, Z 4, L 3 (see the @PAD_ constants).",
+    source: "Ref. pp. 64-67",
+  },
+  PEEK: {
+    syntax: "PEEK(<block>,<address>)",
+    summary: "One byte, 0-255, from the user area reserved with CLEAR.",
+    source: "Ref. p. 67",
+  },
+  'PEEK$': {
+    syntax: "PEEK$(<block>,<address>,<length>)",
+    summary: "A string of length bytes from the user area reserved with CLEAR; it must not run past the area.",
+    source: "Ref. p. 68",
+  },
+  POKE: {
+    syntax: "POKE <block>,<address>,{<numeric expression>|<string expression>}[,{<numeric expression>|<string expression>}...]",
+    summary: "Writes into the user area reserved with CLEAR: each number is one byte (0-255), each string character one byte (its code). E.g. POKE 0,0,128,64,32,16 or POKE 0,&H3800,BN$.",
+    source: "Ref. pp. 68-69",
+  },
+  USING: {
+    syntax: "PRINT USING <format string>;<expression>[{,|;}<expression>...][{,|;}]",
+    summary: "Prints values to a format. # digit position (a % in front if the number doesn't fit; extra decimals rounded); . decimal point; + sign; & & a string field as wide as the ampersands and spaces between them; @ a string of any length; ! the first character of a string; _ prints the next format character literally. , and ; don't move the cursor here; the format repeats if there are more values. A trailing , or ; keeps the cursor on the line. E.g. PRINT USING \"#####.###\";1000*A#.",
+    source: "Ref. pp. 70-71",
+  },
+  READ: {
+    syntax: "READ <variable>[,<variable>...]",
+    summary: "Reads the next DATA items into the variables. An empty item gives 0 or \"\". Running out gives Out of DATA, and the wrong type gives Type mismatch.",
+    source: "Ref. p. 72",
+  },
+  POS: {
+    syntax: "POS(<number>)",
+    summary: "Text cursor position (fixed point): 0 = X (column), 1 = Y (row).",
+    source: "Ref. p. 69",
+  },
+  PRINT: {
+    syntax: "PRINT [<expression>[[{,|;}]<expression>[[{,|;}]<expression>]...]][{,|;}]\n? ...",
+    summary: "Prints numbers or strings on the text screen. ; continues at the cursor (also assumed when no separator is given); , moves to the next tab stop. A trailing , or ; keeps the cursor on the line, otherwise it goes to the start of the next line. Control characters in a string act as with CHR$ (e.g. CHR$(&H0C) clears the screen). ? is short for PRINT: ?\"ABC\".",
+    source: "Ref. pp. 69-70",
+  },
+  RANDOMIZE: {
+    syntax: "RANDOMIZE <seed>",
+    summary: "Starts a new random sequence from the seed, so RND gives the same numbers every time. The sequence is otherwise renewed at start-up, RUN and LOAD.",
+    source: "Ref. p. 71",
+  },
+  RESTORE: {
+    syntax: "RESTORE [{<line>|<label>}]",
+    summary: "Makes the next READ start at the first DATA at or after the line or label (the line itself need not hold DATA); from the first DATA in the program if left out.",
+    source: "Ref. pp. 73-74",
+  },
+  RESUME: {
+    syntax: "RESUME [{NEXT|<line>|<label>}]",
+    summary: "Ends an ON ERROR handler: retries the failing statement, or with NEXT goes on after it, or jumps to a line or label. Resets ERR and ERL to 0. A line number can't be given in direct mode (Illegal direct).",
+    source: "Ref. p. 74",
+  },
+  RETURN: {
+    syntax: "RETURN",
+    summary: "Returns from a subroutine to the statement after its GOSUB.",
+    source: "Ref. p. 74",
+  },
+  'RIGHT$': {
+    syntax: "RIGHT$(<target string>,<numeric expression>)",
+    summary: "The last n characters of the string; the whole string if n is longer, \"\" if n is 0.",
+    source: "Ref. p. 75",
+  },
+  RND: {
+    syntax: "RND(<upper limit>)",
+    summary: "A random whole number from 0 to the limit minus 1: RND(10) gives 0-9, RND(1) always 0. Use RANDOMIZE for a repeatable sequence.",
+    source: "Ref. pp. 75-76",
+  },
+  RUN: {
+    syntax: "RUN [{<line>|<label>}]",
+    summary: "Runs the program, from the start or from a line or label. First zeroes numbers, empties strings, undoes DIMs, resets ERL/ERR, READ position and FOR/IF nesting, closes all files, turns off INTERVAL and TIMER, clears PAD trigger bits, ends USERDATA mode and drops the sound cache.",
+    source: "Ref. p. 76",
+  },
+  SGN: {
+    syntax: "SGN(<numeric expression>)",
+    summary: "-1, 0 or 1 for a negative, zero or positive value, in the argument's type.",
+    source: "Ref. p. 77",
+  },
+  SHIFT: {
+    syntax: "SHIFT",
+    summary: "Saturn keyboard modifier keys as bits: 0/1 left/right Shift, 2/3 left/right Ctrl, 4/5 left/right Alt, 6 Caps Lock, 7 Katakana/Hiragana. BASTERM's virtual keyboard sends Shift as &H3 and Ctrl as &HC (no left/right). Three or more keys at once, or a busy CPU, can give wrong bits. E.g. IF SHIFT AND 3 THEN PRINT \"Shift ON\".",
+    source: "Ref. pp. 77-78",
+  },
+  SIN: {
+    syntax: "SIN(<angle>)",
+    summary: "Sine, returned as float; the angle is in radians (2\u03c0 = 360\u00b0).",
+    source: "Ref. pp. 78-79",
+  },
+  SKCLOSE: {
+    syntax: "SKCLOSE",
+    summary: "Closes the software keyboard if it is on screen. It can still be opened again from the pad.",
+    source: "Ref. p. 79",
+  },
+  'SPACE$': {
+    syntax: "SPACE$(<length>)",
+    summary: "A string of that many spaces; \"\" for 0.",
+    source: "Ref. p. 79",
+  },
+  SQR: {
+    syntax: "SQR(<numeric expression>)",
+    summary: "Square root, as float. A negative argument gives Illegal function call.",
+    source: "Ref. p. 80",
+  },
+  STOP: {
+    syntax: "STOP",
+    summary: "Stops the program; CONT resumes it.",
+    source: "Ref. p. 80",
+  },
+  'STR$': {
+    syntax: "STR$(<numeric expression>[,<suppress>])",
+    summary: "Number to decimal string, with a leading space if not negative or \"-\" if negative. Suppress pads with 0s: 0 = none (default), 1 = integer part, 2 = fraction, 3 = both. STR$(123.25,3) gives \" 000123.2500\".",
+    source: "Ref. pp. 80-81",
+  },
+  'STRING$': {
+    syntax: "STRING$(<count>,{<numeric expression>|<string expression>})",
+    summary: "Repeats one character: a code (low 8 bits) or the first character of a string. STRING$(5,&H41) = \"AAAAA\". Use STRW$ for longer patterns.",
+    source: "Ref. pp. 81-82",
+  },
+  'STRW$': {
+    syntax: "STRW$(<count>,{<numeric expression>|<string expression>})",
+    summary: "Repeats a whole string, or a 16-bit value (0-65535) as two bytes, high byte first: STRW$(5,&H4142) = \"ABABABABAB\". Handy for RGB data: PALETTE ,STRW$(32,RGB(3,0,0)+&H8000).",
+    source: "Ref. p. 82",
+  },
+  SWAP: {
+    syntax: "SWAP <variable 1>,<variable 2>",
+    summary: "Exchanges two variables of the same type; for arrays, just the one element named.",
+    source: "Ref. p. 83",
+  },
+  TAN: {
+    syntax: "TAN(<angle>)",
+    summary: "Tangent, as float; the angle is in radians.",
+    source: "Ref. p. 83",
+  },
+  TIMER: {
+    syntax: "TIMER[(<countdown timer number>)] ON [,<time>]\nTIMER[(<countdown timer number>)] <time>\nTIMER[(<countdown timer number>)] OFF",
+    summary: "Countdown timers 0-7 (0 if left out), in 1/60 s. ON allows the interrupt and starts the count (a time resets it); a bare time changes only the time; OFF blocks it (not queued). Fires once, unlike INTERVAL; 0 stops the count. Set the handler with ON TIMER GOSUB first. Timers that finish together are served round-robin, one interrupt per BASIC statement.",
+    source: "Ref. pp. 84-85",
+  },
+  USERDATA: {
+    syntax: "USERDATA [<block>,<offset>,]\"<string>\",<switch>\nUSERDATA <block>,<offset>\nUSERDATA END\nUSERDATA(<item>)",
+    summary: "Keeps DATA in the user area (block 0-4095, offset 0-&H1FFFF): form 1 stores items like a DATA line (switch 1 keeps quotes, 0 drops them) and points READ there; form 2 reads DATA saved earlier with BSAVE and loaded with BLOAD; END goes back to normal DATA. CLEAR, POKE or a BLOAD elsewhere also end it. USERDATA(0-3) gives start block, start offset, end block, end offset, ready for BSAVE.",
+    source: "Ref. pp. 86-88",
+  },
+  VAL: {
+    syntax: "VAL(<string expression>)",
+    summary: "String to number: decimal, &H hex or &B binary (sign before the prefix). Spaces are skipped; it stops at the first other character; 0 if nothing converts.",
+    source: "Ref. p. 89",
+  },
+  VERSION: {
+    syntax: "VERSION",
+    summary: "The BASIC version number (fixed point).",
+    source: "Ref. p. 89",
+  },
+  'WADD$': {
+    syntax: "WADD$(<string expression>,<add value>[,<start position>])",
+    summary: "Treats the string as 16-bit words (high byte first; an odd last character is dropped), starting at word <start position> (1 or more), and returns the result as a string. Adds the value (low 16 bits) to each word: WADD$(\"AAAAAAAA\",&H0102) = \"BCBCBCBC\".",
+    source: "Ref. p. 90",
+  },
+  'WANDOR$': {
+    syntax: "WANDOR$(<source string>,<AND value>,<OR value>[,<start position>])",
+    summary: "Treats the string as 16-bit words (high byte first; an odd last character is dropped), starting at word <start position> (1 or more), and returns the result as a string. ANDs then ORs each word: WANDOR$(\"AbCdEfGh\",&H5F5F,&H2020) = \"abcdefgh\".",
+    source: "Ref. pp. 90-91",
+  },
+  WIDTH: {
+    syntax: "WIDTH [<left>],[<top>][,<right>][,<bottom>]",
+    summary: "Sets the text window, 0-127 each, e.g. WIDTH 0,20,63,24. A wide window can run off the TV; scroll it with SCROLL. SCREEN resets it to 1,1,38,26, and Ctrl+P while editing resets it to the system-screen setting.",
+    source: "Ref. p. 91",
+  },
+  'WMUL$': {
+    syntax: "WMUL$(<source string>,<multiplier>[,<start position>])",
+    summary: "Treats the string as 16-bit words (high byte first; an odd last character is dropped), starting at word <start position> (1 or more), and returns the result as a string. Multiplies each word (low 16 bits kept): WMUL$(\"12\",2) = \"bd\", WMUL$(\"bd\",1/2) = \"12\".",
+    source: "Ref. pp. 91-92",
+  },
+  'WXOR$': {
+    syntax: "WXOR$(<source string>,<XOR value>[,<start position>])",
+    summary: "Treats the string as 16-bit words (high byte first; an odd last character is dropped), starting at word <start position> (1 or more), and returns the result as a string. XORs each word: WXOR$(\"AAAAAAAA\",&H0304) = \"BEBEBEBE\".",
+    source: "Ref. p. 92",
+  },
+  XATN: {
+    syntax: "XATN(<x ratio>,<y ratio>)",
+    summary: "Fast fixed-point arctangent, from 0 up to 1 where 1.000 = 360\u00b0: XATN(0,1) = .25, XATN(-1,0) = .5. Returns 0 for (0,0).",
+    source: "Ref. p. 93",
+  },
+  XCOS: {
+    syntax: "XCOS(<angle>)",
+    summary: "Fast fixed-point cosine. The angle is in turns (1.000 = 360\u00b0; the whole-number part is ignored); the result is -1 to 1.",
+    source: "Ref. p. 93",
+  },
+  XDIST: {
+    syntax: "XDIST(<XP>,<YP>[,<ZP>])",
+    summary: "Distance from the origin, SQR(XP^2+YP^2[+ZP^2]), in fixed point; over &H1FFFF gives Overflow. XDIST(10000,10000,10000) = 17320.508.",
+    source: "Ref. p. 94",
+  },
+  XSIN: {
+    syntax: "XSIN(<angle>)",
+    summary: "Fast fixed-point sine. The angle is in turns (1.000 = 360\u00b0; the whole-number part is ignored); the result is -1 to 1.",
+    source: "Ref. p. 94",
+  },
+  XSQR: {
+    syntax: "XSQR(<numeric expression>)",
+    summary: "Square root; a negative argument gives Illegal function call.",
+    source: "Ref. p. 95",
+  },
+  XTAN: {
+    syntax: "XTAN(<angle>)",
+    summary: "Fast fixed-point tangent. The angle is in turns (1.000 = 360\u00b0; the whole-number part is ignored).",
+    source: "Ref. p. 95",
+  },
   FILES: {
     syntax: 'FILES "<device>:[<name>]"',
     summary: 'Lists files on BRAM:, CRAM:, FD0:, FD1:, COM: or CD:, then "Free size n / m file blocks". Wildcards ? and * are allowed; give the extension here.',
@@ -241,9 +496,9 @@ const COMMANDS = {
     source: 'Tut. p. 53',
   },
   RENUM: {
-    syntax: 'RENUM',
-    summary: 'Renumbers the program from 100 in steps of 10 and updates GOTO/GOSUB targets.',
-    source: 'Tut. p. 34',
+    syntax: "RENUM [<new number>][,<old number>][,<step>]",
+    summary: "Direct command. Renumbers from line <old number> (all lines if left out) to start at <new number> (100) in steps of <step> (10), all 1-99999. Not allowed if lines would collide or go past 99999. E.g. RENUM 1000,320 or RENUM ,,100.",
+    source: "Ref. p. 73; Tut. p. 34",
   },
   RGB: {
     syntax: 'RGB(r,g,b)',

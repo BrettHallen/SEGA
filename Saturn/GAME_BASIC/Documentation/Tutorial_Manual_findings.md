@@ -280,9 +280,9 @@ These pages are the language definition, so they settle several things the sampl
 
 ---
 
-## 10a. Reference Manual command pages (Ref. pp. 23–54)
+## 10a. Reference Manual section 1.1, general commands (Ref. pp. 23–95)
 
-Scans 25–58 (Ref. p. = scan − 4). Scan 26 is blank.
+Scans 25–99 (Ref. p. = scan − 4), all in order. Section 1.1 ends on p. 95 (XTAN); section 1.2, file commands, starts on p. 96. Scan 26 is blank. Scan 392 is a byte-for-byte copy of scan 59 (p. 55).
 
 **Notation (p. 23).** `[]` optional; `<>` required, unless inside an outer `[]`; `{a|b}` choose one (in the sound chapters `{}` means "can repeat"). When a middle parameter is left out and a later one follows, keep its comma. These rules are what `src/reference.js` follows.
 
@@ -328,6 +328,42 @@ Scans 25–58 (Ref. p. = scan − 4). Scan 26 is blank.
 | INTERVAL | `INTERVAL[<n>] ON [,<interval>]`, `INTERVAL[(<n>)] <interval>`, `INTERVAL[(<n>)] OFF` | Timers 0–23, 1/60 s units | 51–53 |
 | LEFT$ / LEN | `LEFT$(<string>,<n>)` / `LEN(<string>)` | | 53–54 |
 | LET | `[LET] <var>=<expression>` | Fixed-point range ±&H1FFFF.FFFC | 54 |
+| LIST | `LIST [<start>][{,|-}[<end>]]` / `LIST .` | Direct only; same Ctrl keys as FIND | 55 |
+| LOCATE | `LOCATE [<X>][,<Y>]` | 0–127, from the WIDTH area's top left | 55–56 |
+| LOCK / UNLOCK | `LOCK` / `UNLOCK` | Holds back ON INTERVAL / ON TIMER calls | 56 |
+| LOG | `LOG(<numeric expression>)` | Float, argument > 0 | 56–57 |
+| MID$ | `MID$(<string>,<pos>[,<len>])` and `MID$(<var>,<pos>[,<len>])=<string>` | Function and statement | 57–58 |
+| NEW | `NEW` | Direct only; keeps user and file areas | 58 |
+| NEXT | `NEXT [<var>[,<var>...]]` | | 59 |
+| ON … | `ON ERROR GOTO {<line>|<label>|0}`, `ON <expr> GOSUB/GOTO/RESTORE …`, `ON INTERVAL[(<n>)] GOSUB …`, `ON TIMER[(<n>)] GOSUB …` | Interval timers 0–23, countdown timers 0–7 | 59–64 |
+| PAD | `PAD(<function>[,<item>])` | Ports, device IDs, button bits (matches the `@PAD_` constants) | 64–67 |
+| PEEK / PEEK$ / POKE | `PEEK(<block>,<address>)`, `PEEK$(<block>,<address>,<length>)`, `POKE <block>,<address>,{<n>|<string>}[,...]` | User area from CLEAR | 67–68 |
+| POS | `POS(<number>)` | 0 = X, 1 = Y | 69 |
+| PRINT / ? | `PRINT [<expr>[[{,|;}]<expr>...]][{,|;}]` | `,` = next tab stop, `;` = continue; control characters act as with CHR$ | 69–70 |
+| PRINT USING | `PRINT USING <format>;<expr>[{,|;}<expr>...][{,|;}]` | `#` `.` `+` `& &` `@` `!` `_` | 70–71 |
+| READ | `READ <var>[,<var>...]` | | 72 |
+| REM / ' | `{REM|'} [<comment>]` | Not a statement separator: anything after it, `:` included, is comment | 72 |
+| RANDOMIZE | `RANDOMIZE <seed>` | | 71 |
+| RENUM | `RENUM [<new>][,<old>][,<step>]` | Direct only; defaults 100, all lines, 10 | 73 |
+| RESTORE | `RESTORE [{<line>|<label>}]` | | 73–74 |
+| RESUME | `RESUME [{NEXT|<line>|<label>}]` | No line number in direct mode | 74 |
+| RETURN | `RETURN` | | 74 |
+| RIGHT$ / RND | `RIGHT$(<string>,<n>)` / `RND(<limit>)` | RND gives 0..limit−1 | 75–76 |
+| RUN | `RUN [{<line>|<label>}]` | Resets variables, files, timers, USERDATA, sound cache | 76 |
+| SGN / SHIFT | `SGN(<n>)` / `SHIFT` | SHIFT bit table for the Saturn keyboard; BASTERM sends Shift = &H3, Ctrl = &HC | 77–78 |
+| SIN / SKCLOSE / SPACE$ | `SIN(<angle>)`, `SKCLOSE`, `SPACE$(<length>)` | | 78–79 |
+| SQR / STOP / STR$ | `SQR(<n>)`, `STOP`, `STR$(<n>[,<suppress>])` | STR$ suppress as BIN$/HEX$ | 80–81 |
+| STRING$ / STRW$ | `STRING$(<count>,{<n>|<string>})`, `STRW$(<count>,{<n>|<string>})` | One character / a whole pattern | 81–82 |
+| SWAP / TAN | `SWAP <var1>,<var2>`, `TAN(<angle>)` | | 83 |
+| TIMER | `TIMER[(<n>)] ON [,<time>]`, `TIMER[(<n>)] <time>`, `TIMER[(<n>)] OFF` | Countdown timers 0–7, one-shot | 84–85 |
+| USERDATA | four forms, plus `USERDATA(<0-3>)` | DATA kept in the user area, for BSAVE/BLOAD | 86–88 |
+| VAL / VERSION | `VAL(<string>)`, `VERSION` | VAL takes `&H` and `&B` | 89 |
+| WADD$ / WANDOR$ / WMUL$ / WXOR$ | `WADD$(<s>,<add>[,<start>])`, `WANDOR$(<s>,<and>,<or>[,<start>])`, `WMUL$(<s>,<mul>[,<start>])`, `WXOR$(<s>,<xor>[,<start>])` | Treat a string as 16-bit words | 90–92 |
+| WIDTH | `WIDTH [<left>],[<top>][,<right>][,<bottom>]` | 0–127; SCREEN resets to 1,1,38,26; Ctrl+P resets to the system setting | 91 |
+| XATN / XCOS / XSIN / XTAN | `XATN(<x>,<y>)`, `XCOS(<angle>)`, `XSIN(<angle>)`, `XTAN(<angle>)` | Fast fixed-point trig; angles in turns (1.000 = 360°) | 93–95 |
+| XDIST / XSQR | `XDIST(<XP>,<YP>[,<ZP>])`, `XSQR(<n>)` | | 94–95 |
+
+Every command in section 1.1 now has a hover entry. `REM` isn't one: the editor treats it as a comment, not a keyword.
 
 **Key codes the Saturn sees (INKEY$, pp. 47–48).** This matters for a live key-send mode. Backspace 8, Tab 9, Home 11, Insert 18, End 24, Esc 27, right 28, left 29, up 30, down 31, Delete 127, F1–F12 224–235 (&HE0–&HEB), Page Up 250, Page Down 251. The manual notes that **F10 can't be sent from BASTERM**. The F-key codes are shared with some graphic characters.
 
@@ -376,6 +412,9 @@ Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 i
 12. The Python sender matches the manual's exact error messages: a new `tools/saturn_link/errors.py` (same table as the extension) replaces the old loose pattern in `link.py`, and `cli.py` adds the code and cause to "The Saturn reported: …". Two tests added (27 Python tests pass).
 13. Reference pp. 33–54 applied to hover help: `DELETE`, `DIM`, `EDIT`, `END`, `ERL`, `ERR`, `ERROR`, `EXP`, `FIND`, `FIX`, `FOR`, `FRAC`, `GOSUB`, `GOTO`, `HEX$`, `HEXBIN$`, `IF`, `INKEY$`, `INPUT`, `INPUT$`, `INSTR`, `INT`, `INTERVAL`, `LEFT$`, `LEN`, `LET` added; `DATE$`, `FKEY`, `FRE` updated (FRE 0 also counts variables; 1–3 are sizes, not free space). `THEN`/`ELSE`/`ENDIF` show the IF entry and `TO`/`STEP` the FOR entry. 50 commands now have syntax.
 14. Show Error Line (Brett's request): **Alt+F6** or the warning button in the editor title runs `saturn_send.py show-error`, which presses F12 (keystroke 07,07) and then types `ERROR` + Enter, with no STOP first so the Saturn keeps its error state. The mock answers `ERROR` by listing a line. One Python test added (28 pass); README updated. Still to test on hardware: whether F12 sent over the link acts like the keyboard's F12.
+15. Reference pp. 55–72 applied to hover help: `LIST`, `LOCATE`, `LOCK`, `UNLOCK`, `LOG`, `MID$` (function and statement), `NEW`, `NEXT`, `ON` (all six forms), `PAD`, `PEEK`, `PEEK$`, `POKE`, `USING` (PRINT USING), `READ`. Scans 73/74 renamed to 74/76 (pp. 70/72). `PRINT` and `POS` added from p. 69 (and `POKE` completed); `RANDOMIZE` waits for p. 71.
+16. Reference pp. 69–89 applied to hover help: `POS`, `PRINT`, `RANDOMIZE`, `RESTORE`, `RESUME`, `RETURN`, `RIGHT$`, `RND`, `RUN`, `SGN`, `SHIFT`, `SIN`, `SKCLOSE`, `SPACE$`, `SQR`, `STOP`, `STR$`, `STRING$`, `STRW$`, `SWAP`, `TAN`, `TIMER`, `USERDATA`, `VAL`, `VERSION` added; `POKE`, `PRINT USING` and `RENUM` completed. 95 commands now have syntax.
+17. Reference pp. 90–95 applied: `WADD$`, `WANDOR$`, `WIDTH`, `WMUL$`, `WXOR$`, `XATN`, `XCOS`, `XDIST`, `XSIN`, `XSQR`, `XTAN`. Section 1.1 is complete: 106 commands have syntax, and 108 keywords from later sections (graphics, sprites, 3D, sound, files) still have only a plain hover.
 
 ---
 
