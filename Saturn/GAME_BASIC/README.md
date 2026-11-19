@@ -10,6 +10,7 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 | [BASTERM](BASTERM) | BASTERM 1.0, the editor and serial terminal, unpacked from `Instbt10.exe`, plus my analysis of it. |
 | [DXFCONV](DXFCONV) | The DXF to BASIC 3D model converters, unpacked from `Instdc10.exe`, with their C source and samples. |
 | [vscode-game-basic](vscode-game-basic) | VS Code extension: highlighting, live checks and Send/Run/Stop/Receive for GAME BASIC, on macOS, Linux and Windows. |
+| [Documentation](Documentation) | The two Japanese manuals as PDFs, English versions and notes on both manuals. |
 | [tools](tools) | `saturn_send.py`, the Python (pyserial) replacement for BASTERM's serial link that the extension uses. Has a mock Saturn for testing without hardware. |
 
 ### WIN_TOOLS_CD
@@ -49,6 +50,18 @@ DXFCONV turns `3DFACE` entities in a DXF model into BASIC `DATA` lines for `SETV
 | `HEADBAS.B` | Small BASIC viewer program that the converters can put in front of the model data |
 | `SAMPLE/` | `ASCII` and `GIRL` example models at every stage (`.DXF`, `.POL`, `.VTX`, `.PNT`, `.B`) |
 | `README.TXT` | Original Japanese documentation (Shift-JIS) |
+
+### Documentation
+GAME BASIC came with two Japanese manuals: the *Tutorial Manual* (チュートリアルマニュアル), and the *Reference Manual* (リファレンスマニュアル) with the full command details.
+
+| File | Description |
+|---|---|
+| [`GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf) | The original Japanese Tutorial Manual (184 pages), including Chapter 3 on BASTERM |
+| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf) | The original Japanese Reference Manual, part 1: the front matter and Chapter 1, up to p. 228 |
+| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.pdf)) | English translation of the Reference Manual, page by page (work in progress) |
+| [`GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.pdf)) | **Start here** for using GAME BASIC in English: a guide in its own words, with page references to both manuals |
+| [`Tutorial_Manual_findings.md`](Documentation/Tutorial_Manual_findings.md) | Notes from the Tutorial Manual for the BASTERM replacement: connecting, controls, what the Saturn prints, and BASTERM's own behaviour |
+| [`Reference_Manual_findings.md`](Documentation/Reference_Manual_findings.md) | Notes from the Reference Manual, chapter by chapter: syntax, limits, error messages and what matters for sending files (work in progress) |
 
 ## Next steps
 - Confirm the protocol on real hardware with a logic analyser; the open questions are listed at the end of `BASTERM/BASTERM_serial_protocol.md`.
