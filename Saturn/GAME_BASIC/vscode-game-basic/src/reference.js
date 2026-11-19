@@ -246,9 +246,9 @@ const COMMANDS = {
     source: "Ref. p. 59",
   },
   ON: {
-    syntax: "ON ERROR GOTO {{<line>|<label>}|0}\nON <expression> GOSUB [{<line>|<label>}][,[{<line>|<label>}]...]\nON <expression> GOTO [{<line>|<label>}][,[{<line>|<label>}]...]\nON INTERVAL[(<timer number>)] GOSUB {<line>|<label>}\nON TIMER[(<countdown timer number>)] GOSUB {<line>|<label>}\nON <numeric expression> RESTORE [{<line>|<label>}][,[{<line>|<label>}]...]",
-    summary: "ON ERROR GOTO sets an error handler (0 turns it off); an error inside the handler stops the program, RESUME re-arms it, and running off the end gives No RESUME. ON n GOSUB/GOTO/RESTORE picks the nth target (0-131071; 0, too big or a left-out target goes on to the next statement; negative is Illegal function call). ON INTERVAL sets the handler for interval timer 0-23 and ON TIMER for countdown timer 0-7; both start disabled, and ON INTERVAL resets the interval to 60.",
-    source: "Ref. pp. 59-64",
+    syntax: "ON ERROR GOTO {{<line>|<label>}|0}\nON <expression> GOSUB [{<line>|<label>}][,[{<line>|<label>}]...]\nON <expression> GOTO [{<line>|<label>}][,[{<line>|<label>}]...]\nON INTERVAL[(<timer number>)] GOSUB {<line>|<label>}\nON TIMER[(<countdown timer number>)] GOSUB {<line>|<label>}\nON <numeric expression> RESTORE [{<line>|<label>}][,[{<line>|<label>}]...]\nON MMLSTAT GOSUB {<line>|<label>}",
+    summary: "ON ERROR GOTO sets an error handler (0 turns it off); an error inside the handler stops the program, RESUME re-arms it, and running off the end gives No RESUME. ON n GOSUB/GOTO/RESTORE picks the nth target (0-131071; 0, too big or a left-out target goes on to the next statement; negative is Illegal function call). ON INTERVAL sets the handler for interval timer 0-23 and ON TIMER for countdown timer 0-7; both start disabled, and ON INTERVAL resets the interval to 60. ON MMLSTAT GOSUB calls the routine (checked each VSYNC) when MML track 0 sends a non-zero \"!\" control value; read it with MMLSTAT(0,0). It arrives about a 32nd note after the note, so place the \"!\" that much early.",
+    source: "Ref. pp. 59-64, 269-270",
   },
   PAD: {
     syntax: "PAD(<function>[,<item>])",
@@ -809,6 +809,61 @@ const COMMANDS = {
     syntax: "VERTEXID(<vertex ID>[,<element>[,<item>]])   (e.g. PRINT VERTEXID(-1))",
     summary: "-1: the next vertex ID after the highest defined, for a new SETVERTEX. For a defined ID: no element = its vertex count (0 = undefined); element 0 to count-1 with item 0, 1 or 2 = that vertex's X, Y or Z. Giving an element for an undefined ID is Undefined vertex. The manual's heading calls it VERTEX. Fractions are dropped.",
     source: "Ref. pp. 226-227",
+  },
+  BEEP: {
+    syntax: "BEEP [0|1]",
+    summary: "No parameter: a short beep (the error sound), waiting until it ends. 1: keep sounding and carry on. 0: stop. Song 0 is the beep, so if EFFECT or SETSONG replaced it, BEEP puts the default back.",
+    source: "Ref. p. 252",
+  },
+  BGM: {
+    syntax: "BGM [<song no>[,<volume>[,<fade-in rate>]]]   (e.g. BGM 5,127,70)",
+    summary: "Plays a SETSONG song on sequence 0, which is kept for BGM so EFFECT can't cut it off. Takes no MML string. Song 0 (BEEP) up to the PLAYINIT song count (default 1). Volume 0-255 (default 127; 128 and up is louder than the waveform, normally keep to 127 or less). Fade-in 0-255, smaller is faster, 0 none (default). Use sequence 0 with PLAYFADE, PLAYSTAT and so on.",
+    source: "Ref. p. 253",
+  },
+  DSP: {
+    syntax: "(1) DSP ON {<tone>,<layer|ALL>,<effector>,<level>}[{...}]\n(2) DSP OFF {<tone>,<layer|ALL>}[{...}]\n(3) DSP ALL ON <effector>,<level>\n(4) DSP ALL OFF   (e.g. DSP ON 38,0,@REV,7)",
+    summary: "Switches the DSP effect on or off per tone layer (tone = MML @ number). Effector (TPROP 70): @REV (0) stereo reverb, @DEL (1) stereo delay, @DST (2) distortion; in single-effector mode (PLAYINIT \"DSP\") always 0. Level (TPROP 71) 0-7: 0 off, 1 -36 dB ... 7 0 dB, in 6 dB steps; keep the mix at 0 dB or less or it distorts. Takes effect at the next note-on. Needs PLAYINIT \"DSP\" or \"DSPEXT\", else an error. Not saved; PLAYINIT/TARG resets it. Bad values can silence the sound: run PLAYINIT, or hot start, save and reset.",
+    source: "Ref. pp. 254-256",
+  },
+  EFFECT: {
+    syntax: "(1) EFFECT [(<numeric var>),][<song no>[,<volume>],]{[#<track>,]\"<MML>\"}[,...]   (up to 16 tracks)\n(2) EFFECT [(<numeric var>),][<song no>[,<volume>]]   (e.g. EFFECT 2,0,\"CDE\" then EFFECT 2)",
+    summary: "Plays MML as a sound effect without waiting; up to 7 at once on sequences 1-7, the one used going into the variable. With a song number the MML is registered and can be replayed by number; volume 0 only registers. -<song no> skips the short start wait (PLAYSTAT may not be 1 at once). Song 0 (BEEP) to the PLAYINIT count. Volume 0-255 (default 127). #track 0-15, any order; tracks start from defaults each time. Write an expression song number in brackets after the variable, e.g. EFFECT (I),(5-4). Overwriting a playing song's MML garbles it.",
+    source: "Ref. pp. 256-259",
+  },
+  EG: {
+    syntax: "EG <tone>,<layer|ALL>,[<AR>][,<DR>][,<SR>][,<RR>][,<SL>][,<EGHOLD>][,<LSLINK>][,<KS>]   (e.g. EG 44,ALL,31,18,8,16)",
+    summary: "Sets the envelope of a tone layer in sound memory (TPROP 20-27). AR attack, DR decay to SL, SR sustain decay (0 = held), RR release, SL level: all 0-31. EGHOLD 0 follow AR, 1 jump to max and hold for the AR time. LSLINK 1 starts the decay at the loop start. KS key scaling 0-14, -1 off. A lone comma leaves an item. Takes effect at note-on. Not saved; PLAYINIT/TARG resets it.",
+    source: "Ref. pp. 259-263",
+  },
+  LFO: {
+    syntax: "LFO <tone>,<layer|ALL>,[<reset>][,<freq>][,<ALFO wave>][,<ALFO depth>][,<PLFO wave>][,<PLFO depth>]   (e.g. LFO 44,ALL,1,16,2,7,1,7)",
+    summary: "Sets a tone layer's LFO (TPROP 50-55). Reset 0 free-running, 1 restart at key-on. Freq 0-31 (0.17 Hz to 172.3 Hz; 16 = 2.87 Hz), shared. Waves: @SAW 0, @SQU 1, @TRI 2, @NOISE 3 (noise can't reset or change speed). ALFO depth 0-7 tremolo (0.4 to 24 dB); PLFO depth 0-7 vibrato (7 to 494 cents). A lone comma leaves an item. Takes effect at note-on. Not saved; PLAYINIT/TARG resets it.",
+    source: "Ref. pp. 263-266",
+  },
+  MMLSTAT: {
+    syntax: "MMLSTAT(<track>,<item>)   (e.g. IF MMLSTAT(0,1) THEN ...)",
+    summary: "Status of MML track 0-15 while it plays. Item 0: value 0-127 of the last MML \"!\" control command, cleared to 0 once read (track 0 also drives ON MMLSTAT GOSUB). 1: note number playing (0 silent). 2: direct send level 0-7 (TPROP 72). 3: pan 0-31. 4: total level 0-255 after volume and velocity, an attenuation so smaller is louder (255 silent). Can't tell sequences apart when several play.",
+    source: "Ref. pp. 267-270",
+  },
+  PLAY: {
+    syntax: "PLAY [<volume>,]<[#<track>,]\"<MML>\">[,<[#<track>,]\"<MML>\">...]   (e.g. PLAY 60,\"CDE\")",
+    summary: "Plays MML and waits for it to finish; kept for compatibility with older MML, so it can't use the whole sound system. Volume 0-255 (default 127). #track 0-15; settings such as length and octave carry over from the previous PLAY (reset each time in direct mode). Only 4 song blocks (about 150 quarter notes): too much gives Sound:Song bank full, so split over lines. Not kept in sound memory; use EFFECT or SETSONG to replay.",
+    source: "Ref. pp. 270-271",
+  },
+  PLAYSTAT: {
+    syntax: "PLAYSTAT(<sequence no>)   (e.g. *LBL:IF PLAYSTAT(0)=1 THEN *LBL)",
+    summary: "1 while sequence 0-7 is playing (0 = BGM, others from EFFECT), else 0. A song paused by PLAYPAUSE counts as playing. Right after EFFECT -n or BGM it may not be 1 yet: wait at least 2 VSYNCs.",
+    source: "Ref. p. 272",
+  },
+  PLAYCONT: {
+    syntax: "PLAYCONT <sequence no>   (e.g. PLAYCONT I)",
+    summary: "Resumes a sequence paused by PLAYPAUSE. 0 = BGM, 1-7 from EFFECT, -1 all BGM and effects, -2 all effects except BGM.",
+    source: "Ref. pp. 272-273",
+  },
+  PLAYFADE: {
+    syntax: "PLAYFADE <sequence no>,<volume>,<fade rate>   (e.g. PLAYFADE 0,0,50)",
+    summary: "Fades a sequence to a volume. Sequence 0 = BGM, 1-7 from EFFECT, -1 all, -2 all except BGM. Volume 0-255 (default 127; 0 stops it). Rate 0-255, smaller is faster, 0 is immediate.",
+    source: "Ref. p. 273",
   },
   FILES: {
     syntax: "FILES \"[<device>:][<pattern>]\"[,P]   (e.g. FILES, FILES \"COM:SAMPLE??\", FILES F$)",

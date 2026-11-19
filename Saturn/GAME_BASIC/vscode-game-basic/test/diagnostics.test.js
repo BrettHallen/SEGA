@@ -107,6 +107,19 @@ test('unnumbered direct commands and comments are notes, not errors (DEMO.B)', (
   assert.deepStrictEqual(codes('PRINT 1\n'), ['0:no-line-number']);
 });
 
+test('PLAY with more notes than its song buffer holds', () => {
+  const notes = (n) => 'CDEFGAB'.repeat(Math.ceil(n / 7)).slice(0, n);
+  assert.deepStrictEqual(codes(`10 PLAY 60,"${notes(150)}"\n`), []);
+  assert.deepStrictEqual(codes(`10 PLAY "${notes(80)}","${notes(71)}"\n`), ['0:play-too-long']);
+  // Lower-case MML commands and other statements on the line don't count.
+  assert.deepStrictEqual(codes(`10 PLAY "v100 ${notes(100)}":PRINT "${notes(100)}"\n`), []);
+  assert.deepStrictEqual(codes(`10 X=PLAYSTAT(0):EFFECT 1,"${notes(200)}"\n`), []);
+  const d = analyze(`10 A=1:PLAY "${notes(160)}"\n`)[0];
+  assert.strictEqual(d.code, 'play-too-long');
+  assert.strictEqual(d.start, 7);
+  assert.match(d.message, /160 notes/);
+});
+
 // Runs over the sample programs on the GAME BASIC CD when they sit next to
 // this folder (GAME_BASIC/GAME_BASIC_CD). They should come up with no errors
 // or warnings apart from two strings with no closing quote.

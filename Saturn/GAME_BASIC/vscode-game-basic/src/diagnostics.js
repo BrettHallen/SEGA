@@ -8,7 +8,8 @@
 // big line numbers, over-long lines), characters Shift-JIS can't carry, and
 // missing #include files. Warnings are likely mistakes the Saturn would
 // report later: unbalanced brackets, an unclosed string, a GOTO to a line or
-// *label that doesn't exist, IF without THEN/GOTO.
+// *label that doesn't exist, IF without THEN/GOTO, a PLAY with more notes
+// than its song buffer holds.
 
 const K = require('./keywords');
 
@@ -23,6 +24,40 @@ const COMMENT_RE = /^\s*('|REM(?![A-Za-z0-9_$]))/i;
 const LABEL_DEF_RE = /^\*([A-Za-z_][A-Za-z0-9_]*)/;
 
 const SEVERITY = { error: 'error', warning: 'warning', info: 'info' };
+
+// PLAY has only 4 song-data blocks, about 150 quarter notes; more stops with
+// "Sound:Song bank full" (Ref. p. 271). Notes are the MML letters A-G and the
+// rest R, written in capitals.
+const PLAY_NOTE_LIMIT = 150;
+const PLAY_RE = /^\s*PLAY(?![A-Za-z0-9_$])/i;
+
+// Split a line body into statements at ':' outside strings.
+// Returns [{ text, col }] with col relative to the body.
+function statements(body) {
+  const out = [];
+  let start = 0;
+  let inStr = false;
+  for (let i = 0; i <= body.length; i++) {
+    const ch = body[i];
+    if (ch === '"') inStr = !inStr;
+    if (i === body.length || (ch === ':' && !inStr)) {
+      out.push({ text: body.slice(start, i), col: start });
+      start = i + 1;
+    }
+  }
+  return out;
+}
+
+// Count the notes and rests in a PLAY statement's MML string literals.
+function playNotes(stmt) {
+  let notes = 0;
+  const re = /"([^"]*)"?/g;
+  let m;
+  while ((m = re.exec(stmt)) !== null) {
+    for (const ch of m[1]) if (/[A-GR]/.test(ch)) notes++;
+  }
+  return notes;
+}
 
 // ---------------------------------------------------------------- Shift-JIS
 
@@ -363,6 +398,19 @@ function analyze(text, opts = {}) {
         add(lineNo, bodyCol + Math.max(c, 0), bodyCol + Math.max(c, 0) + 2, SEVERITY.warning,
           'if-without-then', 'IF without THEN or GOTO.');
         break;
+      }
+    }
+
+    // PLAY strings longer than PLAY's song buffer
+    for (const st of statements(body)) {
+      if (!PLAY_RE.test(st.text)) continue;
+      const n = playNotes(st.text);
+      if (n > PLAY_NOTE_LIMIT) {
+        const c = bodyCol + st.col + st.text.search(/\S/);
+        add(lineNo, c, bodyCol + st.col + st.text.length, SEVERITY.warning, 'play-too-long',
+          `PLAY has ${n} notes and rests. PLAY only has room for about ${PLAY_NOTE_LIMIT} quarter notes ` +
+          '(fewer with options such as pitch bend), so the Saturn may stop with "Sound:Song bank full". ' +
+          'Split it over several PLAY lines, or register it with SETSONG and play it with BGM or EFFECT.');
       }
     }
   }
