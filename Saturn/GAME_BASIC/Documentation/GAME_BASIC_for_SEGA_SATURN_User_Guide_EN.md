@@ -1,6 +1,6 @@
-# GAME BASIC for SEGASATURN: English User Guide
+# GAME BASIC for SEGA SATURN: English User Guide
 
-GAME BASIC for SEGASATURN (ASCII Corp., Bits Laboratory and ESP inc., 1998) is a BASIC interpreter that runs on the Sega Saturn. It was only sold in Japan, and its two manuals, the *Tutorial Manual* and the *Reference Manual*, are in Japanese.
+GAME BASIC for SEGA SATURN (ASCII Corp., Bits Laboratory and ESP inc., 1998) is a BASIC interpreter that runs on the Sega Saturn. It was only sold in Japan, and its two manuals, the *Tutorial Manual* and the *Reference Manual*, are in Japanese.
 
 This guide is written for English speakers who want to use GAME BASIC on a real Saturn. It is not a translation of the Tutorial Manual. It explains the important points in its own words, with short examples, and gives page numbers so you can look things up in the Japanese manual (book page numbers, "TM p. N"; Reference Manual pages are "RM p. N"). For more detail on any topic, see `Documentation/Tutorial_Manual_findings.md` and `Documentation/Reference_Manual_findings.md`.
 
@@ -1002,4 +1002,4 @@ These are the same symbols as on the software keyboard's GRPH page (section 3). 
 
 ---
 
-*GAME BASIC for SEGASATURN, its manuals and the CD contents are ©1998 ASCII Corp./Bits Laboratory/ESP inc. This guide is an independent description written for preservation and hobby use; page references point to the original Japanese manuals.*
+*GAME BASIC for SEGA SATURN, its manuals and the CD contents are ©1998 ASCII Corp./Bits Laboratory/ESP inc. This guide is an independent description written for preservation and hobby use; page references point to the original Japanese manuals.*
