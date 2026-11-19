@@ -2,9 +2,11 @@
 
 GAME BASIC for SEGASATURN (ASCII Corp., Bits Laboratory and ESP inc., 1998) is a BASIC interpreter that runs on the Sega Saturn. It was only sold in Japan, and its two manuals, the *Tutorial Manual* and the *Reference Manual*, are in Japanese.
 
-This guide is written for English speakers who want to use GAME BASIC on a real Saturn. It is not a translation of the Tutorial Manual. It explains the important points in its own words, with short examples, and gives page numbers so you can look things up in the Japanese manual (book page numbers, "TM p. N"; Reference Manual pages are "RM p. N"). The scanned manuals are in `Documentation/Tutorial_Manual_JP/` and `Documentation/Reference_Manual_JP/`. For more detail on any topic, see `Documentation/Tutorial_Manual_findings.md`.
+This guide is written for English speakers who want to use GAME BASIC on a real Saturn. It is not a translation of the Tutorial Manual. It explains the important points in its own words, with short examples, and gives page numbers so you can look things up in the Japanese manual (book page numbers, "TM p. N"; Reference Manual pages are "RM p. N"). The scanned manuals are in `Documentation/Tutorial_Manual_JP/` and `Documentation/Reference_Manual_JP/`. For more detail on any topic, see `Documentation/Tutorial_Manual_findings.md` and `Documentation/Reference_Manual_findings.md`.
 
 Where something here is worked out from the sample programs or the PC software rather than stated in the manuals, it says so.
+
+> **Work in progress.** The serial protocol used by the modern PC tools (section 19) was worked out from BASTERM's code and has not yet been confirmed on real hardware; the open questions are listed in `tools/README.md`. The polygon example in section 14 has also not yet been run on a Saturn.
 
 ---
 
@@ -45,7 +47,7 @@ To use it you need:
 - **A Saturn and the GAME BASIC CD.**
 - **A way to type.** Either a standard control pad in **controller port 1**, using the on-screen software keyboard, or the separately sold **Saturn keyboard** (TM pp. 3–4). The keyboard is much more comfortable for anything longer than a few lines.
 - **Somewhere to save.** The Saturn's internal backup RAM works, but it is small (see section 8). A Power Memory cartridge gives more room.
-- **Optionally, a PC link.** Writing long programs is much easier on a computer. The original cable connected to a Windows 95 PC running BASTERM. This project replaces both with a USB adapter and VS Code (sections 17–19).
+- **Optionally, a PC link.** Writing long programs is much easier on a computer. The original cable connected to a Windows 95 PC running BASTERM. A USB serial adapter and the VS Code tools in this repository can replace both (sections 17–19).
 
 ## 2. Starting GAME BASIC
 
@@ -513,7 +515,7 @@ The steps are always the same:
 5. `OBJTYPE`, `OBJATR` and `OBJPOS` create an object, give it the polygon and attribute, and place it.
 6. `OBJTURN` sets it spinning.
 
-Here is a short example of a spinning blue square (adapted from the structure on TM pp. 65–66, not tested on hardware):
+Here is a short example of a spinning blue square (adapted from the structure on TM pp. 65–66):
 
 ```basic
 10 SCREEN 0
@@ -646,7 +648,7 @@ Useful BASTERM features:
 
 ## 19. The modern tools: VS Code and saturn_send.py
 
-This project replaces BASTERM with tools that run on macOS, Linux and Windows.
+The tools in this repository replace BASTERM and run on macOS, Linux and Windows.
 
 ### VS Code extension (`GAME_BASIC/vscode-game-basic`)
 
@@ -684,8 +686,6 @@ python3 saturn_send.py selftest                            # test with the mock 
 ```
 
 `serve` lets programs on the Saturn use `COM:` for their own files, and lets you type `FILES "COM:"`, `SAVE "COM:NAME"` and `LOAD "COM:NAME"` at the Saturn. See `tools/README.md` for all options.
-
-**Status.** The protocol was worked out from BASTERM's code and tested against a simulated Saturn. Testing on real hardware is still in progress; the open questions are listed in `tools/README.md`.
 
 ## 20. Messages and errors
 
