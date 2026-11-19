@@ -50,6 +50,7 @@ DXFCONV turns `3DFACE` entities in a DXF model into BASIC `DATA` lines for `SETV
 | `HEADBAS.B` | Small BASIC viewer program that the converters can put in front of the model data |
 | `SAMPLE/` | `ASCII` and `GIRL` example models at every stage (`.DXF`, `.POL`, `.VTX`, `.PNT`, `.B`) |
 | `README.TXT` | Original Japanese documentation (Shift-JIS) |
+| `Python/` | Modern Python versions of the DXFCONV programs |
 
 ### Documentation
 GAME BASIC came with two Japanese manuals: the *Tutorial Manual* (チュートリアルマニュアル), and the *Reference Manual* (リファレンスマニュアル) with the full command details.
