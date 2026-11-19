@@ -9,6 +9,7 @@
     python3 saturn_bitmap.py SABA_BG.0 -o saba.png
     python3 saturn_bitmap.py FONT.png --setchr        # -> FONT_chr.B (SETCHR + DATA)
     python3 saturn_bitmap.py TILES.png --setchr 256 --first 64
+    python3 saturn_bitmap.py SHIP.png --sprite         # -> SHIP_spr.B (SPRITE$ + DATA)
 
 The Saturn reads these with GLOAD and writes them with GSAVE. Format, from the
 Reference Manual pp. 105-106 (and checked against SABA_BG.0, HIBIKI_0.0,
@@ -29,6 +30,14 @@ picture is cut into 8x8 cells, left to right, top to bottom. "16" makes
 16-colour patterns for the text screen (4 bits per dot, 32 bytes each, up to
 15 colours); "256" makes 256-colour patterns for a character screen (1 byte
 per dot, 64 bytes each, up to 255 colours). Dot value 0 is transparent.
+
+--sprite turns a PNG into 16x16 sprite patterns as GAME BASIC lines:
+SPRITE$(<pattern>)=READHEX$(256) followed by 16 hex DATA lines, one per dot
+row (Reference Manual pp. 161, 177). A sprite pattern is always 16x16 with
+one byte per dot in row order, as G_BOMB.B on the CD builds them; dot value 0
+is transparent. Up to 255 colours go into the sprite palette with
+PALETTE 10 (entries 1-255 for SETSPRITE palette 0, 257-511 for palette 1).
+The picture is cut into 16x16 cells, left to right, top to bottom.
 
 Plain Python 3, no packages needed. PNG transparency (alpha below 128, or a
 tRNS colour) becomes the Saturn's transparent value. A PNG with more than 255
@@ -422,6 +431,39 @@ def setchr_lines(w: int, h: int, pixels: Sequence[Pixel], colours: int = 16, bg:
     return out, count, reduced
 
 
+def sprite_lines(w: int, h: int, pixels: Sequence[Pixel], first: int = 0, palette: int = 0,
+                 with_palette: bool = True) -> Tuple[List[str], int, bool]:
+    """GAME BASIC statements (no line numbers) that define the picture as SPRITE$ patterns.
+
+    Returns (lines, number of patterns, colours were reduced).
+    """
+    if palette not in (0, 1):
+        raise BitmapError("--sprite: the sprite palette is 0 or 1")
+    if w % 16 or h % 16:
+        raise BitmapError(f"the picture is {w}x{h}; for sprites both sides must be multiples of 16")
+    cols, rows = w // 16, h // 16
+    count = cols * rows
+    if not 0 <= first or first + count - 1 > 255:
+        raise BitmapError(f"{count} sprite patterns from pattern {first} go past pattern 255")
+    pal, index, reduced = _palette_for(pixels, 255)
+    noun = "pattern" if count == 1 else "patterns"
+    out = [f"' {count} sprite {noun}, {cols}x{rows} cells of 16x16, "
+           f"patterns {first}-{first + count - 1}, sprite palette {palette} (made by saturn_bitmap.py)",
+           f"' Show one with SETSPRITE <sprite>,{palette} : PUTSPRITE <sprite>,(X,Y),<pattern>"]
+    if with_palette and pal:
+        values = [f"RGB({c & 31},{(c >> 5) & 31},{(c >> 10) & 31})" for c in pal]
+        for i in range(0, len(values), 8):
+            out.append(f"PALETTE 10,{palette * 256 + 1 + i}," + ",".join(values[i:i + 8]))
+    for cy in range(rows):
+        for cx in range(cols):
+            out.append(f"SPRITE$({first + cy * cols + cx})=READHEX$(256)")
+            for y in range(16):
+                start = (cy * 16 + y) * w + cx * 16
+                vals = [0 if p is None else index[word_from_rgb(p)] for p in pixels[start:start + 16]]
+                out.append("DATA " + "".join(f"{v:02X}" for v in vals))
+    return out, count, reduced
+
+
 def number_lines(lines: List[str], start: Optional[int], step: int) -> List[str]:
     if start is None:
         return lines
@@ -484,6 +526,26 @@ def convert_setchr(src: str, dst: Optional[str] = None, colours: int = 16, bg: i
     return msg
 
 
+def convert_sprite(src: str, dst: Optional[str] = None, first: int = 0, palette: int = 0,
+                   with_palette: bool = True, start: Optional[int] = None, step: int = 10) -> str:
+    if os.path.splitext(src)[1].lower() != ".png":
+        raise BitmapError("--sprite needs a .png file")
+    with open(src, "rb") as fh:
+        w, h, pixels, _ = read_png(fh.read())
+    lines, count, reduced = sprite_lines(w, h, pixels, first, palette, with_palette)
+    lines = number_lines(lines, start, step)
+    dst = dst or os.path.splitext(src)[0] + "_spr.B"
+    with open(dst, "w", encoding="ascii", newline="\r\n") as fh:
+        fh.write("\n".join(lines) + "\n")
+    msg = (f"Wrote {os.path.basename(dst)}: {count} sprite pattern{'' if count == 1 else 's'}, "
+           f"{first}-{first + count - 1}.")
+    if start is None:
+        msg += ' The lines have no numbers: #include it, or send with automatic line numbers.'
+    if reduced:
+        msg += " The picture had more than 255 colours, so they were reduced."
+    return msg
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="Convert PNG <-> GAME BASIC bitmap files (.0 / .1).")
     ap.add_argument("input", help="a .png, .0 or .1 file")
@@ -492,14 +554,20 @@ def main(argv: Optional[List[str]] = None) -> int:
                     help="PNG -> .0 (256 colours) instead of .1 (32768 colours)")
     ap.add_argument("--setchr", nargs="?", const="16", choices=("16", "256"),
                     help="PNG -> SETCHR + DATA lines for 8x8 characters (16-colour text screen, or 256)")
+    ap.add_argument("--sprite", action="store_true",
+                    help="PNG -> SPRITE$ + DATA lines for 16x16 sprite patterns")
     ap.add_argument("--bg", type=int, default=4, help="--setchr: logical BG (default 4)")
-    ap.add_argument("--first", type=int, default=0, help="--setchr: first pattern number (default 0)")
-    ap.add_argument("--palette", type=int, help="--setchr: palette code for the colours (default 1 for 16, 0 for 256)")
-    ap.add_argument("--no-palette", action="store_true", help="--setchr: leave out the PALETTE lines")
-    ap.add_argument("--start", type=int, help="--setchr: number the lines from here (default: no numbers)")
-    ap.add_argument("--step", type=int, default=10, help="--setchr: line number step (default 10)")
+    ap.add_argument("--first", type=int, default=0, help="--setchr/--sprite: first pattern number (default 0)")
+    ap.add_argument("--palette", type=int, help="--setchr: palette code for the colours (default 1 for 16, 0 for 256); --sprite: sprite palette 0 or 1 (default 0)")
+    ap.add_argument("--no-palette", action="store_true", help="--setchr/--sprite: leave out the PALETTE lines")
+    ap.add_argument("--start", type=int, help="--setchr/--sprite: number the lines from here (default: no numbers)")
+    ap.add_argument("--step", type=int, default=10, help="--setchr/--sprite: line number step (default 10)")
     a = ap.parse_args(argv)
     try:
+        if a.sprite:
+            print(convert_sprite(a.input, a.output, a.first, a.palette or 0, not a.no_palette,
+                                 a.start, a.step))
+            return 0
         if a.setchr:
             print(convert_setchr(a.input, a.output, int(a.setchr), a.bg, a.first, a.palette,
                                  not a.no_palette, a.start, a.step))
