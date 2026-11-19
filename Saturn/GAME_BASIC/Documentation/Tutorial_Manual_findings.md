@@ -396,6 +396,22 @@ Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 i
 
 ---
 
+## 10c. Rest of the Appendix (Ref. pp. 407–415)
+
+Scans 411–419 (p. = scan − 4). Scans 418 and 419 were the wrong way round (the p. 414 diagram was in 419 and the blank page in 418), so I swapped them: 418 is now p. 414 and 419 is the blank p. 415. The index follows on scans 420–425 (pp. 416–421), then two blanks and the back cover (428).
+
+- **pp. 407–410, sample program list.** One row per file on the CD, with its data files indented beneath it. The English version is being written up separately. Points for this project: `TRANSFOR.B` is described as "a program that transfers `*.D` files to `COM:`", which confirms section 9; `DEMO.B` loads the kanji fonts `FONT161.D`/`FONT162.D` with `KLOAD`; `UD_DATA1.B`/`UD_DATA2.B` test `USERDATA`; `P_CAME2.B` tests the camera commands; `PLAYMIDI.B` converts MIDI files to MML.
+- **p. 411, character code table.** The Saturn's character set is **single-byte only**:
+  - 0x20–0x7E is ASCII, except 0x5C is shown as **¥** and 0x7C as a broken bar.
+  - 0xA1–0xDF is half-width katakana and punctuation, as in Shift-JIS.
+  - 0x80–0x9F and 0xE0–0xFF are **graphic characters**: block shades, box lines, card suits, arrows, a circle and dot, a tick, and 円 年 月 日 時 分 秒 at 0xF1–0xF7.
+  - In Shift-JIS those same bytes (0x81–0x9F, 0xE0–0xFC) start two-byte kanji. So a program file that uses the graphic characters reads as kanji or garbage in VS Code, and a kanji typed in VS Code reaches the Saturn as two graphic characters. Only `KPRINT` (after `KLOAD ON`) shows real kanji.
+- **pp. 412–414, 3D diagrams.** The screen is 320 × 224, the default view angle is 90°, and `SETDISP` display levels 1, 2 and 3 start at 1/2, 1/4 and 1/8 of the distance to the projection plane. These are worth adding to the `SETDISP` hover when the 3D section is done.
+
+**For the editor and the sender.** Both treat files as Shift-JIS (`cp932`). That is right for katakana and for strings meant for `KPRINT`, but not for the graphic bytes. A "Saturn charset" mode that maps each byte 0x80–0x9F and 0xE0–0xFF to a single look-alike Unicode character (and back) would let such programs load, edit and send byte for byte. I haven't changed anything; it is listed under section 12.
+
+---
+
 ## 11. Changes made from these notes (Nov 18, not committed)
 
 1. `PUTSPRITE` added, and `AND!` highlighted as one operator.
@@ -423,6 +439,7 @@ Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 i
 **To build.**
 - Diff send, following the rules in section 6.
 - A live key-send mode, with F12 as a "reset display" key.
+- A "Saturn charset" mode for files using the graphic characters 0x80–0x9F/0xE0–0xFF (section 10c), and a warning when a non-`KPRINT` string contains kanji.
 - Optionally: a check for variable names over 31 characters; an option to auto-number from 100/10 like `RENUM`; hover notes (texture colour bit 15, `RGB` ranges); MML highlighting inside strings.
 
 **To test on hardware.**
