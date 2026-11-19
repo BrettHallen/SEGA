@@ -218,4 +218,6 @@ The rest (G_HATA, G_MOBIL/G_MOBILS, G_BOMB, G_BOU, G_JUMP/_A/_M, G_MAZE, G_SABA,
 - TRANSFOR.B against a PC file server, for Saturn→PC writes one byte at a time.
 - Whether Receive copes with `LIST`-style leading spaces before line numbers.
 
-**Not in the tutorial.** It has no wire-level protocol (byte formats, handshake, block sizes) and no full error-message list. It also doesn't explain status codes 1 and 2 or the difference between the two STOP modifiers. The Reference Manual covers the error messages (see `Reference_Manual_findings.md`, section 7) but not the wire protocol.
+**Not in the tutorial.** It has no wire-level protocol and no full error-message list. The Reference Manual covers the error messages (see `Reference_Manual_findings.md`, section 7). The wire protocol is derived from Basterm.exe in `BASTERM/BASTERM_serial_protocol.md`: byte formats, keystroke packets, 252-byte data blocks with checksum and CRC-16, the handshake, the command table and the timeouts.
+
+**Status codes.** From the same analysis, status 3 means a program is running (it drives the check mark on the Run menu item) and status 4 means a command has finished (BASTERM beeps, and Send and Receive wait for it). BASTERM treats 1 and 2 only as "not running" and never tells them apart, and it sends both STOP modifiers (4 and 5) in exactly the same way. What 1 and 2 mean, and whether the Saturn handles the two STOP modifiers differently, can only be settled on hardware.
