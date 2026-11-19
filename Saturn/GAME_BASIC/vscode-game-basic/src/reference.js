@@ -460,10 +460,80 @@ const COMMANDS = {
     summary: "Fast fixed-point tangent. The angle is in turns (1.000 = 360\u00b0; the whole-number part is ignored).",
     source: "Ref. p. 95",
   },
+  BLOAD: {
+    syntax: "BLOAD \"[<device>:]<name>\",<start block>,<start offset>   (e.g. BLOAD FILENAME$,0,0)",
+    summary: "Reads a .D file into the CLEAR user area at <block>*256+<offset> (offset 0-&H1FFFF). The extension defaults to D; any other gives Bad file name. Device defaults to the last one used. Errors: File still open, Not enough space (past the user area).",
+    source: "Ref. p. 98",
+  },
+  BSAVE: {
+    syntax: "BSAVE \"[<device>:]<name>\",<start block>,<start offset>,<end block>,<end offset>   (e.g. BSAVE FILENAME$,0,0,10,10)",
+    summary: "Writes the user area from <start block>*256+<start offset> to <end block>*256+<end offset> to a .D file (other extensions give Bad file name). Errors: File still open; Not enough space if the device is full or already holds 99 files.",
+    source: "Ref. p. 99",
+  },
+  CLOSE: {
+    syntax: "CLOSE [[#]<file number>]   (e.g. CLOSE, CLOSE #1)",
+    summary: "Writes out any data left in the file area and ends access. With no number, closes every file opened by OPEN. Backup devices are only written when the file is closed. Ending the program or any error also closes (and discards) open files.",
+    source: "Ref. pp. 96, 100",
+  },
+  FORMAT: {
+    syntax: "FORMAT \"<device>:\"   (e.g. FORMAT \"FD1:\")",
+    summary: "Erases and initialises BRAM:, CRAM:, FD0: or FD1:, but only if not already formatted (Already formatted). A floppy is formatted one partition at a time. Bad device name for anything else.",
+    source: "Ref. p. 101",
+  },
+  FREAD: {
+    syntax: "FREAD [#]<file number>,<string variable>,<byte count>   (e.g. FREAD #1,A$,10)",
+    summary: "File number 1 or 2 (from OPEN). Reads <byte count> bytes (1 or more) into the variable from the file area. The file must be opened FOR INPUT or with no mode. Moves the SEEK position; reading past the end gives Access past EOF.",
+    source: "Ref. p. 102",
+  },
+  FWRITE: {
+    syntax: "FWRITE [#]<file number>,<string>   (e.g. FWRITE #1,\"ABC\" or FWRITE 1,A$)",
+    summary: "File number 1 or 2 (from OPEN). Writes the string to the file area and moves the SEEK position. The file must be opened FOR OUTPUT, APPEND or with no mode, and the data only reaches the file when it is CLOSEd, so close it before the program ends.",
+    source: "Ref. pp. 96, 102-103",
+  },
+  GLOAD: {
+    syntax: "GLOAD \"[<device>:]<name>\"[,<logical BG>][,(<dest X>,<dest Y>)][,P]   (e.g. GLOAD \"COM:TEST.1\")",
+    summary: "Loads bitmap data (.0 = 256 colours, .1 = 32768 colours) onto a bitmap screen at (X,Y), default (0,0); clipped like GCOPY. No extension: the current screen mode picks it; a mismatch, or a mode with no bitmap, gives Illegal function call. BG defaults to the last ACTIVE one. P skips the palette of 256-colour data. Needs an unused file buffer bigger than the data (CLEAR): a 320x224 picture needs 282 blocks (.0) or 560 blocks (.1). E.g. SCREEN 1: CLEAR ,600: GLOAD \"GDATA.0\",1. File format: width and height (2 bytes each, high byte first), then for .0 a 512-byte palette and 1 byte per dot (0 = transparent), for .1 2 bytes per dot (bit 15 set; 0 = transparent; black = &H8000).",
+    source: "Ref. pp. 103-106",
+  },
+  GSAVE: {
+    syntax: "GSAVE \"[<device>:]<name>\"[,<logical BG>][,(<X1>,<Y1>)-(<X2>,<Y2>)]   (e.g. GSAVE \"COM:PICT\",0)",
+    summary: "Saves part of a bitmap screen as .0 (256 colours) or .1 (32768 colours); the area defaults to (0,0)-(319,223). Extension and BG rules as GLOAD. Needs an unused file buffer of 4+512+W*H bytes (.0) or 4+W*H*2 bytes (.1), e.g. CLEAR ,600: GSAVE \"TEMP\",0. A large area takes 1-2 minutes or more to write to COM:.",
+    source: "Ref. pp. 106-107",
+  },
+  KILL: {
+    syntax: "KILL \"[<device>:]<name>.<ext>\"   (e.g. KILL \"BRAM:TEST.B\" or KILL F$)",
+    summary: "Deletes a file. The extension must be given in full: without it the extension counts as a space and you get File not found. Device defaults to the last one used.",
+    source: "Ref. p. 108",
+  },
+  SEEK: {
+    syntax: "SEEK [#]<file number>,<position>   (e.g. SEEK #1,128)",
+    summary: "File number 1 or 2 (from OPEN). Sets the read/write position, 0-&H7FFFFFFF. Past the end of a file opened FOR INPUT gives Access past EOF; a writable file can seek past its end but the gap is undefined. The file ends up as long as the furthest byte written. See LOC and LOF.",
+    source: "Ref. p. 112",
+  },
+  DSKF: {
+    syntax: "DSKF([<device>:])   (e.g. A = DSKF(\"BRAM:\"), PRINT DSKF(\"\"))",
+    summary: "Free space on the device in file blocks of 64 bytes (capped at the fixed-point maximum). \"\" or no device means the last one used. CD: gives Bad device name; a missing device gives Device not connected.",
+    source: "Ref. p. 113",
+  },
+  'FILES$': {
+    syntax: "FILES$([<device>:][<pattern>][.<ext>])   (e.g. A$ = FILES$(), PRINT FILES$(\"COM:TEST*.b\"))",
+    summary: "Returns the matching names joined into one string. Each entry is the name with its period and extension in 10 characters, the size in file blocks as 5 decimal digits (spaces on CD: and COM:), then CHR$(13)+CHR$(10). Wildcards work; empty string if nothing matches.",
+    source: "Ref. p. 114",
+  },
+  LOC: {
+    syntax: "LOC([#]<file number>)   (e.g. A# = LOC(#1): SEEK 1,LOC(#1)+5)",
+    summary: "File number 1 or 2 (from OPEN). Returns the current read/write (SEEK) position.",
+    source: "Ref. p. 115",
+  },
+  LOF: {
+    syntax: "LOF([#]<file number>)   (e.g. A# = LOF(#1): SEEK 1,LOF(1))",
+    summary: "File number 1 or 2 (from OPEN). Returns the position of the end of the file.",
+    source: "Ref. p. 115",
+  },
   FILES: {
-    syntax: 'FILES "<device>:[<name>]"',
-    summary: 'Lists files on BRAM:, CRAM:, FD0:, FD1:, COM: or CD:, then "Free size n / m file blocks". Wildcards ? and * are allowed; give the extension here.',
-    source: 'Tut. pp. 29-30; Ref. p. 8',
+    syntax: "FILES \"[<device>:][<pattern>]\"[,P]   (e.g. FILES, FILES \"COM:SAMPLE??\", FILES F$)",
+    summary: "Lists matching files, 10 characters per name plus 2 separator spaces, wrapping as needed. Wildcards ? and * work; no pattern lists everything, no extension matches all extensions. P pauses when the screen is full (any key continues). Except on CD:, the last line is \"Free size <free> / <total> file blocks\" (1 block = 64 bytes). Device defaults to the last one used.",
+    source: "Ref. pp. 100-101; Tut. pp. 29-30",
   },
   FKEY: {
     syntax: "FKEY <function key number>,<string expression>\nFKEY PRINT   (or FKEY ?)",
@@ -481,14 +551,14 @@ const COMMANDS = {
     source: 'Tut. pp. 49-50',
   },
   LOAD: {
-    syntax: 'LOAD "<device>:<name>"[,R][,M]',
-    summary: 'Loads a program. ,R runs it; ,M merges it without NEW. BASTERM types LOAD "COM:TBASTERM.B".',
-    source: 'Tut. pp. 29, 89, 152, 171',
+    syntax: "LOAD \"[<device>:]<name>\"[,R][,M]   (e.g. LOAD \"SAMPLE\", LOAD \"BRAM:MAIN\",R, LOAD F$,R)",
+    summary: "Loads a program; .B is always added. R runs it. Memory is cleared first, so an error while loading loses the old program. M merges into the current program (COM:, or a .D text file on BRAM:, CRAM:, FD0:, FD1:): lines with the same number are replaced, new ones added, lines without a number ignored. Text files made elsewhere need CR+LF at each line end (CR is ignored, LF ends the line). In a program it keeps the CLEAR user area, textures, vertices, polygons, attributes and sound data. If LOAD/SAVE over COM: fails while the Saturn is busy, press Ctrl+P or F12, or run SCREEN 0.",
+    source: "Ref. pp. 97, 108-109; Tut. p. 152",
   },
   OPEN: {
-    syntax: 'OPEN "<device>:<name>" FOR {INPUT|OUTPUT|APPEND} AS [#]<1|2>',
-    summary: 'Opens a data file (.D). At most 2 files can be open, as #1 and #2.',
-    source: 'Ref. p. 9; TRANSFOR.B',
+    syntax: "OPEN \"[<device>:]<name>\" [FOR {INPUT|OUTPUT|APPEND}] AS [#]<file number>   (e.g. OPEN \"SAVE.D\" FOR INPUT AS 1)",
+    summary: "File number 1 or 2 (from OPEN). INPUT: read only, the file must exist and be .D. OUTPUT: new write-only file (created if missing; old contents not read). APPEND: the file must exist; it is read into the file area and SEEK goes to the end. No FOR: read and write. Files OPEN creates get .D. Errors: File already open, Not enough space (99 files on a backup device).",
+    source: "Ref. pp. 110-111",
   },
   PUTSPRITE: {
     syntax: 'PUTSPRITE <n>,(x,y),<pattern>',
@@ -506,9 +576,9 @@ const COMMANDS = {
     source: 'Tut. pp. 44, 66',
   },
   SAVE: {
-    syntax: 'SAVE "<device>:<name>"',
-    summary: 'Saves the program. Fails if backup RAM is full.',
-    source: 'Tut. p. 29',
+    syntax: "SAVE \"[<device>:]<name>\"[,A]   (e.g. SAVE \"SAMPLE\", SAVE \"BRAM:MAIN\", SAVE F$)",
+    summary: "Direct statement only. Saves the program as .B. A (FD0:, FD1:, BRAM:, CRAM: only) saves it as a .D text file that OPEN can read and LOAD \"....D\" can load or merge; this needs a file buffer from CLEAR at least as big as the text, or Out of memory.",
+    source: "Ref. pp. 111-112; Tut. p. 29",
   },
   SCREEN: {
     syntax: 'SCREEN [mode][,text BG][,text colours][,frame unit]',
@@ -567,6 +637,7 @@ const CONSTANTS = {
 // Words that belong to a larger statement show that statement's entry.
 for (const w of ['THEN', 'ELSE', 'ENDIF']) COMMANDS[w] = COMMANDS.IF;
 for (const w of ['TO', 'STEP']) COMMANDS[w] = COMMANDS.FOR;
+for (const w of ['OUTPUT', 'APPEND', 'AS']) COMMANDS[w] = COMMANDS.OPEN;
 
 // Error messages, Reference Manual appendix pp. 391-406: code -> [message as
 // the Saturn prints it, cause]. Codes 33, 38, 40 and 49 are not listed.

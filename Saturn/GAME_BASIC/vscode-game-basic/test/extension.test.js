@@ -153,6 +153,8 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.match(ext.hoverText('bin$'), /BIN\$\(<numeric expression>\[,<suppress>\]\)/);
   assert.match(ext.hoverText('endif'), /IF <condition> THEN/);
   assert.match(ext.hoverText('INKEY$'), /Page Down 251/);
+  assert.match(ext.hoverText('files$'), /CHR\$\(13\)\+CHR\$\(10\)/);
+  assert.match(ext.hoverText('append'), /OPEN "\[<device>:\]<name>" \[FOR/);
   assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
   assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
   assert.match(ext.hoverText('VERTEXID'), /function/);
