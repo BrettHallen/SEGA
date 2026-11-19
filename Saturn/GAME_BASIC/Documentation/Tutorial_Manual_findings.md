@@ -2,31 +2,29 @@
 
 These are notes from the whole Japanese *GAME BASIC for SEGASATURN Tutorial Manual* (チュートリアルマニュアル). They are read with a PC-side replacement for BASTERM in mind, alongside `BASTERM/BASTERM_serial_protocol.md`. Notes on the *Reference Manual* are in `Reference_Manual_findings.md`.
 
-The manual is written for users, so it has no wire-level protocol detail. It does settle many behaviour questions, shows what the Saturn prints, and describes BASTERM itself in Chapter 3. Page numbers below are book pages unless marked "scan".
+The manual is written for users, so it has no wire-level protocol detail. It does settle many behaviour questions, shows what the Saturn prints, and describes BASTERM itself in Chapter 3. Page numbers below are the book's own page numbers.
 
 ---
 
-## 1. The scans
+## 1. Contents of the manual
 
-The scans are in `Documentation/Tutorial_Manual_JP/`, one TIFF per sheet. They were scanned at 600 dpi: the covers in 24-bit colour and the other pages in 8-bit grey. From scan 9 on, **book page = scan number − 6**. Scans 8, 18, 20, 150 and 152 are blank pages.
+| Book pages | Content |
+|---|---|
+| cover, foreword, contents | Contents for the whole book. The foreword says a separate Reference Manual held the full command details |
+| 3–11 | Package contents, pad and keyboard hookup, boot screen, controls, software keyboard, PC cable |
+| 13–31 | Chapter 2 starts: first input, error messages, `PRINT`, variables, first program, `LIST`/`RUN`/Break, `SAVE`/`FILES`/`LOAD` |
+| 32–60 | `IF`/`FOR`/`GOSUB`, arrays, `DATA`, `RENUM`, screen modes, graphics, kanji, sprites, scroll, zoom, rotate, mosaic |
+| 61–79 | 3D polygons, samples P_PFONT, P_CLOCK, P_FLOWER and P_CAME2, the DXFCONV tool |
+| 80–86 | Sound: music basics, FM and PCM, MML with `EFFECT "…"`, S_TUTOR.B |
+| 87–103 | Making games: G_HATA.B, a line-by-line walkthrough of G_MOBIL.B, the light gun sample |
+| 104–143 | Guide to every sample program and tool on the CD |
+| 145–172 | **Chapter 3: BASTERM** (the PC communication software) |
+| 173–176, back | Index, back matter, back cover |
+| Ref. front matter, 1–18 | **Basic specification** (Reference Manual): contents, characters, numbers, strings, operators and precedence, variables, line and label limits, memory, devices and file names, **reserved word list**, `@` constant table, editing keys, function keys, soft reset |
+| Ref. 19–20 | **System settings screen**: baud rate, keyboard repeat, edit width, where the settings are stored |
+| Ref. 416–421 | **Reference Manual index**: every keyword with its page |
 
-| Scans | Book pages | Content |
-|---|---|---|
-| 1–7 | cover, foreword, contents | Contents for the whole book. The foreword says a separate Reference Manual held the full command details |
-| 9–17 | 3–11 | Package contents, pad and keyboard hookup, boot screen, controls, software keyboard, PC cable |
-| 19–37 | 13–31 | Chapter 2 starts: first input, error messages, `PRINT`, variables, first program, `LIST`/`RUN`/Break, `SAVE`/`FILES`/`LOAD` |
-| 38–66 | 32–60 | `IF`/`FOR`/`GOSUB`, arrays, `DATA`, `RENUM`, screen modes, graphics, kanji, sprites, scroll, zoom, rotate, mosaic |
-| 67–85 | 61–79 | 3D polygons, samples P_PFONT, P_CLOCK, P_FLOWER and P_CAME2, the DXFCONV tool |
-| 86–92 | 80–86 | Sound: music basics, FM and PCM, MML with `EFFECT "…"`, S_TUTOR.B |
-| 93–109 | 87–103 | Making games: G_HATA.B, a line-by-line walkthrough of G_MOBIL.B, the light gun sample |
-| 110–149 | 104–143 | Guide to every sample program and tool on the CD |
-| 151–178 | 145–172 | **Chapter 3: BASTERM** (the PC communication software) |
-| 179–184 | 173–176, back | Index, back matter, back cover |
-| Ref. 1–22 | Ref. front matter, 1–18 | **Basic specification**: contents, characters, numbers, strings, operators and precedence, variables, line and label limits, memory, devices and file names, **reserved word list**, `@` constant table, editing keys, function keys, soft reset |
-| Ref. 23–24 | Ref. 19–20 | **System settings screen**: baud rate, keyboard repeat, edit width, where the settings are stored |
-| Ref. 420–425 | Ref. 416–421 | **Reference Manual index**: every keyword with its page |
-
-Reference Manual scans are in `Documentation/Reference_Manual_JP/`; Reference scan N = book page N − 4. Notes on the Reference Manual are in `Reference_Manual_findings.md`.
+Pages 2, 12, 14, 144 and 146 are blank. Notes on the Reference Manual are in `Reference_Manual_findings.md`.
 
 ---
 
