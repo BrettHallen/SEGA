@@ -1,6 +1,6 @@
 # GAME BASIC Reference Manual: notes for the BASTERM replacement
 
-> **Work in progress.** This covers these pages so far: pp. 1–20 (basic specification and system settings), all of Chapter 1 (pp. 23–227), Chapter 2 sections 2.1–2.4 (pp. 229–251) and the Appendix (pp. 389–421).
+> **Work in progress.** This covers these pages so far: pp. 1–20 (basic specification and system settings), all of Chapter 1 (pp. 23–227), Chapter 2 sections 2.1–2.4 and the start of 2.5 (pp. 229–273), sections 2.7 and 2.8 (pp. 355–388) and the Appendix (pp. 389–421).
 
 These are notes from the Japanese *GAME BASIC for SEGASATURN Reference Manual* (リファレンスマニュアル), with attention to what matters for a PC-side replacement for BASTERM. Notes from the *Tutorial Manual* are in `Tutorial_Manual_findings.md`.
 
@@ -358,7 +358,7 @@ Pages 224–227 cover the four lookup functions. All parameters are fixed point 
 
 Pages 228 and 230 are blank, and p. 229 is the Chapter 2 title page.
 
-These pages explain how the sound system works. The command pages (2.5 onwards, including PLAY, EFFECT, PLAYINIT, TARG and TPROP) are not covered here.
+These pages explain how the sound system works. The sound commands start in section 2.5 (section 6d).
 
 - **Two systems.** BASIC runs on the SH-2. Music runs separately on the 68EC000 sound CPU with its own 512 KB of memory. That memory is checked with `SFRE()`/`TFRE()`, not `FRE`.
   - PLAY, EFFECT and SETSONG turn MML into "song data" in sound memory before playing.
@@ -386,6 +386,93 @@ These pages explain how the sound system works. The command pages (2.5 onwards, 
 **For the PC link.** These pages don't say where TARG reads AIFF/WAVE files from. If `COM:` works, a sample would travel as a `.D` file, converted on the PC to mono 8- or 16-bit. While `PLAY` is running BASIC doesn't take the next statement, so a stop request may wait until the end of that line of music.
 
 ---
+
+## 6d. Section 2.5, sound commands, BEEP to PLAYFADE (Ref. pp. 252–273)
+
+The rest of section 2.5 (PLAYINIT, PLAYPAN, PLAYPAUSE, PLAYSTOP, PLAYTEMPO, SETSONG, TARG, TLIST, TPROP, VOLUME) and section 2.6 (MML) are not covered here.
+
+**How playback is organised.** There are 8 sequences. Sequence 0 belongs to BGM, and EFFECT shares out 1–7, so up to 7 effects play at once without cutting off the music. Songs are numbered from 0 (the BEEP sound) up to the count set by PLAYINIT. PLAYSTAT, PLAYCONT, PLAYFADE and PLAYPAUSE take a sequence number: 0 for BGM, 1–7 as returned by EFFECT, −1 for everything and −2 for every effect except BGM. Volumes are 0–255 with 127 the default; 128 and up is louder than the original waveform, so the manual advises 127 or less.
+
+| Command | Syntax | Pages |
+|---|---|---|
+| BEEP | `BEEP [0\|1]` | 252 |
+| BGM | `BGM [<song no>[,<volume>[,<fade-in rate>]]]` | 253 |
+| DSP | `DSP ON {<tone>,<layer\|ALL>,<effector>,<level>}…`, `DSP OFF {<tone>,<layer\|ALL>}…`, `DSP ALL ON <effector>,<level>`, `DSP ALL OFF` | 254–256 |
+| EFFECT | `EFFECT [(<numeric var>),][<song no>[,<volume>],]{[#<track>,]"<MML>"}…` or `EFFECT [(<numeric var>),][<song no>[,<volume>]]` | 256–259 |
+| EG | `EG <tone>,<layer\|ALL>,[<AR>][,<DR>][,<SR>][,<RR>][,<SL>][,<EGHOLD>][,<LSLINK>][,<KS>]` | 259–263 |
+| LFO | `LFO <tone>,<layer\|ALL>,[<reset>][,<freq>][,<ALFO wave>][,<ALFO depth>][,<PLFO wave>][,<PLFO depth>]` | 263–266 |
+| MMLSTAT() | `MMLSTAT(<track>,<item>)` | 267–270 |
+| ON MMLSTAT GOSUB | `ON MMLSTAT GOSUB {<line>\|<label>}` (program only) | 269–270 |
+| PLAY | `PLAY [<volume>,]<[#<track>,]"<MML>">[,…]` (up to 16 tracks) | 270–271 |
+| PLAYSTAT() | `PLAYSTAT(<sequence no>)` | 272 |
+| PLAYCONT | `PLAYCONT <sequence no>` | 272–273 |
+| PLAYFADE | `PLAYFADE <sequence no>,<volume>,<fade rate>` | 273 |
+
+- **BEEP** with no parameter gives the error beep and waits for it to end. `BEEP 1` keeps sounding while the program carries on, and `BEEP 0` stops it. If song 0 was replaced, BEEP restores the default.
+- **BGM** plays a song registered with SETSONG and takes no MML. The fade-in rate is 0–255, where smaller is faster and 0 means no fade.
+- **EFFECT** does not wait. With a song number, the MML is registered under that number and can be replayed later with just the number; volume 0 only registers it. Without a song number, the MML is discarded after playing, like PLAY. The MML belongs to one statement, so two EFFECT statements are not joined; long songs go through SETSONG.
+  - The optional variable must be a fixed-point variable or array element and receives the sequence number (1–7).
+  - A negative song number skips a short wait the system inserts so that PLAYSTAT is right straight away. PLAYSTAT may then read 0 for up to 2 VSYNCs.
+  - An expression song number must be in brackets after the variable: `EFFECT (I),(5-4)`. Without `(I)`, `(5-4)` is read as the variable.
+  - Tracks are `#0`–`#15` in any order. An omitted first track is 0 and later ones count up; going past 15 is an error. Each EFFECT starts every track from its defaults, unlike PLAY.
+  - Overwriting the MML of a song that is playing makes it play wrongly.
+- **DSP, EG and LFO** change one tone's parameters in sound memory, layer by layer, and take effect at the next note-on. The tone is the MML `@` number and `ALL` means every layer. A lone comma leaves an item unchanged. Changes are not saved, and PLAYINIT or TARG puts the original values back. All three warn that bad values can silence or distort the sound; the cure is PLAYINIT, or failing that a hot start, saving the program and resetting.
+  - **DSP** needs PLAYINIT "DSP" or "DSPEXT" and is an error otherwise. The effector (TPROP 70) is `@REV` 0 stereo reverb, `@DEL` 1 stereo delay or `@DST` 2 distortion; in single-effector mode ("DSP") it must be 0 and switching is done with the MML `ec` command. The level (TPROP 71) is 0 (off) or 1–7 for −36 dB to 0 dB in 6 dB steps. The input mixer has no overflow protection, so the total should stay at 0 dB or below. Some tone files already set a level, so `DSP ALL OFF` first gives a clean start.
+  - **EG** sets TPROP 20–27. AR, DR, SR, RR and SL are 0–31, with SR 0 meaning the note is held. EGHOLD 1 jumps to full level and holds it for the AR time. LSLINK 1 ties the start of decay to the waveform's loop start. KS (key scaling) is 0–14, or −1 for off. The manual compares this with the YM2203/YM2608 envelope, whose SL and RR only go to 15.
+  - **LFO** sets TPROP 50–55. The frequency is 0–31 (0.17 Hz to 172.3 Hz, with 16 = 2.87 Hz) and is shared by both outputs. The waveforms are `@SAW` 0, `@SQU` 1, `@TRI` 2 and `@NOISE` 3; noise can't be reset or have its speed changed. ALFO depth 0–7 is tremolo from 0.4 dB to 24 dB, and PLFO depth 0–7 is vibrato from ±7 to ±494 cents.
+- **MMLSTAT(track, item)** reads a playing track, 0–15:
+  - 0: the value (0–127) of the last `!` control command in the MML. It is held until read, then reads 0.
+  - 1: the note number playing (0 when silent).
+  - 2: the direct send level, 0–7 (TPROP 72).
+  - 3: the pan, 0–31, from the MML `P` command or auto-pan; otherwise TPROP 73.
+  - 4: the total level, 0–255, after volume and velocity but before the envelope. It is an attenuation, so smaller is louder and 255 is silent.
+  - It cannot tell which sequence a value came from when several are playing.
+- **ON MMLSTAT GOSUB** checks track 0 every VSYNC and calls the routine when a `!` value arrives; the routine reads it with `MMLSTAT(0,0)`. Other interval interrupts still run, so shared data needs LOCK. A slow routine can overflow the GOSUB stack, and heavy work such as scrolling, CLS, PAINT or INPUT can pause the program. The interrupt comes about a 32nd note after the note-on, so to switch BGM exactly on a bar line the `!` goes a 32nd early: `DATA #0,"|L4 R1 |R R R R8 R16 R32 !1 R32"`.
+- **PLAY** waits for each statement to finish and is kept for compatibility with older MML. Length, octave and other settings carry over from the previous PLAY (in direct mode they reset each time). Tracks that end at different times are lined up at the next PLAY. It has only 4 song blocks, about 150 quarter notes, and a long or complex line (pitch bend, for example) gives `Sound:Song bank full`; split it over several lines. PLAY's data is not kept in sound memory.
+- **PLAYSTAT** returns 1 while a sequence plays and 0 when stopped; a paused song counts as playing.
+- **PLAYFADE** with volume 0 stops the sequence, and rate 0 changes the volume at once.
+
+**For the PC tools.** Sending a program with PLAY lines that are too long gives `Sound:Song bank full` on the Saturn, so a sender or linter could warn about long PLAY strings. MMLSTAT and PLAYSTAT are functions, and the rest are statements.
+
+## 6e. Sections 2.7 and 2.8, repeats and tone data (Ref. pp. 355–388)
+
+### 2.7 Repeat structure (pp. 355–357)
+
+MML uses score-style repeat marks. The manual's examples, with the order they play in:
+
+| MML | Plays |
+|---|---|
+| `AB \|: CD :\|` | AB CD CD |
+| `AB :\| CD` | AB AB CD |
+| `ABCD :\|` | ABCD ABCD |
+| `AB :\|: CD :\|` | AB AB CD CD |
+| `AB :\|: CD \|1 E :\|2 F` | AB AB CDE CDF |
+| `AB dc CD dc` | AB CD CD CD … (endless) |
+| `A $ B * C ds D` | A B C B D |
+| `A B $ C D * E \|: F G \|1 H I :\|2 J K ds L M` | ABCDEFGHIFGJKCDLM |
+
+- `$` is a segno, `ds` a dal segno back to it, `*` a coda mark and `|1`/`|2` first and second endings. Numbers pair them up (`$1`, `ds1`, `*1`), and `$1;3` sets two at once.
+- Unlike a printed score, `dc` does not go back to the start: the part between two `dc` marks loops for ever, for game BGM.
+- A segno or dal segno repeat works only once, and a skip can only jump over a part that has already played.
+
+### 2.8 Tone data (pp. 358–388)
+
+There are 16 tone files in 4 groups. The names are what PLAYINIT and TLIST take.
+
+| Group | Files | Use |
+|---|---|---|
+| 1, game sets | `STANDARD`, `ORCHEST`, `ROCK`, `DANCE` | Ready to use; each starts with the same sound effects |
+| 2, high quality | `PIANO`, `METAL`, `ETHNIC`, `MBOXPO` | One genre, no effects; PIANO samples each range separately |
+| 3, extra | `EXTRA1`–`EXTRA4` | Meant to be recombined with TARG |
+| 4, GM FM | `GM_FM1`–`GM_FM4` | General MIDI order, tones 0–127, FM so little wave memory |
+
+- Tone 0 in groups 1–3 is the BEEP sound; the GM FM sets have a different beep.
+- **Common sound effects (pp. 360–361)**, tones 0–30 of the game sets: 0 BEEP; 1–10 fighting-game shouts (HEY, HUA, POH, HAH, TOH2 male; KYA, TAH, TOH, WAH, YAH female); 11 CHUKIN (docking); 12 NOISE (explosion); 13 BA (bad door); 14 BASHA (scratch); 15 DOKA (hit); 16 KACHA (open/close); 17 SHU (launch); 18–20 saw, sine and square waves (system sounds); 21–27 effects built on them (energy, inside a spaceship, future machine, comical, UFO, space); 28 Crystal Bell; 29 GLOCKEN (metal hit); 30 RUM (beam).
+- **Reading the tables (p. 361).** Each column is a TPROP item: Bd 0 bend range, Ly 1 layer, sn 10 / en 11 start and end note, bn 12 base note, ft 13 fine tune, AR–SL 20–24, KS 27, RE 50 LFO reset, LF 51 frequency, AW/AS 52/53 AM wave and depth, PW/PS 54/55 PM wave and depth, MX 71 input mix level, DS 72 direct send level, DP 73 direct pan. A range under an instrument name is its recommended note range.
+- **Saving memory (p. 362).** When tone data does not fit, a layer list copies only the ranges needed, for example `DATA "BUILDLAYER"`, `DATA "STANDARD",44,1,-1,-1,-1`, `DATA "ENDLAYER"` for just the high strings.
+- **Per-set tables** list every tone and layer: STANDARD pp. 362–366 (drum set 31 and percussion set 32 map one sound per note), ORCHEST pp. 366–369, ROCK pp. 369–372, DANCE pp. 372–377, PIANO and METAL pp. 378–379, ETHNIC pp. 380–382, MBOXPO and EXTRA1 p. 382, EXTRA2 p. 383, EXTRA3 and EXTRA4 p. 384.
+- **EXTRA3 loops (p. 384).** The LOOP tones keep playing until Note Off. They are in tempo at note 60; an octave up doubles the tempo and an octave down halves it.
+- **GM FM sets (pp. 385–388)** use the standard General MIDI program names 000–127. The four sets share the names but differ in parameters. The list numbers both Syn Brass 1 and 2 as 062; the second is 063.
 
 ## 7. Error messages (Ref. pp. 391–406)
 
