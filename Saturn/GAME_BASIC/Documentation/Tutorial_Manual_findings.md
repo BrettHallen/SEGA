@@ -434,6 +434,33 @@ Scans 100–119, all named correctly (p. = scan − 4). Section 1.2 (file comman
 
 ---
 
+## 10e. Section 1.4, BG, text and video commands (Ref. pp. 116–156)
+
+Scans 120–160, all named correctly (p. = scan − 4). Section 1.4 runs from p. 116 (ACTIVE) to p. 156 (ZOOM).
+
+- **Logical BG numbers** (pp. 117–118): 0 and 1 bitmap screens, 2 bitmap rotation screen, 4–7 character screens 0–3, 8 and 9 character rotation screens, 10 and up sprites/polygons. A SETTEX texture is texture ID + 10. `ACTIVE` sets the default; bitmap and character defaults are kept separately.
+- **GCOPY strings (pp. 126–127)** are the same layout as the bitmap files: a `.1` file is exactly a 32768-colour GCOPY string, and a `.0` file is a 256-colour GCOPY string with the 512-byte palette inserted after the size. So `saturn_bitmap.py` output can also feed GCOPY from a `.D` file.
+- **Default display priorities** (p. 138): bitmaps 2, character screens 6/5/4/3, rotation 1, sprites 6; an 8th sprite priority register belongs to the virtual keyboard and is fixed at 7.
+- **KLOAD** (pp. 127–128) takes 722 blocks (level 1) or 991 blocks (levels 1 and 2) from the program area and does `CLEAR 0,256,256`, so it belongs at the top of a program.
+- **F12** restores the text screen after `DISPLAY OFF 4` or `MOSAIC ON 4` (pp. 124, 133), more support for the F12 key in a live mode.
+- Misprint: the PRIORITY syntax box says `PRIORYTY`.
+- **Screen modes** (pp. 148–150): 0 = bitmap 0 (32768 colours) + character screens 4, 5; 1 = bitmaps 0, 1 (256 colours) + 4, 5; 2 = 4, 5 + rotation 8 (Z axis, 256×256 characters); 3 = bitmap rotation 2 (Z axis) + 4, 5; 4 = character screens 4–7 (256 colours); 5 = 4, 5 + rotation 8 (3-axis); 6 = 4, 5 + rotation 8 and 9 (3-axis, sharing palette and patterns). The virtual keyboard uses the last 16 colours of BG 8 in mode 2.
+- **What SCREEN resets** (pp. 147–148): VRAM, scroll, zoom, priorities, rotation, palettes, text font, WIDTH 1,1,38,26, WINDOW 0,0,319,223, ACTIVE, LINE start, OBJ, textures (image data kept), vertices, polygons, attributes, SPRWINDOW.
+- **A hang worth knowing about** (p. 147): with a frame unit of 2 or more without waiting, an OBJECT with over about 1000 polygons can stop sprites and leave the keyboard dead even after Ctrl+P or SCREEN. Soft reset (A+B+C+Start) keeps the program in memory. The PC side would just see the Saturn stop answering. The sender's "no answer" message now mentions it (item 23).
+- **SETCHR … READ** (p. 153) reads character patterns from hex `DATA` strings, and `saturn_bitmap.py --setchr` now writes those lines from a PNG (item 24).
+
+---
+
+## 10f. Section 1.5, BG, text and video functions (Ref. pp. 157–164)
+
+Scans 161–168, all named correctly (p. = scan − 4): GETCHR, PALETTE(), POINT, READCHR$, READHEX$, RGB, RGBADD, RGBTO.
+
+- **READHEX$ (p. 161)** confirms the hex DATA layouts that `saturn_bitmap.py --setchr` writes: `DATA 12345678` is read as bytes 12,34,56,78, the same as `DATA 12,34,56,78`. Like `SETCHR …,READ` and `SETTEX …,READ`, it skips the rest of the last DATA line it reads from.
+- **POINT** returns −1 for transparent and −2 off the screen, and isn't limited by WINDOW.
+- **RGBADD / RGBTO** step colours for fades, clamped to 0–31 per part; RGB() keeps only the low 5 bits of each part.
+
+---
+
 ## 11. Changes made from these notes (Nov 18, not committed)
 
 1. `PUTSPRITE` added, and `AND!` highlighted as one operator.
@@ -456,6 +483,17 @@ Scans 100–119, all named correctly (p. = scan − 4). Section 1.2 (file comman
 
 18. Reference pp. 96–115 (sections 1.2 and 1.3) applied to hover help: `BLOAD`, `BSAVE`, `CLOSE`, `FORMAT`, `FREAD`, `FWRITE`, `GLOAD`, `GSAVE`, `KILL`, `SEEK`, `DSKF`, `FILES$`, `LOC`, `LOF` added; `FILES`, `LOAD`, `OPEN` and `SAVE` rewritten from the manual. `OUTPUT`, `APPEND` and `AS` show the OPEN entry. 115 commands now have syntax, and 91 keywords still have only a plain hover. Two hover tests added (17 pass).
 
+19. Sender: `FILES "COM:"` now lists only names the Saturn can use (1–8 of A–Z, 0–9, `_`, then `.B`, `.0`, `.1` or `.D`), via `protocol.saturn_name_ok` and `SaturnLink._dir_names`. One test added. Brett asked for this.
+20. New `tools/saturn_bitmap.py` (Brett asked for it): PNG ↔ `.0`/`.1` converter with no extra packages. PNG → `.1` keeps every colour, `--256` makes a `.0` (median-cut reduction past 255 colours; dot 0 stays transparent); PNG transparency maps to the Saturn's transparent value. It prints the CLEAR buffer GLOAD needs and warns about names the Saturn can't use. The four CD bitmaps round-trip byte for byte. VS Code: right-click a `.png` → "Convert to Saturn Bitmap (.0/.1)" (asks which type), or a `.0`/`.1` → "Convert Saturn Bitmap to PNG". The extension bundles the script. 7 Python tests and 1 extension test added (36 Python, 18 extension tests pass); both READMEs updated.
+21. Reference pp. 116–141 applied to hover help: `ACTIVE`, `CCOPY`, `CIRCLE`, `CLS`, `COLOR`, `COLOROFS`, `DISPLAY`, `GCOPY`, `KLOAD`, `LINE`, `MOSAIC`, `PAINT`, `PALETTE`, `PRIORITY`, `PSET`, `PUTCHR` added and `KPRINT` rewritten. 131 commands now have syntax; 75 keywords still have only a plain hover.
+
+22. Reference pp. 142–156 applied to hover help: `ROTATE`, `ROTCENTER`, `ROTOVER`, `ROTPOS`, `ROTZOOM`, `SCROLL`, `SETCHR`, `VSYNC`, `WINDOW`, `ZOOM` added and `SCREEN` rewritten with the mode table. Section 1.4 is complete: 141 commands now have syntax; 65 keywords (mostly sprites, 3D and sound) still have only a plain hover.
+
+23. Sender (Brett asked): "No answer from the Saturn" and "The Saturn did not answer STOP" now end with the soft-reset hint from p. 147: "If the Saturn has locked up, soft reset it with A+B+C+Start on the pad: GAME BASIC keeps the program in memory." (`HUNG_HINT` in `link.py`.)
+24. `saturn_bitmap.py --setchr [16|256]` (Brett asked): cuts a PNG into 8×8 characters and writes `NAME_chr.B` with `SETCHR <BG>,<pattern>,<bytes>,READ`, one hex `DATA` line per dot row, and `PALETTE` lines (16-colour text patterns use palette code 1 by default so the normal text colours are untouched; colours past 15 or 255 are reduced). Options `--bg`, `--first`, `--palette`, `--no-palette`, `--start`/`--step`. A generated file passes `saturn_send.py check` and sends to the mock Saturn. VS Code: right-click a `.png` → "Convert to Characters (SETCHR DATA)". 3 Python tests and one extension check added (39 Python, 18 extension tests pass); READMEs updated.
+
+25. Reference pp. 157–164 (section 1.5) applied to hover help: `GETCHR`, `POINT`, `READCHR$`, `READHEX$`, `RGBADD`, `RGBTO` added; `RGB` rewritten; the PALETTE hover now shows both the statement and the function. 147 commands now have syntax; 59 keywords still have only a plain hover.
+
 ---
 
 ## 12. Still open
@@ -464,7 +502,6 @@ Scans 100–119, all named correctly (p. = scan − 4). Section 1.2 (file comman
 - Diff send, following the rules in section 6.
 - A live key-send mode, with F12 as a "reset display" key.
 - A "Saturn charset" mode for files using the graphic characters 0x80–0x9F/0xE0–0xFF (section 10c), and a warning when a non-`KPRINT` string contains kanji.
-- Filter the sender's `COM:` directory list to valid Saturn names (section 10d); optionally a PNG ↔ `.0`/`.1` bitmap converter.
 - Optionally: a check for variable names over 31 characters; an option to auto-number from 100/10 like `RENUM`; hover notes (texture colour bit 15, `RGB` ranges); MML highlighting inside strings.
 
 **To test on hardware.**

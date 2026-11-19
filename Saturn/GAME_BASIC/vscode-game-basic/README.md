@@ -17,6 +17,8 @@ The extension does the editing side itself. Anything that touches the serial por
 | Send and Run | **Shift+F6**. Same, with `,R` |
 | Stop | **Ctrl+F6** |
 | Show Error Line | **Alt+F6**, or the warning button in the editor title. After a program stops on an error, presses F12 (readable edit screen) and types `ERROR`, so the Saturn shows the failing line again (Reference Manual p. 36) |
+| Convert to Saturn Bitmap / Convert Saturn Bitmap to PNG | Right-click a `.png`, `.0` or `.1` file in the Explorer. A PNG becomes `.1` (32768 colours) or `.0` (256 colours, reduced if needed) for `GLOAD`; a Saturn bitmap becomes a PNG. Uses `tools/saturn_bitmap.py` |
+| Convert to Characters (SETCHR DATA) | Right-click a `.png` whose sides are multiples of 8. Asks for 16 colours (text screen) or 256 (character screen) and the first pattern number, then writes `NAME_chr.B` with `SETCHR ... READ`, the hex `DATA` lines and `PALETTE` lines, ready to `#include` |
 | Other commands | Run, Receive (pulls the Saturn's program back with `SAVE "COM:..."`), Type Text, Show Program as It Will Be Sent, Select Serial Port, Run Self-Test, and a COM: file server console |
 
 All commands are under **GAME BASIC:** in the Command Palette.

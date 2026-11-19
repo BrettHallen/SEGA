@@ -530,6 +530,166 @@ const COMMANDS = {
     summary: "File number 1 or 2 (from OPEN). Returns the position of the end of the file.",
     source: "Ref. p. 115",
   },
+  ACTIVE: {
+    syntax: "ACTIVE <logical BG>   (e.g. ACTIVE 0, ACTIVE (A AND 3)+4)",
+    summary: "Sets the default BG for commands that leave it out. 0-2: bitmap commands (CIRCLE, LINE, GCOPY, PSET, PAINT, KPRINT, CLS, POINT). 4-8: character commands (CCOPY, PUTCHR, SETCHR, READCHR$). 10+: draws into SETTEX texture (logical BG = texture ID + 10); Undefined texture if it is missing. Bitmap and character choices are kept separately; CLS/MOSAIC/DISPLAY ACTIVE use the last one set, and the ROT commands use BG 8 or 9. Logical BG numbers: 0/1 bitmap, 2 bitmap rotation, 4-7 character screens, 8/9 character rotation, 10+ sprites/polygons (texture ID + 10 for a SETTEX texture).",
+    source: "Ref. pp. 117-118",
+  },
+  CCOPY: {
+    syntax: "CCOPY [<BG>,](x1,y1)-(x2,y2) TO [<BG>,](x,y)\nCCOPY <string> TO [<BG>,](x,y)\nCCOPY [<BG>,](x1,y1)-(x2,y2) TO <string variable>   (e.g. CCOPY 0,(0,0)-(20,7) TO V$)",
+    summary: "Copies a rectangle of a character screen, in characters, always top-left first, line by line. Coordinates wrap by the screen width (for scrolling). The string form is: width and height in characters (1 byte each, 1-128), then 2 bytes per character (pattern name, high byte first). BG defaults to the last ACTIVE character screen.",
+    source: "Ref. pp. 118-120",
+  },
+  CIRCLE: {
+    syntax: "CIRCLE(x,y),<radius>[,[<colour>][,F]]\nCIRCLE(x,y),(<x radius>,<y radius>)[,[<colour>][,F]]   (e.g. CIRCLE(100,100),10,15)",
+    summary: "Draws a circle or ellipse in dots on the ACTIVE bitmap, inside the WINDOW clip area. Colour defaults to COLOR; F fills it.",
+    source: "Ref. p. 120",
+  },
+  CLS: {
+    syntax: "CLS [<logical BG>][,<logical BG>...]\nCLS -1\nCLS ACTIVE   (e.g. CLS, CLS 0,4,5)",
+    summary: "Clears screens; no number means the text screen, -1 means every screen except textures. A bitmap (0-2) or texture (10+) is filled with the COLOR background colour inside WINDOW; a character screen (4-8) with word &H0000, and the text screen with spaces (&H20) inside WIDTH.",
+    source: "Ref. p. 121",
+  },
+  COLOR: {
+    syntax: "COLOR [<text colour>][,[<draw colour>][,[<background colour>][,<border colour>]]]   (e.g. COLOR 5, COLOR A,,15-A)",
+    summary: "At least one value is needed; the rest keep their settings. Text colour 0-15 (via the text palette). Draw/background: RGB(r,g,b) = r+g*32+b*1024 in 32768-colour mode (-1 = transparent), or a palette number 0-255 in 256-colour mode. Border 0-32767, or a word string of up to 224 line colours, top to bottom.",
+    source: "Ref. p. 122",
+  },
+  COLOROFS: {
+    syntax: "COLOROFS {ON|OFF}[,]<logical BG>[,<logical BG>...]\nCOLOROFS (<R>,<G>,<B>)",
+    summary: "Colour offset (tint) for BG and sprite planes (sprites are 10): the first form picks the screens, the second sets the offset, -255 to +255 each (Illegal function call outside). Several numbers can be listed and ON/OFF mixed; the last mention of a number wins, and ending with ON or OFF applies it to every BG in the mode. Tinting sprites affects the virtual keyboard too. SCREEN turns it off and resets to (0,0,0). Fade out: COLOROFS ON: FOR I=0 TO 255: COLOROFS (-I,-I,-I): VSYNC: NEXT.",
+    source: "Ref. p. 123",
+  },
+  DISPLAY: {
+    syntax: "DISPLAY {ON|OFF}[,]<logical BG>[,<logical BG>...]   (e.g. DISPLAY OFF 4)",
+    summary: "Shows or hides BG screens; ACTIVE can stand for a number. Several numbers can be listed and ON/OFF mixed; the last mention of a number wins, and ending with ON or OFF applies it to every BG in the mode. DISPLAY OFF hides everything (press F12 to bring the text screen back). Hiding rotation screens while drawing speeds things up. \"DISPLAY OFF,ON 3\" is not allowed: use two statements. SCREEN turns all on.",
+    source: "Ref. p. 124",
+  },
+  GCOPY: {
+    syntax: "GCOPY [<BG>,](x1,y1)-(x2,y2) TO [<BG>,](x,y)\nGCOPY <string> TO [<BG>,](x,y)\nGCOPY [<BG>,](x1,y1)-(x2,y2) TO <string variable>   (e.g. GCOPY 0,(0,0)-(99,99) TO 1,(100,0))",
+    summary: "Copies a rectangle of a bitmap screen, in dots, top-left first. X wraps at 512 and Y at 256. With a texture (BG 10+) only the string forms work; string to texture clips to the texture (negative positions allowed). Bitmap strings: width and height (2 bytes each, high byte first), then 1 byte per dot (256 colours, no palette) or 2 bytes per dot (32768 colours, bit 15 set, 0 = transparent), the same as a .1 file and a .0 file without its palette.",
+    source: "Ref. pp. 125-127",
+  },
+  KLOAD: {
+    syntax: "KLOAD [ON[,{1|2}]]\nKLOAD OFF",
+    summary: "Loads the kanji font from the CD so KPRINT can show kanji: 1 = JIS level 1 only (722 blocks of 256 bytes), 2 or nothing = levels 1 and 2 (991 blocks), taken from the program area (Out of memory if the program is too big). OFF frees it. Both do CLEAR 0,256,256, so put KLOAD at the start of a program before CLEAR.",
+    source: "Ref. pp. 127-128",
+  },
+  LINE: {
+    syntax: "LINE [(x1,y1)]-(x2,y2)[,[<colour>][,B|BF]]   (e.g. LINE(0,0)-(100,100), LINE-(200,0),,B, LINE(X,Y)-(XX,YY),C,BF)",
+    summary: "Draws a line, or with B a box and with BF a filled box, on the ACTIVE bitmap inside WINDOW. Without a start point it continues from the last LINE or PSET point. Colour defaults to COLOR.",
+    source: "Ref. pp. 132-133",
+  },
+  MOSAIC: {
+    syntax: "MOSAIC {ON|OFF}[,]<logical BG>[,<logical BG>...]\nMOSAIC (<width dots>,<height dots>)   (e.g. MOSAIC ON 4, MOSAIC (4,4))",
+    summary: "Mosaic effect, 1-16 dots each way. Several numbers can be listed and ON/OFF mixed; the last mention of a number wins, and ending with ON or OFF applies it to every BG in the mode. Rotation screens (2, 8, 9) only get horizontal mosaic; sprites and polygons (10+) give Illegal function call. MOSAIC ON 4 blocks the text screen; F12 restores it. SCREEN turns it off and sets (1,1).",
+    source: "Ref. pp. 133-134",
+  },
+  PAINT: {
+    syntax: "PAINT(x,y)[,<fill colour>[,<border colour>...]]\nPAINT(x,y) ON [<fill colour>]   (e.g. PAINT(100,100),C, PAINT(X,Y) ON,-1)",
+    summary: "Fills on the ACTIVE bitmap inside WINDOW. The first form fills up to the border colour(s) (no border means border = fill colour); ON fills the area of the same colour as the start point. Fill defaults to COLOR; -1 is transparent (colour 0 in 256-colour mode). Does nothing if the start is already the fill colour.",
+    source: "Ref. pp. 134-135",
+  },
+  PALETTE: {
+    syntax: "PALETTE [<logical BG>],<palette number>[,{<value>|<word string>}...]\nPALETTE [<logical BG>],-1   (e.g. PALETTE ,C,RGB(R,G,B), PALETTE ,15,A$, PALETTE 0,-1)\nPALETTE([<logical BG>],<palette number>)   (function, e.g. A = PALETTE(0,255))",
+    summary: "Sets palette entries from the given number on (1-255; 0 is always transparent): RGB(r,g,b) values, or a word string (2 bytes per entry, high byte first; low 15 bits used). -1 restores the defaults. 16-colour text: entry n*16+15 is the letter colour and n*16+1 the outline. BG 10 sets the sprite/polygon palette (0-511); in mode 6 BGs 8 and 9 share one palette (0-511). As a function it returns the 15-bit colour (r + g*32 + b*1024); BG 10 reads the sprite/polygon palette.",
+    source: "Ref. pp. 136-137, 158-159",
+  },
+  PRIORITY: {
+    syntax: "PRIORITY <logical BG>,<priority>   (e.g. PRIORITY 0,5)",
+    summary: "Display order, 0-7: higher is in front, ties go to the lower BG, 0 hides it. Defaults: bitmaps 2, character screens 6/5/4/3, rotation 1, sprites 6. BG 10-16 set sprite priority registers 0-6; a sprite uses register n when SETATR adds n*&H1000 to its texture ID (an 8th register is the virtual keyboard's, fixed at 7). The manual's syntax box misprints it as PRIORYTY.",
+    source: "Ref. pp. 137-138",
+  },
+  PSET: {
+    syntax: "PSET (x,y)[,<colour>]   (e.g. PSET (100,100),&H7FFF)",
+    summary: "Plots a dot on the ACTIVE bitmap inside WINDOW. Colour defaults to COLOR. Also sets where a LINE without a start point begins.",
+    source: "Ref. p. 139",
+  },
+  PUTCHR: {
+    syntax: "PUTCHR [<logical BG>][,](<x>,<y>),{<word string>|<value>}[,...]\nPUTCHR [<logical BG>],<VRAM address>,{<word string>|<value>}[,...]   (e.g. PUTCHR 4,(10,10),ASC(\"3\")+&H5000)",
+    summary: "Writes pattern-name words to a character screen at a character position (wrapped to the map size) or a VRAM address 0-65535 (made even, wrapped to the screen size). Each word: bits 15-12 palette, 11 flip vertical, 10 flip horizontal, 9-0 character number (the character code on the text screen; pattern number x2 on other character screens). PUTCHR 4,(10,12),STRW$(10,&H5034) writes ten \"4\"s.",
+    source: "Ref. pp. 139-141",
+  },
+  ROTATE: {
+    syntax: "ROTATE [<X angle>][,[<Y angle>][,<Z angle>]]   (e.g. ROTATE X,Y,Z, ROTATE ,,0.5)",
+    summary: "Only in modes with a rotation screen; in mode 6 it applies to the rotation screen chosen with ACTIVE (8 or 9). Angles are in turns (1.000 = 360\u00b0; the whole-number part is ignored): Z 0.25 turns 90\u00b0 clockwise, 0.5 180\u00b0. X and Y only work in modes 5 and 6 (3-axis); modes 2 and 3 rotate about Z only. SCREEN resets to 0,0,0.",
+    source: "Ref. p. 142",
+  },
+  ROTCENTER: {
+    syntax: "ROTCENTER <X>,<Y>,<Z>   (e.g. ROTCENTER 160,112,0)",
+    summary: "Only in modes with a rotation screen; in mode 6 it applies to the rotation screen chosen with ACTIVE (8 or 9). Centre of rotation; Z is ignored in modes 2 and 3. On a 1-axis screen it is measured from the top-left (SCREEN sets 160,112,0); on a 3-axis screen from the screen centre, in the opposite direction (SCREEN sets 0,0,0). 3-axis order: ROTPOS move, 1/ROTZOOM scale, ROTATE Z then Y then X, ROTCENTER move.",
+    source: "Ref. pp. 142-143",
+  },
+  ROTOVER: {
+    syntax: "ROTOVER <outside mode>[,<repeat character>]   (e.g. ROTOVER 1,ASC(\"X\")+&H7000)",
+    summary: "Only in modes with a rotation screen; in mode 6 it applies to the rotation screen chosen with ACTIVE (8 or 9). What shows outside the rotation screen: 0 repeats the image, 1 fills with the repeat character (a pattern-name word as in PUTCHR, 0-65535), 2 transparent (the default; SCREEN sets 2 and 0). In mode 6, mode 2 reserves the last character (&H3FF for 16 colours, &H1FF for 256) as the transparent one.",
+    source: "Ref. pp. 143-144",
+  },
+  ROTPOS: {
+    syntax: "ROTPOS [<X distance>][,[<Y distance>][,<Z distance>]]   (e.g. ROTPOS 100, ROTPOS ,,ZP)",
+    summary: "Only in modes with a rotation screen; in mode 6 it applies to the rotation screen chosen with ACTIVE (8 or 9). Distance from the viewpoint to the centre of the rotation screen; Z can't be negative and is ignored in modes 2 and 3. SCREEN resets to 0,0,100.",
+    source: "Ref. pp. 144-145",
+  },
+  ROTZOOM: {
+    syntax: "ROTZOOM [<X scale>][,[<Y scale>][,<Z scale>]]   (e.g. ROTZOOM 2,2, ROTZOOM -1)",
+    summary: "Only in modes with a rotation screen; in mode 6 it applies to the rotation screen chosen with ACTIVE (8 or 9). Scale along each axis; a negative value mirrors that axis. Z is ignored in modes 2 and 3; 3-axis screens are also affected by SETPERS. Normal screens use ZOOM. SCREEN resets to 1,1,1.",
+    source: "Ref. p. 145",
+  },
+  SCROLL: {
+    syntax: "SCROLL [<logical BG>],[STEP][<X>][,<Y>]   (e.g. SCROLL 0,SX,SY, SCROLL 4,STEP 0,1)",
+    summary: "Sets which point of the screen shows at the top-left, in dots (low 10 bits used). BG 0, 1 or 4-7 only (rotation screens can't scroll); defaults to ACTIVE. A left-out X or Y keeps its value; STEP moves relative to now (left out = 0). SCREEN resets to 0,0.",
+    source: "Ref. p. 151",
+  },
+  SETCHR: {
+    syntax: "SETCHR [<logical BG>],[<pattern number>],<string>\nSETCHR [<logical BG>],[<pattern number>],<byte count>,READ   (e.g. SETCHR 4,ASC(\"A\"),STRING$(32,&HFF))",
+    summary: "Writes 8x8 character patterns, row by row from the top-left: 64 bytes (1 per dot) on a 256-colour character screen, 32 bytes (4 bits per dot) on the 16-colour text screen. Pattern 0-511 (or 0-1023); left out, it continues after the last SETCHR/READCHR$ (give it when changing BG). READ takes the bytes from hex DATA strings (2 digits per byte, e.g. DATA 00FFF000 or DATA 00,FF,F0,00). Each BG has its own patterns, except BGs 8 and 9 in mode 6. Ctrl+P restores the text font.",
+    source: "Ref. pp. 152-154",
+  },
+  VSYNC: {
+    syntax: "VSYNC [<frames>]   (e.g. VSYNC, VSYNC 2)",
+    summary: "Waits about n/60 s (default 1; 0 returns at once). Timer interrupts still run meanwhile; don't use VSYNC inside an interrupt routine as well.",
+    source: "Ref. p. 154",
+  },
+  WINDOW: {
+    syntax: "WINDOW [<left>],[<top>][,<right>][,<bottom>]   (e.g. WINDOW 0,0,200,223)",
+    summary: "Clip area for bitmap drawing (CIRCLE, LINE, PAINT, PSET, ...), shared by all bitmap screens and within the bitmap size; right >= left and bottom >= top. For a texture chosen with ACTIVE it is within the texture and is reset to the texture size on every ACTIVE, so set it after ACTIVE. SCREEN and Ctrl+P reset it to 0,0,319,223.",
+    source: "Ref. p. 155",
+  },
+  ZOOM: {
+    syntax: "ZOOM [<logical BG>],[<width scale>][,<height scale>]   (e.g. ZOOM 0,2,2)",
+    summary: "Enlarges a normal screen (BG 0, 1 or 4-7 where the mode allows zoom; rotation screens use ROTZOOM). Scales are 1.0 or more; left out they keep their value. BG defaults to ACTIVE. SCREEN resets to 1.0.",
+    source: "Ref. p. 156",
+  },
+  GETCHR: {
+    syntax: "GETCHR([<logical BG>],(<x>,<y>))\nGETCHR([<logical BG>],<VRAM address>)   (e.g. A = GETCHR(4,(X,Y)), A = GETCHR(4,&H800))",
+    summary: "Function. Reads the pattern-name word (0-65535) at a character position (wrapped to the map size) or VRAM address (made even, wrapped). Bits 15-12 palette, 11 flip vertical, 10 flip horizontal, 9-0 character number (as PUTCHR). BG defaults to the last ACTIVE character screen.",
+    source: "Ref. pp. 157-158",
+  },
+  POINT: {
+    syntax: "POINT(x,y)   (e.g. A = POINT(X,Y))",
+    summary: "Function. Colour of a dot on the ACTIVE bitmap or texture: 0-32767 in 32768-colour mode (0 is black), 1-255 in 256-colour mode; -1 transparent (colour 0 in 256-colour mode), -2 off the screen. Not limited by WINDOW.",
+    source: "Ref. p. 159",
+  },
+  'READCHR$': {
+    syntax: "READCHR$([<logical BG>],[<pattern number>],<byte count>)   (e.g. A$ = READCHR$(,10,10))",
+    summary: "Function. Returns character pattern data as a binary string, in the SETCHR layout (64 bytes per 256-colour character, 32 per 16-colour text character). Pattern 0-511 (or 0-1023); left out, it continues after the last READCHR$/SETCHR. BG defaults to ACTIVE.",
+    source: "Ref. p. 160",
+  },
+  'READHEX$': {
+    syntax: "READHEX$(<byte count>)   (e.g. PTN$ = READHEX$(16))",
+    summary: "Function. Reads that many bytes from hex DATA (DATA AA,BB,CC or DATA 12345678; an odd last digit counts as 0x) and returns them as a binary string, carrying on into the next DATA line. Unlike READ, the rest of the last DATA line is skipped. Out of DATA if there isn't enough.",
+    source: "Ref. pp. 161-162",
+  },
+  RGBADD: {
+    syntax: "RGBADD(<RGB value>,<red change>,<green change>,<blue change>)   (e.g. A = RGBADD(PLT,10,-4,2))",
+    summary: "Function. Adds to each 5-bit colour part, clamped to 0-31; bits above 14 are kept. Useful for fades.",
+    source: "Ref. p. 163",
+  },
+  RGBTO: {
+    syntax: "RGBTO(<RGB value>,<target RGB value>)   (e.g. C = RGBTO(C,TARGET))",
+    summary: "Function. Moves each colour part one step towards the target; bits above 14 come from the target. Call it repeatedly for a fade.",
+    source: "Ref. p. 164",
+  },
   FILES: {
     syntax: "FILES \"[<device>:][<pattern>]\"[,P]   (e.g. FILES, FILES \"COM:SAMPLE??\", FILES F$)",
     summary: "Lists matching files, 10 characters per name plus 2 separator spaces, wrapping as needed. Wildcards ? and * work; no pattern lists everything, no extension matches all extensions. P pauses when the screen is full (any key continues). Except on CD:, the last line is \"Free size <free> / <total> file blocks\" (1 block = 64 bytes). Device defaults to the last one used.",
@@ -546,9 +706,9 @@ const COMMANDS = {
     source: "Ref. pp. 7-8, 40-41",
   },
   KPRINT: {
-    syntax: 'KPRINT [(x,y[,xpitch,ypitch,halfwidth])],[FIX][string][;][,colour][,SCALE][,bgcolour]',
-    summary: 'Prints kanji text. Needs KLOAD ON first; kanji strings have to come from the PC.',
-    source: 'Tut. pp. 49-50',
+    syntax: "KPRINT [(x,y[,<x spacing>,<y spacing>,<half-width offset>]),][FIX][<string>][;][,<text colour>][,<SCALE>][,<background colour>]\nKPRINT (x,y)\nKPRINT PALETTE [<BG>],<first palette number>,<base colour>",
+    summary: "Draws Shift-JIS or single-byte text on the ACTIVE bitmap (0-2) or sprites (10). Needs KLOAD, except with FIX (the 8x8 text font). SCALE 8-16 sets the size (default 16); spacing and offset are -128 to 127 and stay set. Colours default to COLOR; the background may be -1 (transparent), the text colour may not. \";\" keeps the position for the next KPRINT; CHR$(13)/CHR$(10) work inside the string. KPRINT PALETTE makes 3 shaded palette entries from the base colour for smooth 256-colour text when SCALE is under 16. SCREEN resets the settings.",
+    source: "Ref. pp. 128-132",
   },
   LOAD: {
     syntax: "LOAD \"[<device>:]<name>\"[,R][,M]   (e.g. LOAD \"SAMPLE\", LOAD \"BRAM:MAIN\",R, LOAD F$,R)",
@@ -571,9 +731,9 @@ const COMMANDS = {
     source: "Ref. p. 73; Tut. p. 34",
   },
   RGB: {
-    syntax: 'RGB(r,g,b)',
-    summary: 'Colour value, 0-31 per channel = r + g*32 + b*1024. Texture colours need OR &H8000.',
-    source: 'Tut. pp. 44, 66',
+    syntax: "RGB(<red>,<green>,<blue>)   (e.g. A = RGB(R,G,B))",
+    summary: "Function. Colour value (r AND 31) + (g AND 31)*32 + (b AND 31)*1024, for PALETTE and 32768-colour mode. Texture and bitmap-file colours need OR &H8000.",
+    source: "Ref. p. 162; Tut. pp. 44, 66",
   },
   SAVE: {
     syntax: "SAVE \"[<device>:]<name>\"[,A]   (e.g. SAVE \"SAMPLE\", SAVE \"BRAM:MAIN\", SAVE F$)",
@@ -581,9 +741,9 @@ const COMMANDS = {
     source: "Ref. pp. 111-112; Tut. p. 29",
   },
   SCREEN: {
-    syntax: 'SCREEN [mode][,text BG][,text colours][,frame unit]',
-    summary: 'Screen mode 0-6. Text screen 39x26, bitmap 320x224. SCREEN 0 (Ctrl+P / F12) brings back the edit screen.',
-    source: 'Tut. pp. 41-44; Ref. p. 15',
+    syntax: "SCREEN [<mode>][,[<text BG>][,[<text colours>][,<frame unit>]]]   (e.g. SCREEN 0, SCREEN ,4,256)",
+    summary: "Sets the screen mode 0-6 and resets the screens (no mode keeps the current one). Text BG: any character screen in the mode, including a rotation one (default the lowest). Text colours 16 (default) or 256 (then the COLOR text colour is ignored). Frame unit -8..-1 or 1..8 (default 1): sprites/polygons swap buffers every n/60 s; positive waits for all polygons, negative cuts them off. Modes: 0 = bitmap 0 (32768 colours) + char 4, 5; 1 = bitmaps 0, 1 (256) + char 4, 5; 2 = char 4, 5 + rotation 8 (Z); 3 = bitmap rotation 2 (Z) + char 4, 5; 4 = char 4-7 (256 colours); 5 = char 4, 5 + rotation 8 (3-axis); 6 = char 4, 5 + rotation 8, 9 (3-axis). Resets VRAM, scroll, zoom, priorities, rotation, palettes, text font, WIDTH 1,1,38,26, WINDOW 0,0,319,223, ACTIVE, OBJ, textures, vertices, polygons, attributes and SPRWINDOW. Ctrl+P / F12 brings back the edit screen.",
+    source: "Ref. pp. 146-150; Tut. pp. 41-44",
   },
 };
 

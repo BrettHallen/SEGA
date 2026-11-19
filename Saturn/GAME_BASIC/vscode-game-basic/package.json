@@ -92,6 +92,21 @@
         "icon": "$(warning)"
       },
       {
+        "command": "gameBasic.toSaturnBitmap",
+        "title": "Convert to Saturn Bitmap (.0/.1)",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.toPng",
+        "title": "Convert Saturn Bitmap to PNG",
+        "category": "GAME BASIC"
+      },
+      {
+        "command": "gameBasic.toSetchr",
+        "title": "Convert to Characters (SETCHR DATA)",
+        "category": "GAME BASIC"
+      },
+      {
         "command": "gameBasic.receive",
         "title": "Receive Program from Saturn",
         "category": "GAME BASIC"
@@ -138,6 +153,23 @@
           "command": "gameBasic.showError",
           "when": "editorLangId == game-basic",
           "group": "navigation@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "gameBasic.toSaturnBitmap",
+          "when": "resourceExtname == .png",
+          "group": "7_modification"
+        },
+        {
+          "command": "gameBasic.toPng",
+          "when": "resourceExtname =~ /^\\.[01]$/",
+          "group": "7_modification"
+        },
+        {
+          "command": "gameBasic.toSetchr",
+          "when": "resourceExtname == .png",
+          "group": "7_modification"
         }
       ],
       "commandPalette": [

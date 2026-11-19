@@ -236,6 +236,20 @@ class LinkTests(unittest.TestCase):
             self.assertIsNone(link._resolve("../etc"))
             mock.stop_thread()
 
+    def test_dir_lists_only_saturn_names(self):
+        # Ref. pp. 96-97: 1-8 of A-Z, 0-9, _ then .B, .0, .1 or .D.
+        self.assertTrue(P.saturn_name_ok("game.b"))
+        self.assertTrue(P.saturn_name_ok("PIC_01.1"))
+        for bad in ("LONGNAME9.B", "my-prog.b", "A B.B", "NOTES.TXT", "README", ".B"):
+            self.assertFalse(P.saturn_name_ok(bad), bad)
+        with tempfile.TemporaryDirectory() as d:
+            for n in ("Game.b", "pic.0", "too_long_name.b", "x-y.d", "notes.txt"):
+                open(os.path.join(d, n), "wb").close()
+            pc, _sat = pipe_pair()
+            link = SaturnLink(pc, serve_dir=d, key_delay=0)
+            self.assertEqual(link._dir_names("*"), ["GAME.B", "PIC.0"])
+            self.assertEqual(link._dir_names("*.B"), ["GAME.B"])
+
     def test_no_saturn_times_out(self):
         pc, _sat = pipe_pair()
         link = SaturnLink(pc)

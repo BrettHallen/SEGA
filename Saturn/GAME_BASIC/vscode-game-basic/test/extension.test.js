@@ -74,6 +74,8 @@ function makeVscode(state) {
       showErrorMessage: async (m) => { state.errors.push(m); },
       showWarningMessage: async (m) => { state.errors.push(m); },
       showInformationMessage: async (m) => { state.info.push(m); },
+      showQuickPick: async (items) => items[state.pick || 0],
+      showInputBox: async (o) => (o && o.value) || '',
       setStatusBarMessage: (m) => { state.info.push(m); },
       showTextDocument: async () => {},
       onDidChangeActiveTextEditor: () => disposable,
@@ -119,7 +121,7 @@ test('extension commands drive the sender against the mock Saturn', { skip: !has
   };
   const ext = load(state);
   for (const id of ['send', 'sendAndRun', 'run', 'stop', 'showError', 'receive', 'typeText', 'serve',
-    'selectPort', 'showProcessed', 'selfTest']) {
+    'selectPort', 'showProcessed', 'selfTest', 'toSaturnBitmap', 'toPng', 'toSetchr']) {
     assert.ok(state.commands[`gameBasic.${id}`], `command ${id} registered`);
   }
 
@@ -154,6 +156,9 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.match(ext.hoverText('endif'), /IF <condition> THEN/);
   assert.match(ext.hoverText('INKEY$'), /Page Down 251/);
   assert.match(ext.hoverText('files$'), /CHR\$\(13\)\+CHR\$\(10\)/);
+  assert.match(ext.hoverText('pset'), /PSET \(x,y\)\[,<colour>\]/);
+  assert.match(ext.hoverText('vsync'), /VSYNC \[<frames>\]/);
+  assert.match(ext.hoverText('palette'), /PALETTE\(\[<logical BG>\],<palette number>\)/);
   assert.match(ext.hoverText('append'), /OPEN "\[<device>:\]<name>" \[FOR/);
   assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
   assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
@@ -171,4 +176,32 @@ test('error list: Saturn messages get their cause (Ref. pp. 391-406)', () => {
   assert.match(R.explainError('Sound: MML command error'), /^error 67: /);
   assert.match(R.explainError('Bad octave value(0 <=> 8)'), /error 67/);
   assert.strictEqual(R.explainError('Line 120'), null);
+});
+
+test('PNG and Saturn bitmaps convert both ways', { skip: !hasPython }, async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'satbmp-'));
+  // A 2x1 .1 file: one black dot (&H8000) and one transparent dot (0).
+  const one = path.join(dir, 'PIC.1');
+  fs.writeFileSync(one, Buffer.from([0, 2, 0, 1, 0x80, 0, 0, 0]));
+  const state = {
+    config: {}, commands: {}, providers: {}, diags: new Map(), errors: [], info: [], opened: [], log: '',
+    editor: null, pick: 1,
+  };
+  load(state);
+  await state.commands['gameBasic.toPng']({ fsPath: one });
+  assert.deepStrictEqual(state.errors, []);
+  assert.ok(fs.existsSync(path.join(dir, 'PIC.png')), state.info.join('\n'));
+  await state.commands['gameBasic.toSaturnBitmap']({ fsPath: path.join(dir, 'PIC.png') });
+  assert.deepStrictEqual(state.errors, []);
+  const zero = fs.readFileSync(path.join(dir, 'PIC.0'));
+  assert.strictEqual(zero.length, 4 + 512 + 2);
+  assert.match(state.info.join('\n'), /256 colours/);
+  // An 8x8 .1 picture (all black) -> PNG -> SETCHR lines.
+  const eight = path.join(dir, 'CHR.1');
+  fs.writeFileSync(eight, Buffer.concat([Buffer.from([0, 8, 0, 8]), Buffer.alloc(128, 0x80).map((b, i) => (i % 2 ? 0 : 0x80))]));
+  await state.commands['gameBasic.toPng']({ fsPath: eight });
+  state.pick = 0;
+  await state.commands['gameBasic.toSetchr']({ fsPath: path.join(dir, 'CHR.png') });
+  assert.deepStrictEqual(state.errors, []);
+  assert.match(fs.readFileSync(path.join(dir, 'CHR_chr.B'), 'ascii'), /SETCHR 4,0,32,READ\r\nDATA 11111111/);
 });

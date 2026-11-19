@@ -506,6 +506,69 @@ async function selectPort() {
   await cfg().update('useMockSaturn', false, target);
 }
 
+// ------------------------------------------------------------- bitmaps
+
+function bitmapScript() {
+  return path.join(path.dirname(senderScript()), 'saturn_bitmap.py');
+}
+
+// PNG <-> GAME BASIC bitmap (.0 / .1) with tools/saturn_bitmap.py.
+async function convertBitmap(uri, toSaturn) {
+  let file = uri && uri.fsPath;
+  if (!file) {
+    const picked = await vscode.window.showOpenDialog({
+      canSelectMany: false,
+      filters: toSaturn ? { PNG: ['png'] } : { 'Saturn bitmap': ['0', '1'] },
+    });
+    if (!picked || !picked.length) return;
+    file = picked[0].fsPath;
+  }
+  const args = [bitmapScript(), file];
+  if (toSaturn) {
+    const pick = await vscode.window.showQuickPick([
+      { label: '32768 colours (.1)', description: 'every colour kept' },
+      { label: '256 colours (.0)', description: 'needs less memory', c256: true },
+    ], { placeHolder: 'Saturn bitmap type' });
+    if (!pick) return;
+    if (pick.c256) args.push('--256');
+  }
+  const py = await python();
+  const res = await new Promise((resolve) => {
+    cp.execFile(py[0], [...py.slice(1), ...args], { timeout: 120000 }, (err, stdout, stderr) =>
+      resolve({ ok: !err, out: `${stdout}`.trim(), err: `${stderr}`.trim() }));
+  });
+  output.appendLine(res.ok ? res.out : res.err);
+  if (res.ok) vscode.window.showInformationMessage(res.out);
+  else vscode.window.showErrorMessage(`Convert failed: ${(res.err || 'unknown error').replace(/^Error: /, '')}`);
+}
+
+// PNG -> SETCHR + DATA lines for 8x8 characters (saturn_bitmap.py --setchr).
+async function pngToSetchr(uri) {
+  let file = uri && uri.fsPath;
+  if (!file) {
+    const picked = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { PNG: ['png'] } });
+    if (!picked || !picked.length) return;
+    file = picked[0].fsPath;
+  }
+  const pick = await vscode.window.showQuickPick([
+    { label: '16 colours (text screen)', description: '4 bits per dot, up to 15 colours', c: '16' },
+    { label: '256 colours (character screen)', description: '1 byte per dot, up to 255 colours', c: '256' },
+  ], { placeHolder: 'Character pattern type' });
+  if (!pick) return;
+  const first = await vscode.window.showInputBox({ prompt: 'First pattern number', value: '0',
+    validateInput: (v) => (/^\d+$/.test(v.trim()) ? null : 'A number, e.g. 0 or 128') });
+  if (first === undefined) return;
+  const py = await python();
+  const args = [...py.slice(1), bitmapScript(), file, '--setchr', pick.c, '--first', first.trim()];
+  const res = await new Promise((resolve) => {
+    cp.execFile(py[0], args, { timeout: 120000 }, (err, stdout, stderr) =>
+      resolve({ ok: !err, out: `${stdout}`.trim(), err: `${stderr}`.trim() }));
+  });
+  output.appendLine(res.ok ? res.out : res.err);
+  if (res.ok) vscode.window.showInformationMessage(res.out);
+  else vscode.window.showErrorMessage(`Convert failed: ${(res.err || 'unknown error').replace(/^Error: /, '')}`);
+}
+
 async function selfTest() {
   const res = await runTool(['selftest'], 'Self-test', { cancellable: false });
   if (!res) return;
@@ -568,6 +631,9 @@ function activate(context) {
     reg('gameBasic.selectPort', selectPort),
     reg('gameBasic.showProcessed', showProcessed),
     reg('gameBasic.selfTest', selfTest),
+    reg('gameBasic.toSaturnBitmap', (uri) => convertBitmap(uri, true)),
+    reg('gameBasic.toPng', (uri) => convertBitmap(uri, false)),
+    reg('gameBasic.toSetchr', pngToSetchr),
     vscode.languages.registerDefinitionProvider(sel, definitionProvider),
     vscode.languages.registerInlayHintsProvider(sel, inlayHintsProvider),
     vscode.languages.registerDocumentSymbolProvider(sel, symbolProvider),

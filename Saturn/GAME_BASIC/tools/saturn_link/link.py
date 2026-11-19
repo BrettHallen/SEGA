@@ -35,6 +35,12 @@ SATURN_ERROR_RE = E.ERROR_RE
 SATURN_LINE_RE = re.compile(r"^\s*Line\s+(\d+)\s*$", re.I)
 
 
+# Reference Manual p. 147: a program drawing very many polygons can lock up
+# the Saturn's keyboard input; a soft reset keeps the program in memory.
+HUNG_HINT = ("If the Saturn has locked up, soft reset it with A+B+C+Start on the pad: "
+             "GAME BASIC keeps the program in memory.")
+
+
 class LinkError(Exception):
     pass
 
@@ -124,7 +130,7 @@ class SaturnLink:
             "No answer from the Saturn. Check the cable, the port, the baud rate "
             "(9600 or 19200, same as GAME BASIC; to see or change it on the Saturn, "
             "press L+R+Z on the pad or Q+E+D on the keyboard) and that GAME BASIC "
-            "is at its prompt."
+            "is at its prompt. " + HUNG_HINT
         )
 
     def _drain_nuls(self, quiet: float) -> None:
@@ -459,6 +465,11 @@ class SaturnLink:
         pattern = self._read_string()
         if pattern is None:
             return
+        self._dir_matches = self._dir_names(pattern)
+        self._on_dir_next()
+
+    def _dir_names(self, pattern: str) -> List[str]:
+        """Names for FILES "COM:...": only ones the Saturn can load (Ref. pp. 96-97)."""
         names = sorted(self.virtual) if not self.serve_dir else []
         if self.serve_dir:
             try:
@@ -467,9 +478,8 @@ class SaturnLink:
             except OSError:
                 names = []
         pat = pattern.upper() or "*"
-        self._dir_matches = [n.upper() for n in names
-                             if len(n) <= P.STRING_MAX_CHARS and fnmatch.fnmatch(n.upper(), pat)]
-        self._on_dir_next()
+        return [n.upper() for n in names
+                if P.saturn_name_ok(n) and fnmatch.fnmatch(n.upper(), pat)]
 
     def _on_dir_next(self) -> None:
         if not self._dir_matches:
@@ -501,7 +511,7 @@ class SaturnLink:
         deadline = time.monotonic() + timeout
         while self.status_seq == seq:
             if time.monotonic() > deadline:
-                raise LinkError("The Saturn did not answer STOP within 5 s.")
+                raise LinkError("The Saturn did not answer STOP within 5 s. " + HUNG_HINT)
             self._send(P.keystroke(*P.KEY_STOP_BEFORE_LOAD))
             self.pump_for(0.05)
 

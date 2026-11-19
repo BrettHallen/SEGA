@@ -14,6 +14,7 @@ Basterm.exe:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
@@ -204,6 +205,17 @@ def parse_string(raw: bytes) -> Optional[str]:
         return None
     text = body.split(b"\0", 1)[0]
     return text.decode("ascii", errors="replace")
+
+
+# Reference Manual pp. 96-97: a base of 1-8 characters from A-Z, 0-9 and "_",
+# then one of the extensions B (program), 0/1 (256/32768-colour bitmap) or
+# D (other data). The Saturn upper-cases what is typed.
+SATURN_NAME_RE = re.compile(r"[A-Z0-9_]{1,8}\.[B01D]", re.IGNORECASE)
+
+
+def saturn_name_ok(name: str) -> bool:
+    """True if the Saturn can use this name (e.g. GAME.B, PIC_01.1)."""
+    return SATURN_NAME_RE.fullmatch(name) is not None
 
 
 def clean_filename(name: str) -> str:

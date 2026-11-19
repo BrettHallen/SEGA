@@ -24,7 +24,23 @@ python3 saturn_send.py send GAME.B --mock --run        # pretend Saturn
 
 Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATURN_BAUD`), `--mock`, `--trace` (hex dump), `-v`, `--key-delay`, and for programs `-n/--auto-number`, `--start`, `--step`, `--label-interval`, `--max-line-bytes`. Exit codes: 0 ok, 1 link error, 2 program errors, 3 usage, 4 sent but the Saturn printed an error (such as `Syntax error`). After a send, `send` reports the Saturn's `Line N` message and any error lines it printed.
 
+`serve` and `send --serve` list only names the Saturn can use (1-8 of A-Z, 0-9 and `_`, then `.B`, `.0`, `.1` or `.D`; Reference Manual pp. 96-97), so `FILES "COM:"` doesn't show files it couldn't load.
+
 `TBASTERM.B` is kept in memory, so nothing is written to your folder on a send. Other `COM:` names the program opens are served from one folder only (`--serve-dir`, by default the program's folder), matched without regard to case, and paths that try to leave that folder are refused.
+
+## saturn_bitmap.py
+
+Converts between PNG and the Saturn's bitmap files for `GLOAD`/`GSAVE` (Reference Manual pp. 105-106). Plain Python 3, no packages needed.
+
+```
+python3 saturn_bitmap.py PICTURE.png            # -> PICTURE.1 (32768 colours)
+python3 saturn_bitmap.py PICTURE.png --256      # -> PICTURE.0 (256 colours; more are reduced)
+python3 saturn_bitmap.py TEKST.1                # -> TEKST.png
+python3 saturn_bitmap.py FONT.png --setchr       # -> FONT_chr.B: SETCHR + DATA for 8x8 characters
+python3 saturn_bitmap.py TILES.png --setchr 256 --first 64 --start 9000
+```
+
+PNG transparency becomes the Saturn's transparent value (dot 0 in `.0`, word 0 in `.1`). Pictures can be up to 512x256. It prints the `CLEAR` file-buffer size `GLOAD` needs, and warns if the output name isn't one the Saturn can use. `--setchr` cuts a PNG (sides multiples of 8) into 8x8 characters and writes `SETCHR <BG>,<pattern>,<bytes>,READ` with one hex `DATA` line per dot row (Reference Manual pp. 152-154), plus `PALETTE` lines for its colours. `16` (the default) is for the 16-colour text screen (up to 15 colours, palette code 1 unless `--palette` says otherwise); `256` is for a 256-colour character screen. Options: `--bg` (default 4), `--first` pattern, `--no-palette`, and `--start`/`--step` for line numbers (without them, `#include` the file or send with automatic numbering). The CD's `SABA_BG.0`, `HIBIKI_0.0`, `TEKST.1` and `TEKEND.1` convert to PNG and back byte for byte.
 
 ## Layout
 
@@ -35,6 +51,7 @@ Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATU
 | `saturn_link/link.py` | PC side: NUL handshake, file server, STOP, LOAD / SAVE / RUN |
 | `saturn_link/mock.py` | A pretend Saturn that speaks the other side of the protocol |
 | `saturn_link/preprocess.py` | `#include`, automatic line numbers, BASTERM's checks, Shift-JIS encoding |
+| `saturn_bitmap.py` | PNG <-> `.0`/`.1` bitmap converter (separate from the link) |
 | `saturn_link/transport.py` | pyserial port, in-process pipe, and a byte-logging tap |
 | `tests/` | `python3 -m unittest discover tests`. Includes a run of the real pyserial code over a pseudo-terminal (macOS/Linux) |
 
