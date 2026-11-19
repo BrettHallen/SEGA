@@ -167,7 +167,9 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.match(ext.hoverText('@type'), /6 invisible pivot/);
   assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
   assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
-  assert.match(ext.hoverText('SFRE'), /function/);
+  assert.match(ext.hoverText('SFRE'), /SFRE\(<song no>\)/);
+  assert.match(ext.hoverText('tprop'), /TPROP\(1,ALL,@AR\)/);
+  assert.match(ext.hoverText('@loop'), /2 reverse/);
   assert.match(ext.hoverText('mmlstat'), /control command/);
   assert.match(ext.hoverText('on'), /ON MMLSTAT GOSUB/);
   assert.match(ext.hoverText('vertexid'), /Undefined vertex/);
@@ -176,6 +178,20 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.match(ext.hoverText('NOT!'), /operator/);
   assert.strictEqual(ext.hoverText('TIME'), null);
   assert.strictEqual(ext.hoverText('@NOPE'), null);
+});
+
+test('hover text: MML commands inside PLAY, EFFECT and DATA strings', () => {
+  const ext = load({ config: {}, commands: {}, providers: {}, diags: new Map(), errors: [], info: [], opened: [], log: '', editor: null });
+  const at = (line, sub, k = 0) => ext.mmlHover(line, line.indexOf(sub) + k);
+  assert.match(at('10 PLAY "T150 @44 CDE"', 'T150').text, /base track only/);
+  assert.match(at('10 PLAY "T150 @44 CDE"', '@44', 1).text, /@<tone no>/);
+  assert.match(at('20 EFFECT (I),5,"O4 C1~64;127;960"', '~64').text, /bends pitch/);
+  assert.match(at('30 DATA #0,"|:CD|1EF:|2GAB"', ':|2').text, /Second ending/);
+  assert.match(at('40 A=1:PLAY "ff=120 v100"', 'ff').text, /ff 112/);
+  const m = at('50 PLAY "@V100 CDE"', '@V');
+  assert.deepStrictEqual([m.start, m.end], [9, 14]);
+  assert.strictEqual(at('60 PRINT "T150"', 'T150'), null);
+  assert.strictEqual(at('70 PLAY "C D"', ' D'), null);
 });
 
 test('error list: Saturn messages get their cause (Ref. pp. 391-406)', () => {

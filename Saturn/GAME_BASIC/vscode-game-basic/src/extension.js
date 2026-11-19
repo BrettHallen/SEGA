@@ -217,8 +217,39 @@ function hoverText(word) {
   return `**${w}**: GAME BASIC ${kind}`;
 }
 
+// Hover inside an MML string of a PLAY, EFFECT or DATA statement: the MML
+// command under the cursor (Reference Manual section 2.6). Returns
+// { text, start, end } with columns in the line, or null.
+const MML_SCOPE = { base: 'base track only', all: 'all tracks', track: 'per track' };
+function mmlHover(line, col) {
+  let stmt = 0;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === ':') { stmt = i + 1; continue; }
+    if (ch === "'") return null;
+    if (ch !== '"') continue;
+    let j = line.indexOf('"', i + 1);
+    if (j < 0) j = line.length;
+    if (col > i && col < j) {
+      if (!/^\s*(?:\d+\s+)?(?:PLAY|EFFECT|DATA)(?![A-Za-z0-9_$])/i.test(line.slice(stmt, i))) return null;
+      const t = R.mmlTokenAt(line.slice(i + 1, j), col - i - 1);
+      if (!t) return null;
+      const [syntax, scope, summary, pages] = R.MML_COMMANDS[t.key];
+      const text = `**MML** (${MML_SCOPE[scope]})\n\n\`\`\`\n${syntax}\n\`\`\`\n${summary} *(Ref. ${pages})*`;
+      return { text, start: i + 1 + t.start, end: i + 1 + t.end };
+    }
+    i = j;
+  }
+  return null;
+}
+
 const hoverProvider = {
   provideHover(doc, pos) {
+    const mml = mmlHover(doc.lineAt(pos.line).text, pos.character);
+    if (mml) {
+      const r = new vscode.Range(pos.line, mml.start, pos.line, mml.end);
+      return new vscode.Hover(new vscode.MarkdownString(mml.text), r);
+    }
     const range = doc.getWordRangeAtPosition(pos, /@?[A-Za-z_][A-Za-z0-9_]*[$!#]?/);
     if (!range) return null;
     const text = hoverText(doc.getText(range));
@@ -686,4 +717,4 @@ function deactivate() {
   if (busy) busy.kill();
 }
 
-module.exports = { activate, deactivate, hoverText };
+module.exports = { activate, deactivate, hoverText, mmlHover };

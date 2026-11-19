@@ -865,6 +865,66 @@ const COMMANDS = {
     summary: "Fades a sequence to a volume. Sequence 0 = BGM, 1-7 from EFFECT, -1 all, -2 all except BGM. Volume 0-255 (default 127; 0 stops it). Rate 0-255, smaller is faster, 0 is immediate.",
     source: "Ref. p. 273",
   },
+  PLAYINIT: {
+    syntax: "(1) PLAYINIT [\"DSP\"|\"DSPEXT\",][\"<tone file>\",][<song count>][,<extra tone blocks>][,<song no>[~<song no>],<blocks>]...\n(2) PLAYINIT [\"<tone file>\"],0\n(3) PLAYINIT   (e.g. PLAYINIT \"DANCE\",10,0,2~3,100 / PLAYINIT \"METAL\",0 / PLAYINIT \"DSP\",\"PIANO\")",
+    summary: "Initialises sound memory and sets how the song area is shared. Without it the state is PLAYINIT \"STANDARD\",8,0. \"DSP\" = single effector (ch 0/1 out at level 7, L/R); \"DSPEXT\" = multi-effector (ch 0/1 reverb, 2/3 delay, 4 distortion). Tone file default STANDARD; changing it reads the CD and erases registered songs (form 2 swaps the file only and keeps songs). Song count 1-251 (default 8; song 0 is always BEEP). Extra tone blocks 0-487 (256 bytes each) on top of the standard 1360. Songs get 2 blocks each and song 1 the rest (488 by default, less with extra tone blocks or DSP). CLEAR ,1360,1360 caches up to 3 tone files so switching needs no CD access. Form 3 returns to the power-on state. An error here re-initialises the sound system.",
+    source: "Ref. pp. 274-279",
+  },
+  PLAYPAN: {
+    syntax: "PLAYPAN <sequence no>,<pan>   (e.g. EFFECT (I),-2:PLAYPAN I,127)",
+    summary: "Pans a playing sequence: 0-7, or -1 for all sound effects. Pan -127 left, 0 centre, 127 right; the low 3 bits are ignored (16 steps each side). Moves the direct sound only. Meant for EFFECT sounds; use EFFECT with a negative song number so the line doesn't wait. Afterwards the MML P command and TPROP pan (73) no longer apply.",
+    source: "Ref. p. 279",
+  },
+  PLAYPAUSE: {
+    syntax: "PLAYPAUSE <sequence no>   (e.g. PLAYPAUSE 0 / PLAYPAUSE -2)",
+    summary: "Pauses a sequence: 0 BGM, 1-7 sound effects, -1 all, -2 all sound effects but not the BGM. PLAYCONT resumes it; a paused sequence still counts as playing for PLAYSTAT.",
+    source: "Ref. p. 280",
+  },
+  PLAYSTOP: {
+    syntax: "PLAYSTOP <sequence no>   (e.g. PLAYSTOP -1)",
+    summary: "Stops a sequence: 0 BGM, 1-7 sound effects, -1 all, -2 all sound effects but not the BGM.",
+    source: "Ref. p. 280",
+  },
+  PLAYTEMPO: {
+    syntax: "PLAYTEMPO <sequence no>,<tempo>   (e.g. BGM 1:VSYNC 2:PLAYTEMPO 0,-4096)",
+    summary: "Changes the tempo of a playing sequence (0-7, -1 all, -2 all but BGM) relative to the original: -32768 to 32767, 0 = as written, 4096 = twice as fast, -4096 = half speed. An MML T command later in the score takes priority, and a dc repeat resets the tempo when it jumps back unless PLAYTEMPO is given after the second pass.",
+    source: "Ref. pp. 280-281",
+  },
+  SETSONG: {
+    syntax: "SETSONG [<song no>]   (program only; e.g. RESTORE *BGM5:SETSONG)\nDATA [SONG<n>] / DATA [TEMPO<n>] / DATA [#<track>,]\"<MML>\" / DATA NEXT|-|+ / DATA ENDSONG",
+    summary: "Reads MML from DATA lines and registers it in sound memory as a song for BGM or EFFECT. Song no must be within the PLAYINIT song count and fit its blocks, else an error. SONG<n> starts a song (overrides the SETSONG number, so several songs can follow each other); TEMPO<n> = tempo changes allowed, 1-256 (default 16). #<track> 0-15, else one more than the last; quotes are only needed if the MML has ':'. NEXT, - or + resets to track 0 and continues the score. The data must end with ENDSONG. Overwriting a song while it plays garbles it.",
+    source: "Ref. pp. 281-283",
+  },
+  SFRE: {
+    syntax: "SFRE(<song no>)   (e.g. PRINT SFRE(1))",
+    summary: "Free space of a song in 256-byte blocks, with a fraction (MML is kept in sound memory, so FRE doesn't show it). Song 0 to the PLAYINIT count, or -1 for all. After PLAYINIT: SFRE(0) = 1.7852, SFRE(1) = 487.9961 (about 122 KB); PLAYINIT 1 gives song 1 about 125 KB.",
+    source: "Ref. pp. 283-284",
+  },
+  TARG: {
+    syntax: "(1) TARG <\"tone file\",tone no>[,<tone no>...][,<\"tone file\",tone no>...]\n(2) TARG READ [<extra layer blocks>][,<BEEP switch>]   (e.g. TARG \"ROCK\",2,5,\"EXTRA2\",3 / TARG READ 10,0)\nREAD data: DATA \"<file>\",<tone>[,...] / BUILDLAYER ... ENDLAYER / STARTPCM,8|16,<SB>,<sn>,<en>,<bn> \"<hex>\" ENDPCM / FILE,\"<file>\",<block>,<offset>,<sn>,<en>,<bn> / FM,<OP>,W,X,Y,M,S,AR,DR,SR,RR,SL,TL,ml1,ml2,dt,KS / FMEXT,... / ENDARRANGE",
+    summary: "Rebuilds the tone set: picks tones from several tone files (renumbered from 1, 0 = BEEP unless the switch is 0), builds tones layer by layer, adds your own PCM (hex DATA, or a mono 8/16-bit AIFF or WAVE file, up to 64 KB-2 per tone) or FM tones (32 operators, waveforms 1-47 or another layer's PCM). Form 2 reads DATA up to ENDARRANGE. Up to 128 tones; extra layer blocks 0-108 if \"Sound:Out of layer memory\" or \"Layer overflow\". Needs the 1360-block file area first (CLEAR ,1360); PCM from a file also needs the user area (CLEAR first parameter). Doesn't include PLAYINIT. The result can't be saved. An error re-initialises the sound system.",
+    source: "Ref. pp. 285-306",
+  },
+  TFRE: {
+    syntax: "TFRE(0)   (e.g. PRINT TFRE(0))",
+    summary: "Free tone-data area left for TARG, in 256-byte blocks (fraction cut). The argument is ignored. Until TARG is used it returns the full size: 1360 by default, 1847 after PLAYINIT ,487.",
+    source: "Ref. p. 307",
+  },
+  TLIST: {
+    syntax: "(1) TLIST [\"<tone file>\"]\n(2) TLIST \"MENU\"   (e.g. TLIST \"DANCE\")",
+    summary: "Lists the tone numbers and instrument names of a tone file: the current one with no name, or another file's description read from the CD (the tones in memory don't change). \"MENU\" lists the tone file names. After TARG the list no longer matches sound memory.",
+    source: "Ref. pp. 308-309",
+  },
+  TPROP: {
+    syntax: "(1) A=TPROP(<tone no>,<layer no>,<item no>)\n(2) TPROP(<tone no>,<layer no>|ALL,<item no>)=A[,A...]   (e.g. TPROP(1,ALL,@AR)=20,5,7,10,3,0,1,5)",
+    summary: "Reads or writes a tone layer's setting in sound memory (tone = MML @ number), also for TARG and original PCM tones; changes apply at the next note-on. Items (@ constants): 0-2 voice (bend range, layers-1, tones-1; layer must be 0), 10-13 note-on (SN, EN, BN, FT), 20-27 EG, 30-36 wave data, 50-55 LFO, 60-62 FM wiring, 70-73 mixer/DSP. Form 2 writes consecutive items from the comma list; ALL means every layer. Not saved; PLAYINIT/TARG resets it. Bad values can silence the sound: run PLAYINIT, or hot start, save and reset.",
+    source: "Ref. pp. 309-316",
+  },
+  VOLUME: {
+    syntax: "VOLUME [<volume>]   (e.g. VOLUME 0)",
+    summary: "Master volume for PLAY, EFFECT, BGM and BEEP: 0-127, larger is louder; omitted = 127. Goes back to the default after an error or a break.",
+    source: "Ref. p. 317",
+  },
   FILES: {
     syntax: "FILES \"[<device>:][<pattern>]\"[,P]   (e.g. FILES, FILES \"COM:SAMPLE??\", FILES F$)",
     summary: "Lists matching files, 10 characters per name plus 2 separator spaces, wrapping as needed. Wildcards ? and * work; no pattern lists everything, no extension matches all extensions. P pauses when the screen is full (any key continues). Except on CD:, the last line is \"Free size <free> / <total> file blocks\" (1 block = 64 bytes). Device defaults to the last one used.",
@@ -951,19 +1011,19 @@ const CONSTANTS = {
   PAD_R: ['&H80', PAD, 'R'], PAD_L: ['&H8', PAD, 'L'],
   PAD_RIGHT: ['&H8000', PAD, 'right'], PAD_LEFT: ['&H4000', PAD, 'left'],
   PAD_DOWN: ['&H2000', PAD, 'down'], PAD_UP: ['&H1000', PAD, 'up'], PAD_START: ['&H800', PAD, 'Start'],
-  BEND: [0, SND, 'bend range'], LAYER: [1, SND, 'layers - 1'], TONE: [2, SND, 'tones - 1'],
-  SN: [10, SND, 'start note'], EN: [11, SND, 'end note'], BN: [12, SND, 'base note'], FT: [13, SND, 'fine tune'],
+  BEND: [0, SND, 'bend range: pitch change for the full MML pitch bend, in notes, 0-12 or 24 (12 = +/-1 octave)'], LAYER: [1, SND, 'layers - 1 of the tone; can be lowered but not raised again'], TONE: [2, SND, 'tones - 1, the highest tone number (read only)'],
+  SN: [10, SND, 'start note 0-127: lowest note number this layer plays'], EN: [11, SND, 'end note 0-127: highest note number this layer plays'], BN: [12, SND, 'base note 0-127 of the wave data (adjusted by TARG for FM)'], FT: [13, SND, 'fine tune -127 to 128 (adjusted by TARG for FM)'],
   AR: [20, SND, 'attack rate'], DR: [21, SND, 'decay rate'], SR: [22, SND, 'sustain rate'],
   RR: [23, SND, 'release rate'], SL: [24, SND, 'sustain level'], EGHOLD: [25, SND, 'EG hold mode'],
-  LSLINK: [26, SND, 'loop start link'], KS: [27, SND, 'key rate scaling'], SDIR: [30, SND, 'sound direct'],
-  SB: [31, SND, 'source bit control'], SS: [32, SND, 'sound source control'], LOOP: [33, SND, 'loop control'],
-  PCM8B: [34, SND, 'wave data word length'], LSA: [35, SND, 'loop start address'], LEA: [36, SND, 'loop end address'],
+  LSLINK: [26, SND, 'loop start link'], KS: [27, SND, 'key rate scaling'], SDIR: [30, SND, 'sound direct: 0 through the EG, 1 out unchanged by EG, TL, ALFO'],
+  SB: [31, SND, 'source bit control: 0 none, 1 invert all but the sign bit, 2 invert the sign bit, 3 both'], SS: [32, SND, 'sound source: 0 wave data in sound memory, 1 noise, 2 all zero'], LOOP: [33, SND, 'loop: 0 off, 1 normal, 2 reverse, 3 alternating'],
+  PCM8B: [34, SND, 'wave data word length: 0 16-bit, 1 8-bit (read only)'], LSA: [35, SND, 'loop start, samples from the start address, &H0000-&HFFFE'], LEA: [36, SND, 'loop end, samples from the start address, &H0000-&HFFFE'],
   RE: [50, SND, 'LFO reset'], LFOF: [51, SND, 'LFO frequency'], ALFOWS: [52, SND, 'amplitude LFO wave'],
   ALFOS: [53, SND, 'amplitude LFO depth'], PLFOWS: [54, SND, 'pitch LFO wave'], PLFOS: [55, SND, 'pitch LFO depth'],
-  MDX: [60, SND, 'modulation input X (layer)'], MDY: [61, SND, 'modulation input Y (layer)'], MDL: [62, SND, 'modulation level'],
+  MDX: [60, SND, 'modulation input X: layer number 0-127 (+128 = previous generation); normally set by TARG FM'], MDY: [61, SND, 'modulation input Y: layer number 0-127 (+128 = previous generation); normally set by TARG FM'], MDL: [62, SND, 'modulation level (FM M); 0 switches the layer to PCM mode; normally set by TARG FM'],
   ISEL: [70, SND, 'DSP input select: channel 0 in DSP mode, 0-2 (@REV/@DEL/@DST) in DSPEXT mode; default 0'],
-  IMIX: [71, SND, 'DSP input mix level (0 = no effect)'], DSEND: [72, SND, 'direct (dry) send level'],
-  DPAN: [73, SND, 'direct pan; MML P and PLAYPAN override it until the next @ voice change'],
+  IMIX: [71, SND, 'DSP input mix level (0 = no effect)'], DSEND: [72, SND, 'direct send level 0-7: 0 off, 1 -36 dB ... 7 0 dB'],
+  DPAN: [73, SND, 'direct pan 0-31: 0/16 centre, 1-15 toward left (15 = left only), 17-31 toward right (31 = right only); MML P and PLAYPAN override it until the next @ voice change'],
   REV: [0, 'effect', 'stereo reverb (DSPEXT input 0, output 0-1)'], DEL: [1, 'effect', 'stereo delay (DSPEXT input 1, output 2-3)'],
   DST: [2, 'effect', 'mono distortion (DSPEXT input 2, output 4)'],
   SAW: [0, 'waveform', 'sawtooth'], SQU: [1, 'waveform', 'square'], TRI: [2, 'waveform', 'triangle'],
@@ -1104,4 +1164,95 @@ function explainError(text) {
   return best ? best.text : null;
 }
 
-module.exports = { COMMANDS, CONSTANTS, ERRORS, MML_DETAILS, explainError };
+// MML commands, section 2.6 (pp. 318-354): key -> [syntax, scope, summary, pages].
+// Scope: "base" = base track only (the lowest-numbered track), "all" = shared by
+// every track, "track" = per track. MML is case-sensitive.
+const MML_COMMANDS = {
+  NOTE: ['A-G[+|#|-|n][<length>[.][.][.]|l<direct length>][;<velocity>[;<gate>]][~[V|P][<start>[;<target>[;<bend length>]]]][?<chord>[;<inversion>]]', 'track',
+    'Plays a note. + or # sharp, - flat, n natural. Length 1-128 (default L) or l + direct length (quarter = 480). ;velocity 0-127 and ;gate (q ratio) for this note only. ~ bends pitch, ~V volume, ~P pan from start to target 0-127 (64 = normal) over the bend length; ; separators can\'t be left out after ~. ?chord plays a chord: ? major, ?m, ?aug, ?dim, ?7, ?m7, ?m7-5, ?M7, ?mM7, ?dim7, ?6, ?m6, ?sus4, ?7sus4, ;1-3 inversion. Without S an accidental affects this note only; after S they last to the bar line |. e.g. D-4;127;2  O4 C1~64;127;960  G?7', 'pp. 335-339'],
+  N: ["N<note no>['<length>][.][.][.][;<velocity>[;<gate>]][~[V|P]...][?<chord>[;<inversion>]]", 'track',
+    "Plays MIDI note 0-127 (N60 = O4 C); ' separates the number from the length. Not changed by S or K, so use it for drums and notes outside octaves 0-8 (N0-N11, N120-N127). e.g. N61'4;127", 'p. 342'],
+  R: ['R[<length>][.][.][.][~[V|P][<start>[;<target>[;<bend length>]]]]', 'track',
+    'Rest. Velocity and gate options are ignored. Rl0 sets bend options without resting: "@44 R10~P0;127;2000 & R10~P127;0;2000 CDEFGAB" pans while playing.', 'pp. 342-343'],
+  T: ['T<tempo>', 'base', 'Tempo, quarter notes per minute, 40-300 (default 120). More than 16 tempo changes in a song is an error unless SETSONG TEMPO<n> allows more; dc counts too.', 'pp. 324-325'],
+  O: ['O<octave>', 'track', 'Octave 0-8 (default 4). An octave set inside ( ) chord brackets lasts only to the closing bracket.', 'pp. 330-331'],
+  L: ['L<length>[.][.][.]  or  Ll<direct length>', 'track', 'Default length for A-G, N and R: 1-128 (default 4); 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128 only. Each dot adds half the previous value (up to 3). Direct lengths count 480 to a quarter note (whole 1920, 128th 15), 0-8388607, and work wherever a length is taken (C#l100).', 'pp. 331-332'],
+  l: ['l<direct length>', 'track', 'Direct length: 480 = quarter note, 1920 = whole, 15 = 128th; 0-8388607. Use after L, a note or R (Ll480, C#l100).', 'pp. 331-332'],
+  V: ['V<volume>', 'track', 'Track volume 0-15 (default 15). Sets @V: V0..V15 = @V85, 87, 90, 93, 95, 98, 101, 103, 106, 109, 111, 114, 117, 119, 122, 125.', 'pp. 325-326'],
+  '@V': ['@V<volume>', 'track', 'Fine track volume 0-127 (default 125), in decibel steps, so half volume is about 100, not 64.', 'p. 326'],
+  '@': ['@<tone no>', 'track', 'Changes the tone (instrument or effect) within the current tone file; 0 is the BEEP tone in every file (default 0). Also resets the pan to the tone\'s own. A tone missing from the file is silent, not an error.', 'pp. 322-323'],
+  '[': ['[<relative volume>', 'track', 'Raises @V by twice the value, 0-63 (default 1). e.g. @V100 CDE[20FG', 'p. 326'],
+  ']': [']<relative volume>', 'track', 'Lowers @V by twice the value, 0-63 (default 1).', 'p. 327'],
+  P: ['P<direct pan>', 'track', 'Pan 0-127: 0 left, 64 centre, 127 right (32 real steps). Default is the tone\'s own pan, which is ignored from here until the next @.', 'pp. 327-328'],
+  S: ['S<key signature>', 'track', 'Key signature, -7 to 7: sharps +, flats - (default 0, C major). After S, CDEFGAB follow the key and +, #, -, n act as accidentals until the bar line |. N is not affected. e.g. S2', 'pp. 323, 336'],
+  K: ['K<semitones>', 'track', 'Transposes following notes by -127 to 127 semitones (default 0); K12 / K-12 shift an octave. N is not affected.', 'p. 324'],
+  v: ['v<velocity>', 'track', 'Default key-on velocity for A-G and N, 0-127 (default 127). ppp to fff change it.', 'p. 333'],
+  DYN: ['ppp|pp|p|mp|mf|f|ff|fff[=<velocity>]', 'all', 'Sets the default velocity to the mark\'s value: ppp 16, pp 32, p 48, mp 64, mf 80, f 96, ff 112, fff 127. With =<n> it stores a new value for the mark instead. e.g. ff=120', 'pp. 333-334'],
+  q: ['q[<numerator>/]<denominator>', 'track', 'Key-on time as a fraction of the note length (gate/delta), 1-8388607 each, default 1/1. q2 = staccato half length; a numerator bigger than the denominator overlaps the next note. Never shorter than 1/480.', 'p. 334'],
+  '(': ['(<notes>)', 'track', 'Chord: notes inside sound together, up to 32 (33 is an error; 32 voices are shared with every song). Each note keeps its own length and velocity; the last one sets when the next note starts. Give pitch bend on one note only. Must stay in one string. e.g. (C;80 E;90 G;100)', 'p. 340'],
+  ')': ['(<notes>)', 'track', 'End of a chord; octave changes inside it are undone here.', 'p. 340'],
+  '{': ['{<notes>}[<length>][.][.][.]', 'track', 'Tuplet: the notes share the length equally (default L). Chords and tone changes are allowed inside. Must stay in one string. e.g. {CDE}4', 'p. 341'],
+  '}': ['{<notes>}[<length>][.][.][.]', 'track', 'End of a tuplet; the length after it is shared by the notes inside.', 'p. 341'],
+  '<': ['<', 'track', 'Octave down (below 0 wraps to 8).', 'p. 343'],
+  '>': ['>', 'track', 'Octave up (above 8 wraps to 0).', 'p. 344'],
+  '&': ['&', 'track', 'Tie: joins notes; pitch and accidental come from the first, other options from the last, and each part can carry its own bend. Tie across a bar with "C& | C" ("|&" is an error). Tie chords inside the brackets: (C1&C1 E1&E1 G1&G1). Keep tied notes in one string.', 'pp. 344-345'],
+  _: ['_', 'track', 'Slur: legato, keys on for the full length whatever q says; the ;gate option is ignored. e.g. C_D_E', 'p. 346'],
+  '%': ['%<damper>', 'track', 'Damper (sustain pedal): %1 no key-off from now on, %0 off (default). LOOP rhythm tones in EXTRA3/EXTRA4 need long notes or %1. e.g. CD%1EF%0GA', 'pp. 346-347'],
+  '!': ['!<control>', 'track', 'Sends 1-127 to the program when played: read with MMLSTAT(n,0). On track 0 it also triggers ON MMLSTAT GOSUB. e.g. CDE!10FG', 'p. 347'],
+  '/': ['/[<tone>;<semitones>[;<tone>;<semitones>...]]', 'track', 'Software layer: each note also plays these tone/transpose pairs (up to 16 per track, 32 voices in all). With pairs it turns layering on; a bare / toggles it. e.g. @44 /41;0;36;12;38;-12 CDEFGAB / CEG', 'pp. 347-348'],
+  '|': ['|', 'track', 'Bar line. Ignored unless S is set, when it ends the reach of accidentals. Not allowed on its own at the end of a string.', 'p. 351'],
+  '^': ['^<MML>^', 'track', 'Not played (for testing). A single ^ skips to the end of the string. Put rests in its place or the tracks drift apart. e.g. CDE^FG^CD', 'p. 354'],
+  YEN: ['¥<name>=<MML>¥  /  ¥<name>', 'all', 'Macro: one letter A-Z or a-z (case counts), up to 128 characters, shared by all tracks (the last definition wins). Written ¥ (byte &H5C, a backslash on a PC). e.g. ¥K=¥N36\'4;127¥ then ¥K(¥K¥S)', 'pp. 321-322'],
+  ec: ['ec<effector>', 'all', 'Single-effector mode (PLAYINIT "DSP") only: 0 stereo reverb 1 (strong), 1 stereo reverb 2 (weak), 2 stereo delay, 3 mono distortion; 4-15 ignored. Leave it 0 in DSPEXT mode. e.g. ec3', 'p. 330'],
+  ep: ['ep<DSP channel>;<pan>', 'all', 'Effect pan of DSP output channel 0-15: 0 left, 64 centre, 127 right. Needs PLAYINIT "DSP" or "DSPEXT", else an error; the last setting from any track wins. e.g. PLAY "CD ep0;127 E"', 'p. 328'],
+  el: ['el<DSP channel>;<level>', 'all', 'Effect level of DSP output channel 0-15: 0 off, 1 -36 dB ... 7 0 dB (all 7 at start). Needs PLAYINIT "DSP" or "DSPEXT". e.g. PLAY "CD el0;7 E"', 'p. 329'],
+  dc: ['dc', 'base', 'Da capo: the part between two dc marks loops for ever (BGM). e.g. ABdcGACDdcEF', 'pp. 348-349'],
+  $: ['$[<label>[;<label>...]]', 'base', 'Segno: where ds jumps back to. Label 0-7 (default 0); list labels to come back here more than once. e.g. CD$1EFds1G', 'p. 349'],
+  ds: ['ds[<label>]', 'base', 'Dal segno: jumps back once to the $ with the same label (0-7, default 0). e.g. CD$EGdsFE', 'p. 350'],
+  '*': ['*[<label>[;<label>...]]', 'base', 'To coda: ignored the first time; on the repeat skips to just after the ds with the same label. e.g. CD$EG*FGdsAG', 'pp. 350-351'],
+  '|:': ['|:', 'base', 'Repeat start.', 'p. 352'],
+  ':|': [':|', 'base', 'Repeat end: goes back once to |:. e.g. CDE|:FG:|', 'p. 352'],
+  ':|:': [':|:', 'base', 'Repeat end and the next repeat start in one. e.g. |:CD:|:EF:|', 'pp. 352-353'],
+  '|1': ['|1', 'base', 'First ending: played the first time only, up to :|2. e.g. |:CD|1EF:|2GAB', 'p. 353'],
+  ':|2': [':|2', 'base', 'Second ending: the second time, skips from |1 to here.', 'p. 353'],
+  '#': ['#<track>', 'track', 'Track number 0-15 at the start of an MML string or DATA line; without it each string takes the next track. The lowest track is the base track for T, dc, $, ds, * and repeats.', 'pp. 282, 319'],
+};
+
+// MML tokens in the order they are tried at each position (longest first).
+const MML_TOKENS = [
+  [/^#\d+,?/, '#'],
+  [/^:\|:/, ':|:'], [/^:\|2/, ':|2'], [/^:\|/, ':|'], [/^\|:/, '|:'], [/^\|1/, '|1'], [/^\|/, '|'],
+  [/^(?:¥|\\)[A-Za-z](?:=(?:¥|\\)[^¥\\]*(?:¥|\\))?/, 'YEN'],
+  [/^ec\d*/, 'ec'], [/^ep\d*(?:;\d*)?/, 'ep'], [/^el\d*(?:;\d*)?/, 'el'],
+  [/^dc/, 'dc'], [/^ds\d?/, 'ds'],
+  [/^(?:ppp|pp|mp|mf|fff|ff|p|f)(?:=\d+)?/, 'DYN'],
+  [/^@V\d*/, '@V'], [/^@\d*/, '@'],
+  [/^[A-G][+#\-n]?(?:l\d+|\d+)?\.{0,3}(?:;\d*){0,2}(?:~[VP]?\d*(?:;\d*){0,2})?(?:\?(?:7sus4|m7-5|m7b5|maj7|dim7|sus4|mM7|M7|m7|m6|dim|aug|m|6|7|\+|-|°)?(?:;[1-3])?)?/, 'NOTE'],
+  [/^N\d*(?:'(?:l\d+|\d+)?\.{0,3})?(?:;\d*){0,2}(?:~[VP]?\d*(?:;\d*){0,2})?(?:\?[A-Za-z0-9+\-°]*(?:;[1-3])?)?/, 'N'],
+  [/^R(?:l\d+|\d+)?\.{0,3}(?:;\d*){0,2}(?:~[VP]?\d*(?:;\d*){0,2})?/, 'R'],
+  [/^T\d*/, 'T'], [/^O\d*/, 'O'], [/^L(?:l?\d*)\.{0,3}/, 'L'], [/^l\d*/, 'l'], [/^V\d*/, 'V'],
+  [/^P\d*/, 'P'], [/^S-?\d*/, 'S'], [/^K-?\d*/, 'K'], [/^v\d*/, 'v'], [/^q\d*(?:\/\d*)?/, 'q'],
+  [/^\[\d*/, '['], [/^\]\d*/, ']'], [/^\}(?:l\d+|\d+)?\.{0,3}/, '}'],
+  [/^%\d*/, '%'], [/^!\d*/, '!'], [/^\$\d?(?:;\d)*/, '$'], [/^\*\d?(?:;\d)*/, '*'],
+  [/^\/(?:-?\d+;?)*/, '/'],
+  [/^[(){<>&_^]/, null],
+];
+
+// The MML command covering position `offset` of an MML string, as
+// { key, start, end } (end exclusive), or null on a space or unknown character.
+function mmlTokenAt(mml, offset) {
+  let i = 0;
+  while (i < mml.length) {
+    let len = 1;
+    let key = null;
+    for (const [re, k] of MML_TOKENS) {
+      const m = re.exec(mml.slice(i));
+      if (m && m[0].length) { len = m[0].length; key = k || m[0]; break; }
+    }
+    if (offset >= i && offset < i + len) return key && MML_COMMANDS[key] ? { key, start: i, end: i + len } : null;
+    i += len;
+  }
+  return null;
+}
+
+module.exports = { COMMANDS, CONSTANTS, ERRORS, MML_DETAILS, MML_COMMANDS, mmlTokenAt, explainError };
