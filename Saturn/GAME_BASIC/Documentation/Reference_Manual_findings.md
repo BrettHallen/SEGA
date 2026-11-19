@@ -89,57 +89,57 @@ Scans 25–99 (Ref. p. = scan − 4), all in order. Section 1.1 ends on p. 95 (X
 | COS | `COS(<angle>)` | Radians, float result | 31 |
 | DATA | `DATA [<data item>][,[<data item>]...]` | Program only. Quote strings holding `,` `:` or spaces; a `"` can't be included; left-out items are 0 or "" | 31–32 |
 | DATE$ | `DATE$` | `"1997 02/27 THU 19:52:01"`: year, month/day, SUN–SAT, 24-hour time | 32–33 |
-| DELETE | `DELETE {<start line>|<label>},{<end line>|<label>}` | Direct only; both lines must exist | 33 |
+| DELETE | `DELETE {<start line>\|<label>},{<end line>\|<label>}` | Direct only; both lines must exist | 33 |
 | DIM | `DIM <name>(<max>[,<max>...])[,...]` | Subscripts 0..max; up to 16 dimensions | 33–34 |
-| EDIT | `EDIT [{<line>|<label>}]` / `EDIT .` | Direct only; Page Up/Down move between lines | 34 |
+| EDIT | `EDIT [{<line>\|<label>}]` / `EDIT .` | Direct only; Page Up/Down move between lines | 34 |
 | END | `END` | Closes files, clears stacks | 35 |
 | ERL / ERR | `ERL` / `ERR` | Last error's line / code; reset by RESUME or a program change | 35–36 |
 | ERROR | `ERROR [<error number>]` | 0–255. Bare `ERROR` right after a stop re-shows the failing line (use after F12) | 36 |
 | EXP | `EXP(<numeric expression>)` | Float; argument up to about 709 | 36–37 |
-| FIND | `FIND [<start>][{,|-}[<end>]] [,]<search string>[,P]` | Direct only; Ctrl+S pause, Ctrl+C stop, Ctrl+E/X slower/faster | 37 |
+| FIND | `FIND [<start>][{,\|-}[<end>]] [,]<search string>[,P]` | Direct only; Ctrl+S pause, Ctrl+C stop, Ctrl+E/X slower/faster | 37 |
 | FIX | `FIX(<numeric expression>)` | Toward zero | 38 |
 | FKEY | `FKEY <key>,<string>` / `FKEY PRINT` (`FKEY ?`) | Keys 1–12, up to 31 characters | 38 |
 | FOR | `FOR <var>=<start> TO <end> [STEP <step>]` | Fixed-point limit ±131071.999; in direct mode the loop must fit on one line | 39–40 |
 | FRAC | `FRAC(<numeric expression>)` | Fraction part | 40 |
 | FRE | `FRE(<number>)` | 0 = free variable+program area; 1–3 = sizes of user area and file areas (not free space) | 40–41 |
-| GOSUB / GOTO | `GOSUB {<line>|<label>}` / `GOTO {<line>|<label>}` | Lines 1–99999 or `*LABEL` | 41–42 |
+| GOSUB / GOTO | `GOSUB {<line>\|<label>}` / `GOTO {<line>\|<label>}` | Lines 1–99999 or `*LABEL` | 41–42 |
 | HEX$ | `HEX$(<numeric expression>[,<suppress>])` | Same suppress codes as BIN$ | 42 |
 | HEXBIN$ | `HEXBIN$(<source string>)` | Hex text to bytes; commas allowed | 43 |
 | IF | `IF <cond> THEN … [ELSE …]`, `IF <cond> GOTO … [ELSE …]`, block `IF … THEN` / `[ELSE]` / `ENDIF` | THEN followed by line end or `:` starts a block IF; ELSE IF chains allowed | 43–46 |
 | INKEY$ | `INKEY$` | Key codes table (below) | 47–48 |
-| INPUT | `INPUT [<prompt>,]{<string var>|<numeric var>}[,<default>]` | Commas, colons and quotes are taken as typed | 48–49 |
+| INPUT | `INPUT [<prompt>,]{<string var>\|<numeric var>}[,<default>]` | Commas, colons and quotes are taken as typed | 48–49 |
 | INPUT$ | `INPUT$(<number of characters>)` | 1–255 keys; all but Ctrl+C | 49 |
 | INSTR | `INSTR(<target>,<search>[,<start>])` | 1-based, 0 if not found | 50 |
 | INT | `INT(<numeric expression>)` | Floor | 51 |
 | INTERVAL | `INTERVAL[<n>] ON [,<interval>]`, `INTERVAL[(<n>)] <interval>`, `INTERVAL[(<n>)] OFF` | Timers 0–23, 1/60 s units | 51–53 |
 | LEFT$ / LEN | `LEFT$(<string>,<n>)` / `LEN(<string>)` | | 53–54 |
 | LET | `[LET] <var>=<expression>` | Fixed-point range ±&H1FFFF.FFFC | 54 |
-| LIST | `LIST [<start>][{,|-}[<end>]]` / `LIST .` | Direct only; same Ctrl keys as FIND | 55 |
+| LIST | `LIST [<start>][{,\|-}[<end>]]` / `LIST .` | Direct only; same Ctrl keys as FIND | 55 |
 | LOCATE | `LOCATE [<X>][,<Y>]` | 0–127, from the WIDTH area's top left | 55–56 |
 | LOCK / UNLOCK | `LOCK` / `UNLOCK` | Holds back ON INTERVAL / ON TIMER calls | 56 |
 | LOG | `LOG(<numeric expression>)` | Float, argument > 0 | 56–57 |
 | MID$ | `MID$(<string>,<pos>[,<len>])` and `MID$(<var>,<pos>[,<len>])=<string>` | Function and statement | 57–58 |
 | NEW | `NEW` | Direct only; keeps user and file areas | 58 |
 | NEXT | `NEXT [<var>[,<var>...]]` | | 59 |
-| ON … | `ON ERROR GOTO {<line>|<label>|0}`, `ON <expr> GOSUB/GOTO/RESTORE …`, `ON INTERVAL[(<n>)] GOSUB …`, `ON TIMER[(<n>)] GOSUB …` | Interval timers 0–23, countdown timers 0–7 | 59–64 |
+| ON … | `ON ERROR GOTO {<line>\|<label>\|0}`, `ON <expr> GOSUB/GOTO/RESTORE …`, `ON INTERVAL[(<n>)] GOSUB …`, `ON TIMER[(<n>)] GOSUB …` | Interval timers 0–23, countdown timers 0–7 | 59–64 |
 | PAD | `PAD(<function>[,<item>])` | Ports, device IDs, button bits (matches the `@PAD_` constants) | 64–67 |
-| PEEK / PEEK$ / POKE | `PEEK(<block>,<address>)`, `PEEK$(<block>,<address>,<length>)`, `POKE <block>,<address>,{<n>|<string>}[,...]` | User area from CLEAR | 67–68 |
+| PEEK / PEEK$ / POKE | `PEEK(<block>,<address>)`, `PEEK$(<block>,<address>,<length>)`, `POKE <block>,<address>,{<n>\|<string>}[,...]` | User area from CLEAR | 67–68 |
 | POS | `POS(<number>)` | 0 = X, 1 = Y | 69 |
-| PRINT / ? | `PRINT [<expr>[[{,|;}]<expr>...]][{,|;}]` | `,` = next tab stop, `;` = continue; control characters act as with CHR$ | 69–70 |
-| PRINT USING | `PRINT USING <format>;<expr>[{,|;}<expr>...][{,|;}]` | `#` `.` `+` `& &` `@` `!` `_` | 70–71 |
+| PRINT / ? | `PRINT [<expr>[[{,\|;}]<expr>...]][{,\|;}]` | `,` = next tab stop, `;` = continue; control characters act as with CHR$ | 69–70 |
+| PRINT USING | `PRINT USING <format>;<expr>[{,\|;}<expr>...][{,\|;}]` | `#` `.` `+` `& &` `@` `!` `_` | 70–71 |
 | READ | `READ <var>[,<var>...]` | | 72 |
-| REM / ' | `{REM|'} [<comment>]` | Not a statement separator: anything after it, `:` included, is comment | 72 |
+| REM / ' | `{REM\|'} [<comment>]` | Not a statement separator: anything after it, `:` included, is comment | 72 |
 | RANDOMIZE | `RANDOMIZE <seed>` | | 71 |
 | RENUM | `RENUM [<new>][,<old>][,<step>]` | Direct only; defaults 100, all lines, 10 | 73 |
-| RESTORE | `RESTORE [{<line>|<label>}]` | | 73–74 |
-| RESUME | `RESUME [{NEXT|<line>|<label>}]` | No line number in direct mode | 74 |
+| RESTORE | `RESTORE [{<line>\|<label>}]` | | 73–74 |
+| RESUME | `RESUME [{NEXT\|<line>\|<label>}]` | No line number in direct mode | 74 |
 | RETURN | `RETURN` | | 74 |
 | RIGHT$ / RND | `RIGHT$(<string>,<n>)` / `RND(<limit>)` | RND gives 0..limit−1 | 75–76 |
-| RUN | `RUN [{<line>|<label>}]` | Resets variables, files, timers, USERDATA, sound cache | 76 |
+| RUN | `RUN [{<line>\|<label>}]` | Resets variables, files, timers, USERDATA, sound cache | 76 |
 | SGN / SHIFT | `SGN(<n>)` / `SHIFT` | SHIFT bit table for the Saturn keyboard; BASTERM sends Shift = &H3, Ctrl = &HC | 77–78 |
 | SIN / SKCLOSE / SPACE$ | `SIN(<angle>)`, `SKCLOSE`, `SPACE$(<length>)` | | 78–79 |
 | SQR / STOP / STR$ | `SQR(<n>)`, `STOP`, `STR$(<n>[,<suppress>])` | STR$ suppress as BIN$/HEX$ | 80–81 |
-| STRING$ / STRW$ | `STRING$(<count>,{<n>|<string>})`, `STRW$(<count>,{<n>|<string>})` | One character / a whole pattern | 81–82 |
+| STRING$ / STRW$ | `STRING$(<count>,{<n>\|<string>})`, `STRW$(<count>,{<n>\|<string>})` | One character / a whole pattern | 81–82 |
 | SWAP / TAN | `SWAP <var1>,<var2>`, `TAN(<angle>)` | | 83 |
 | TIMER | `TIMER[(<n>)] ON [,<time>]`, `TIMER[(<n>)] <time>`, `TIMER[(<n>)] OFF` | Countdown timers 0–7, one-shot | 84–85 |
 | USERDATA | four forms, plus `USERDATA(<0-3>)` | DATA kept in the user area, for BSAVE/BLOAD | 86–88 |
