@@ -86,7 +86,7 @@ The Saturn drives a small file-server protocol, and BASTERM's dispatcher (jump t
 | 0x03 | `cC#` 03 | Both | NAK or general error | None |
 | 0x04 | `dD$` 04 | Both | Data block follows (256 bytes) | Writes payload to the current file, then ACK or NAK |
 | 0x05 | `eE%` 05 | Saturn | Read next block of the current file | Data block (length 0 at EOF), waits for ACK |
-| 0x06 to 0x09 | `fF&` 06 … `iI)` 09 | Saturn | Status 1 to 4. 3 = program running, 4 = command finished (BASTERM beeps), 1 and 2 = stopped states (*inferred*) | None |
+| 0x06 to 0x09 | `fF&` 06 … `iI)` 09 | Saturn | Status 1 to 4, kept as BASTERM's current status (0 = unknown, set on connect and before STOP). 3 = program running: it sets the check mark on the Run menu item (update handler `0x406300`), and Stop is checked for any other known status (`0x406510`). 4 = command finished: BASTERM beeps, and Send and Receive wait for it. 1 and 2 are treated only as "not running"; BASTERM never tells them apart | None |
 | 0x0A | `jJ*` 0A | Saturn | Open for read; file name in the string packet that follows | Handle frame 0x14 + n, or 0x17 not found, 0x18 access denied, 0x03 other |
 | 0x0B | `kK+` 0B | Saturn | Open for write (create or truncate) | Same as 0x0A |
 | 0x0C | `lL,` 0C | Saturn | Open existing for read and write | Same as 0x0A |
@@ -163,8 +163,8 @@ A cross-platform replacement is small: a serial port, the frame codec, a file-se
 Open questions to check on hardware with a logic analyser:
 
 - [ ] The decompiled code shows the PC probes first and expects `0x00` back. Confirm the Saturn really answers that way.
-- [ ] The meaning of status codes 1 and 2 (frames 0x06 and 0x07). BASTERM only ever tests for 3 and 4, so it treats 1 and 2 as plain "not running".
-- [ ] Whether STOP modifiers 4 and 5 differ on the Saturn side.
+- [ ] The meaning of status codes 1 and 2 (frames 0x06 and 0x07). BASTERM only ever tests for 3 and 4, so it treats 1 and 2 as plain "not running"; the difference can only be seen on the Saturn.
+- [ ] Whether STOP modifiers 4 and 5 differ on the Saturn side. BASTERM sends both the same way (routines `0x40B630`, `0x40B6D0`, `0x40B770`): it resets the status to 0, then repeats the key every 50 ms until any status frame arrives or 5 s pass.
 - [ ] How the Saturn reacts to a NAK on a data block (resend or re-request).
 - [ ] The `COM:` device syntax beyond `LOAD`/`SAVE`/`OPEN`/`FILES`.
 
