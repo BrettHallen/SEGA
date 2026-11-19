@@ -107,6 +107,11 @@
         "category": "GAME BASIC"
       },
       {
+        "command": "gameBasic.toSprite",
+        "title": "Convert to Sprites (SPRITE$ DATA)",
+        "category": "GAME BASIC"
+      },
+      {
         "command": "gameBasic.receive",
         "title": "Receive Program from Saturn",
         "category": "GAME BASIC"
@@ -168,6 +173,11 @@
         },
         {
           "command": "gameBasic.toSetchr",
+          "when": "resourceExtname == .png",
+          "group": "7_modification"
+        },
+        {
+          "command": "gameBasic.toSprite",
           "when": "resourceExtname == .png",
           "group": "7_modification"
         }

@@ -569,6 +569,32 @@ async function pngToSetchr(uri) {
   else vscode.window.showErrorMessage(`Convert failed: ${(res.err || 'unknown error').replace(/^Error: /, '')}`);
 }
 
+async function pngToSprite(uri) {
+  let file = uri && uri.fsPath;
+  if (!file) {
+    const picked = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { PNG: ['png'] } });
+    if (!picked || !picked.length) return;
+    file = picked[0].fsPath;
+  }
+  const first = await vscode.window.showInputBox({ prompt: 'First sprite pattern number (0-255)', value: '0',
+    validateInput: (v) => (/^\d+$/.test(v.trim()) && +v <= 255 ? null : 'A number from 0 to 255') });
+  if (first === undefined) return;
+  const pick = await vscode.window.showQuickPick([
+    { label: 'Sprite palette 0', description: 'PALETTE 10,1-255 (SETSPRITE n,0)', p: '0' },
+    { label: 'Sprite palette 1', description: 'PALETTE 10,257-511 (SETSPRITE n,1)', p: '1' },
+  ], { placeHolder: 'Sprite palette for the colours' });
+  if (!pick) return;
+  const py = await python();
+  const args = [...py.slice(1), bitmapScript(), file, '--sprite', '--first', first.trim(), '--palette', pick.p];
+  const res = await new Promise((resolve) => {
+    cp.execFile(py[0], args, { timeout: 120000 }, (err, stdout, stderr) =>
+      resolve({ ok: !err, out: `${stdout}`.trim(), err: `${stderr}`.trim() }));
+  });
+  output.appendLine(res.ok ? res.out : res.err);
+  if (res.ok) vscode.window.showInformationMessage(res.out);
+  else vscode.window.showErrorMessage(`Convert failed: ${(res.err || 'unknown error').replace(/^Error: /, '')}`);
+}
+
 async function selfTest() {
   const res = await runTool(['selftest'], 'Self-test', { cancellable: false });
   if (!res) return;
@@ -634,6 +660,7 @@ function activate(context) {
     reg('gameBasic.toSaturnBitmap', (uri) => convertBitmap(uri, true)),
     reg('gameBasic.toPng', (uri) => convertBitmap(uri, false)),
     reg('gameBasic.toSetchr', pngToSetchr),
+    reg('gameBasic.toSprite', pngToSprite),
     vscode.languages.registerDefinitionProvider(sel, definitionProvider),
     vscode.languages.registerInlayHintsProvider(sel, inlayHintsProvider),
     vscode.languages.registerDocumentSymbolProvider(sel, symbolProvider),

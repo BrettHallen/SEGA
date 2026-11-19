@@ -121,7 +121,7 @@ test('extension commands drive the sender against the mock Saturn', { skip: !has
   };
   const ext = load(state);
   for (const id of ['send', 'sendAndRun', 'run', 'stop', 'showError', 'receive', 'typeText', 'serve',
-    'selectPort', 'showProcessed', 'selfTest', 'toSaturnBitmap', 'toPng', 'toSetchr']) {
+    'selectPort', 'showProcessed', 'selfTest', 'toSaturnBitmap', 'toPng', 'toSetchr', 'toSprite']) {
     assert.ok(state.commands[`gameBasic.${id}`], `command ${id} registered`);
   }
 
@@ -160,6 +160,11 @@ test('hover text: command syntax, @ constants, plain keywords', () => {
   assert.match(ext.hoverText('vsync'), /VSYNC \[<frames>\]/);
   assert.match(ext.hoverText('palette'), /PALETTE\(\[<logical BG>\],<palette number>\)/);
   assert.match(ext.hoverText('append'), /OPEN "\[<device>:\]<name>" \[FOR/);
+  assert.match(ext.hoverText('sprite$'), /16x16, 256 colours/);
+  assert.match(ext.hoverText('setvertex'), /VERTEXID\(-1\)/);
+  assert.match(ext.hoverText('obj'), /OBJ COPY <from> TO <to>/);
+  assert.match(ext.hoverText('@isel'), /DSPEXT/);
+  assert.match(ext.hoverText('@type'), /6 invisible pivot/);
   assert.match(ext.hoverText('@pad_start'), /@PAD_START\*\* = &H800/);
   assert.match(ext.hoverText('@XP'), /= 4: OBJ field, X position/);
   assert.match(ext.hoverText('VERTEXID'), /function/);
@@ -204,4 +209,14 @@ test('PNG and Saturn bitmaps convert both ways', { skip: !hasPython }, async () 
   await state.commands['gameBasic.toSetchr']({ fsPath: path.join(dir, 'CHR.png') });
   assert.deepStrictEqual(state.errors, []);
   assert.match(fs.readFileSync(path.join(dir, 'CHR_chr.B'), 'ascii'), /SETCHR 4,0,32,READ\r\nDATA 11111111/);
+  // A 16x16 .1 picture (all black) -> PNG -> SPRITE$ lines.
+  const sixteen = path.join(dir, 'SPR.1');
+  fs.writeFileSync(sixteen, Buffer.concat([Buffer.from([0, 16, 0, 16]), Buffer.alloc(512, 0).map((b, i) => (i % 2 ? 0 : 0x80))]));
+  await state.commands['gameBasic.toPng']({ fsPath: sixteen });
+  state.pick = 1;
+  await state.commands['gameBasic.toSprite']({ fsPath: path.join(dir, 'SPR.png') });
+  assert.deepStrictEqual(state.errors, []);
+  const spr = fs.readFileSync(path.join(dir, 'SPR_spr.B'), 'ascii');
+  assert.match(spr, /PALETTE 10,257,RGB\(0,0,0\)/);
+  assert.match(spr, /SPRITE\$\(0\)=READHEX\$\(256\)\r\nDATA (01){16}\r\n/);
 });
