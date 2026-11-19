@@ -1,10 +1,10 @@
 # GAME BASIC Reference Manual: notes for the BASTERM replacement
 
-> **Work in progress.** This covers the pages scanned so far: pp. 1–20 (basic specification and system settings), Chapter 1 sections 1.1–1.6 (pp. 23–178), the start of section 1.7 (pp. 179–190), Chapter 2 sections 2.1–2.4 (pp. 229–251) and the Appendix (pp. 389–421).
+> **Work in progress.** This covers these pages so far: pp. 1–20 (basic specification and system settings), Chapter 1 sections 1.1–1.6 (pp. 23–178), the start of section 1.7 (pp. 179–190), Chapter 2 sections 2.1–2.4 (pp. 229–251) and the Appendix (pp. 389–421).
 
 These are notes from the Japanese *GAME BASIC for SEGASATURN Reference Manual* (リファレンスマニュアル), with attention to what matters for a PC-side replacement for BASTERM. Notes from the *Tutorial Manual* are in `Tutorial_Manual_findings.md`.
 
-Scans are named `GAME_BASIC_for_SEGA_SATURN_Reference_Manual_N.tiff`; scan N is book page N − 4. Page numbers are book pages unless marked "scan".
+Page numbers are the book's own page numbers.
 
 ---
 
@@ -68,7 +68,7 @@ These pages are the language definition, so they settle several things the sampl
 
 ## 2. Reference Manual section 1.1, general commands (Ref. pp. 23–95)
 
-Scans 25–99 (Ref. p. = scan − 4), all in order. Section 1.1 ends on p. 95 (XTAN); section 1.2, file commands, starts on p. 96. Scan 26 is blank. Scan 392 is a byte-for-byte copy of scan 59 (p. 55).
+Section 1.1 ends on p. 95 (XTAN); section 1.2, file commands, starts on p. 96. Page 22 is blank.
 
 **Notation (p. 23).** `[]` optional; `<>` required, unless inside an outer `[]`; `{a|b}` choose one (in the sound chapters `{}` means "can repeat"). When a middle parameter is left out and a later one follows, keep its comma.
 
@@ -164,7 +164,7 @@ Scans 25–99 (Ref. p. = scan − 4), all in order. Section 1.1 ends on p. 95 (X
 
 ## 3. Sections 1.2 and 1.3, file commands and functions (Ref. pp. 96–115)
 
-Scans 100–119, all named correctly (p. = scan − 4). Section 1.2 (file commands) runs pp. 96–112 and section 1.3 (file functions) pp. 113–115. Section 1.4 (BG, text and bitmap screens) comes next.
+Section 1.2 (file commands) runs pp. 96–112 and section 1.3 (file functions) pp. 113–115. Section 1.4 (BG, text and bitmap screens) comes next.
 
 **General rules (pp. 96–97).**
 - Devices: `COM:` (the PC), `BRAM:` (internal RAM), `CRAM:` (cartridge RAM), `FD0:`/`FD1:` (floppy partitions 1 and 2), `CD:`. Leaving the device out means the last one used.
@@ -186,7 +186,7 @@ Scans 100–119, all named correctly (p. = scan − 4). Section 1.2 (file comman
 
 ## 4. Section 1.4, BG, text and video commands (Ref. pp. 116–156)
 
-Scans 120–160, all named correctly (p. = scan − 4). Section 1.4 runs from p. 116 (ACTIVE) to p. 156 (ZOOM).
+Section 1.4 runs from p. 116 (ACTIVE) to p. 156 (ZOOM).
 
 - **Logical BG numbers** (pp. 117–118): 0 and 1 bitmap screens, 2 bitmap rotation screen, 4–7 character screens 0–3, 8 and 9 character rotation screens, 10 and up sprites/polygons. A SETTEX texture is texture ID + 10. `ACTIVE` sets the default; bitmap and character defaults are kept separately.
 - **GCOPY strings (pp. 126–127)** are the same layout as the bitmap files: a `.1` file is exactly a 32768-colour GCOPY string, and a `.0` file is a 256-colour GCOPY string with the 512-byte palette inserted after the size. So a bitmap file can also feed GCOPY when loaded from a `.D` file.
@@ -203,7 +203,7 @@ Scans 120–160, all named correctly (p. = scan − 4). Section 1.4 runs from p.
 
 ## 5. Section 1.5, BG, text and video functions (Ref. pp. 157–164)
 
-Scans 161–168, all named correctly (p. = scan − 4): GETCHR, PALETTE(), POINT, READCHR$, READHEX$, RGB, RGBADD, RGBTO.
+Pages 157–164: GETCHR, PALETTE(), POINT, READCHR$, READHEX$, RGB, RGBADD, RGBTO.
 
 - **READHEX$ (p. 161)** confirms the hex DATA layouts: `DATA 12345678` is read as bytes 12,34,56,78, the same as `DATA 12,34,56,78`. Like `SETCHR …,READ` and `SETTEX …,READ`, it skips the rest of the last DATA line it reads from.
 - **POINT** returns −1 for transparent and −2 off the screen, and isn't limited by WINDOW.
@@ -213,7 +213,7 @@ Scans 161–168, all named correctly (p. = scan − 4): GETCHR, PALETTE(), POINT
 
 ## 6. Section 1.6, sprite and 3D commands (Ref. pp. 165–178, first part)
 
-Scans 169–182, all named correctly (p. = scan − 4): CAMERA, PUTSPRITE, SETDISP, SETLIGHT, SETPERS, SETPFONT, SETPOLYGON, SETSPRITE, SETVERTEX, SPRITE$, SPRWINDOW. Pages 165–166 also open the section with the general rules.
+Pages 165–178: CAMERA, PUTSPRITE, SETDISP, SETLIGHT, SETPERS, SETPFONT, SETPOLYGON, SETSPRITE, SETVERTEX, SPRITE$, SPRWINDOW. Pages 165–166 also open the section with the general rules.
 
 - **Numbers and angles.** 3D coordinates are fixed point, about ±&H7FFF.FFFC. Angles are in turns (0–1); the whole part is dropped.
 - **Steps to show a polygon object:** SETVERTEX → SETPOLYGON → SETTEX (optional) → SETATR → give the OBJECT its polygon and attribute → position → parent (usually 0) → TYPE 4/5/6. With only TYPE set, BASIC links it to OBJECT 0 and shows a built-in cube. SETPFONT and PUTSPRITE do all of this for you.
@@ -229,7 +229,7 @@ These pages don't affect the serial link.
 
 ## 6a. Section 1.7, OBJ commands (Ref. pp. 179–190, first part)
 
-Scans 183–194, all named correctly (p. = scan − 4). The per-item descriptions continue past p. 190, the last page scanned; only TYPE is covered so far.
+The per-item descriptions continue past p. 190; only TYPE is covered here.
 
 - **OBJ is the table behind every sprite and polygon.** Each object number has numbered items. `OBJ(n,<item>)=` writes them and `OBJ(n,<item>)` reads them. OBJPOS, OBJROT and the other OBJ… commands are shorthands, so `OBJPOS 1,X,Y,Z` is the same as `OBJ(1,@XP)=X,Y,Z`. Extra values go into the following items, and an empty one is skipped.
 - **Forms:** `OBJ COPY <from> TO <to>[,…]`, `OBJ CLEAR`, `OBJ NEW` and `OBJ PRINT n[,P]` (or `OBJ ?`). P pauses the listing.
@@ -263,11 +263,9 @@ Scans 183–194, all named correctly (p. = scan − 4). The per-item description
 
 ## 6b. Chapter 2, sound reference, sections 2.1–2.4 (Ref. pp. 229–251)
 
-Scans 232–255. All are named correctly (p. = scan − 4).
-- Scans 232 and 234 (pp. 228 and 230) are blank. They are byte-for-byte identical.
-- Scan 233 is the Chapter 2 title page.
+Pages 228 and 230 are blank, and p. 229 is the Chapter 2 title page.
 
-These pages explain how the sound system works. The command pages (2.5 onwards, including PLAY, EFFECT, PLAYINIT, TARG and TPROP) have not been scanned yet.
+These pages explain how the sound system works. The command pages (2.5 onwards, including PLAY, EFFECT, PLAYINIT, TARG and TPROP) are not covered here.
 
 - **Two systems.** BASIC runs on the SH-2. Music runs separately on the 68EC000 sound CPU with its own 512 KB of memory. That memory is checked with `SFRE()`/`TFRE()`, not `FRE`.
   - PLAY, EFFECT and SETSONG turn MML into "song data" in sound memory before playing.
@@ -298,7 +296,7 @@ These pages explain how the sound system works. The command pages (2.5 onwards, 
 
 ## 7. Error messages (Ref. pp. 391–406)
 
-Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 is the Appendix title (p. 389) and scan 394 is blank; the list runs from scan 395 (p. 391) to scan 410 (p. 406).
+Page 389 is the Appendix title and p. 390 is blank; the list runs from p. 391 to p. 406.
 
 - Codes 1–95, with 33, 38, 40 and 49 not listed: 91 messages. Error 67 "Sound: MML command error" is followed by one of 35 detail lines, such as `Bad octave value(0 <=> 8)`.
 - The Saturn prints the message text exactly as listed, in English. One typo is genuine: 41 is "Unusable charactor".
@@ -315,7 +313,7 @@ Scans 393–410 (Ref. p. = scan − 4, as everywhere in this manual). Scan 393 i
 
 ## 8. Rest of the Appendix (Ref. pp. 407–415)
 
-Scans 411–419 (p. = scan − 4). Scan 418 is the p. 414 diagram and scan 419 the blank p. 415. The index follows on scans 420–425 (pp. 416–421), then two blanks and the back cover (428).
+Page 414 is a diagram and p. 415 is blank. The index follows on pp. 416–421, then two blank pages and the back cover.
 
 - **pp. 407–410, sample program list.** One row per file on the CD, with its data files indented beneath it. Points for the PC link: `TRANSFOR.B` is described as "a program that transfers `*.D` files to `COM:`", as the Tutorial Manual also says; `DEMO.B` loads the kanji fonts `FONT161.D`/`FONT162.D` with `KLOAD`; `UD_DATA1.B`/`UD_DATA2.B` test `USERDATA`; `P_CAME2.B` tests the camera commands; `PLAYMIDI.B` converts MIDI files to MML.
 - **p. 411, character code table.** The Saturn's character set is **single-byte only**:
