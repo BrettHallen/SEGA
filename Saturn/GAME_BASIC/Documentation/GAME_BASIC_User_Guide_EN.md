@@ -31,7 +31,8 @@ Where something here is worked out from the sample programs or the PC software r
 19. [The modern tools: VS Code and saturn_send.py](#19-the-modern-tools-vs-code-and-saturn_sendpy)
 20. [Messages and errors](#20-messages-and-errors)
 21. [Sample programs on the CD](#21-sample-programs-on-the-cd)
-22. [Quick reference](#22-quick-reference)
+22. [Character codes](#22-character-codes)
+23. [Quick reference](#23-quick-reference)
 
 ---
 
@@ -529,6 +530,14 @@ Here is a short example of a spinning blue square (adapted from the structure on
 
 Two points the manual stresses: texture colours must have **bit 15 set** (`OR &H8000`), or they show in the wrong colour, and corners must go **clockwise** for the front face.
 
+### How the 3D view works
+
+The Reference Manual's appendix has diagrams of the 3D view (RM pp. 412–415). In short:
+
+- The viewpoint (camera) looks along the z axis. The **projection plane**, the 320×224 picture you see, sits in front of it. The default field of view is **90 degrees**.
+- Objects are only drawn between a **near limit** and a **far limit** (the "back limit plane"). Anything outside is not shown.
+- `SETDISP` sets the **display level**, which moves the near limit. At level 1, objects are drawn from half the distance to the projection plane; level 2 draws from a quarter, and level 3 from an eighth, so higher levels let objects come closer to the camera before they disappear. (`P_PFONT.B` uses `SETDISP 3`.)
+
 ### Bigger models: DXFCONV
 
 Typing in hundreds of vertices is not practical. The Windows tools CD includes **DXFCONV**, which turns a 3D model saved as a DXF file (using `3DFACE` entities) into BASIC `DATA` lines for `SETVERTEX` and `SETPOLYGON`, optionally with a small viewer program (`HEADBAS.B`) in front (TM pp. 73–78). The C source of its command-line versions is in `GAME_BASIC/DXFCONV/SOURCE/`, so it can be rebuilt on a modern computer. An English version of its readme is in `GAME_BASIC/DXFCONV/README_EN.TXT`.
@@ -875,19 +884,103 @@ Every error has a code number as well as a message. The full list is in the Refe
 
 ## 21. Sample programs on the CD
 
-The CD is full of programs to run and study. List them with `FILES "CD:"` and run one with `LOAD "CD:NAME.B",R`, or use the launcher (Shift+F1). The Tutorial Manual describes each one on TM pp. 104–143.
+The CD is full of programs to run and study. List them with `FILES "CD:"` and run one with `LOAD "CD:NAME.B",R`, or use the launcher (Shift+F1). The Reference Manual's appendix lists every program with a one-line description (RM pp. 407–410), and the Tutorial Manual describes how to use each one (TM pp. 104–143). The tables below give that list in English. Indented names are the data files and helper programs that the program above them loads for you; you don't run those directly.
 
-| Prefix | What they are | Examples |
-|---|---|---|
-| `G_` | Games, with full source to read | `G_HATA` (flag-raising game), `G_MOBIL`, `G_BOMB`, `G_MAZE`, `G_JUMP`, `G_SABA`, `G_TEKE` |
-| `P_` | Polygon and 3D demos | `P_PFONT`, `P_CLOCK`, `P_FLOWER`, `P_CAME2`, `P_TANK`, `P_HERI`, `P_DOLL` |
-| `S_` | Sound and music | `S_TUTOR` (MML tutorial), music samples, `PLAYMIDI` |
-| `T_` | Tools | `T_KAMI` (paint program), `T_OTO` (song editor), `T_HIBIKI` (instrument editor), `TRANSFOR` (copies a data file to the PC) |
-| | Other | `LAUNCH` (file launcher) |
+Japanese titles are given in romaji, with their meaning in brackets.
 
-The Tutorial Manual walks through `G_MOBIL.B` line by line (TM pp. 87–103). Even without reading Japanese, its listing is a good model of how a GAME BASIC game is organised: set-up, a main loop driven by labels, `PAD` input and object updates.
+### Games
 
-## 22. Quick reference
+| File | What it is |
+|---|---|
+| `G_BOMB.B` | Sample game "Bomb". Supports the Multi-Terminal 6 multitap for several players |
+| `G_BOU.B` | Starts the game "Bou" (stick) |
+| &nbsp;&nbsp;`BOU_SCD.B` / `BOU_TCD.B` / `BOU_MCD.B` | Its title screen, texture set-up and main program |
+| `G_HATA.B` | "Hata" (flags): raise the red and white flags as instructed. The Tutorial Manual's first worked game (TM p. 87) |
+| `G_JUMP.B` | Sample game "Jump" |
+| `G_JUMP_A.B` | "Jump" for the analogue Multi Controller (3D pad) |
+| `G_JUMP_M.B` | "Jump" for the Mission Stick |
+| `G_MAZE.B` | Sample game "Maze" |
+| `G_MOBIL.B` | Sample game "Mobil". The Tutorial Manual's game-making chapter explains its listing line by line (TM pp. 87–103) |
+| `G_MOBILS.B` | "Mobil" for the Racing Controller |
+| `G_SABA.B` | "Saba" (mackerel) |
+| &nbsp;&nbsp;`SABA_BG.0` | Its background picture (256 colours) |
+| `G_TEKE.B` | "Teke-teke", main program |
+| &nbsp;&nbsp;`TEKST.1` / `TEKEND.1` | Its opening and ending pictures (32768 colours) |
+| `G_THESEU.B` | "Theseus", main program (a maze game) |
+| &nbsp;&nbsp;`PALWIN.D`, `BGCHR.D`, `WLCHR.D`, `MYCHR.D`, `ENECHR.D`, `YAKCHR.D`, `HEROCHR.D` | Palette, background, wall, player, enemy, item and ending character data |
+| &nbsp;&nbsp;`MAZE01.D`–`MAZE10.D` | Maze layouts for stages 1–10 (some files cover several stages) |
+| &nbsp;&nbsp;`ITEM01.D`–`ITEM10.D`, `ENEM01.D`–`ENEM10.D`, `INID01.D`–`INID10.D` | Items, enemies and start-up settings for each stage |
+
+### Polygon and graphics demos
+
+| File | What it is |
+|---|---|
+| `CLOCK.B` | Clock sample |
+| `DEMO.B` | GAME BASIC demonstration program |
+| &nbsp;&nbsp;`FONT161.D` / `FONT162.D` | Kanji font data, loaded into memory by `KLOAD` |
+| `P_CAME2.B` | Tests the `CAMERA` command |
+| `P_CLOCK.B` | Clock built from polygons |
+| `P_DLPLAY.B` | Polygon doll animation demo |
+| &nbsp;&nbsp;`TAISOPT.D` | Its sample motion data |
+| `P_DOLL.B` | Polygon doll animation program |
+| &nbsp;&nbsp;`TAISO.D` | Its sample motion data |
+| `P_FLOWER.B` | Texture test |
+| `P_HERI.B`, `P_SHOWER.B`, `P_TANK.B`, `P_TEXMAP.B` | Polygon tests. Going by their names: a helicopter, a shower, a tank and texture mapping |
+| `P_NEKO.B` | Sprite test |
+| `P_PFONT.B` | Polygon font (`PFONT`) test |
+
+### Sound and music
+
+| File | What it is |
+|---|---|
+| `S_TUTOR.B` | Interactive tutorial for the sound commands and MML (TM pp. 83–84). The best place to start |
+| `PLAYMIDI.B` | Converts a MIDI file to MML |
+| `S_AIFF.B` | Tests PCM (sampled) sound using AIFF files |
+| &nbsp;&nbsp;`BEAT_A.D`, `SAMPLE_A.D`, `WAVE1_A.D` | Its AIFF sound files |
+| `S_WAVE.B` | Tests PCM sound using WAVE files |
+| &nbsp;&nbsp;`BEAT_W.D`, `SAMPLE_W.D`, `WAVE1_W.D` | Its WAVE sound files |
+| `S_FM_TA.B` | Tests the FM synthesiser |
+| `S_GM_FM1.B`–`S_GM_FM4.B` | Four programs that build an FM instrument set laid out in General MIDI order |
+| `S_CLASSI.B` | Menu of six classical pieces: Bach's *Air on the G String* (pipe organ, `S_ARIA_P.B`, and strings, `S_ARIA.B`), Chopin's *Heroic Polonaise* (`S_POLONA.B`), Gounod's *Ave Maria* (`S_MARIA.B`), Bach's *Little Fugue in G minor* (`S_FUGA.B`) and Pachelbel's *Canon* (`S_KANON.B`) |
+| `S_G_ARTS.B` | Menu of eight game tunes: *Silpheed* (`S_SILPH.B`), *Zeliard* (`S_ZELIAR.B`), *Veigues* (`S_VEIGUS.B`), *Fire Hawk* (`S_F_HAWK.B`), *Alisia Dragoon* (`S_ALISIA.B`), two *Lunar* arrangements (`S_LUNARA.B`, `S_LUNARB.B`) and *Tubasa*, the *Lunar* theme (`S_TUBASA.B`) |
+| `S_T_NAME.B` | Names of the instruments in the sound data, to add to your own program (TM p. 141) |
+
+### Tools
+
+| File | What it is |
+|---|---|
+| `LAUNCH.B` | File launcher: pick and run a file from any device (also started with Shift+F1) |
+| `T_KAMI.B` | "Kami" (paper): a paint program. Starts with a title screen, then runs `K_MAIN.B` |
+| `T_OTO.B` | "Oto" (sound): a song editor that saves MML. Runs `O_MAIN.B` and `O_SET.B`, with data in `OTO_DATA.D` |
+| `T_HIBIKI.B` | "Hibiki" (resonance): an instrument editor. Runs `H_MAIN.B` and `H_SET.B`, with a background picture `HIBIKI_0.0` and instrument names in `LST1_00.D`–`LST1_15.D` (shared with `T_OTO.B`) |
+| `T_KANADE.B` | "Kanade" (playing music) program (TM p. 128) |
+| `TRANSFOR.B` | Copies a `.D` data file to the PC over `COM:` |
+| `UD_DATA1.B`, `UD_DATA2.B` | Tests of the `USERDATA` command |
+
+Even without reading Japanese, the game listings are good models of how a GAME BASIC program is organised: set-up, a main loop driven by labels, `PAD` input and object updates.
+
+## 22. Character codes
+
+`CHR$(n)` and `ASC()` use GAME BASIC's own character set (RM p. 411). It is mostly ASCII with Japanese additions, much like the character sets of 1980s Japanese home computers. Codes below 32 are control codes.
+
+| Codes (hex) | Characters |
+|---|---|
+| `&H20`–`&H7E` | Standard ASCII, except that `&H5C` shows as `¥` (it still works as `\`, the whole-number divide) and `&H7C` shows as a broken bar |
+| `&H80`–`&H8F` | Solid blocks of increasing height, for bar graphs |
+| `&H90`–`&H9F` | Line-drawing pieces: crosses, tees, corners and lines, for drawing boxes |
+| `&HA0`–`&HDF` | Half-width katakana and Japanese punctuation (the same as the standard JIS X 0201 set) |
+| `&HE0`–`&HE7` | Thin horizontal lines and triangles |
+| `&HE8`–`&HEB` | Card suits: ♠ ♥ ♦ ♣ |
+| `&HEC` / `&HED` | ● / ○ |
+| `&HEE`, `&HEF`, `&HF0` | Diagonal line pieces and a crossed box |
+| `&HF1`–`&HF7` | Kanji for money and dates: 円 年 月 日 時 分 秒 (yen, year, month, day, hour, minute, second) |
+| `&HF8`–`&HFB` | Arrows: → ← ↑ ↓ |
+| `&HFC` | \ (a real backslash) |
+| `&HFE` | ✓ |
+
+These are the same symbols as on the software keyboard's GRPH page (section 3). For example, `PRINT CHR$(&HE9)` prints a heart.
+
+## 23. Quick reference
 
 | Task | How |
 |---|---|
