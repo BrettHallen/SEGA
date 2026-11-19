@@ -1,6 +1,6 @@
 # GAME BASIC Reference Manual: notes for the BASTERM replacement
 
-> **Work in progress.** This covers these pages so far: pp. 1–20 (basic specification and system settings), all of Chapter 1 (pp. 23–227), Chapter 2 sections 2.1–2.4 and the start of 2.5 (pp. 229–273), sections 2.7 and 2.8 (pp. 355–388) and the Appendix (pp. 389–421).
+> These notes cover the whole manual: pp. 1–20 (basic specification and system settings), Chapter 1 (pp. 23–227), Chapter 2 (pp. 229–388) and the Appendix (pp. 389–421).
 
 These are notes from the Japanese *GAME BASIC for SEGASATURN Reference Manual* (リファレンスマニュアル), with attention to what matters for a PC-side replacement for BASTERM. Notes from the *Tutorial Manual* are in `Tutorial_Manual_findings.md`.
 
@@ -387,11 +387,11 @@ These pages explain how the sound system works. The sound commands start in sect
 
 ---
 
-## 6d. Section 2.5, sound commands, BEEP to PLAYFADE (Ref. pp. 252–273)
+## 6d. Section 2.5, sound commands (Ref. pp. 252–317)
 
-The rest of section 2.5 (PLAYINIT, PLAYPAN, PLAYPAUSE, PLAYSTOP, PLAYTEMPO, SETSONG, TARG, TLIST, TPROP, VOLUME) and section 2.6 (MML) are not covered here.
+The MML itself (section 2.6) is in section 6e.
 
-**How playback is organised.** There are 8 sequences. Sequence 0 belongs to BGM, and EFFECT shares out 1–7, so up to 7 effects play at once without cutting off the music. Songs are numbered from 0 (the BEEP sound) up to the count set by PLAYINIT. PLAYSTAT, PLAYCONT, PLAYFADE and PLAYPAUSE take a sequence number: 0 for BGM, 1–7 as returned by EFFECT, −1 for everything and −2 for every effect except BGM. Volumes are 0–255 with 127 the default; 128 and up is louder than the original waveform, so the manual advises 127 or less.
+**How playback is organised.** There are 8 sequences. Sequence 0 belongs to BGM, and EFFECT shares out 1–7, so up to 7 effects play at once without cutting off the music. Songs are numbered from 0 (the BEEP sound) up to the count set by PLAYINIT. PLAYSTAT, PLAYCONT, PLAYFADE, PLAYPAN, PLAYPAUSE, PLAYSTOP and PLAYTEMPO take a sequence number: 0 for BGM, 1–7 as returned by EFFECT, −1 for everything and −2 for every effect except BGM. Volumes are 0–255 with 127 the default; 128 and up is louder than the original waveform, so the manual advises 127 or less.
 
 | Command | Syntax | Pages |
 |---|---|---|
@@ -407,6 +407,18 @@ The rest of section 2.5 (PLAYINIT, PLAYPAN, PLAYPAUSE, PLAYSTOP, PLAYTEMPO, SETS
 | PLAYSTAT() | `PLAYSTAT(<sequence no>)` | 272 |
 | PLAYCONT | `PLAYCONT <sequence no>` | 272–273 |
 | PLAYFADE | `PLAYFADE <sequence no>,<volume>,<fade rate>` | 273 |
+| PLAYINIT | `PLAYINIT ["DSP"\|"DSPEXT",]["<tone file>",][<song count>][,<extra tone blocks>][,<song no>[~<song no>],<blocks>]…`, `PLAYINIT ["<tone file>"],0`, `PLAYINIT` | 274–279 |
+| PLAYPAN | `PLAYPAN <sequence no>,<pan>` | 279 |
+| PLAYPAUSE | `PLAYPAUSE <sequence no>` | 280 |
+| PLAYSTOP | `PLAYSTOP <sequence no>` | 280 |
+| PLAYTEMPO | `PLAYTEMPO <sequence no>,<tempo>` | 280–281 |
+| SETSONG | `SETSONG [<song no>]` (program only) | 281–283 |
+| SFRE() | `SFRE(<song no>)` | 283–284 |
+| TARG | `TARG <"tone file",tone no>[,<tone no>…]…`, `TARG READ [<extra layer blocks>][,<BEEP switch>]` | 285–306 |
+| TFRE() | `TFRE(0)` | 307 |
+| TLIST | `TLIST ["<tone file>"]`, `TLIST "MENU"` | 308–309 |
+| TPROP() | `A=TPROP(<tone>,<layer>,<item>)`, `TPROP(<tone>,<layer>\|ALL,<item>)=A[,A…]` | 309–316 |
+| VOLUME | `VOLUME [<volume>]` | 317 |
 
 - **BEEP** with no parameter gives the error beep and waits for it to end. `BEEP 1` keeps sounding while the program carries on, and `BEEP 0` stops it. If song 0 was replaced, BEEP restores the default.
 - **BGM** plays a song registered with SETSONG and takes no MML. The fade-in rate is 0–255, where smaller is faster and 0 means no fade.
@@ -431,10 +443,131 @@ The rest of section 2.5 (PLAYINIT, PLAYPAN, PLAYPAUSE, PLAYSTOP, PLAYTEMPO, SETS
 - **PLAY** waits for each statement to finish and is kept for compatibility with older MML. Length, octave and other settings carry over from the previous PLAY (in direct mode they reset each time). Tracks that end at different times are lined up at the next PLAY. It has only 4 song blocks, about 150 quarter notes, and a long or complex line (pitch bend, for example) gives `Sound:Song bank full`; split it over several lines. PLAY's data is not kept in sound memory.
 - **PLAYSTAT** returns 1 while a sequence plays and 0 when stopped; a paused song counts as playing.
 - **PLAYFADE** with volume 0 stops the sequence, and rate 0 changes the volume at once.
+- **PLAYINIT** sets up sound memory. Without it the state is `PLAYINIT "STANDARD",8,0`, and plain `PLAYINIT` returns to that power-on state.
+  - `"DSP"` is single-effector mode: channels 0 and 1 output at level 7, panned left and right. `"DSPEXT"` is multi-effector mode: channels 0/1 reverb, 2/3 delay and 4 distortion.
+  - The tone file (default STANDARD) is a set of PCM waveforms; the MML `@` command picks a tone inside it, and one MML can't mix tones from two files. Changing the file reads the CD and erases every registered song. `PLAYINIT "METAL",0` swaps the file only and keeps the songs.
+  - The song count is 1–251 (default 8). Song 0 is always the BEEP sound.
+  - Extra tone blocks are 0–487 of 256 bytes, added to the standard 1360 blocks (340 KB) of tone area, for TARG or extra tones. The tone area can then reach 1847 blocks.
+  - The song area is 512 blocks (128 KB), less any extra tone blocks and the DSP work area. A header of 4 bytes for each of 253 songs (251, BEEP and PLAY) takes 4 blocks, whatever the song count. PLAY has 4 blocks, every other song gets 2, and song 1 gets the rest: 512 − 4 − 16 − 4 = 488 blocks with the defaults. A `<song no>,<blocks>` pair (or a range `2~3,100`) changes that; it is an error if song 1 can't then be allocated.
+  - Sound cache: if the second or third CLEAR parameter (file areas 1 and 2) is at least 1360 blocks, the last tone files are kept there, so up to 3 files can be switched without reading the CD (`CLEAR ,1360,1360` gives both).
+  - An error during PLAYINIT re-initialises the sound system, so the error can take a while to appear.
+- **PLAYPAN** pans sequence 0–7, or −1 for all effects, from −127 (left) through 0 to 127 (right). The low 3 bits are ignored, giving 16 steps each side, and only the direct sound moves. Afterwards the MML `P` command and TPROP pan no longer apply.
+- **PLAYPAUSE** and **PLAYSTOP** take 0–7, −1 (all) or −2 (all effects but BGM).
+- **PLAYTEMPO** changes the tempo relative to the original: −32768 to 32767, where 4096 doubles the speed and −4096 halves it. An MML `T` command takes priority, and a `dc` repeat resets the tempo when it jumps back.
+- **SETSONG** turns MML in DATA lines into a song in sound memory, for BGM or EFFECT. The DATA layout is:
+  - `SONG<n>` starts a song and overrides the SETSONG number, so several songs can follow each other; RESTORE also picks the start.
+  - `TEMPO<n>` sets how many tempo changes the song may hold, 1–256 (default 16; more uses memory).
+  - `[#<track>,]"<MML>"`: without a track number each string goes to the next track. Quotes are needed only when the MML contains `:` (for example `"|:"` or `":|2"`).
+  - `NEXT`, `-` or `+` goes back to track 0 and continues the score from there.
+  - `ENDSONG` must end the data. Text straight after NEXT, ENDSONG and so on is a comment.
+  - The song number must be within the PLAYINIT count and the song must fit its blocks, otherwise it is an error. Overwriting a song while it plays makes it play wrongly.
+- **SFRE(song)** returns a song's free blocks with a fraction; −1 gives the whole area. MML lives in sound memory, so FRE doesn't count it. With the defaults SFRE(0) = 1.7852 and SFRE(1) = 487.9961 (about 122 KB); `PLAYINIT 1` gives song 1 about 125 KB.
+- **TARG** rebuilds the tone set.
+  - Form 1 copies whole tones (every layer) from one or more tone files; the new tones are numbered from 1, with 0 the BEEP tone. Waveforms are shared by source file, so repeating a tone to make versions with different TPROP, EG, LFO or DSP settings costs no wave memory.
+  - `TARG READ` reads DATA up to `ENDARRANGE`. Lines can list tones (`"ROCK",34`), build a tone layer by layer (`BUILDLAYER` … `ENDLAYER`, each layer `"<file>",<tone>,<layer>,<sn>,<en>,<bn>`), add raw PCM (`STARTPCM,8|16,<source bit control>,<sn>,<en>,<bn>`, hex strings, `ENDPCM`), load a wave file (`FILE,"<file>",<start block>,<offset>,<sn>,<en>,<bn>`) or define FM operators (`FM,…` and `FMEXT,…`).
+  - Wave files may be AIFF (not AIFF-C) or WAVE, mono, 8- or 16-bit, any sample rate; bn −1 takes the pitch from the file's sample rate. Up to 64 KB − 2 per tone. Stereo needs two layers panned left and right.
+  - FM: 32 operators, numbered 1–32, wired freely through inputs X and Y. W is waveform 1–47, or −n to use layer n's PCM (one cycle 1024 words, stored 3 times with loop 1024–2048). M 0–4 means no modulation and 5–15 is ±π/16 to ±64π (YM2203/YM2608 M = M − 4). S is the direct send level 0–7, normally 7 only on the output operator. TL is 0–255, ml1 −62 to 65 and ml2 0–4 set the multiple (ml1 36, ml2 1, dt 0 plays at the written pitch), and dt −128 to 127 is detune. The manual gives tables of ml1/dt for the classic multiples and the 4-operator algorithms as DATA lines.
+  - The second READ parameter is 0–108 extra layer blocks, for `Sound:Out of layer memory` or `Sound:Layer overflow`. Up to 128 tones; about 120 layers fit by default. Memory is tones × 4 + layers × 32 bytes.
+  - BEEP switch 0 makes `@0` the first new tone, so error and break sounds change.
+  - TARG needs the 1360-block file area reserved first with the second or third CLEAR parameter, and a wave file also borrows the user area (first CLEAR parameter). It does not include PLAYINIT. Rebuilt tones can't be saved. An error re-initialises the sound system.
+- **TFRE(0)** returns the free tone area for TARG in blocks: 1360 by default, 1847 after `PLAYINIT ,487`. It only drops once TARG has been used; after `CLEAR ,1360:TARG "PIANO",1` it is 628, showing that piano tone 1 takes 1219 blocks.
+- **TLIST** prints the tone numbers and instrument names of the current tone file, or of a named file (read from the CD without changing the tones). `TLIST "MENU"` lists the tone files. Some names are in half-width katakana. After TARG the list no longer matches sound memory.
+- **TPROP** reads (function form) or writes (statement form) one item of a tone layer, also for TARG and original PCM tones. Changes act at the next note-on. Writing takes several comma-separated values for consecutive items, and `ALL` writes every layer: `TPROP(1,ALL,@AR)=20,5,7,10,3,0,1,5` is the same as `EG 1,ALL,20,5,7,10,3,0,1,5`. The item numbers have `@` constants:
 
-**For the PC tools.** Sending a program with PLAY lines that are too long gives `Sound:Song bank full` on the Saturn, so a sender or linter could warn about long PLAY strings. MMLSTAT and PLAYSTAT are functions, and the rest are statements.
+| Items | Group | Constants and values |
+|---|---|---|
+| 0–2 | Voice (layer number must be 0) | `@BEND` 0–12 or 24 notes, `@LAYER` layers − 1 (can be lowered, not raised), `@TONE` tones − 1 (read only) |
+| 10–13 | Note-on | `@SN`/`@EN` note range 0–127, `@BN` base note 0–127, `@FT` fine tune −127 to 128 (BN and FT adjusted by TARG for FM) |
+| 20–27 | EG (as EG) | `@AR` `@DR` `@SR` `@RR` `@SL` `@EGHOLD` `@LSLINK` `@KS` |
+| 30–36 | Wave data | `@SDIR` 0 through the EG, 1 direct; `@SB` bit inversion 0–3; `@SS` source 0 wave data, 1 noise, 2 zero; `@LOOP` 0 off, 1 normal, 2 reverse, 3 alternating; `@PCM8B` 0 16-bit, 1 8-bit (read only); `@LSA`/`@LEA` loop start and end, &H0000–&HFFFE samples |
+| 50–55 | LFO (as LFO) | `@RE` `@LFOF` `@ALFOWS` `@ALFOS` `@PLFOWS` `@PLFOS` |
+| 60–62 | FM wiring | `@MDX`/`@MDY` input layer 0–127 (+128 = previous generation), `@MDL` modulation level (0 switches the layer to PCM) |
+| 70–73 | Mixer/DSP | `@ISEL`, `@IMIX` (as DSP), `@DSEND` direct send 0–7 (−36 dB to 0 dB), `@DPAN` direct pan 0–31: 0 and 16 centre, 1–15 turn the right side down 3 dB a step (15 = left only), 17–31 the left side (31 = right only); MML `P` and PLAYPAN change it |
 
-## 6e. Sections 2.7 and 2.8, repeats and tone data (Ref. pp. 355–388)
+- **VOLUME** sets the master volume for PLAY, EFFECT, BGM and BEEP, 0–127 (default 127). It returns to the default after an error or break.
+
+**For the PC tools.** Sending a program with PLAY lines that are too long gives `Sound:Song bank full` on the Saturn, so a sender or linter could warn about long PLAY strings. MMLSTAT, PLAYSTAT, SFRE and TFRE are functions, TPROP is both, and the rest are statements. TARG READ and FILE can load AIFF or WAVE samples from a file (the manual's example reads `BRAM:WAVE_DT`), so sending such a file to the Saturn is another use for file transfer. TLIST prints half-width katakana, which a terminal needs to show as such.
+
+## 6e. Section 2.6, MML (Ref. pp. 318–354)
+
+MML is the music language used by PLAY, EFFECT and the DATA lines that SETSONG reads.
+
+**General rules (pp. 318–319).**
+- MML goes in double quotes. In DATA lines the quotes can be left out unless the MML contains `:`.
+- Upper and lower case are different commands (`V` volume, `v` velocity; `P` pan, `p` piano).
+- A long score can be split over several strings, but only between commands. A tie, tuplet or chord must not be split: `"@44 CDE @V"` + `"127"` is an error, where `"@44 CDE"` + `"@V127"` is fine.
+- Tracks of different lengths are padded with rests to the longest one at the next separator, so an unused track needs no rests.
+- A song shorter than a 128th note (direct length 15) gives `Sound: MML String too short`. `PLAY "Cl14"` is an error; `"C128"`, `"Cl15"` and `"Cl14 Cl1"` are not.
+- The **base track** is the lowest-numbered track in use. Commands marked BASE (tempo and all the repeat marks) are an error on any other track.
+
+**Commands.** Scope is BASE (base track only), All (shared by every track, last setting wins) or Track (per track).
+
+| Command | Scope | Meaning | Pages |
+|---|---|---|---|
+| `¥<name>[=¥…¥]` | All | Macro, one letter A–Z or a–z, up to 128 characters | 321–322 |
+| `@<tone>` | Track | Tone number in the current tone file; 0 is the BEEP tone (default) | 322–323 |
+| `S<key>` | Track | Key signature −7 to 7 (sharps +, flats −) | 323 |
+| `K<semitones>` | Track | Transpose −127 to 127 (K12 = an octave up) | 324 |
+| `T<tempo>` | BASE | Tempo 40–300 (default 120) | 324–325 |
+| `V<volume>` | Track | Volume 0–15 (default 15) | 325 |
+| `@V<volume>` | Track | Fine volume 0–127 (default 125) | 326 |
+| `[<n>` / `]<n>` | Track | Raise / lower @V by 2 × n, n 0–63 (default 1) | 326–327 |
+| `P<pan>` | Track | Pan 0–127, 64 centre | 327–328 |
+| `ep<ch>;<pan>` | All | DSP effect pan of output channel 0–15 | 328 |
+| `el<ch>;<level>` | All | DSP effect level 0–7 of output channel 0–15 | 329 |
+| `ec<n>` | All | Effector in single-effector mode: 0 reverb 1, 1 reverb 2, 2 delay, 3 distortion | 330 |
+| `O<octave>` | Track | Octave 0–8 (default 4) | 330–331 |
+| `L<length>[.][.][.]` | Track | Default length 1–128 (default 4), or `Ll<direct length>` | 331–332 |
+| `v<velocity>` | Track | Default velocity 0–127 (default 127) | 333 |
+| `ppp` … `fff[=<n>]` | All | Velocity presets ppp 16, pp 32, p 48, mp 64, mf 80, f 96, ff 112, fff 127 | 333–334 |
+| `q[<num>/]<den>` | Track | Key-on time as a fraction of the length (default 1/1) | 334 |
+| `A`–`G` | Track | Note, with options (below) | 335–339 |
+| `(…)` | Track | Chord, up to 32 notes | 340 |
+| `{…}[<length>]` | Track | Tuplet | 341 |
+| `N<note>['<length>]` | Track | Note by number 0–127 (N60 = O4 C) | 342 |
+| `R[<length>]` | Track | Rest | 342–343 |
+| `<` / `>` | Track | Octave down / up (wraps between 0 and 8) | 343–344 |
+| `&` | Track | Tie | 344–345 |
+| `_` | Track | Slur | 346 |
+| `%<0\|1>` | Track | Damper (sustain pedal) off / on | 346–347 |
+| `!<n>` | Track | Sends 1–127 to MMLSTAT(n,0); on track 0 it triggers ON MMLSTAT GOSUB | 347 |
+| `/[<tone>;<semitones>…]` | Track | Software layer: extra tones on each note | 347–348 |
+| `dc` | BASE | Da capo: the part between two `dc` marks loops for ever | 348–349 |
+| `$[<label>…]` | BASE | Segno, label 0–7 | 349 |
+| `ds[<label>]` | BASE | Dal segno: back to `$` once | 350 |
+| `*[<label>…]` | BASE | To coda: on the repeat, skip to after `ds` | 350–351 |
+| `\|` | Track | Bar line | 351 |
+| `\|:` `:\|` `:\|:` | BASE | Repeat start, end, end-and-start | 352–353 |
+| `\|1` `:\|2` | BASE | First and second endings | 353 |
+| `^…^` | Track | Not played (for testing) | 354 |
+
+**Notes and their options (pp. 335–339).** The full form is `A–G[+|#|-|n][<length>[.][.][.]|l<direct length>][;<velocity>[;<gate>]][~[V|P][<start>[;<target>[;<bend length>]]]][?<chord>[;<inversion>]]`.
+- Without `S`, `+` or `#` sharpens and `-` flattens that note only, and `n` is ignored, as in older PC MML. After `S`, the note letters follow the key signature, and `+`, `#`, `-` and `n` act as real accidentals until the next bar line `|` (within one octave). A tie carries an accidental over the bar line.
+- Lengths are 1–128 (1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96 or 128; others are an error) with up to three dots. Direct lengths count 480 to a quarter note: whole 1920, half 960, quarter 480, eighth 240, 16th 120, 32nd 60, 64th 30, 128th 15; triplet lengths 3 = 640, 6 = 320, 12 = 160, 24 = 80, 48 = 40, 96 = 20. A dotted 128th is rounded.
+- `;velocity` and `;gate` apply to that note only; they are this MML's own extension.
+- `~` bends the pitch, `~V` the volume and `~P` the pan, from a start value to a target (0–127, 64 = normal) over the bend length (default the note's length). Pitch range comes from the tone's bend range. If the start is left out, the bend carries on from the previous target, so tied notes can shape a curve: `C1~64;70; & C2~;127; & C1~;80; & C2~;30;`. Up to 64 bends can be tied. After `~` the `;` separators can't be left out. A bend stays on the track for the following notes, so set the start back to 64 when done. The bend speed is fixed at 1 per time unit, so a wide bend over a short time jumps to the target at the end.
+- Pitch bends take many times the usual memory, so a PLAY line with wide bends easily gives `Sound:Song bank full`.
+- `?` plays a named chord: `?` major, `?m` (`?-`) minor, `?aug` (`?+`), `?dim` (`?°`), `?7`, `?m7`, `?m7-5` (`?m7b5`), `?M7` (`?maj7`), `?mM7`, `?dim7`, `?6`, `?m6`, `?sus4`, `?7sus4`, with `;1`–`;3` for the inversion: `G?7`, `C?7;3`, `C~64;127;?M7`.
+- `S` and `K` change notes, so drums and other fixed-range tones are best played with `N`.
+- Examples: `D-4;127;2` is a D flat quarter note at full velocity keyed on for an eighth; `O4 C1~64;127;960` bends a whole-note C up an octave over a half note.
+
+**Other details.**
+- **Macros** are stored as text and only become song data where they are used. The example defines a kick and a snare: `¥K=¥N36'4;127¥ ¥S=¥N37'4;100¥` and then plays `¥K(¥K¥S)¥K(¥K¥S)`.
+- **Chords** share the Saturn's 32 voices with every song playing, and later notes take priority; 33 notes in one chord is an error. Each note keeps its own length, velocity and tone, and the last note's length sets when the next note starts. Volume and pan are per track, so the last one given wins. Give a pitch bend on one note only, or it is applied once per note. An octave change inside the brackets ends with the chord. Velocities can differ per note: `(C;80 E;90 G;100)`.
+- **Tuplets** share the length among the notes inside, which can include chords and tone changes: `{@32 (FD) (GE) (FD) @40 (GE) (FD) (AF)}4`. `C4&{CCC}4` ties into the first note; `{C&CC}&C` is not supported.
+- **Ties**: the pitch comes from the first note and other options from the last; q and gate apply to the total length. Tie across a bar line with `C& | C`; `|&` is an error. Chords are tied inside the brackets, `(C1&C1&C1&C1 E1&E1&E1&E1 G1&G1&G1&G1)`, not as `(C1E1G1)&(C1E1G1)`. Tied notes split over two DATA lines lose their timing.
+- **Rests** can carry bend options. `R` with direct length 0 sets them without resting: `EFFECT 1,"@44 R10~P0;127;2000 & R10~P127;0;2000 CDEFGAB"` sweeps the pan while the scale plays.
+- **Damper** `%1` stops key-offs. The LOOP rhythm tones in the EXTRA3 and EXTRA4 sets keep sounding between notes and need long notes or `%1`. Some tones never stop without a key-off, and PLAYINIT may not stop them either.
+- **Software layer** `/41;0;36;12;38;-12` adds tones 41, 36 an octave up and 38 an octave down to every note until a bare `/` turns it off. Up to 16 pairs per track; each one uses a voice. TARG BUILDLAYER gives fuller control.
+- **Repeats**: `dc` simply loops for ever in this MML (no da capo to the start). `$`, `ds` and `*` take labels 0–7 so a score can jump back more than once: `CD$1;2;3FFds1GAds2BGds3`. The repeat order is set out in section 2.7 (section 6f).
+- **Bar lines** do nothing without `S`. They needn't be on every bar, tracks may differ, and a `|` on its own at the end of a string is not allowed.
+
+**For the PC tools.**
+- The macro mark `¥` is byte &H5C, which shows as a backslash `\` on a PC, and the bend mark `~` is byte &H7E (an overline in some Japanese fonts). The sender should send both unchanged and turn a typed Unicode `¥` into &H5C. The chord name `?dim` can also be written `?°`, which is not ASCII; `?dim` is safer in a file sent from a PC.
+- `N61'4` uses `'`, which starts a comment in BASIC outside quotes, and repeat marks use `:`, which separates statements, so MML in DATA lines should stay in quotes.
+- The VS Code extension shows these commands as hovers inside PLAY, EFFECT and DATA strings. A checker could also catch the simple errors listed here: lengths other than the allowed values, BASE commands on a non-base track, a `|` alone at the end of a string, or a tie or chord split across strings.
+
+## 6f. Sections 2.7 and 2.8, repeats and tone data (Ref. pp. 355–388)
 
 ### 2.7 Repeat structure (pp. 355–357)
 
