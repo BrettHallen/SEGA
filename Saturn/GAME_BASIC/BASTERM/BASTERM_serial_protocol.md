@@ -168,7 +168,7 @@ Open questions to check on hardware with a logic analyser:
 - [ ] The meaning of status codes 1 and 2 (frames 0x06 and 0x07). BASTERM only ever tests for 3 and 4, so it treats 1 and 2 as plain "not running".
 - [ ] Whether STOP modifiers 4 and 5 differ on the Saturn side.
 - [ ] How the Saturn reacts to a NAK on a data block (resend or re-request).
-- [x] The baud setting: found in the GAME BASIC Reference Manual, pp. 19–20. It is on the Saturn's system settings screen (L+R+Z on the pad, Q+E+D on the keyboard): 9600 (default) or 19200, saved in backup RAM as `GBASICSS_01`. See `../Documentation/Tutorial_Manual_findings.md`.
+- [x] The baud setting: found in the GAME BASIC Reference Manual, pp. 19–20. It is on the Saturn's system settings screen (L+R+Z on the pad, Q+E+D on the keyboard): 9600 (default) or 19200, saved in backup RAM as `GBASICSS_01`. See `../Documentation/Reference_Manual_findings.md`.
 - [ ] The `COM:` device syntax beyond `LOAD`/`SAVE`/`OPEN`/`FILES`, which the Reference Manual may document.
 
 Addresses such as `0x4011C0` are virtual addresses in `Basterm.exe` (image base `0x400000`), for anyone re-checking the disassembly.
