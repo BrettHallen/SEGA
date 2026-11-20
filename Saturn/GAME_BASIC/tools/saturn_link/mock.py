@@ -2,11 +2,21 @@
 # Guided by Brett Hallen
 """A pretend Saturn running GAME BASIC, for testing without hardware.
 
-It speaks the Saturn side of the protocol as BASTERM expects it: answers the
-NUL probe, takes keystrokes, and runs LOAD "COM:..." / SAVE "COM:..." / RUN /
-LIST by issuing file requests to the PC. It is an emulation of the protocol as
-read from Basterm.exe, not of the real Saturn firmware, so it proves the PC
-side is self-consistent; it cannot prove the real Saturn behaves the same.
+It speaks the Saturn side of the protocol: answers the NUL probe, takes
+keystrokes, and runs LOAD "COM:..." / SAVE "COM:..." / RUN / LIST by issuing
+file requests to the PC. Its status frames and retries follow the GAME BASIC
+interpreter's own code (Documentation/GAME_BASIC_CD_analysis.md):
+
+- every typed command starts with STATUS_RUNNING (0x08) and ends with
+  STATUS_IDLE (0x06), or STATUS_ERROR (0x09) if it stopped with an error;
+  LOAD ...,R keeps running, so no end status follows until STOP;
+- STOP at the prompt answers STATUS_IDLE, and STOP of a running program
+  answers STATUS_BREAK (0x07);
+- after a NAK it seeks (0x0E) to the position it expects and asks again.
+
+The real Saturn never sends its screen text over the link. The mock keeps a
+copy in `screen`, and only sends it as keystroke packets when echo=True, so
+tests can still exercise the PC's text handling.
 
 Its screen messages follow the GAME BASIC Tutorial Manual: "Ready." after a
 command (p. 15), "Line 120" for the last line loaded (p. 152), "Syntax error"
@@ -28,7 +38,7 @@ from .transport import Transport
 
 class MockSaturn(threading.Thread):
     def __init__(self, transport: Transport, nak_first_block: bool = False,
-                 log=lambda s: None, echo: bool = True):
+                 log=lambda s: None, echo: bool = False):
         super().__init__(daemon=True, name="MockSaturn")
         self.t = transport
         self.r = Reader(transport)
@@ -54,7 +64,7 @@ class MockSaturn(threading.Thread):
         self.t.write(P.command_frame(n))
 
     def _print(self, text: str) -> None:
-        """Send text back to the PC's terminal, the way the Saturn echoes."""
+        """Record a screen line; send it to the PC only when echo is on."""
         self.screen.append(text)
         if not self.echo:
             return
@@ -103,7 +113,6 @@ class MockSaturn(threading.Thread):
     def _on_key(self, mod: int, key: int) -> None:
         self.keys.append((mod, key))
         if key == 0x03 and mod in (0x04, 0x05):
-            self.t.write(P.keystroke(mod, 0x03))  # echo STOP
             self.line.clear()
             if self.running:
                 self.running = False
@@ -111,7 +120,9 @@ class MockSaturn(threading.Thread):
                 # last line as the one it stopped on.
                 self._print(f"Break at {max(self.program)}" if self.program else "Break")
                 self._print("Ready.")
-            self._cmd(P.STATUS_1)
+                self._cmd(P.STATUS_BREAK)
+            else:
+                self._cmd(P.STATUS_IDLE)
             return
         if (mod, key) == P.KEY_LINE_RESET:
             self.line.clear()
@@ -131,6 +142,8 @@ class MockSaturn(threading.Thread):
     # ----------------------------------------------------------- commands
     def _execute(self, text: str) -> None:
         self.commands.append(text)
+        if self.linked:
+            self._cmd(P.STATUS_RUNNING)
         m = re.match(r'\s*(LOAD|SAVE)\s*"COM:([^"]+)"\s*((?:,\s*[RM]\s*)*)$', text, re.I)
         if m:
             verb, name, opts = m.group(1).upper(), m.group(2), m.group(3).upper()
@@ -143,16 +156,15 @@ class MockSaturn(threading.Thread):
         if word == "RUN":
             if self.program:
                 self.running = True
-                self._cmd(P.STATUS_RUNNING)
             else:
                 self._print("Ready.")
-                self._cmd(P.STATUS_DONE)
+                self._cmd(P.STATUS_IDLE)
             return
         if word == "LIST":
             for n in sorted(self.program):
                 self._print(f"{n:5d} {self.program[n]}")
             self._print("Ready.")
-            self._cmd(P.STATUS_DONE)
+            self._cmd(P.STATUS_IDLE)
             return
         if word == "ERROR":
             # Ref. p. 36: re-shows the line the last error stopped on. The
@@ -161,17 +173,20 @@ class MockSaturn(threading.Thread):
                 n = max(self.program)
                 self._print(f"{n:5d} {self.program[n]}")
             self._print("Ready.")
-            self._cmd(P.STATUS_DONE)
+            self._cmd(P.STATUS_IDLE)
             return
         if word == "NEW":
             self.program.clear()
             self._print("Ready.")
-            self._cmd(P.STATUS_DONE)
+            self._cmd(P.STATUS_IDLE)
             return
         if word:
             self._print("Syntax error")
+            self._cmd(P.STATUS_ERROR)
+            self._print("Ready.")
+            return
         self._print("Ready.")
-        self._cmd(P.STATUS_DONE)
+        self._cmd(P.STATUS_IDLE)
 
     def _open(self, verb: int, name: str) -> Optional[int]:
         self._cmd(verb)
@@ -181,28 +196,35 @@ class MockSaturn(threading.Thread):
         if len(padded) > P.STRING_MAX_CHARS:
             padded = name
         if not self._send_string(padded):
+            self._fail("Communication error")
             return None
         reply = self._expect((P.HANDLE_0, P.HANDLE_1, P.HANDLE_2, P.ERR_NOT_FOUND,
                               P.ERR_ACCESS, P.NAK))
         if reply in (P.HANDLE_0, P.HANDLE_1, P.HANDLE_2):
             return reply - P.HANDLE_0
-        self._print({P.ERR_NOT_FOUND: "File not found",
-                     P.ERR_ACCESS: "Access denied"}.get(reply, "Device I/O error"))
+        self._fail({P.ERR_NOT_FOUND: "File not found",
+                    P.ERR_ACCESS: "File access error"}.get(reply, "Communication error"))
         return None
+
+    def _fail(self, message: str) -> None:
+        self._print(message)
+        self._cmd(P.STATUS_ERROR)
+        self._print("Ready.")
+
+    def _seek(self, pos: int) -> bool:
+        """Seek the current file the way the Saturn retries: 0x0E + hex offset."""
+        self._cmd(P.SEEK)
+        return self._send_string(f"{pos:x}")
 
     def _load(self, name: str, run: bool, merge: bool) -> None:
         if self._open(P.OPEN_READ, name) is None:
-            self._print("Ready.")
-            self._cmd(P.STATUS_DONE)
             return
         data = bytearray()
         retries = 0
         while True:
             self._cmd(P.READ_BLOCK)
             if self._expect((P.DATA,)) is None:
-                self._print("Device timeout")
-                self._print("Ready.")
-                self._cmd(P.STATUS_DONE)
+                self._fail("Communication error")
                 return
             raw = self.r.read_raw(P.BLOCK_SIZE, 2.0)
             blk = P.parse_block(raw) if raw else None
@@ -210,10 +232,8 @@ class MockSaturn(threading.Thread):
                 self.naks_sent += 1
                 retries += 1
                 self._cmd(P.NAK)
-                if retries > 5:
-                    self._print("Device I/O error")
-                    self._print("Ready.")
-                    self._cmd(P.STATUS_DONE)
+                if retries > 5 or not self._seek(len(data)):
+                    self._fail("Communication error")
                     return
                 continue
             self._cmd(P.ACK)
@@ -225,36 +245,41 @@ class MockSaturn(threading.Thread):
         if not merge:
             self.program.clear()
         last = None
+        bad = False
         for line in data.decode("cp932", errors="replace").splitlines():
             m = re.match(r"\s*(\d+)\s?(.*)$", line)
             if m:
                 last = int(m.group(1))
                 self.program[last] = m.group(2)
             elif line.strip():
-                self._print("Syntax error")
+                bad = True
         if last is not None:
             self._print(f"Line {last}")
-        if run:
+        if bad:
+            self._fail("Syntax error")
+        elif run:
             self.running = True
-            self._cmd(P.STATUS_RUNNING)
         else:
             self._print("Ready.")
-            self._cmd(P.STATUS_DONE)
+            self._cmd(P.STATUS_IDLE)
 
     def _save(self, name: str) -> None:
         if self._open(P.OPEN_WRITE, name) is None:
-            self._print("Ready.")
-            self._cmd(P.STATUS_DONE)
             return
         text = "".join(f"{n} {self.program[n]}\r\n" for n in sorted(self.program))
         data = text.encode("cp932", errors="replace")
         for i in range(0, len(data), P.BLOCK_PAYLOAD):
             chunk = data[i:i + P.BLOCK_PAYLOAD]
-            for _ in range(3):
+            for attempt in range(4):
+                if attempt and not self._seek(i):
+                    continue
                 self.t.write(P.data_block(chunk))
                 if self._expect((P.ACK, P.NAK)) == P.ACK:
                     break
+            else:
+                self._fail("Communication error")
+                return
         self._cmd(P.CLOSE)
         self._expect((P.ACK, P.NAK))
         self._print("Ready.")
-        self._cmd(P.STATUS_DONE)
+        self._cmd(P.STATUS_IDLE)

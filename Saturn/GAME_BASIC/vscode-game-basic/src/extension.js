@@ -212,7 +212,8 @@ function hoverText(word) {
   if (!K.ALL.includes(w)) return null;
   const c = R.COMMANDS[w];
   if (c) return '```game-basic\n' + c.syntax + '\n```\n' + c.summary + ` *(${c.source})*`;
-  const kind = K.FUNCTIONS.includes(w) ? 'function' : K.OPERATORS.includes(w) ? 'operator'
+  const kind = K.DUAL.includes(w) ? 'statement and function'
+    : K.FUNCTIONS.includes(w) ? 'function' : K.OPERATORS.includes(w) ? 'operator'
     : K.CONTROL.includes(w) ? 'control' : 'statement';
   return `**${w}**: GAME BASIC ${kind}`;
 }
@@ -499,9 +500,10 @@ async function send(run) {
       if (pick) output.show(true);
     }
   } else if (res.code === 4) {
-    // Sent, but the Saturn printed an error (tutorial manual p. 163: BASTERM
-    // itself may miss these, so check what the Saturn says).
-    // The cause comes from the manual's error list (Ref. pp. 391-406).
+    // Sent, but the Saturn ended the LOAD with its error status (0x09). The
+    // Saturn doesn't send the message itself, so point at its screen. When a
+    // message is known (mock with echo), explain it from the manual's error
+    // list (Ref. pp. 391-406).
     const msg = (res.stderr.trim().split(/\r?\n/).pop() || '').replace(/^Error: /, '');
     const why = R.explainError(msg);
     const pick = await vscode.window.showErrorMessage(

@@ -1,6 +1,6 @@
-# GAME BASIC for SEGASATURN: Reference Manual (English translation)
+# GAME BASIC for SEGA SATURN: Reference Manual (English translation)
 
-This is an English translation of the *GAME BASIC for SEGASATURN Reference Manual* (リファレンスマニュアル; ASCII Corp., Bits Laboratory and ESP inc., 1998). It follows the Japanese book page by page. Page markers such as *[p. 24]* give the book page number, so any entry can be checked against the original.
+This is an English translation of the *GAME BASIC for SEGA SATURN Reference Manual* (リファレンスマニュアル; ASCII Corp., Bits Laboratory and ESP inc., 1998). It follows the Japanese book page by page. Page markers such as *[p. 24]* give the book page number, so any entry can be checked against the original.
 
 Command names, syntax, example programs and screen output are kept exactly as printed. Japanese placeholder names in the syntax are translated (for example `<数値式>` becomes `<numeric expression>`). Where the original has a clear misprint it is kept and marked "(sic)", with a short note where the meaning is not obvious. Notes in square brackets in italics, such as *[p. 22 is blank]*, describe the layout of the book.
 
@@ -10,14 +10,13 @@ Terms used throughout:
 - **Program-mode command** (間接実行命令): can be used in a program line.
 - **Fixed-point / floating-point** (固定小数点型 / 浮動小数点型): the two numeric types; see the basic specification.
 
-> **Work in progress.** Translated so far: the front matter, the basic specification (pp. 1–20), Chapter 1 (pp. 21–227), Chapter 2 pp. 228–273 and 355–388, and the Appendix (pp. 389–421). Pages 274–354 are marked *pending*.
 
 ---
 
 ## Contents
 
 - [Preface](#preface)
-- [GAME BASIC for SEGASATURN: basic specification](#game-basic-for-segasaturn-basic-specification)
+- [GAME BASIC for SEGA SATURN: basic specification](#game-basic-for-sega-saturn-basic-specification)
 - [Chapter 1: Function reference](#chapter-1-function-reference)
     - [1.1 General commands](#11-general-commands)
     - [1.2 File commands](#12-file-commands)
@@ -33,6 +32,7 @@ Terms used throughout:
     - [2.3 Sound memory map](#23-sound-memory-map)
     - [2.4 Sound system block structure](#24-sound-system-block-structure)
     - [2.5 Sound commands](#25-sound-commands)
+    - [2.6 MML details](#26-mml-details)
     - [2.7 Repeat structure details](#27-repeat-structure-details)
     - [2.8 Voice data details](#28-voice-data-details)
 - [Appendix](#appendix)
@@ -48,15 +48,15 @@ Terms used throughout:
 
 *[Front matter, unnumbered page]*
 
-Thank you for purchasing "GAME BASIC for SEGASATURN", software for the Sega Saturn. Before use, please read this manual carefully and use the software correctly. This manual will not be reissued, so please keep it in a safe place.
+Thank you for purchasing "GAME BASIC for SEGA SATURN", software for the Sega Saturn. Before use, please read this manual carefully and use the software correctly. This manual will not be reissued, so please keep it in a safe place.
 
-# GAME BASIC for SEGASATURN: basic specification
+# GAME BASIC for SEGA SATURN: basic specification
 
 *[p. 1]*
 
 ## Characters used
 
-The characters that can be written in GAME BASIC for SEGASATURN are only the letters, digits and symbols with character codes 32 to 126. Inside a string enclosed in double quotes (`"`), characters 128 to 255 can also be used. No font is defined for character codes 0 to 31 and 127.
+The characters that can be written in GAME BASIC for SEGA SATURN are only the letters, digits and symbols with character codes 32 to 126. Inside a string enclosed in double quotes (`"`), characters 128 to 255 can also be used. No font is defined for character codes 0 to 31 and 127.
 
 Lower-case letters can be typed into a program, but when the line is stored in the list, lower-case letters outside strings are automatically converted to upper case. Also, except inside strings, upper-case and lower-case letters are not distinguished.
 
@@ -388,6 +388,15 @@ The maximum number of files that can be handled by the OPEN command and the like
 
 `LOCK` `LOF` `LOG` `MID$` `MMLSTAT` `MOSAIC` `NEW` `NEXT` `OBJ` `OBJATR` `OBJLINK` `OBJPOS` `OBJROT` `OBJTURN` `OBJTYPE` `OBJZOOM` `OFF` `ON` `OPEN` `OPTION` `PAD` `PAINT` `PALETTE` `PEEK` `PEEK$` `PLAY` `PLAYCONT` `PLAYFADE` `PLAYINIT` `PLAYPAN` `PLAYPAUSE` `PLAYSTAT` `PLAYSTOP` `PLAYTEMPO` `POINT` `POKE` `POLYGONID` `POS` `PRINT` `PRIORITY` `PSET` `PUTCHR` `PUTSPRITE` `RANDOMIZE` `READ` `READCHR$` `READHEX$` `REM` `RENUM` `RESTORE` `RESUME` `RETURN` `RGB` `RGBADD` `RGBTO` `RIGHT$` `RND` `ROTATE` `ROTCENTER` `ROTOVER` `ROTPOS` `ROTZOOM` `RUN` `SAVE` `SCREEN` `SCROLL` `SEEK` `SETATR` `SETCHR` `SETDISP` `SETLIGHT` `SETPERS` `SETPFONT` `SETPOLYGON` `SETSONG` `SETSPRITE` `SETTEX` `SETVERTEX` `SFRE` `SGN` `SHIFT` `SIN` `SKCLOSE` `SPACE$` `SPRITE$` `SPRWINDOW` `SQR` `STEP` `STOP` `STR$` `STRING$` `STRW$` `SWAP` `TAN` `TARG` `TEXID` `TFRE` `THEN` `TIMER` `TLIST` `TO` `TPROP` `UNLOCK` `USERDATA` `USING` `VAL` `VERSION` `VERTEXID` `VOLUME` `VSYNC` `WADD$` `WANDOR$` `WIDTH` `WINDOW` `WMUL$` `WXOR$` `XATN` `XCOS` `XDIST` `XSIN` `XSQR` `XTAN` `ZOOM`
 
+> Translator's note: `OPTION` is reserved but has no entry in this manual. The GAME BASIC interpreter on the CD accepts four hidden forms, found by reading its code:
+>
+> - `OPTION HD352` saves the setting and restarts GAME BASIC in a 352-pixel-wide screen mode, which runs the Saturn at its faster 28.6 MHz clock. The **Baudrate** setting (pp. 19–20) then offers 9600, 14400, 28800, 38400, 57600 and 115200BPS. These faster rates have not yet been tested on hardware.
+> - `OPTION HD320` goes back to the normal 320-pixel mode and the 9600/19200BPS list.
+> - `OPTION COM` resets the serial port and drops the link to the PC.
+> - `OPTION VERSION` shows a hidden staff credit list.
+>
+> Any other word after `OPTION` gives a Syntax error. Details are in `GAME_BASIC_CD_analysis.md`.
+
 *[p. 11]*
 
 ## Operators
@@ -661,6 +670,8 @@ The settings are as follows.
 **■ Baudrate: 19200BPS or 9600BPS**
 
 Sets the communication speed for connecting to a PC. You must choose the same speed as the communication software. If communication errors occur, set it to 9600BPS.
+
+> Translator's note: after the undocumented `OPTION HD352` this setting also offers 14400, 28800, 38400, 57600 and 115200BPS (see the note under Reserved words). These rates have not yet been tested on hardware.
 
 **■ Keyboard: Sega Saturn keyboard settings**
 
@@ -1426,7 +1437,7 @@ FKEY 1,"RUN"+CHR$(13)+CHR$(10)
 - `<function key number>`: a fixed-point numeric expression; 1 to 12.
 - `<string expression>`: up to 31 characters. If the string contains `CHR$(0)`, the characters after it are ignored.
 
-**[Details]** Form 2 shows the current function key definitions. Control codes in the strings are shown as "×". For the strings defined on the function keys as standard, see "Input during screen editing" in "GAME BASIC for SEGASATURN basic specification" earlier. *(The list is under "Function keys", p. 18.)*
+**[Details]** Form 2 shows the current function key definitions. Control codes in the strings are shown as "×". For the strings defined on the function keys as standard, see "Input during screen editing" in "GAME BASIC for SEGA SATURN basic specification" earlier. *(The list is under "Function keys", p. 18.)*
 
 *[p. 39]*
 
@@ -2644,7 +2655,7 @@ For `<item number>` 1 and 2, the details of the return value are as for digital 
 
 **[Caution]** PAD data is updated once per VSYNC, and the trigger information is ORed in each time a button is pressed. It is cleared to 0 when read, so when checking several bits, first copy it to a variable and use that. To cancel the trigger information so far, read it once and discard the result.
 
-**[See also]** "BASIC constant table" in "GAME BASIC for SEGASATURN basic specification"
+**[See also]** "BASIC constant table" in "GAME BASIC for SEGA SATURN basic specification"
 
 ### PEEK
 
@@ -6953,7 +6964,7 @@ The following values are defined as initial values after the SCREEN command is e
 
 ### About the OBJ commands/functions
 
-In GAME BASIC for SEGASATURN, polygons and sprites are called OBJECTs and are managed through the OBJ commands and functions.
+In GAME BASIC for SEGA SATURN, polygons and sprites are called OBJECTs and are managed through the OBJ commands and functions.
 
 Each OBJ-related command is almost equivalent to an OBJ item number `OBJ(n,<item>)=`. The 3D-related commands work using numbers. Frequently used items have alias definitions. For details, see the OBJPOS command, the OBJROT command and so on.
 
@@ -6963,7 +6974,7 @@ For example, the command that writes the coordinates of a polygon or sprite is
 OBJPOS <オブジェクト番号>, X,Y,Z
 ```
 
-but in GAME BASIC for SEGASATURN it can also be expressed as
+but in GAME BASIC for SEGA SATURN it can also be expressed as
 
 ```
 OBJ(<オブジェクト番号>,@XP)=X,Y,Z
@@ -9016,9 +9027,9 @@ As well as general waveforms such as sine, sawtooth, square and triangle waves, 
 - The playing state of 16 tracks can be monitored in real time.
 - Track "0" can be monitored by interrupt.
 
-### About the sound system for GAME BASIC for SEGASATURN
+### About the sound system for GAME BASIC for SEGA SATURN
 
-In GAME BASIC for SEGASATURN, the program that parses BASIC and the program that actually plays the music are controlled by separate systems, so the specification differs somewhat from the MML used on conventional personal computers.
+In GAME BASIC for SEGA SATURN, the program that parses BASIC and the program that actually plays the music are controlled by separate systems, so the specification differs somewhat from the MML used on conventional personal computers.
 
 Conventional MML provided register-setting commands for controlling PSG and FM sound sources directly, but in this MML the command specification differs because of differences in hardware structure (there is no PSG in the hardware). Compared with the personal computers of the days when conventional MML was carried, the SEGA Saturn has a vast amount of memory, so the sound system including MML has been greatly extended, taking in as many functions of commercial sequencers and synthesizers as possible, with a design that puts more weight on musicality. This works by adding options to the basic commands, so if no options are given it behaves the same as conventional MML.
 
@@ -9449,7 +9460,7 @@ DSP OFF 5,ALL,24,2      and initialises the effector to delay at level 5.
 - `<layer number|ALL>`: specifies the layer number for which the DSP effector is to be turned ON or OFF. "ALL" can be given instead of a layer number; in this case all layers of the selected voice number are affected. Cannot be omitted.
 - `<effector number>`: specifies the type of DSP effector. The same as "70: input select" of the TPROP command. Affected if the TPROP command is executed.
 
-  Specifies which channel of the DSP mixer the slot output data is input to. The range is "0 to 15", but in GAME BASIC for SEGASATURN values other than the following are invalid.
+  Specifies which channel of the DSP mixer the slot output data is input to. The range is "0 to 15", but in GAME BASIC for SEGA SATURN values other than the following are invalid.
 
   | Value | Effector | |
   |---|---|---|
@@ -9977,9 +9988,2905 @@ PLAYFADE I,64,80
 
 **[Details]** For a sequence sounded by BGM, give "0". If "−1" is given, fade processing is done on all BGM and sound effects. If "−2" is given, fade processing is done on all sound effects except the BGM.
 
-*[pp. 274–354]*
+*[p. 274]*
 
-> **Pending.** The rest of section 2.5 (from p. 274) and section 2.6, "MML details", are not yet translated.
+### PLAYINIT
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Initializes the sound memory and changes the block allocation of the MML area.
+
+**Syntax:**
+
+(1) `PLAYINIT ["DSP"|"DSPEXT",]["<voice data file name>",][<number of registered songs>][,<number of blocks to add>][{,<song number>[~<song number>],<number of blocks to reserve>}]…`
+
+(2) `PLAYINIT ["<voice data file name>"],0`
+
+(3) `PLAYINIT`
+
+**Example:**
+```
+PLAYINIT "DANCE",10,0,2,100,3,100
+or
+PLAYINIT "DANCE",10,0,2~3,100  → sets the voice data file to "DANCE" and reserves room for
+                                 10 songs. Songs "0" and "4 to 10" get "2" blocks each, songs
+                                 "2" and "3" get "100" blocks each, and the rest is allocated
+                                 to song number "1"
+PLAYINIT 200,100        → without switching the voice file, makes the number of songs that
+                          can be registered "200" and enlarges the voice data area by "100"
+                          blocks (the song data area is initialized)
+PLAYINIT "METAL",0      → switches only the voice file to the "METAL" set, without
+                          initializing the registered song data
+PLAYINIT "DSP","PIANO"  → initializes the sound memory in single-effector mode and loads
+                          the piano set
+PLAYINIT "DSPEXT"       → initializes the sound memory in multi-effector mode and loads the
+                          default standard set
+PLAYINIT                → returns the sound memory to its power-on state
+```
+
+**[Parameters]**
+
+- `"DSP"|"DSPEXT"`: specify this to use the DSP effector. With this option, the MML commands for DSP effects become usable. The whole sound memory is initialized. Depending on the effector mode, the mixer is initialized as follows.
+
+*[p. 275]*
+
+```
+"DSP"  single-effector mode
+
+  Channel 0  - Effect Level : maximum (7)
+               Effect Pan   : L (left)
+  Channel 1  - Effect Level : maximum (7)
+               Effect Pan   : R (right)
+  Channel 2
+      :        no output
+  Channel 15
+
+"DSPEXT"  multi-effector mode
+
+  Channel 0  - Effect Level : maximum (7)  ┐
+               Effect Pan   : L (left)     │ reverb
+  Channel 1  - Effect Level : maximum (7)  │ output
+               Effect Pan   : R (right)    ┘
+  Channel 2  - Effect Level : maximum (7)  ┐
+               Effect Pan   : L (left)     │ delay
+  Channel 3  - Effect Level : maximum (7)  │ output
+               Effect Pan   : R (right)    ┘
+  Channel 4  - Effect Level : maximum (7)  ┐ distortion
+               Effect Pan   : C (centre)   ┘ output
+  Channel 5
+      :        no output
+  Channel 15
+```
+
+  Applying DSP effects requires knowledge of the mixer. For details, see "2.4 Block structure of the sound system".
+
+- `"<voice data file name>"`: specify this to change the voice data file. The voice data is grouped by purpose (4 sets × 4 kinds). Default = "STANDARD". For the file names that can be given, see "2.8 Voice data details".
+- `<number of registered songs>` (number of songs): specifies the number of song data to register. Range "1 to 251". In practice, a sequence for the BEEP command is always resident as number "0". Default = 8 (sequences "1" to "8", and "0", can be created). Specifying many songs uses more memory, because a management table is created for each. Setting the minimum number of songs needed is recommended. If "0" is given (syntax (2)), only the voice data is replaced, without initializing the sound memory. In that case the parameters after it cannot be given.
+
+*[p. 276]*
+
+- `<number of blocks to add>`: specifies how much to enlarge the voice data area. Range "0 to 487". One block is 256 bytes. Default "0" (standard value = 1360 blocks).
+- `<song number>,<number of blocks to reserve>` or `<song number>~<song number>,<number of blocks to reserve>`: specifies the number of memory blocks allocated to the given song number. One block is 256 bytes. The song number is "0" up to the value given as the "number of registered songs" (number "0" is for the BEEP command). A value larger than the number of songs is an error. A range such as "2~7" can also be given; in that case song numbers "2 to 7" get the given number of blocks. Song numbers that are not given get the default number of memory blocks. Depending on how much sound memory remains, the given number of blocks may not be reservable. For details, see the SFRE() function.
+
+**[Details]** Selects the voice data used by MML and decides how the sound memory is divided up. If this command is not executed, the state is initialized as if `PLAYINIT "STANDARD",8,0` had been executed (no DSP, standard set, 8 songs, voice data area not enlarged). Each song data is "empty", except number "0" (for BEEP).
+
+When "DSP" or "DSPEXT" is given, the memory is initialized so that DSP effects can be used.
+
+Each DSP mode changes the kinds of effect that can be used at the same time and the free area of the sound memory, so choose according to the kind of game program or music program. For details, see "2.3 Sound memory map".
+
+The "voice data file name" names a collection of waveform data of PCM-sampled instruments and sound effects, which can be swapped according to the genre of music or the kind of game. One voice data file holds a variety of voice data, including rhythm instruments, and the voices can be switched with the MML voice change command "@" (for editing voice data, see the TARG and TPROP() commands).
+
+Within an MML string, a voice change that crosses files is not possible. Also, when the voice data file is changed with this command, the MML already registered is erased and the song data for BEEP also returns to its default. When executed with syntax (2), only the voice file is replaced, without initialization. Switching the voice data file involves CD access, so initialization takes a little time.
+
+The "number of registered songs" is given as "0 to 251". The default is "8", which makes it possible to change songs "1" to "8" as well as the song data number "0", which is allocated to BEEP.
+
+*[p. 277]*
+
+Giving "0" is treated as syntax (2): only the voice file is replaced, without initializing the sound memory. In this case the later parameters cannot be given.
+
+The "number of blocks to add" is given to make the voice data area larger than 340 KB. As standard, 340 KB (1360 blocks) is reserved for the voice data area. If a voice data file is only loaded with the PLAYINIT command and used, it fits within 340 KB, so there is no problem; but when it is rearranged with the TARG command or original voices are added, 340 KB may not be enough (memory overflow occurs part way through the rearrangement). In such a case this command can enlarge the voice data area in units of blocks, up to a maximum of 487 blocks (Free Area 1847 blocks).
+
+The "song number, number of blocks to reserve" is used to change, song by song, the size of the song data registered by MML strings. One block is 256 bytes, and sound memory is reserved in units of blocks. Increasing the number of blocks per song lets a longer piece be registered, but depending on the remaining sound memory, the desired number of blocks may not be reservable unless other steps are taken, such as shortening other pieces. Reservation gives priority to the "number of registered songs", so the number that can be registered is never reduced automatically; an error occurs at the point where the blocks cannot be reserved. To check the remaining song data area, use the SFRE() function.
+
+By default, the song data of every song number except "1" has "2" blocks, and the remaining blocks are allocated to song number "1". Normally, memory is used efficiently by writing a long piece such as the BGM as number 1 and allocating sound effects to song numbers with few blocks. When several long pieces must be held at once, for example when a game changes the BGM for each scene, set the number of blocks of those numbers again.
+
+The error sound can also be changed by increasing the number of blocks of number "0" and registering song data with MML.
+
+**■ About block allocation**
+
+For ease of management, song data is allocated in sound memory using 256 bytes as one block. The song data area is 128 KB (512 blocks) as standard, but it becomes less than 128 KB when the voice data area is enlarged or a DSP mode is used (executing `PLAYINIT ,100` makes the song data area 100 blocks smaller).
+
+```
+128K / 256 = 512 blocks
+```
+
+A fixed-length header of 4 bytes × 253 songs (251 songs + for BEEP + for PLAY) + 2 bytes = 1014 bytes uses 4 blocks, so the maximum number of song data blocks is as follows.
+
+```
+512 - 4 = 508 blocks (total song data blocks the user can use)
+```
+
+*[p. 278]*
+
+Even if the number of songs is made smaller than 251, the header size is fixed.
+
+With the default value (8 songs), the song data size of each song number is as follows.
+
+| Use | Size | Use | Size |
+|---|---|---|---|
+| For the PLAY command | 4 blocks | Song number 4 | 2 blocks |
+| For the BEEP command | 2 blocks | Song number 5 | 2 blocks |
+| Song number 1 | 488 blocks | Song number 6 | 2 blocks |
+| Song number 2 | 2 blocks | Song number 7 | 2 blocks |
+| Song number 3 | 2 blocks | Song number 8 | 2 blocks |
+
+The number of blocks for song number 1 is found with the following formula.
+
+```
+512 - 4 - (2×8) - 4 - expand - DSP blocks = 488
+ ↑    ↑     ↑     ↑      ↑
+ total header songs for PLAY  blocks added to the voice area
+```
+
+In this example, "expand" and "DSP blocks" are both "0".
+
+A header for registering MML is set in advance at the start of each song data area, so the value shown by the SFRE() function is slightly smaller.
+
+If the memory for song 1 cannot be allocated because the voice data area was enlarged or the number of songs increased, an error occurs.
+
+**■ About the sound source cache**
+
+When a value of 1360 blocks or more is set for the second or third parameter of the CLEAR command (reserving the file areas), the sound source cache is enabled.
+
+Normally, each time a PLAYINIT or TARG command is executed to switch voice files, the CD is accessed; but when the sound source cache is enabled, up to three files can be switched without CD access.
+
+```
+CLEAR ,1360          → uses only file area 1 for the sound source cache
+CLEAR ,256,1360      → uses only file area 2 for the sound source cache
+CLEAR                → does not use the sound source cache
+CLEAR ,1360,1360     → uses both file areas for the sound source cache
+```
+
+Example:
+
+```
+CLEAR ,1360,1360     → makes both file areas usable for the cache
+PLAYINIT "PIANO"     → loads the piano set (loaded directly into sound memory)
+PLAYINIT "METAL"     → saves the piano set to file area 1 and loads the metal set
+PLAYINIT "EXTRA1"    → saves the metal set to file area 2 and loads the extra set
+PLAYINIT "PIANO"     → swaps the extra set with the piano set in file area 1
+PLAYINIT "ORCHEST"   → saves the piano set to file area 2 and loads the orchestra set.
+                       The extra set in file area 2 is discarded at this point
+```
+
+*[p. 279]*
+
+**[Caution]** When the voice data area is enlarged or a DSP mode is used, the number of free blocks in the song data area falls, and the necessary number of blocks may no longer be reservable. If an error occurs while this command is executing, the sound system is initialized, so in some cases it may take a while before the error is shown.
+
+### PLAYPAN
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Changes the direction from which the sound being played on the given sequence number comes.
+
+**Syntax:** `PLAYPAN <sequence number>,<pan>`
+
+**Example:**
+```
+EFFECT (I),-2:PLAYPAN I,127  → sounds the sound effect of song number "2" on the right channel
+```
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number whose direction is changed. Give the return value of the EFFECT command. "0 to 7", and "−1". If "−1" is given, the direction of all sound effects is changed.
+- `<pan>`: specifies the position (pan value) of the sound during playback. Given in the range "−127 (left) to 0 (centre) to 127 (right)", but the lowest 3 bits are ignored and it is handled as 16 steps on each side. It affects only the direct component.
+
+**[Details]** Changes the position of the sound of song data sounded by the EFFECT command. For sound effects in a game, for example, one song data can be used and split between left and right. In that case, put a minus sign on the song number given to the EFFECT command, so that no wait occurs.
+
+**[Caution]** After this command is executed, all position values set by the MML P command or by TPROP are disabled.
+
+*[p. 280]*
+
+### PLAYPAUSE
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Pauses the sound being played on the given sequence number.
+
+**Syntax:** `PLAYPAUSE <sequence number>`
+
+**Example:**
+```
+PLAYPAUSE 0
+PLAYPAUSE -2
+```
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number to pause. Give the return value of the EFFECT command. "0 to 7", and "−1" and "−2".
+
+**[Details]** For a sequence sounded by BGM, give "0". If "−1" is given, all BGM and sound effects are paused. If "−2" is given, all sound effects except the BGM are paused.
+
+### PLAYSTOP
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Stops the sound being played on the given sequence number.
+
+**Syntax:** `PLAYSTOP <sequence number>`
+
+**Example:**
+```
+PLAYSTOP 0
+PLAYSTOP -2
+```
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number to stop. Give the return value of the EFFECT command. "0 to 7", and "−1" and "−2".
+
+**[Details]** For a sequence sounded by BGM, give "0". If "−1" is given, all BGM and sound effects are stopped. If "−2" is given, all sound effects except the BGM are stopped.
+
+### PLAYTEMPO
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Changes the speed of the sound being played on the given sequence number.
+
+**Syntax:** `PLAYTEMPO <sequence number>,<tempo>`
+
+**Example:**
+```
+BGM 1:VSYNC 2
+PLAYTEMPO 0,-4096      → plays the BGM at half its original speed
+```
+
+*[p. 281]*
+
+**[Parameters]**
+- `<sequence number>`: specifies the sequence number whose speed is changed. Give the return value of the EFFECT command. "0 to 7", and "−1" and "−2".
+- `<tempo>`: specifies the tempo value. Range "−32768 to 32767".
+
+**[Details]** For the "sequence number", give "0" for a sequence sounded by BGM. If "−1" is given, the tempo of all BGM and sound effects is changed. If "−2" is given, the tempo of all sound effects except the BGM is changed.
+
+The "tempo" is relative to the reference tempo "0": "4096" doubles it and "−4096" halves it.
+
+**[Caution]** The MML tempo command "T" takes priority over PLAYTEMPO.
+
+Also, when the music is looping with the MML "dc" command, the original tempo is restored when the "dc" command is executed. If PLAYTEMPO is executed after the loop has reached the second playthrough, this does not happen.
+
+### SETSONG
+
+*Program-mode command*
+
+**Function:** Converts the MML defined in DATA statements all at once and registers it in sound memory.
+
+**Syntax:** `SETSONG [<song number>]`
+
+**Example:**
+```
+SETSONG 3
+RESTORE *BGM5:SETSONG
+```
+
+**[Parameters]**
+- `<song number>`: specifies the song number to register into. Within the range of the "number of registered songs" given by the PLAYINIT command. If there are not enough free blocks, an error occurs during registration; in that case, use the PLAYINIT command to increase the number of blocks allocated to the song number being registered. Ignored when the separator "SONG\<song number\>" is used.
+
+*[p. 282]*
+
+Syntax for writing MML in DATA statements:
+
+```
+┌─ DATA [SONG<song number>]
+│  DATA [TEMPO<number of tempo changes>]
+│ ┌ DATA [#<track number>,] "MML string"
+│ │ DATA     :
+│ └ DATA <NEXT|-|+>
+│ ┌ DATA [#<track number>,] "MML string"
+└─┴ DATA     :
+┌─ DATA [SONG<song number>]
+│  DATA [TEMPO<number of tempo changes>]
+│ ┌ DATA [#<track number>,] "MML string"
+│ │ DATA     :
+│ └ DATA <NEXT|-|+>
+│ ┌ DATA [#<track number>,] "MML string"
+└─┴ DATA     :
+   DATA <ENDSONG>
+```
+
+**[Details]** Converts the MML written out in DATA statements all at once and registers it in sound memory. The registered song data can be played with the EFFECT/BGM commands. The MML strings are the same as for the PLAY/EFFECT commands. They do not need to be enclosed in `" "`, but enclose them when they contain symbols that include ":" (such as `|:` or `:|2`).
+
+If no track number is given, the track number is increased by "+1" each time the string changes as it is registered. To register several tracks, separate the strings with the DATA statement separator, or write them in separate DATA statements.
+
+To continue entering the score, give "NEXT" or the symbol "-" or "+". When one of these appears, SETSONG returns the track number to "0" and appends the continuing song data.
+
+To register several pieces, change the position of the DATA statements read with the RESTORE command, or use the separator "SONG\<song number\>". When "SONG\<song number\>" appears, the MML strings given in the DATA statements after it are expanded into \<song number\>, so several pieces can be registered one after another without using the RESTORE command.
+
+"SONG\<song number\>" can be omitted. If it is omitted, the data is registered to the song number given by "SETSONG \<song number\>". Conversely, if "SONG\<song number\>" is written, "SETSONG \<song number\>" is ignored and the data is registered in order starting from the song number given by "SONG\<song number\>".
+
+"TEMPO\<number of tempo changes\>" specifies the number of tempo changes. The default is "16", and 1 to 256 can be given. Change it when entering a score that has more than 16 tempo changes in one piece. Note that the larger the number set, the more memory is used.
+
+*[p. 283]*
+
+Put "ENDSONG" at the end of the data.
+
+**[Caution]** If a song number that is currently playing is overwritten, it will not play correctly.
+
+**[Note]** "NEXT", "-", "+" and "ENDSONG" can be used in forms such as "ENDSONG comment" and "-comment".
+
+**[Example]**
+```
+1000 SETSONG
+ :
+2000 DATA SONG1
+2010 DATA #0,"T150S-2 @53 V12 P64 O4 L8"
+2020 DATA #1,"     S-2 @52 V9  P64 O4 L8"
+2030 DATA NEXT                            → because of this separator, the MML
+2040 DATA #0,"R8|GAB>C<GAB>C<|GAB>C<GAB>C<"  strings from this line on continue
+2050 DATA #1,"R8|R1|R1"                     the strings of line 2010
+ :
+ :
+3000 DATA SONG2    → because of this separator, the MML strings after this are
+ :                   registered to song number 2
+ :
+4000 DATA ENDSONG  → must always be put at the end
+```
+
+### SFRE()
+
+*Fixed-point function*
+
+**Function:** Returns the free area of the song data area.
+
+**Syntax:** `A=SFRE(<song number>)`
+
+**Example:**
+```
+PRINT SFRE(1)
+```
+
+**[Parameters]**
+- `<song number>`: specifies the song number to examine, or "−1". From number "0" (for BEEP) up to the number of songs given as the "number of registered songs" of the PLAYINIT command.
+
+**[Return value]** The free area of the area allocated to the given song number. The unit is the "block", and one block is 256 bytes. If "−1" is given, the free area of all song areas is returned.
+
+*[p. 284]*
+
+**[Details]** MML strings do not occupy the BASIC variable area; they are expanded directly into sound memory. For this reason, a function dedicated to sound memory is provided, rather than the FRE function that examines the normal free area. It returns the remaining memory blocks for each song reserved by the PLAYINIT command.
+
+**[Example]**
+```
+PLAYINIT [Enter]         → initializes the sound memory with the default values
+Ready.
+?SFRE(0) [Enter]         → a song for BEEP is set, so "1.7852" blocks remain
+1.7852
+Ready.
+?SFRE(2) [Enter]         → an empty song number is allocated 2 blocks, but a 1-byte
+1.9961                     end code is set from the start, so the value returned is
+Ready.                     actually just under 2 blocks
+?SFRE(2)*256 [Enter]     → multiplying by 256 like this shows that it is 511 bytes,
+511                        1 byte less than 2 blocks (512 bytes)
+Ready.
+?SFRE(1) [Enter]
+487.9961
+Ready.
+?SFRE(1)*256 [Enter]     → all the remaining memory is allocated to song number 1.
+124927                     About 122 KB is left
+Ready.
+PLAYINIT 1 [Enter]       → try setting the number of registered songs to "1"
+Ready.
+?SFRE(1)*256 [Enter]     → shows that about 125 KB can be used
+128511
+Ready.
+PLAYINIT 251  [Enter]    → try setting the number of registered songs to the maximum
+Ready.
+?SFRE(1)*256  [Enter]    → it becomes the minimum block count, the same as the other songs
+511
+Ready.
+```
+
+As this example shows, reserving more songs than necessary reduces the number of blocks for song number "1", so reserve only as many songs as will be registered and use the memory effectively. The total header size changes with the number of registered songs, so the return value when "−1" is given also changes accordingly.
+
+**[Caution]** The song area can handle values of less than one block, so the return value includes a fractional part.
+
+*[p. 285]*
+
+### TARG
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Rearranges voice data and registers original voices. With the "READ" option, editing by layer becomes possible. Sets the parameters of the FM sound source.
+
+**Syntax:**
+
+(1) `TARG {<"voice data file name",voice number>[,<voice number>…]}`
+
+(2) `TARG READ [<number of blocks to add to the layer data area>][,<BEEP voice switch>]`
+
+**Example:**
+```
+TARG READ 10,0
+TARG "ROCK",2,5,"EXTRA2",3
+```
+
+**[Parameters]**
+- `<"voice data file name">`: specifies the file name of the voice data. The voice data is grouped by purpose. For the file names that can be given, see "2.8 Voice data details". Cannot be omitted with syntax (1).
+- `<voice number>`: specifies the voice number to select. As long as the voice data file does not change, several can be given, separated by ",". All layers are copied at the same time. For example, if the voice number of a drum set is given, all the drums in it are copied at once. To copy by layer, use syntax (2). Cannot be omitted.
+- `READ`: the syntax that registers while reading the parameters from DATA statements. Registering original PCM sampling data and setting the slot algorithm of the FM sound source can only be done with syntax (2), with the "READ" option. Registering with DATA statements allows finer settings, such as editing by layer.
+- `<number of blocks to add to the layer data area>`: when enlarging the layer data area, specifies the number of blocks. For the "READ" option only. Range "0 to 108". One block is 256 bytes. The default is "0" (standard value).
+- `<BEEP voice switch>`: a switch for whether to set the BEEP voice as voice number "0". Range "0 to 1" (default "1"). If "0" is given, the BEEP voice is not set.
+
+*[p. 286]*
+
+**[Details]** Voices can be freely chosen from several voice data files and rearranged, and original PCM sampling data can be registered as voice data. With this command it becomes possible, for example, to sound the drums of the "ROCK" set and the strings of the "ORCHEST" set at the same time. The rebuilt voice data is allocated from number "1" in the order given (number 0 is always the voice for the BEEP command, but if the "BEEP voice switch" is set to "0", allocation starts from number 0).
+
+With syntax (1), the unit of rearrangement is the "voice number". When several layers exist for the same voice number, as in a drum set, all the layers are copied at the same time.
+
+When registering from DATA statements with syntax (2), editing by layer is possible.
+
+Copied wave data is checked for duplicates as long as the source file name does not change, so giving the same voice number repeatedly does not use up wave memory. This makes it possible to create several voices with different parameters, set by the TPROP/LFO/EG/DSP commands, while using the same wave data. For example, strings with a fast attack and strings with a slow attack can be registered as separate voices and used as needed.
+
+Give the "number of blocks to add to the layer data area" when "Sound:Out of layer memory" or "Sound:Layer overflow" occurs during registration. Up to 128 voices can be registered at the same time, but depending on what is rearranged, memory may overflow before the maximum is reached. By default an error occurs at around 120 layers. This varies with the number of layers in the voice data and the amount of LFO-related data that goes with them, so adjust it when an error occurs during rearrangement.
+
+> For reference: one voice with one layer uses 36 bytes of memory, and each additional layer in a voice uses another 32 bytes.
+>
+> For an FM sound source layer, each additional operator uses another 32 bytes. In short, memory is used for a 4-byte voice header plus number of layers × 32 bytes (memory used = number of voices × 4 + number of layers × 32). Increasing the layer data area by one block (256 bytes) adds 8 layers when counted simply as layers, or 7 voices of one layer each.
+>
+> For example, to register 127 voices that are all 4-operator FM voices, the total number of layers used is 508, so 508 × 32 + 4 × 127 = 16764 bytes of layer data area are used. The layer data area provided by default is 16 blocks (4096 bytes), but the header and accompanying data use just under one block of it, so in practice it is 15 blocks (3840 bytes). 16764 − 3840 = 12924 bytes are missing, so unless about 51 blocks are added, 127 4-operator FM voices cannot be registered (52 blocks for 128 voices). Up to 128 layers can be registered per voice, but trying to reserve that for 127 voices would come to 128 × 32 × 127 = 520192 bytes, which exceeds the upper limit of the sound memory, so it is impossible in practice.
+
+*[p. 287]*
+
+The "BEEP voice switch" is a switch for whether to set the BEEP voice as voice number "0". If "0" is given, no BEEP voice is set, so when MML "@0" is given, the first sound the user registered is played. Depending on how the parameters are given, the sound on an error or a break may therefore sound unnatural.
+
+**■ Syntax for writing the parameters in DATA statements**
+
+```
+Normal setting  → DATA [{<"voice data file name",voice number>[,<voice number>…]}]
+                  DATA  :
+Registering    ┌ DATA [<STARTPCM,8|16,source bit control,sn,en,bn>]
+PCM data       │ DATA ["00FF00020405040200FDFAF9F9FAFD00" etc.]
+without a      │ DATA     :
+header         └ DATA [ENDPCM]        (*always required when STARTPCM is given)
+                  DATA  :
+Registering    → DATA [<FILE,"File Name",start block,start offset,sn,en,bn>]
+PCM by giving     DATA  :
+a file name       DATA  :
+              ┌── DATA [BUILDLAYER]
+              │   DATA [{<"voice data file name"{,voice number,layer number,sn,en,bn}>}]
+              │   DATA  :
+  this makes  │ ┌ DATA [<STARTPCM,8|16,source bit control,sn,en,bn>]
+  one voice   │ │ DATA ["00FF00020405040200FDFAF9F9FAFD00" etc.]
+  data        │ │ DATA     :
+              │ └ DATA [ENDPCM]        (*always required when STARTPCM is given)
+              │   DATA  :
+              │   DATA [<FILE,"File Name",start block,start offset,sn,en,bn>]
+              │   DATA  :
+              │   DATA [<FM,   OP number,W,X,Y,M,S,AR,DR,SR,RR,SL,TL,ml1,ml2,dt,KS>]
+              │   DATA  :
+              │   DATA [<FMEXT,OP number,W,X,Y,M,S,AR,DR,SR,RR,SL,TL,ml1,ml2,dt,KS
+              │   DATA       sn,en,vl,RE,LF,AW,AS,PW,PS,MX,DP>]
+              │   DATA  :
+              └── DATA [ENDLAYER]      (*always required when BUILDLAYER is given)
+                  DATA  :
+                  DATA <ENDARRANGE>    (*always required at the end of the data)
+```
+
+**`[{<"voice data file name",voice number>[,<voice number>…]}]`**
+
+When not enclosed between BUILDLAYER and ENDLAYER, this has the same meaning as syntax (1). If the source voice number is made up of several layers, all the layers are copied at the same time.
+
+**`[<STARTPCM,8|16,source bit control,sn,en,bn>]` to `[ENDPCM]`**
+
+Give this to register raw waveform data with no header information as binary strings in "HEXBIN$" format.
+
+After STARTPCM, give the number of bits of the sampling data (8 bits/16 bits). The "source bit control" is the "31: source bit control" given with TPROP
+
+*[p. 288]*
+
+and is the same thing. When binary strings are given directly in DATA statements, the format of the waveform data itself, such as \<\*.AIF\> or \<\*.WAV\>, cannot be identified, so set a value with which it sounds correctly. In many cases, AIFF data plays as a correct waveform with "0" or "3", and WAVE data with "1" or "2". When registering with the FILE command, "0" is set by default for AIFF format and "2" for WAVE format.
+
+"sn:Start Note" and "en:End Note" give the range of note numbers on which the registered wave data sounds. The note numbers given correspond to the numbers of the MML "N" command. The sound is actually produced when a note number in the range given here is requested.
+
+"bn:Base Note" gives the note number at which the data sounds at its original pitch. For example, to play 44.1 kHz sampling data at N60 (C in octave 4), the Base Note is "60". From the rule that doubling the frequency raises the pitch by one octave, to play sampling data at half that rate, 22 kHz, at the correct pitch on N60, set "72", one octave higher; then when it is played on N60 it goes up one octave and is at the correct pitch.
+
+The binary strings are registered as wave data until ENDPCM appears. The size of wave data that can be registered for one voice is at most "64 KB − 2". Any data beyond that is ignored.
+
+**`[<FILE,"File Name",start block,start offset,sn,en,bn>]`**
+
+Registers original PCM sampling data from a file. The Macintosh standard "AIFF" format and the Windows standard "WAVE" format are identified automatically (AIFF-C is not identified).
+
+Only monaural files (1 channel) can be registered. The quantization bit count is identified as 8 bits or 16 bits. There is no restriction on the sampling rate.
+
+Stereo data is not recognized, but since it is just the left and right channels alternating, the wave data can be thinned out by hand into two layers and registered in binary string form. If the two layers are then given the same start note, end note and so on, and the direct pan values are split left and right, the stereo data can be played. Because the layers are separate, original data up to 64K × 2 = 128 KB can be registered. For details, see the STARTPCM command.
+
+If "−1" is given for "bn:Base Note", the base note is set from the "sampling rate" recorded in the file header.
+
+It is adjusted so that the data plays at its original pitch when sounded on "C in octave 4 = N60", but if the pitch is not what was expected, set a suitable value for "bn:Base Note". It is also fine to rewrite the TPROP items "12: base note" and "13: fine tune" afterwards.
+
+When the file is analyzed, it is first loaded into the user area, so an area as large as the file to be read
+
+*[p. 289]*
+
+must be reserved with CLEAR beforehand. The address of the work area is given as a "start block" and "start offset", as with BLOAD. The file name format also follows BLOAD, so the file name extension must be renamed beforehand, as in "\*.AIF" → "\*.D" or "\*.WAV" → "\*.D".
+
+Default settings when original PCM sampling data is registered:
+
+- The loop start and loop end addresses of the waveform data are set to the start and end of the data.
+- The attack rate to the release rate are set to the maximum.
+- The direct level is set to the maximum.
+
+**`[BUILDLAYER]` to `[ENDLAYER]`**
+
+Registers in layer editing mode. The voice numbers and original PCM sampling data defined between these two keywords are allocated to one voice number. Each piece of data defined corresponds to one layer within one voice (defining three makes a voice with three layers).
+
+Some voice data change the kind of instrument or the sampling base note according to the note number even within the same voice number, or sound several pieces of wave data at the same time. In this way, voice data other than one-voice-one-layer can be rearranged by layer, and original PCM sampling data can be built into part of the layers. The FM sound source and the PCM sound source can also be handled at the same time (see the FM command).
+
+With this feature it becomes possible, for example, to take out only the cymbal of a drum set and allocate it to one voice, or to rebuild a set by combining drum sounds from other voice files. Also, the wave data of layers of the original voice data that are not needed is not copied, so memory can be used effectively.
+
+Up to 128 layers can be given per voice.
+
+When editing layers, "sn:Start Note", "en:End Note" and "bn:Base Note" can be changed even for voice data stored in a voice data file. If "−1" is given, the original information is copied. Also, if "sn" and "en" are both "0", "bn" is taken as an offset from the original information and all the items "sn", "en" and "bn" are shifted. Give this when building different voice data into one layer and the note numbers on which they sound overlap. Of course, several layers can also be deliberately set to the same numbers and registered. In that case, several voice data can be handled as if they were one instrument (to use the layer feature temporarily, the MML "software layer" command is useful; see the MML "/" command).
+
+*[p. 290]*
+
+**`[<FM,   OP number,W,X,Y,M,S,AR,DR,SR,RR,SL,TL,ml1,ml2,dt,KS>]`**
+**`[<FMEXT,OP number,W,X,Y,M,S,AR,DR,SR,RR,SL,TL,ml1,ml2,dt,KS,sn,en,vl,RE,LF,AW,AS,PW,PS,MX,DP>]`** …… LFO settings and so on
+
+Voice data can be created with the FM sound source method, in layer editing mode only.
+
+The 32 sounding slots can be wired freely to build original slot algorithms. One layer corresponds to one FM sound source operator, and connections are handled using the "OP number" as the identifier. When registration is executed, the "OP number" is converted internally into a "layer number", so there is no need to think about the relation to other PCM sound source layers and so on.
+
+When sounding, the "layer number" is converted into an actual "free slot number" as it plays, so any value in the range "1 to 32" may be given as long as the OP number connection information is consistent.
+
+With earlier FM sound source commands, the algorithms were fixed in advance and one was selected; but with the hardware structure of the SEGA Saturn sound source slots, it can be set in detail for each operator which operators are carriers or modulators, which operators get feedback, and how much modulation comes from other operators. Note that if the parameters of several operators are changed at once, it becomes impossible to predict the sound that comes out.
+
+Conventional slot algorithms can also be simulated, so voices from older FM sound sources can be ported (see [Example 5]). In that case, the meanings of values such as the modulation depth and multiple differ, so set the parameters for the SEGA Saturn based on the actual values the numbers stand for.
+
+> **[Caution]** In "FMEXT" mode, the following finer settings are also possible.
+
+Several FM voices can be placed in the same voice and switched by note number or sounded on top of one another. They can also be combined with normal layers that use PCM.
+
+Whether velocity level conversion is done can be chosen for each operator. In normal "FM" mode, level conversion is done when the direct data send level "S" is not "0".
+
+LFO parameters can be set for each operator. In normal "FM" mode the LFO is not used (everything is set to 0).
+
+> **[Caution]** "FM"/"FMEXT" can be switched for each operator, so there is no need to give unnecessary data for operators for which the normal settings are fine.
+
+*[p. 291]*
+
+**■ Items common to "FM"/"FMEXT"**
+
+**OP number**
+
+The identification number of the operator registered in this layer (1 to 32).
+
+**W**
+
+Specifies the waveform. Except for the base slot (the one nearest the output), it becomes the modulating waveform for the operator connected next. Changing the waveforms of the carrier and modulator can also produce more complex waveforms. The modulation waveforms are loaded from the CD and registered. Each kind uses 3K words of memory, but after that, modulating with a waveform of the same kind does not use up more waveform memory. See the following waveform figures.
+
+1 to 47: modulation waveform selection (47 kinds).
+
+−n: uses the waveform of layer number n as the modulation waveform. There are special rules in this case, so see the item "M" (modulation depth) below.
+
+**FM modulation waveform figures**
+
+*[Figure: one cycle of each modulation waveform, drawn against a centre line. [1] sine wave. [2] sine wave. [3] sine wave with flattened shoulders near the zero crossings. [4] sine wave with a gentler start. [5] sine wave whose negative half is smaller and narrower. [6] sharp positive peak and sharp negative peak with flat sections at the zero crossing. [7] narrow positive spike, then a narrow negative spike, with flat sections between. [8] triangle wave. [9] sawtooth wave rising to a peak and dropping vertically, repeated twice. [10] square wave. [11] quarter-sine rise cut off vertically, then the negative half as a falling curve cut off vertically. [12] full-wave rectified sine (two positive humps).]*
+
+*[p. 292]*
+
+*[Figure, continued. [13] full-wave rectified sine, two humps. [14] two smooth bell-shaped humps. [15] two humps with a smooth start and a sharp end. [16] two pointed humps with curved sides. [17] two narrow spikes with flat sections between. [18] one sine hump (half-wave rectified sine), then flat. [19] one sine hump, then flat. [20] one smooth bell-shaped hump, then flat. [21] one smooth hump, then flat. [22] one pointed hump with curved sides, then flat. [23] one narrow spike, then flat. [24] to [27] one positive and one negative sine-like half cycle in the first part of the cycle, then flat, with progressively narrower or smoother shapes. [28] pointed positive and negative halves, then flat. [29] narrow positive and negative spikes, then flat. [30] two positive humps followed by two negative humps.]*
+
+*[p. 293]*
+
+*[Figure, continued. [31] two positive sine humps followed by two negative sine humps. [32] two positive and two negative bell-shaped humps. [33] two positive and two negative pointed humps. [34] two positive and two negative narrow spikes. [35] and [36] two positive sine humps, then flat. [37] two bell-shaped humps, then flat. [38] two humps, then flat. [39] two pointed humps, then flat. [40] two narrow spikes, then flat. [41] and [42] a positive sine hump, then a negative half that stays flat at its minimum for the rest of the cycle and rises at the end. [43] to [46] a smaller positive hump, then a negative section held flat at its minimum, with progressively steeper edges. [47] a narrow positive spike, then a negative section with near-vertical edges held flat at its minimum.]*
+
+*[p. 294]*
+
+**X&Y**
+
+An operator has two modulation inputs. X and Y have the same specification; the two inputs are simply mixed and used as the modulation signal. Give the "OP number" set in another layer. That "OP number" must be the identification number of an operator that is already registered. To prevent the input level from overflowing, each level is halved before input, so when there is input from only one operator, give the same "OP number" for X and Y (1 to 32).
+
+The "OP number" given here is converted internally, when registration is executed, into the "serial layer number" within the same voice, and can be checked with the TPROP command items "60: modulation input X selection (layer number)" and "61: modulation input Y selection (layer number)".
+
+**M**
+
+Specifies the modulation depth: how much modulation is received from the input signals connected to X and Y.
+
+| M | Modulation depth | Maximum address displacement | M on conventional FM sound sources (YM2203/YM2608 etc.) |
+|---|---|---|---|
+| 0–4 | 0 (π) | 0 (words) | 0 |
+| 5 | ±1/16 | ±32 | 1 |
+| 6 | ±1/8 | ±64 | 2 |
+| 7 | ±1/4 | ±128 | 3 |
+| 8 | ±1/2 | ±256 | 4 |
+| 9 | ±1 | ±512 | 5 |
+| 10 | ±2 | ±1024 | 6 |
+| 11 | ±4 | ±2048 | 7 |
+| 12 | ±8 | ±4096 | -- |
+| 13 | ±16 | ±8192 | -- |
+| 14 | ±32 | ±16384 | -- |
+| 15 | ±64 | ±32768 | -- |
+
+The larger the value, the deeper the modulation, which can make metallic sounds; but too much makes a noise-like sound.
+
+The meaning of the value given here is the same as the TPROP command item "62: modulation level", but switching between PCM sound source mode and FM sound source mode depends on whether the modulation depth is "0" or not, so do not write "0" with the TPROP command into layer data that is set to FM sound source mode. With this command's FM sound source commands, even if "0" is given for the modulation depth, "1" is written internally (modulation depth is 0 for 0 to 4).
+
+*[p. 295]*
+
+The address displacement is the displacement of the waveform read address corresponding to the modulation depth. For example, if "10" is given for M, the modulation depth is "±2π" and the actual waveform read address varies in the range "±1024 words". This address displacement need not be considered when a plus value is given for the waveform (W). It is information needed only when modulating with a PCM waveform registered in another layer, using "−n". In that case, note that the modulation in the table above is not possible unless one cycle of the waveform (2π) is taken as "1024 words", three cycles of the same waveform data are registered, and the loop start address is set to "1024" and the loop end address to "2048" (see the following figure). Waveform data in a standard voice data file can also be used for modulation, but it is not in a format with one cycle of "1024 words" registered three times, so modulation corresponding to the modulation depth (M) is not done. To modulate with an external waveform, copy data with one cycle of "1024 words" three times, and register the headerless wave data with DATA statements or give it with "FILE".
+
+The rightmost values in the table are the correspondence with conventional FM sound source chips such as the YM2203/YM2608. Use them as a reference when porting FM sound source data.
+
+> **[Caution]** When Wave Form = −n is given, the waveform format must be set up as in this figure. When M = 11 (±4π) or more is given, the hardware performs clipping automatically, so the waveform data never runs short.
+
+*[Figure: three cycles of a sine wave, each marked as 1024 words long. The start of the waveform is at the left; Loop Start (1024) is at the end of the first cycle and Loop End (2048) at the end of the second, so the loop between them is one cycle, 2π.]*
+
+**S**
+
+Specifies the direct data send level. The same as the TPROP command item "72: direct data send level".
+
+*[p. 296]*
+
+| S | Level (dB) |
+|---|---|
+| 0 | −∞ (not sent) |
+| 1 | −36 |
+| 2 | −30 |
+| 3 | −24 |
+| 4 | −18 |
+| 5 | −12 |
+| 6 | −6 |
+| 7 | −0 |
+
+Normally the level of every operator except the base slot (the operator that finally outputs the sound) is set to "0", so that the sound of intermediate operators is not sent to the mixer; but by deliberately raising the level, the sound part way through the modulation can also be mixed in. Note that if the level of the base slot is set to "0", the modulated sound is not heard.
+
+In "FM" mode, setting S to anything other than "0" makes it subject to velocity level conversion.
+
+**AR to SL**
+
+Sets the envelope generator for each operator. For details, see the TPROP/EG command items "20: attack rate" to "24: sustain level".
+
+**TL**
+
+Specifies the operator's Output Level as an attenuation (0 to 255). Within the 8-bit total level, the sum of the attenuations of the bits set to "1" is the actual attenuation [dB]. So the larger the value set in "TL", the greater the attenuation and the quieter the sound. Conversely, the smaller the value set in TL, the smaller the attenuation and the louder the sound. It can be set for each operator, and values set for operators other than the base slot also affect the tone.
+
+| TL bit | bit 7 | bit 6 | bit 5 | bit 4 | bit 3 | bit 2 | bit 1 | bit 0 |
+|---|---|---|---|---|---|---|---|---|
+| TL attenuation | −48 | −24 | −12 | −6 | −3 | −1.5 | −0.8 | −0.4 |
+
+For example, the attenuation when "FFH" is written is
+
+```
+- 48 - 24 - 12 - 6 - 3 - 1.5 - 0.8 - 0.4 = -95.7[dB]
+```
+
+*[p. 297]*
+
+**ml1**
+
+Multiple (frequency ratio) 1. Give "−62 to 65". With ml1 = "36", ml2 = "1" and dt = "0", the pitch is as written in the MML.
+
+**ml2**
+
+Multiple (frequency ratio) 2. Specifies the scaling of the multiple set with ml1. Given as "0 to 4".
+
+**dt**
+
+Detune (finer adjustment of ml1). Give "−128 to 127".
+
+Next is a table of correspondence with the multiples of conventional FM sound sources.
+
+The multiple and detune values are corrected inside the interpreter, and the base note (bn) and fine tune (ft) are rewritten.
+
+To read the table, simply find the multiple value (harmonic structure) of the conventional FM sound source and set the corresponding ml1 and dt values.
+
+The lower two rows are the set values after correction: the values that can be read when the base note and fine tune items of the TPROP command are looked at.
+
+On conventional FM sound sources, "15" or "31" can be given for the multiple, but on this sound system the limit of the values that can be given for ml1 is reached first, so values corresponding to "11" or more cannot be given with ml1 alone. For this reason, the scaling of the multiple given with ml1 must be set with ml2. This makes it possible to set values beyond the conventional multiple range.
+
+Concretely, if "1" is given for ml2, one cycle of the waveform becomes twice the normal length, and giving "24" for ml1 to make multiple "1" gives the same effect as the normal setting of "36" for multiple "2".
+
+However, changing the scaling with ml2 also affects the modulation depth M. For example, when it is set to double, the value given for M must be reduced by "1".
+
+> **[Caution]** Look at the following table (the table of actual multiples corresponding to the ml1 and dt settings). To produce multiple 3, ml1 is set to 43 and dt to 5. This detune of 5 can be a problem.
+>
+> The third harmonic is the note an octave plus a fifth above in just intonation (one of the tuning systems). However, just intonation is awkward to use for various reasons, so music today generally uses equal temperament. The detune of 5 given here is the fraction that appears when a just fifth is expressed in equal temperament. This can be a problem. Refer to the following items when actually making sounds. If you are interested in the details of tuning, read books on tuning and temperament.
+
+*[p. 298]*
+
+**Making sounds in practice**
+
+1. When used as a modulator, use the values written here as they are. Proper harmonic relationships are needed.
+2. Care is needed for sounds that go straight to the output, such as when a parallel algorithm is used. If an instrument with a fifth harmonic component and a note actually a fifth above are sounded at the same time, beating occurs. In such cases, if the fifth harmonic component is tuned to equal temperament beforehand, no beating occurs. However, even with direct output from such a parallel algorithm, if the instrument is used for single notes, tuning it to just intonation gives very beautiful harmony.
+3. If the sound was originally designed around the third harmonic, use it with the detune at zero (for example, a carrier at multiple 3 modulated by a modulator at multiple 6). Such a sound can be considered designed from the start to sound the fifth, so it must produce output tuned to the equal-tempered fifth beforehand. Note that in this case, the detune of the other operators used in the voice must also be recalculated to match.
+
+Table of actual multiples corresponding to the ml1 and dt settings:
+
+| Multiple on conventional FM sound sources | 0.5 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Value set in ml1 | 12 | 24 | 36 | 43 | 48 | 52 | 55 | 58 | 60 | 62 | 64 |
+| Value set in dt | 0 | 0 | 0 | 5 | 0 | −35 | 5 | −80 | 0 | 10 | −35 |
+| Value set in bn | 53 | 41 | 29 | 22 | 17 | 13 | 10 | 7 | 5 | 3 | 1 |
+| Value set in ft | 0 | 0 | 0 | 5 | 0 | −35 | 5 | −80 | 0 | 10 | −35 |
+
+Table of actual multiples corresponding to the ml2 setting:
+
+| Value set in ml1 | 12 | 24 | 36 | 43 | 48 | 52 | 55 | 58 | 60 | 62 | 64 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Multiple with ml2=0: ×1 | 0.5 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| Multiple with ml2=1: ×2 | 1 | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 | 20 |
+| Multiple with ml2=2: ×4 | 2 | 4 | 8 | 12 | 16 | 20 | 24 | 28 | 32 | 36 | 40 |
+| Multiple with ml2=3: ×8 | 4 | 8 | 16 | 24 | 32 | 40 | 48 | 56 | 64 | 72 | 80 |
+| Multiple with ml2=4: ×16 | 8 | 16 | 32 | 48 | 64 | 80 | 96 | 112 | 128 | 144 | 160 |
+
+*[p. 299]*
+
+Block diagram of one slot:
+
+*[Figure: block diagram of one slot. Modulation inputs X and Y enter an averaging unit at the top right, which feeds M (modulation depth). On the left, PLFO (various PLFO settings) feeds PG (phase generator). PG and M both feed the phase adder in the centre, which holds the waveform address pointer and a buffer. The waveform address pointer reads from the sound memory on the right, which holds the modulation waveform data (47 kinds × 5, selected by W & ml2), and the data returns to the buffer. On the left, ALFO feeds EG; a selector chooses between EG and 0 (EG/direct). The buffer output and the selector feed the level multiplier, whose output goes both to the direct/DSP output (to the mixer) and to the slot output for wiring (to other slots).]*
+
+**KS**
+
+Key rate scaling. For details, see the TPROP/EG command item "27: key rate scaling".
+
+**■ Items for "FMEXT" only**
+
+**sn to en**
+
+Start note and end note. The operator is driven when a note number in the range given here is requested. Normally, give all the operators of one voice the same values.
+
+**vl**
+
+Velocity level conversion switch. A switch, for each slot, for whether velocity level conversion is applied. "0" or "1".
+
+**RE**
+
+LFO reset. For details, see the TPROP/LFO command item "50: LFO reset".
+
+**LF**
+
+LFO frequency. For details, see the TPROP/LFO command item "51: LFO frequency".
+
+*[p. 300]*
+
+**AW**
+
+LFO amplitude modulation waveform. For details, see the TPROP/LFO command item "52: ALFO (amplitude modulation) waveform selection".
+
+**AS**
+
+LFO amplitude modulation depth. For details, see the TPROP/LFO command item "53: ALFO (amplitude modulation) depth".
+
+**PW**
+
+LFO frequency modulation waveform. For details, see the TPROP/LFO command item "54: PLFO (frequency modulation) waveform selection".
+
+**PS**
+
+LFO frequency modulation depth. For details, see the TPROP/LFO command item "55: PLFO (frequency modulation) depth".
+
+**MX**
+
+Input mix level. For details, see the TPROP/DSP command item "71: input mix level".
+
+**DP**
+
+Direct data position. For details, see the TPROP command item "73: direct data position".
+
+**`<ENDARRANGE>`**
+
+When ENDARRANGE is found, "TARG READ" ends.
+
+**■ Parameters that differ from conventional FM sound sources**
+
+| Item | YM2203/YM2608 etc. | SEGA Saturn |
+|---|---|---|
+| Sustain level | Attenuation from maximum volume, 0–15 | The actual level after attenuating from maximum volume, 0–31 |
+| Release rate | 0–15 | 0–31 |
+| Total level | 0–127 | 0–255 |
+| Detune | −3 to 3 | −128 to 127 |
+| Modulation depth M | 0–7 | See the correspondence table |
+| Multiple | 0–15 | See the correspondence table |
+| LFO | Not compatible | Not compatible |
+
+*[p. 301]*
+
+> **[Caution]** This command does not include the function of PLAYINIT. Note that if the voice data area is built without reserving the song data area, the song block allocation set by the program executed earlier is still in effect. Put the other way round, the voices can be rearranged and played song by song.
+>
+> This command uses a 340 KB (1360-block) file buffer, so before it is executed, the area must be reserved with the second or third parameter of the CLEAR command. In addition, when original PCM sampling data is registered from a file, the user area is also used temporarily, so the user area must be reserved with the first parameter of the CLEAR command. It is not resident, so release the area with the CLEAR command again after execution as needed.
+>
+> Rearranged voice data and original voices cannot be saved.
+>
+> Each time a voice data file name appears, that voice file is loaded into the file buffer, so give voice numbers from the same file consecutively as far as possible (this affects execution speed).
+>
+> Depending on the voices given, some may not fit in memory. In that case an error is shown and execution stops, so change the combination, or enlarge the voice data area with the "number of blocks to add" of the PLAYINIT command, and execute again.
+>
+> If an error occurs while this command is executing, the sound system is initialized, so in some cases it may take a while before the error is shown.
+
+> **[Warning]** Depending on how the parameters are given, this command may produce no sound or a distorted sound. In that case, execute the PLAYINIT command. If there is still no sound, or communication between the main system and the sound system goes wrong, do a hot start, save the program, then reset and run it again.
+
+**[Example 1]**
+```
+1000 CLEAR ,1360
+1001 PLAYINIT"STANDARD",,487
+1002 TARG "STANDARD",44,"PIANO",1,"ETHNIC",4
+1003 PLAY "L1 @1 CDEFGAB","L1 @2 CDEFGAB","L1 @3 <CDEFGAB"
+```
+
+A sample that only changes the arrangement of the voice data files, without using DATA statements. It sounds the strings of the standard set, the piano set and the shakuhachi of the ethnic set at the same time.
+
+*[p. 302]*
+
+**[Example 2]**
+```
+1000 CLEAR ,1360:RESTORE *TONE_DATA
+1010 TARG READ
+ :
+2000 *TONE_DATA                     :'(Tone Number)Tone Name
+2010 DATA BUILDLAYER                :' (1)Drum Set
+2020 DATA ROCK,      31, 3, 0, 0, -3  :'|  Hi Hat      42-42 -> 39- 39
+2030 DATA            31, 0, 0, 0,  0  :'|  Kick        36-36 -> 36- 36
+2040 DATA ORCHEST,   31, 2, 0, 0,-17  :'|  ｵｰｹｽﾄﾗｼﾝﾊﾞﾙ   57-57 -> 40- 40
+2050 DATA STANDARD,  32, 8, 0, 0,+50  :'|  Hand Clap    0-39 -> 50- 89
+2060 DATA            32, 1, 0, 0,+50  :'|  Tambourine  40-54 -> 90-104
+2070 DATA            31, 0, 0, 0,  0  :'|  Kick         0-36 ->  0- 36
+2080 DATA            31, 1, 0, 0, -1  :'|  Snare       38-38 -> 37- 37
+2090 DATA            31, 1, 0, 0, -1  :'|  Snare       38-38 -> 37- 37
+2100 DATA ENDLAYER                  :''+
+2110 '
+2120 DATA ROCK,      34             :'  (2)Power Guitar
+2130 DATA ORCHEST,   32             :'  (3)A.Piano
+2140 DATA            35             :'  (4)Strings Arco
+2150 DATA            37             :'  (5)Harp
+2160 DATA            42             :'  (6)Oboe
+2170 DATA            40             :'  (7)Horn
+2180 DATA STANDARD,  35             :'  (8)synth Bass
+2190 DATA            51             :'  (9)Synth Pad 1
+2200 DATA            52             :' (10)Synth Pad 2
+2210 DATA            53             :' (11)Brightness
+2220 DATA DANCE,     39             :' (12)Voice Ahh
+2230 '
+2240 DATA BUILDLAYER                :' (13)ｺｰﾗｽ ﾓﾄﾞｷ
+2250 DATA DANCE,     35, 0,-1,-1,-1  :'|    Vocoder Vox
+2260 DATA            45, 0,-1,-1,-1  :'|    Metal Pad
+2270 DATA ENDLAYER                  :'+
+2280 '
+2290 DATA ENDARRANGE
+```
+
+In the comments, ｵｰｹｽﾄﾗｼﾝﾊﾞﾙ means "orchestra cymbal" and ｺｰﾗｽ ﾓﾄﾞｷ means "chorus-like".
+
+A sample that does layer editing with DATA statements. It registers voices in a new order, numbers (1) to (13).
+
+Voice number (1) rebuilds a drum set. "sn" and "en" are both "0", so "bn" is taken as an offset from the original note number.
+
+For voice number (13), all the items are "−1", so the original note numbers are used. In this case, giving "@13" in MML sounds "Vocoder Vox" and "Metal Pad" at the same time.
+
+*[p. 303]*
+
+**[Example 3]**
+```
+1000 CLEAR ,1360 :'File Buffer ｶｸﾎ
+1001 PLAYINIT"STANDARD":TARG READ
+1002 PLAY"@1 L1 CDEFG"
+1003 END
+1004 DATA STARTPCM, 8, 0, 0, 127, 60   :'8bit Sample BASE = N60
+1005 DATA 00000000000000000000000000000101
+1006 DATA 01010101010101010101010202010101
+       :
+5961 DATA 00000000000000000000000000000000
+5962 DATA 00000000000000000000000000000000
+5963 DATA 00000000000000000000000000000000
+5964 DATA ENDPCM
+5965 DATA ENDARRANGE
+```
+
+In line 1000, ｶｸﾎ means "reserve". A sample that registers headerless wave data with DATA statements.
+
+**[Example 4]**
+```
+1000 CLEAR 257,1360:?"Arrange [ERROR Sound] AIFF"
+1001 PLAYINIT"STANDARD":TARG READ
+1002 EFFECT 0,"%1@1 Cl1200"
+1003 END
+1004 DATA FILE,"BRAM:WAVE_DT", 0, 0, 0,127,-1
+1005 DATA ENDARRANGE
+```
+
+A sample that registers wave data from a file.
+
+**[Example 5]**
+```
+1000 CLEAR ,1360:TARG READ
+1001 EFFECT"@1 O2CDE>CDE>CDE>CDE"
+1002 END
+1003 '
+1004 DATA BUILDLAYER
+1005 '    OP#, W, X, Y, M, S, AR, DR, SR, RR, SL, TL, ml1, ml2, dt, KS
+1006 DATA FM,  1, 1, 1, 1, 0, 0,  11, 0,  0,  11, 0,  0,   24,  0,  0
+1007 DATA FM,  2, 1, 1, 1, 5, 7,  11, 0,  0,  11, 0,  0,   12,  0,  0
+1008 DATA ENDLAYER
+1009 DATA ENDARRANGE
+```
+
+A sample of a 2-operator FM sound source. It outputs a sine wave with little modulation, so try changing various parameters.
+
+Next, how to set up the conventional slot algorithms. If the modulation depth of every operator except the feedback operator is set to "±2π (10)", compatibility with conventional FM sound sources is kept. In these examples the modulation waveform W is a sine wave throughout. The direct data send level S is set to the maximum, "7", only for the base slot (the one nearest the output).
+
+*[p. 304]*
+
+**(0)** *[Figure: 1 (with feedback to itself) → 2 → 3 → 4 → output.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 1, 1, 10, 0, …
+DATA FM,   3,  1, 2, 2, 10, 0, …
+DATA FM,   4,  1, 3, 3, 10, 7, …
+```
+
+**(1)** *[Figure: 1 (with feedback) and 2 both feed 3; 3 → 4 → output.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 2, 2,  0, 0, …
+DATA FM,   3,  1, 1, 2, 10, 0, …
+DATA FM,   4,  1, 3, 3, 10, 7, …
+```
+
+**(2)** *[Figure: 2 → 3 → 4, and 1 (with feedback) also feeds 4; 4 → output.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 2, 2,  0, 0, …
+DATA FM,   3,  1, 2, 2, 10, 0, …
+DATA FM,   4,  1, 3, 1, 10, 7, …
+```
+
+**(3)** *[Figure: 1 (with feedback) → 2 → 4, and 3 also feeds 4; 4 → output.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 1, 1, 10, 0, …
+DATA FM,   3,  1, 3, 3,  0, 0, …
+DATA FM,   4,  1, 2, 3, 10, 7, …
+```
+
+*[p. 305]*
+
+**(4)** *[Figure: 1 (with feedback) → 2, and 3 → 4; the outputs of 2 and 4 are mixed.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 1, 1, 10, 7, …
+DATA FM,   3,  1, 3, 3,  0, 0, …
+DATA FM,   4,  1, 3, 3, 10, 7, …
+```
+
+**(5)** *[Figure: 1 (with feedback) feeds each of 2, 3 and 4; their outputs are mixed.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 1, 1, 10, 7, …
+DATA FM,   3,  1, 1, 1, 10, 7, …
+DATA FM,   4,  1, 1, 1, 10, 7, …
+```
+
+**(6)** *[Figure: 1 (with feedback) → 2; the outputs of 2, 3 and 4 are mixed.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 1, 1, 10, 7, …
+DATA FM,   3,  1, 3, 3,  0, 7, …
+DATA FM,   4,  1, 4, 4,  0, 7, …
+```
+
+*[p. 306]*
+
+**(7)** *[Figure: 1 (with feedback), 2, 3 and 4 in parallel; their outputs are mixed.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 7, …
+DATA FM,   2,  1, 2, 2,  0, 7, …
+DATA FM,   3,  1, 3, 3,  0, 7, …
+DATA FM,   4,  1, 4, 4,  0, 7, …
+```
+
+Besides these, this sound system can use the 32 operators to connect freely. There are only two inputs, so, for example, the output of example (7) cannot be fed into another operator; but the output of (4) can be fed into a fifth slot. Here is how to set that up.
+
+**(4')** *[Figure: 1 (with feedback) → 2, and 3 → 4; the outputs of 2 and 4 both feed 5; 5 → output.]*
+
+```
+          OP#,  W, X, Y,  M, S, …
+DATA FM,   1,  1, 1, 1, 10, 0, …
+DATA FM,   2,  1, 1, 1, 10, 0, …
+DATA FM,   3,  1, 3, 3,  0, 0, …
+DATA FM,   4,  1, 3, 3, 10, 0, …
+DATA FM,   5,  1, 2, 4, 10, 7, …  ← the final output is now only number 5,
+                                     so S for numbers 2 and 4 is set to "0"
+```
+
+Special setups are also possible, such as taking out the direct component part way through the modulation, or sending part of it to the effector, so try various things.
+
+*[p. 307]*
+
+### TFRE()
+
+*Fixed-point function*
+
+**Function:** Returns the free area of the voice data area.
+
+**Syntax:** `A=TFRE(0)`
+
+**Example:**
+```
+PRINT TFRE(0)
+```
+
+**[Parameters]** Has no particular meaning. Give 0. The same value is returned even if something other than 0 is given.
+
+**[Return value]** The remaining amount of the voice data area.
+
+**[Details]** Examines the remaining amount of the voice data area that can be rebuilt with the TARG command. The unit of the return value is the "block" (one block is 256 bytes). Fractions are rounded up.
+
+**[Caution]** Unless the TARG command is used, the current maximum value is always returned, whichever voice file is loaded. For example, if the voice area is not enlarged, "1360" is returned. Note that it is strictly the free area for rebuilding with the TARG command.
+
+**[Example]**
+```
+PLAYINIT:PRINT TFRE(0)
+1360
+Ready.
+```
+
+When initialized in the default state, it is the standard size, "1360". This does not show the current free area; it shows the size that can be rebuilt with the TARG command.
+
+```
+PLAYINIT ,487:PRINT TFRE(0)
+1847
+Ready.
+```
+
+When the voice data area is enlarged to the maximum, "1847" is shown. Converted to bytes, this is about 462 KB. In this state, if the "PIANO" set is taken out and rebuilt as "new voice data":
+
+```
+CLEAR,1360:TARG "PIANO",1:PRINT TFRE(0)
+628
+Ready.
+```
+
+The remaining size becomes "628". From this, it can be seen that the actual size used by voice number "1" of the "PIANO" set is "1847 − 628 = 1219" blocks. This method shows that other voices can be added within the remaining "628" blocks.
+
+*[p. 308]*
+
+### TLIST
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Shows a brief description of a voice data file.
+
+**Syntax:**
+
+(1) `TLIST ["<voice data file name>"]`
+
+(2) `TLIST "MENU"`
+
+**Example:**
+```
+TLIST "DANCE"
+TLIST
+TLIST "MENU"
+```
+
+**[Parameters]**
+- `"<voice data file name>"`: specifies the file name of the voice data. The voice data itself is not replaced; only the description file is read from the CD and shown. If no file name is given, the list of the currently selected voice data is shown.
+- `"MENU"`: shows a list of the voice data file names.
+
+**[Details]** A voice data file holds several dozen kinds of voice. The kinds of instrument and sound effect allocated to the voice numbers differ from voice file to voice file. To find out which voice file is currently selected, execute the command without parameters. The contents of files that are not currently selected can also be examined by giving the file name, so use it to find the instrument name for a voice number.
+
+**[Caution]** If the voice data has been rearranged with the TARG command, the list does not match the contents of the sound memory.
+
+**[Example]**
+```
+TLIST "ROCK"  [Enter]      → shows the contents of the rock set
+[Rock Set]
+00 BEEP       23 SQUARE SE
+01 HEY!ﾀﾞﾝｾｲ  24 SAW SE2
+02 HUA ﾀﾞﾝｾｲ  25 SINE SE2
+03 POH ﾀﾞﾝｾｲ  26 SQUARE SE2
+04 KYA ｼﾞｮｾｲ  27 SINE SE3
+05 TAH ｼﾞｮｾｲ  28 NOISE2
+06 TOH ｼﾞｮｾｲ  29 GLOCKEN
+07 WAH ｼﾞｮｾｲ  30 RUM
+08 YAH ｼﾞｮｾｲ  31 Drums
+09 HAH ﾀﾞﾝｾｲ  32 Fingered Bass
+10 TOH2ﾀﾞﾝｾｲ  33 Picked Bass
+```
+
+*[p. 309]*
+
+```
+11 CHUKIN     34 Power Guitar
+12 NOISE      35 Solo Guitar
+13 BA         36 Clean Guitar
+14 BASHA      37 Organ
+15 DOKA       38 Synth Brass
+16 KACHA      39 Choir Pad
+17 SHU
+18 SAW WAVE
+19 SINE W.
+20 SQUARE W.
+21 SAW SE
+22 SINE SE
+```
+
+In the list, ﾀﾞﾝｾｲ means "male voice" and ｼﾞｮｾｲ means "female voice".
+
+### TPROP()
+
+*Syntax (1): fixed-point function. Syntax (2): direct-mode command / program-mode command*
+
+**Function:** Reads and rewrites the settings of voice data.
+
+**Syntax:**
+
+(1) `A=TPROP(<voice number,layer number,item number>)`
+
+(2) `TPROP(<voice number,[layer number|ALL],item number>)=A{[,A]}`
+
+**Example:**
+```
+PLAYINIT "DSP","PIANO"
+FOR I=0 TO TPROP(1,0,1):TPROP(1,I,71)=7:NEXT → or TPROP(1,ALL,71)=7
+```
+
+Sets "71: input mix level" of "all the layers" registered in voice number "1" of the "PIANO" set to the maximum. The number of layers differs from voice to voice, so the repeat count itself is obtained with this command. The part enclosed in FOR to NEXT can be executed with one command, as in the example above.
+
+```
+TPROP(1,ALL,@AR)=20,5,7,10,3,0,1,5 → same as EG 1,ALL,20,5,7,10,3, 0,1,5
+```
+
+Sets the parameters from "20: attack rate" to "27: key rate scaling" in one go.
+
+**[Parameters]**
+- `<voice number>`: specifies the voice number to read and rewrite. The number given with the MML "@" command. Cannot be omitted.
+- `<layer number|ALL>`: specifies the layer number to read and rewrite. The item numbers of the "Voice part" (0 ≤ n \< 10) are items common to every layer, so the layer number has no effect for them. Give "0".
+
+  For syntax (2) (rewriting) only, "ALL" can be given instead of a layer number. In that case, every layer of the selected voice number is affected. Cannot be omitted.
+
+*[p. 310]*
+
+- `<item number>`: specifies the number of the item to read and rewrite. For the breakdown of the item numbers, see the [List of item numbers] below. Cannot be omitted.
+
+  The "constant symbols" provided by the BASIC interpreter can be used for the item number. To use one, give the symbol name after an "@" sign.
+
+**[Return value]** With syntax (1), the value set in the given item is returned.
+
+**[Details]** Settings can be read and rewritten, layer by layer, for the voice data currently in sound memory. They can also be changed in real time during playback; in that case, the rewritten values take effect at note-on timing.
+
+Voice data rearranged with the TARG command and original PCM sampling data can also be set.
+
+Syntax (1) performs a read.
+
+Syntax (2) performs a rewrite. When rewriting, several settings can be given in a row, separated by ",".
+
+The setting items are broadly divided as follows.
+
+| Group | Items |
+|---|---|
+| Voice part | (0–) |
+| Note-on control | (10–) |
+| EG (envelope generator) control | (20–) |
+| Waveform data control | (30–) |
+| LFO (low-frequency oscillator) control | (50–) |
+| FM wiring | (60–) |
+| Mixer (DSP) control | (70–) |
+
+For details, see the [List of item numbers].
+
+**[Caution]** Data that has been reset cannot be saved. Depending on the parameter values, there may be no sound or the sound may not be produced correctly. In such a case, execute the PLAYINIT command (syntax (3)) to return to the original state.
+
+When the voice data in sound memory is replaced by the PLAYINIT or TARG command, the values set before that return to the original voice parameters, so to change settings, do so after the voice data to be changed has been registered in sound memory by the PLAYINIT and TARG commands.
+
+*[p. 311]*
+
+**[Warning]** Depending on how the parameters are given, this command may produce no sound or a distorted sound. In that case, execute the PLAYINIT command. If there is still no sound, or communication between the main system and the sound system goes wrong, do a hot start, save the program, then reset and run it again.
+
+**[List of item numbers]**
+
+(R/W) means that READ/WRITE operations are possible. (R) means that writing is not allowed.
+
+**Voice part (0–)**
+
+#### 0 Bend range (R/W) `@BEND`
+
+- The pitch change when the MML pitch bend command is given at its maximum value, expressed as a width in note numbers.
+- "0 to 12" and "24" can be set. Setting "12" gives ±1 octave, and "24" gives the maximum of ±2 octaves.
+
+#### 1 Number of layers − 1 (R/W) `@LAYER`
+
+- The "number of layers − 1" registered in the given voice number.
+- When rewriting, it can be set lower than the original number of layers, but it cannot be increased with this item.
+- A reduced number of layers cannot be restored.
+
+#### 2 Number of voices − 1 (R) `@TONE`
+
+- The maximum voice number that can be given (number of voices − 1).
+
+**Note-on control (10–)**
+
+#### 10 Start note (R/W) `@SN`
+
+- Sets which note numbers the voice registered in this layer sounds on. It sounds when a note number between the note number set here and the note number set as the end note arrives.
+- "0 to 127"
+
+#### 11 End note (R/W) `@EN`
+
+- Sets which note numbers the voice registered in this layer sounds on. It sounds when a note number between the note number set here and the note number set as the start note arrives.
+- "0 to 127"
+
+*[p. 312]*
+
+#### 12 Base note (R/W) `@BN`
+
+- Gives, as a note number, the reference frequency of the waveform data.
+- "0 to 127"
+
+> **[Caution]** In FM sound source mode, it is corrected during "TARG".
+
+#### 13 Fine tune (R/W) `@FT`
+
+- Adjusts the frequency in finer units.
+- "−127 to 128"
+
+> **[Caution]** In FM sound source mode, it is corrected during "TARG".
+
+**EG (envelope generator) control (20–)**
+
+For details of the items, see the EG command. Executing the EG command rewrites these values.
+
+#### 20 Attack rate (R/W) `@AR`
+
+#### 21 Decay rate (R/W) `@DR`
+
+#### 22 Sustain rate (R/W) `@SR`
+
+#### 23 Release rate (R/W) `@RR`
+
+#### 24 Sustain level (R/W) `@SL`
+
+#### 25 EG hold mode (R/W) `@EGHOLD`
+
+#### 26 Loop start link (R/W) `@LSLINK`
+
+#### 27 Key rate scaling (R/W) `@KS`
+
+*[p. 313]*
+
+**Waveform data control (30–)**
+
+#### 30 Sound direct (R/W) `@SDIR`
+
+- Selects whether the waveform data is output directly or passed through the EG.
+- When original PCM sampling data is not used as an instrument, it is a good idea to set this to "1".
+
+| Value | Meaning |
+|---|---|
+| 0 | Passes through the EG |
+| 1 | Output without being multiplied by the EG, TL, ALFO and so on |
+
+#### 31 Source bit control (R/W) `@SB`
+
+- Specifies bit inversion of the sound input data.
+
+| Value | Meaning |
+|---|---|
+| 0 | No inversion |
+| 1 | Inverts all bits of the source waveform data except the sign bit |
+| 2 | Inverts the sign bit of the source waveform data |
+| 3 | Inverts both |
+
+#### 32 Sound source control (R/W) `@SS`
+
+- Specifies the data used as sound input data.
+
+| Value | Meaning |
+|---|---|
+| 0 | Uses the wave data in sound memory |
+| 1 | Internally generated data (noise) |
+| 2 | Internally generated data (ALL "0") |
+
+- Each slot outputs noise using the output of the LFO noise oscillator. The LFO parameters then have no effect at all on the noise as sound data. Also, when the LFO is used for low-frequency modulation and noise is chosen as the LFO waveform, "50: LFO reset" has no effect.
+
+#### 33 Loop control (R/W) `@LOOP`
+
+- Sets the loop type of the waveform data.
+
+| Value | Meaning |
+|---|---|
+| 0 | Loop OFF |
+| 1 | Normal loop |
+| 2 | Reverse loop |
+| 3 | Alternative loop |
+
+- Loop processing ends when the attenuation reaches its maximum after release, and, with loop OFF, when the read point reaches the loop end point.
+- With a normal loop or reverse loop, click noise occurs unless the data pointed to by "35: loop start address" and "36: loop end address" has the same value.
+
+*[p. 314]*
+
+#### 34 Waveform data word length (R) `@PCM8B`
+
+- The word length of the waveform data (cannot be changed).
+
+| Value | Meaning |
+|---|---|
+| 0 | 16-bit PCM data |
+| 1 | 8-bit PCM data |
+
+#### 35 Loop start address (R/W) `@LSA`
+
+- Holds the loop start point of the waveform data, as a number of samples from the start address.
+- The start address cannot be read or rewritten.
+- For 16-bit PCM, 2 bytes make one sample.
+- "&H0000 to &HFFFE"
+
+#### 36 Loop end address (R/W) `@LEA`
+
+- Holds the loop end point of the waveform data, as a number of samples from the start address.
+- The start address cannot be read or rewritten.
+- For 16-bit PCM, 2 bytes make one sample.
+- "&H0000 to &HFFFE"
+
+**LFO (low-frequency oscillator) control (50–)**
+
+For details of the items, see the LFO command. Executing the LFO command rewrites these values.
+
+#### 50 LFO reset (R/W) `@RE`
+
+#### 51 LFO frequency (R/W) `@LFOF`
+
+#### 52 ALFO (amplitude modulation) waveform selection (R/W) `@ALFOWS`
+
+#### 53 ALFO (amplitude modulation) depth (R/W) `@ALFOS`
+
+#### 54 PLFO (frequency modulation) waveform selection (R/W) `@PLFOWS`
+
+#### 55 PLFO (frequency modulation) depth (R/W) `@PLFOS`
+
+*[p. 315]*
+
+**FM wiring (60–)**
+
+#### 60 Modulation input X selection (layer number) (R/W) `@MDX`
+
+- Gives, as a layer number, the "modulation input X" of the slot allocated to this layer when it sounds.
+- "0 to 127" (latest data)
+- "+128" (data from one generation earlier)
+
+> **[Caution]** Normally this is set with the FM command of the TARG command (OP number/X&Y).
+
+#### 61 Modulation input Y selection (layer number) (R/W) `@MDY`
+
+- Gives, as a layer number, the "modulation input Y" of the slot allocated to this layer when it sounds.
+- "0 to 127" (latest data)
+- "+128" (data from one generation earlier)
+
+> **[Caution]** Normally this is set with the FM command of the TARG command (OP number/X&Y).
+
+#### 62 Modulation level (R/W) `@MDL`
+
+- Specifies the effect of the modulation input source on the modulation (modulation depth: M).
+
+> **[Caution]** Normally this is set with the FM command of the TARG command (M).
+
+**Mixer (DSP) control (70–)**
+
+For details, see "2.4 Block structure of the sound system" and the DSP command.
+
+#### 70 Input selection (R/W) `@ISEL`
+
+- For details of the item, see the "effector number" of the DSP command. Executing the DSP command rewrites this value.
+
+#### 71 Input mix level (R/W) `@IMIX`
+
+- For details of the item, see the "level" of the DSP command. Executing the DSP command rewrites this value.
+
+#### 72 Direct data send level (R/W) `@DSEND`
+
+- Specifies the direct data send level for each slot.
+
+*[p. 316]*
+
+| S | Level (dB) |
+|---|---|
+| 0 | −∞ (not sent) |
+| 1 | −36 |
+| 2 | −30 |
+| 3 | −24 |
+| 4 | −18 |
+| 5 | −12 |
+| 6 | −6 |
+| 7 | −0 |
+
+#### 73 Direct data position (R/W) `@DPAN`
+
+- Specifies, for each slot, the position used when the direct data is sent.
+- Affected by the MML "P" command and the PLAYPAN command.
+
+Position data by DIPAN:
+
+| DIPAN | Left (dB) | Right (dB) | DIPAN | Left (dB) | Right (dB) |
+|---|---|---|---|---|---|
+| 0 | −00.0 | −00.0 | 16 (0+16) | −00.0 | −00.0 |
+| 1 | −03.0 | −00.0 | 17 (1+16) | −00.0 | −03.0 |
+| 2 | −06.0 | −00.0 | 18 (2+16) | −00.0 | −06.0 |
+| 3 | −09.0 | −00.0 | 19 (3+16) | −00.0 | −09.0 |
+| 4 | −12.0 | −00.0 | 20 (4+16) | −00.0 | −12.0 |
+| 5 | −15.0 | −00.0 | 21 (5+16) | −00.0 | −15.0 |
+| 6 | −18.0 | −00.0 | 22 (6+16) | −00.0 | −18.0 |
+| 7 | −21.0 | −00.0 | 23 (7+16) | −00.0 | −21.0 |
+| 8 | −24.0 | −00.0 | 24 (8+16) | −00.0 | −24.0 |
+| 9 | −27.0 | −00.0 | 25 (9+16) | −00.0 | −27.0 |
+| 10 | −30.0 | −00.0 | 26 (10+16) | −00.0 | −30.0 |
+| 11 | −33.0 | −00.0 | 27 (11+16) | −00.0 | −33.0 |
+| 12 | −36.0 | −00.0 | 28 (12+16) | −00.0 | −36.0 |
+| 13 | −39.0 | −00.0 | 29 (13+16) | −00.0 | −39.0 |
+| 14 | −42.0 | −00.0 | 30 (14+16) | −00.0 | −42.0 |
+| 15 | −∞ | −00.0 | 31 (15+16) | −00.0 | −∞ |
+
+*[p. 317]*
+
+### VOLUME
+
+*Direct-mode command / Program-mode command*
+
+**Function:** Adjusts the overall volume (master volume).
+
+**Syntax:** `VOLUME [<volume>]`
+
+**Example:**
+```
+VOLUME 0
+```
+
+**[Parameters]**
+- `<volume>`: specifies the overall volume value. "0 to 127"; the larger the value, the louder. If omitted, it becomes "127".
+
+**[Details]** Adjusts the overall volume of what is played by the PLAY/EFFECT/BGM/BEEP commands.
+
+**[Caution]** When an error occurs or execution is interrupted by a break, it returns to the default value.
+
+*[p. 318]*
+
+## 2.6 MML details
+
+This section explains the details of the MML written for the PLAY/EFFECT commands and in the DATA statements interpreted by the SETSONG command. Note the following points.
+
+- MML is given as a string enclosed in double quotes ("), but when it is written in a DATA statement the quotes may be omitted, unless the string contains a colon (:).
+- Upper case and lower case letters are distinguished.
+- When MML is split over several lines, always split it at a boundary between commands. Also, do not split the string inside a tie, a tuplet or a chord. If it is split there, the specification is taken to end at that point, so it will not play correctly.
+
+**[Example 1]**
+```
+PLAY "@44 CDE @V"         PLAY "@44 CDE"     ← an error
+PLAY "127 …"         ⇨    PLAY "@V127…"
+```
+
+**[Example 2]**
+```
+PLAY "@44 CDE&"           PLAY "@44 CDE&E"   ← wrong tie
+PLAY "EDC {CD"       ⇨    PLAY "DC {CDE}"    ← wrong tuplet
+PLAY "E}{CDE …}"          PLAY "{CDE} …"
+```
+
+- When writing several tracks, make the "time" length of every track the same. For example, if three bars are written in track "0" and only two in track "1", the third bar of track "1" becomes a rest, and the time length is adjusted at the next separator (matched to the longest track). Using this, if some tracks are not used in part of the music, there is no need to write rests in them; the timing will not slip even if they are written only from the point where they are used.
+
+When writing in MML, if the total playing time is less than a 128th note (direct length 15), the error "Sound: MML String too short" occurs.
+
+*[p. 319]*
+
+```
+PLAY "C128"  ┐ no error
+PLAY "Cl15"  ┘
+
+PLAY "Cl14"  ───── an error
+
+PLAY "Cl14 Cl1" ── no error
+
+DATA #0,"T150 O5"   an error if it ends here (there is no actual playing time)
+DATA -
+DATA #0,"C128"      no error if the actual playing time is a 128th note or more
+DATA ENDSONG
+```
+
+### MML commands
+
+#### Commands that can only be written in the base track
+
+The base track is the lowest track number when several tracks are written. In this MML, tempo changes and the processing of loop-control symbols, which concern all the tracks, are all based on the base track.
+
+If a command marked "BASE" beside its name is written in a track other than the base track, an error occurs.
+
+| Command | Meaning |
+|---|---|
+| `T` | Specifies the tempo (Tempo) |
+| `dc` | Specifies da capo (infinite loop) |
+| `$` | Specifies a segno (start position of a repeat) |
+| `ds` | Specifies dal segno (end position of a repeat) |
+| `*` | Leaves the repeated part and skips to the MML after the dal segno with the matching label (doubles as the coda sign and the to-Coda sign) |
+| `\|:` | Specifies the start position of a repeat |
+| `:\|` | Specifies the end position of a repeat |
+| `:\|:` | Specifies at the same time the end position of a repeat ":\|" and the start position of the next repeat "\|:" |
+| `\|1` | Specifies the position played the first time |
+| `:\|2` | Specifies the position played the second time |
+
+*[p. 320]*
+
+#### Commands common to all tracks
+
+| Command | Meaning |
+|---|---|
+| `¥` | Registers and expands macros |
+| `ep` | Sets the position (pan pot) of the DSP effect in the mixer of the given DSP output channel |
+| `el` | Sets the level of the DSP effect in the mixer of the given DSP output channel |
+| `ec` | Given to switch effectors in single-effector mode (fixed at "0" in multi-effector mode) |
+
+#### Commands that can be given per track
+
+| Command | Meaning |
+|---|---|
+| `@` | Changes the voice to the instrument or sound effect given by \<voice number\> |
+| `S` | Specifies the key (Signature) |
+| `K` | Shifts the written note names in semitone steps (Key transpose). Doubles as an octave sign |
+| `V` | Specifies the volume per track (Volume) |
+| `@V` | Specifies the volume per track in finer steps (Volume) |
+| `[` | Raises the current volume relatively |
+| `]` | Lowers the current volume relatively |
+| `P` | Specifies the sound position (pan pot) per track (Pan) |
+| `O` | Specifies the octave (Octave) |
+| `L` | Specifies the note length (Length) |
+| `v` | Specifies the default speed (strength) of key-on (Velocity) |
+| `ppp/pp/p/mp/mf/f/ff/fff` | Set the default velocity |
+| `q` | Sets the ratio of key-on time to note length (Quantity, including the staccato function). The numerator/denominator calculation gives the Gate/Delta ratio |
+| `A`–`G` | Specify the note name to sound and control the note-on |
+| `(…)` | Specifies a chord within one track |
+| `{…}` | Specifies a tuplet |
+| `N` | Specifies the pitch by note number (Note) |
+| `R` | Specifies a rest (Rest) |
+| `<` | Lowers the octave by one |
+| `>` | Raises the octave by one |
+| `&` | Specifies a tie (tie) |
+| `_` | Specifies a slur (Slur) |
+| `%` | Controls the damper |
+| `!` | Embeds a control command that serves as the value read by the MMLSTAT(n,0) function and as the trigger signal for "ON MMLSTAT GOSUB" |
+
+*[p. 321]*
+
+| Command | Meaning |
+|---|---|
+| `/` | Plays several sounds with different voices or pitches layered on one note-on command (software layer). With no option, toggles the software layer function on and off |
+| `\|` | The bar line symbol |
+| `^` | The part enclosed by this symbol is not played |
+
+### List of MML command details
+
+Each MML command is described in the following format.
+
+| Item | Description |
+|---|---|
+| Heading | The command name |
+| Line under the heading | The tracks in which the command can be given |
+| **Function** | The function of each command |
+| **Syntax** | The syntax of each command |
+| **[Parameters]** | The values given to each command and their explanation |
+| **[Details]** | The details of each command |
+| **[Caution]** | Points to note when using each command |
+| **[Example]** | Samples of actual use of the command |
+
+#### ¥
+
+*Common to all tracks*
+
+**Function:** Registers and expands macros.
+
+**Syntax:** `¥<macro name>[=¥…¥]`
+
+**[Parameters]**
+- `<macro name>`: the single letter registered. Upper case and lower case are treated as different macros. The following 52 characters can be used.
+
+  `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+  `abcdefghijklmnopqrstuvwxyz`
+
+- `…`: after "=", the string enclosed by "¥" is registered under the letter given as \<macro name\>; to use it, give only "¥\<macro name\>".
+
+*[p. 322]*
+
+**[Details]** Rhythm patterns, often-used short phrases and so on can be registered, up to 128 characters per letter.
+
+**[Caution]** Nothing is converted to notes at the time of registration. It only becomes song data when it is used, so even if macros that are not used are registered at the start of the MML, they do not use up sound memory.
+
+This command is referred to in common by all tracks. If a macro with the same name is registered in several tracks, the last one set is the one in effect.
+
+**[Example]** Registers the "Kick" and "Snare" of a drum set.
+
+```
+¥K=¥N36'4;127¥ ¥S=¥N37'4;100¥
+```
+
+To use them, give the following.
+
+```
+¥K(¥K¥S)¥K(¥K¥S)
+```
+
+Written without macros, it becomes the following complicated expression.
+
+```
+N36'4;127(N36'4;127 N37'4;100) N36'4;127(N36'4;127 N37'4;100)
+```
+
+#### @
+
+*Per track*
+
+**Function:** Changes the voice to the instrument or sound effect given by \<voice number\>.
+
+**Syntax:** `@<voice number>`
+
+**[Parameters]** Depends on the voice file. Number "0" is included in every file as the voice dedicated to the BEEP command. The voice allocated by default is number "0".
+
+**[Details]** Depending on the voice number selected for the kind of instrument or sound effect to play, the kind of instrument itself may change with the note number (note name), as in a drum set. In that case there is no need to switch voices for each kind of drum.
+
+**[Caution]** For some voice numbers, the range of note numbers that can be given is limited. Also, with note numbers beyond a certain range, the sound may not sound like the given instrument, or the kind of instrument may change, so check the usable range and the recommended range in the "voice number list" before use.
+
+*[p. 323]*
+
+Depending on the kind of voice file, some voice numbers do not exist. For example, a piece written using the "STANDARD" set cannot be played with the voice file of the "PIANO" set, because the instrument sounds are not there. No error occurs, so take care.
+
+**[Example]**
+```
+@1
+```
+
+#### S
+
+*Per track*
+
+**Function:** Specifies the key (Signature).
+
+**Syntax:** `S<key number>`
+
+**[Parameters]**
+- `<key number>`: −7 to 7. Default = 0 (C major).
+
+**[Details]** Specifies the number of "sharps" or "flats" written at the start of the score.
+
+Give a plus value for sharps and a minus value for flats. With this command, even music in a key other than C major can be entered with the note names as written in the score. It can be written any number of times at any position in the piece, so it is useful when entering scores with many key changes.
+
+**[Caution]** When this command is given, the mode changes so that accidentals such as sharps and flats placed after notes are handled as "temporary accidentals". When porting program listings written in older MML, note that changing the key with this command shifts the pitches. Key-ons made with the "N" command are not affected.
+
+**[Example]** See the "Correspondence between note names on the score and note numbers" figure in "2.2 Explanation of terms". As in the figure shown there, when there are two sharps at the start of the score, giving the following lets the music be entered as written.
+
+```
+S2
+```
+
+**[See also]** The note-on command by note name, "A–G". The note-on command by note number, "N".
+
+*[p. 324]*
+
+#### K
+
+*Per track*
+
+**Function:** Shifts the written note names in semitone steps (Key transpose). Doubles as an octave sign.
+
+**Syntax:** `K<relative note number>`
+
+**[Parameters]**
+- `<relative note number>`: −127 to 127. Default = 0.
+
+**[Details]** Shifts the notes after this command by the value given as \<relative note number\>, in semitone steps. Giving a multiple of "12" gives an octave shift (octave sign).
+
+**[Caution]** Notes outside the note number range "0 to 127" are not guaranteed. Key-ons made with the "N" command are not affected.
+
+**[Example]** Raises every note given by a semitone.
+
+```
+K1
+```
+
+When the score is marked as follows, it means playing one octave up or down.
+
+```
+8va - - - - - - - - - - - - - ┐  ← score marking
+     K12
+8va - - - - - - - - - - - - - ┘  ← score marking
+     K-12
+```
+
+Plays do-re-mi-fa-sol-la-ti using key transpose alone.
+
+```
+C K2 C K4 C K5 C K7 C K9 C K11 C
+```
+
+#### T
+
+*BASE*
+
+**Function:** Specifies the tempo (Tempo).
+
+**Syntax:** `T<tempo value>`
+
+**[Parameters]**
+- `<tempo value>`: 40 to 300. Default = 120.
+
+*[p. 325]*
+
+**[Details]** Specifies the number of quarter notes played per minute. The larger the value, the faster the playing speed.
+
+**[Caution]** In the default state, there cannot be more than 16 tempo changes in one piece. To go beyond 16, change the upper limit with "TEMPO\<number of tempo changes\>" of "SETSONG".
+
+When the da capo sign "dc" is written, tempo processing is also done internally, so an error may occur depending on the number of tempo changes at the point where "dc" is written.
+
+**[Example]**
+```
+T100
+```
+
+#### V
+
+*Per track*
+
+**Function:** Specifies the volume per track (Volume).
+
+**Syntax:** `V<volume>`
+
+**[Parameters]**
+- `<volume>`: 0 to 15. Default = 15.
+
+**[Details]** Specifies the playing volume in 16 steps. The larger the value, the louder. The volume changes in roughly equal proportions with the value.
+
+**[Caution]** It and the "@V" command affect each other.
+
+**[Example]**
+```
+V15
+```
+
+**[See also]** The "@V" command.
+
+*[p. 326]*
+
+#### @V
+
+*Per track*
+
+**Function:** Specifies the volume per track in finer steps (Volume).
+
+**Syntax:** `@V<volume>`
+
+**[Parameters]**
+- `<volume>`: 0 to 127. Default = 125.
+
+**[Details]** Specifies the playing volume in 128 steps. The larger the value, the louder.
+
+**[Caution]** The value given changes in decibels, so to get half the volume of 127, 64 is wrong. Give a value of around 100. It and the "V" command affect each other.
+
+**[Example]**
+```
+@V100
+```
+
+**[See also]** The "V" command.
+
+Correspondence between the V command and the @V command:
+
+| V | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| @V | 85 | 87 | 90 | 93 | 95 | 98 | 101 | 103 | 106 | 109 | 111 | 114 | 117 | 119 | 122 | 125 |
+
+#### [
+
+*Per track*
+
+**Function:** Raises the current volume relatively.
+
+**Syntax:** `[<relative volume value>`
+
+**[Parameters]**
+- `<volume>`: 0 to 63. Default = 1.
+
+**[Details]** Specifies the relative volume value in 64 steps. The larger the value, the louder.
+
+**[Caution]** The value given is relative to the "@V" command, but in practice giving "1" changes the level by "2" (twice the value given).
+
+**[Example]**
+```
+@V100 CDE[FG
+@V100 CDE[20FG
+```
+
+*[p. 327]*
+
+#### ]
+
+*Per track*
+
+**Function:** Lowers the current volume relatively.
+
+**Syntax:** `]<relative volume value>`
+
+**[Parameters]**
+- `<volume>`: 0 to 63. Default = 1.
+
+**[Details]** Specifies the relative volume value in 64 steps. The larger the value, the quieter.
+
+**[Caution]** The value given is relative to the "@V" command, but in practice giving "1" changes the level by "2" (twice the value given).
+
+**[Example]**
+```
+@V100 CDE]FG
+@V100 CDE]20FG
+```
+
+#### P
+
+*Per track*
+
+**Function:** Specifies the sound position (pan pot) per track (Pan).
+
+**Syntax:** `P<direct pan value>`
+
+**[Parameters]**
+- `<direct pan value>`: 0 to 127. Default = depends on the direct pan information of the voice data.
+
+**[Details]** Specifies the direction the sound comes from, in 128 steps. With "64" as the centre, the closer to "0" the further left, and the closer to "127" the further right. By default, the music plays according to the pan pot information (direct pan) belonging to the voice data. Once this command has been executed, the "direct pan information of the voice data" is ignored unless the voice is changed. Put the other way round, executing a voice change command returns the pan information set with this command to the default.
+
+**[Caution]** Some voices, such as drums, are split left and right from the start. If the pan values are not what you want, set them again with this command (changing the direct pan information with the TPROP command is also fine). It is given in 128 steps, but internally the lowest 3 bits are discarded, giving 32 steps (for compatibility if finer settings become possible in the future).
+
+*[p. 328]*
+
+**[Example]**
+```
+p0
+```
+Positions it furthest left.
+
+#### ep
+
+*Common to all tracks*
+
+**Function:** Sets the DSP effect position (pan pot) in the mixer of the specified DSP output channel.
+
+**Syntax:** `ep<DSP output channel>;<effect pan value>`
+
+**[Parameters]**
+- `<DSP output channel>`: 0 to 15. No default; cannot be omitted.
+- `<effect pan value>`: 0 to 127. No default; cannot be omitted.
+
+**[Details]** Specifies the direction the sound comes from, in 128 steps. With "64" as the centre, the closer to "0" the further left, and the closer to "127" the further right. The initial state depends on the effector mode. For details, see "DSP effect module details" in "2.4 Sound system block structure".
+
+> **[Caution]** An error occurs unless DSP mode has been set with the PLAYINIT "DSP" or "DSPEXT" command. Loading or rebuilding voice data initializes the mixer. Because this is a mixer setting, the value set last, across all tracks, is the one in effect. Several mixers can also be set from a single track. A DSP module is not necessarily connected to every one of channels 0 to 15, so do not change the settings of channels that are not connected.
+
+**[Example]**
+```
+PLAY "CD ep0;127 E
+```
+Changes the effector output of mixer channel "0" to the right.
+
+*[p. 329]*
+
+#### el
+
+*Common to all tracks*
+
+**Function:** Sets the DSP effect level in the mixer of the specified DSP output channel.
+
+**Syntax:** `el<DSP output channel>;<effect level value>`
+
+**[Parameters]**
+- `<DSP output channel>`: 0 to 15. No default; cannot be omitted.
+- `<effect level value>`: 0 to 7. No default; cannot be omitted.
+
+**[Details]** Specifies how strongly the DSP effect is applied.
+
+| S | Level (dB) |
+|---|---|
+| 0 | −∞ (not sent) |
+| 1 | −36 |
+| 2 | −30 |
+| 3 | −24 |
+| 4 | −18 |
+| 5 | −12 |
+| 6 | −6 |
+| 7 | −0 |
+
+Each channel is at the maximum right after initialization. For details, see "DSP effect module details" in "2.4 Sound system block structure".
+
+> **[Caution]** An error occurs unless DSP mode has been set with the PLAYINIT "DSP" or "DSPEXT" command. Loading or rebuilding voice data initializes the mixer. Because this is a mixer setting, the value set last, across all tracks, is the one in effect. Several mixers can also be set from a single track. A DSP module is not necessarily connected to every one of channels 0 to 15, so do not change the settings of channels that are not connected.
+
+**[Example]**
+```
+PLAY "CD el0;7 E
+```
+
+*[p. 330]*
+
+#### ec
+
+*Common to all tracks*
+
+**Function:** Specifies the effector to switch to, in single effector mode (fixed at "0" in multi effector mode).
+
+**Syntax:** `ec<effect change value>`
+
+**[Parameters]**
+- `<effect change value>`: 0 to 15. Default = 0.
+
+**[Details]** When single effector mode has been set with PLAYINIT "DSP", one of four DSP effectors can be selected.
+
+When multi effector mode has been set with PLAYINIT "DSPEXT", three effectors can be used per voice, so there is no need to switch effectors (leave it at "0").
+
+| Value | Effect |
+|---|---|
+| 0 | Stereo reverb 1 (strong effect) |
+| 1 | Stereo reverb 2 (weak effect) |
+| 2 | Stereo delay |
+| 3 | Mono distortion |
+
+See "DSP effect module details" in "2.4 Sound system block structure".
+
+**[Caution]** Values from "0" to "15" can be given, but only four effectors are provided, so values of "4" or more are ignored.
+
+**[Example]**
+```
+ec3
+```
+Sets the effect to "mono distortion".
+
+#### O
+
+*Per track*
+
+**Function:** Specifies the octave (Octave).
+
+**Syntax:** `O<octave value>`
+
+**[Parameters]**
+- `<octave value>`: 0 to 8. Default = 4.
+
+**[Details]** Specifies the pitch of the notes played. Once set, it stays in effect until it is set again.
+
+*[p. 331]*
+
+**[Caution]** An octave change given inside the chord symbol "(…)" is in effect only inside the chord symbol. On leaving the chord symbol, the octave returns to what it was before the chord symbol. Entering chords tends to need many octave change symbols, but this feature removes the bother of changing octaves.
+
+**[Example]**
+```
+O2
+```
+
+**[See also]** The ">" command and the "<" command.
+
+#### L
+
+*Per track*
+
+**Function:** Specifies the note length (Length).
+
+**Syntax:** `L<note length>[.][.][.]`
+
+**[Parameters]**
+- `<note length>`: 1 to 128. Default = 4.
+
+  Or:
+
+  `l<direct length>`: 0 to 8388607.
+
+**[Details]** Sets the note length used when no length is given with the note-on commands "A–G & N" or the rest symbol "R". For compatibility, it can also be entered as an "extended specification". Up to three dots can be given. Each dot adds half the length of the value just before it.
+
+The direct length can be used with every command that takes a \<note length\>, including this one. In that case, give a lowercase "l" followed by the value (Ll480, C#l100 and so on).
+
+*[p. 332]*
+
+**General specification**
+
+| Symbol | Note length | Direct length |
+|---|---|---|
+| L1. | Dotted whole note | 2880 |
+| L1 | Whole note | 1920 |
+| L2. | Dotted half note | 1440 |
+| L2 | Half note | 960 |
+| L4. | Dotted quarter note | 720 |
+| L4 | Quarter note | 480 |
+| L8. | Dotted 8th note | 360 |
+| L8 | 8th note | 240 |
+| L16. | Dotted 16th note | 180 |
+| L16 | 16th note | 120 |
+| L32. | Dotted 32nd note | 90 |
+| L32 | 32nd note | 60 |
+| L64. | Dotted 64th note | 45 |
+| L64 | 64th note | 30 |
+| L128 | 128th note | 15 |
+
+**Extended specification**
+
+| Symbol | Direct length |
+|---|---|
+| L3 | 640 |
+| L6 | 320 |
+| L12 | 160 |
+| L24 | 80 |
+| L48 | 40 |
+| L96 | 20 |
+
+**[Caution]** The resolution is fixed at 480 per quarter note. Giving a value other than "1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128" causes an error. Adding a dot to a 128th note produces a rounding error.
+
+*[p. 333]*
+
+**[Example]**
+```
+CDEL8FGAL16.B
+```
+Makes FGA 8th notes and "B" a dotted 16th note.
+
+#### v
+
+*Per track*
+
+**Function:** Specifies the default key-on speed (strength) (Velocity).
+
+**Syntax:** `v<strength>`
+
+**[Parameters]**
+- `<strength>`: 0 to 127. Default = 127.
+
+**[Details]** When a note is sounded with the note-on commands "A–G & N", the key-on uses the strength specified with this command. As with a piano, playing the keys harder or softer makes it possible to vary the expression. The larger the value, the stronger. The velocity can also be given temporarily with a sub-option of the note-on command, but that does not affect the value of this command.
+
+**[Caution]** Giving the "ppp–fff" commands affects the value of this command.
+
+**[Example]**
+```
+v100
+```
+
+#### ppp / pp / p / mp / mf / f / ff / fff
+
+*Common to all tracks*
+
+**Function:** Sets the default velocity.
+
+**Syntax:** `ppp[=<n>]/pp[=<n>]/p[=<n>] / mp[=<n>]/mf[=<n>] / f[=<n>]/ff[=<n>]/fff[=<n>]`
+
+**[Parameters]**
+- `<n>`: The same as \<strength\> of the "v" command. Default = see below.
+
+**[Details]** When "=\<n\>" is added, the velocity value is registered to that symbol. When "=\<n\>" is omitted, the default velocity is set to the value registered to the symbol. This MML provides eight symbols, with values set in advance.
+
+**[Caution]** If "ppp–fff" are given, the value given with the "v" command is no longer in effect.
+
+**[Example]**
+```
+ppp
+ff=120
+```
+
+#### q
+
+*Per track*
+
+**Function:** Sets the ratio of key-on time to note length (Quantity, including the staccato function). The numerator/denominator calculation gives the Gate/Delta ratio.
+
+**Syntax:** `q<[numerator/]denominator>`
+
+**[Parameters]**
+- `[numerator]`: 1 to 8388607. Default = 1.
+- `<denominator>`: when the numerator is "1", the internal value of the note length. Default = 1.
+
+**[Details]** Sets the key-on length to "[numerator] over \<denominator\>" of the note length. Both default to "1", so the key-on lasts for the given note length (the same behaviour as a slur). Normally only \<denominator\> is given, and [numerator] is left at its default of "1". This makes it possible to play staccato (each note cut short). For a quarter note the resolution is set internally to "480" (see the L command), so a value shorter than "1/480" is set to "1/480". Making \<numerator\> larger also makes a key-on longer than the given note length possible. In that case the timing of moving on to the next note follows the note length, but because the key-on time is longer, the note overlaps the next one and they sound together.
+
+**[Example]**
+
+Sounds a 16th-note "C" with a key-on lasting a 32nd note (half a 16th note).
+```
+q2 C16
+```
+
+*[p. 335]*
+
+Sounds each note overlapping the next by half the note length.
+```
+q2/1 CDE
+```
+
+#### A–G
+
+*Per track*
+
+**Function:** Specifies the note name to sound and controls the note-on.
+
+**Syntax:** `A～G[+|#|-|n][[[note length][.][.][.]]|[l<direct length>]][;temporary velocity[;temporary Gate/Delta ratio]][~[V|P][initial value[;target value[;bend length]]]][?[chord name][;inversions]]`
+
+**[Parameters]**
+- `[+|#|-|n]`: behaves differently depending on the S command; see [Details].
+- `[note length]`: 1 to 128. Default = the value set with the "L" command.
+
+  Or:
+
+  `l<direct length>`: 0 to 8388607.
+- `[;temporary velocity]`: the range of the "v" command. Default = the value set with the "v" command.
+- `[;temporary Gate/Delta ratio]`: the range of the "q" command. Default = the value set with the "q" command.
+- `[~]`: pitch bend.
+
+  Or `[~V]`: auto volume (fade) mode.
+
+  Or `[~P]`: auto pan mode.
+- `[initial value]`: 0 to 127. Default = the previous "target value" (default = 64).
+- `[target value]`: 0 to 127. Default = 64 (the normal value).
+- `[bend length]`: 0 to 8388607. Default = the internal value of [note length] (given as a direct length).
+- `[?[chord name]]`: see [Details].
+- `[;inversions]`: see [Details].
+
+**[Details]** Specifies the note name to sound. The options from ";temporary velocity" onwards are specific to this MML, so if they are not given it behaves like the MML of earlier personal computers. When the key signature "S" command has been given, the meaning of sharps and flats differs from earlier MML.
+
+*[p. 336]*
+
+**When the "S" command is not given**
+
+It behaves to the same specification as the MML used on earlier personal computers.
+
+- "CDEFGAB" specify the note names. They correspond to "do re mi fa sol la si".
+- "+" or "#" is the sharp symbol. It raises only the given note by a semitone.
+- "-" is the flat symbol. It lowers only the given note by a semitone.
+- "n" is the natural symbol, but giving it has no meaning and it is ignored.
+
+Semitone raises and lowers must be given every time a note name is given, so when entering a score as written you must take care yourself.
+
+**When the "S" command is given**
+
+"CDEFGAB" are the natural notes. In C major, "S0", they correspond to "do re mi fa sol la si". They are raised or lowered in semitones according to the key signature given with the "S" command.
+
+- "+", "#" and "-" work as true "accidentals".
+- "n" is the natural symbol. It returns to the natural note a note that differs from the natural note in a key other than C major, or a note changed temporarily by a sharp or flat.
+
+In earlier MML these accidentals did not work on anything other than the note they were given on, but when the key signature command "S" is given they work as "accidentals" as in standard notation. That is, their effect is "limited to the bar" and "limited to within one octave".
+
+By stating the range of effect clearly with the bar line symbol (the "|" command), entry exactly as in the score becomes possible. When entering a score with many sharps or flats, the notes are played as written without having to enter "#" or "-" on each note while keeping the key signature in mind.
+
+**Common options not related to the "S" command**
+
+- **[note length]**
+
+  Specifies the length of the note. If omitted, it is the value set with the "L" command.
+- **[.]**
+
+  A dot. The length becomes "1.5" times the given note length. Instead of the dot symbol, a note length that includes the dot can be given, as with the "L" command. Up to three dots can be given.
+- **[;temporary velocity]**
+
+  Given when the key-on speed (strength) is to be changed for this note only. If omitted, it is the value set with the "v" command.
+- **[;temporary Gate/Delta ratio]**
+
+  Specifies the key-on time relative to the note length temporarily. If omitted, it is the value set with the "q" command.
+
+*[p. 337]*
+
+- **["~"]**
+
+  Given when pitch bend, auto volume or auto pan is to be used. Combined with the "&" command and the "R" command, it allows finer and more varied expression. Up to 64 can be given in succession (the number that can be joined with "&").
+
+  | Option | Function |
+  |---|---|
+  | Not given | Pitch bend |
+  | V | Auto volume |
+  | P | Auto pan |
+
+  With pitch bend, the pitch can be changed smoothly, so expression like working the bend wheel of a guitar or synthesizer is possible.
+
+  With auto volume, the volume can be changed gradually, and the attack/release speed can also be controlled in a simulated way.
+
+  With auto pan, the left–right position of the sound can be changed continuously.
+
+  When the bend option is given, give the following three parameters in order. When "~" is given, the separator ";" cannot be omitted.
+- **[initial value]**
+
+  Specifies the initial bend value at key-on. For pitch, "64" is the centre, "0" the lowest and "127" the highest. The width of the pitch bend depends on the "bend range" of the voice data. For volume, "0" is the minimum and "127" the maximum. For pan, "0" is left and "127" right.
+
+  If omitted, the [target value] of the previous bend is set, so when notes are joined in succession with the tie symbol "&", the bend curve can be adjusted for each note.
+- **[target value]**
+
+  Specifies the bend target value. The bend processing runs with the pitch, volume or pan value starting at [initial value] and changing until it reaches [target value]. If omitted, it is set to the normal value "64".
+- **[bend length]**
+
+  Specifies the time the bend wheel is moved, as an internal value (direct length) (see the "L" command). It specifies the time taken to change from [initial value] to [target value], so making it shorter makes the bend faster, and making it longer makes it change slowly. If omitted, it is the internal value of the note length.
+- **[?[chord name]]**
+
+  Giving a chord name after "?" lets you play a chord easily. The chord names that can be given are as follows.
+
+*[p. 338]*
+
+  | Chord name | Chord |
+  |---|---|
+  | `?` | Major triad |
+  | `?m (?-)` | Minor triad |
+  | `?aug (?+)` | Augmented triad |
+  | `?dim (?°)` | Diminished triad |
+  | `?7` | Seventh chord |
+  | `?m7` | Minor seventh chord |
+  | `?m7-5 (?m7b5)` | Minor seventh flat five chord |
+  | `?M7 (?maj7)` | Major seventh chord |
+  | `?mM7` | Minor major seventh chord |
+  | `?dim7` | Diminished seventh chord |
+  | `?6` | Major sixth chord |
+  | `?m6` | Minor sixth chord |
+  | `?sus4` | Suspended fourth |
+  | `?7sus4` | Seventh suspended fourth |
+- **[;inversions]**
+
+  Following the chord name, separate with ";" and give 1 to 3 to make an inversion of the chord. Up to the third inversion is possible.
+
+**[Caution]** Writing "C-E#E+F-B#B+" does not cause an error.
+
+The note is affected by the accidentals of the key signature "S" command and by the key transpose of the "K" command, so when using a voice with a limited range, such as percussion, sound it with the "N" command.
+
+**[Caution when using the bend function]** The bend function affects only the notes of the same track, and if left bent it also affects the notes that follow. To sound the following notes at the initial value, set the initial bend value to "64" when giving the note to return (for volume, "64" makes no sound). For bending longer than a whole note, or for finer bending control, see the examples of the "&" command and the "R" command. Giving a bend command uses many times the usual memory. The wider the bend, the more memory is used, so with the PLAY statement a "Sound: Song bank full" error may occur. The bend amount per unit of time is fixed at "1", so if, for example, the bend width is set to "0–127" and a time of less than "127" is given as a direct length, it cannot bend smoothly to the target value. In this case, after the given bend length it is forced to the target value.
+
+*[p. 339]*
+
+**[Example]**
+
+Sounds without options.
+```
+C16 C# E+1. F16 A# B Cn
+```
+
+Sounds a D-flat quarter note at maximum strength, with a key-on lasting an 8th note.
+```
+D-4;127;2
+```
+
+Sounds a whole-note "C" while bending. Of the whole note, a half note's length is bent, and the note then continues to sound. It bends from "O4C" to "O5C".
+```
+O4 C1~64;127;960
+```
+
+An example of how notes change when a key signature is given.
+```
+S2 CCCC | CCnCC | CCCC | D#DDD& | DDDD
+            1      2      3   4    5
+```
+
+"S2" plays "C" a semitone higher, but the accidental "natural" of "Cn" at (1) returns it to the C-major "C" from that note. The remaining two "C"s in the same bar are also played as the C-major "C", and from the "C" at (2), after the bar line "|", it is raised a semitone again. "S2" does not change the "D" note, so the accidental "sharp" at (3) raises it a semitone. The remaining three "D"s in the same bar are also raised a semitone, but because the last "D" of the bar is joined with the tie symbol "&", the effect lasts up to the "D" note at (5). The last three "D" notes return to the normal "D".
+
+For chord playing, you can write:
+```
+G?7        →ジー・セブンス
+C?m6       →シー・マイナーシックス
+C?7;3      →シー・セブンス・コードの第三転回形
+```
+(G seventh; C minor sixth; third inversion of the C seventh chord.)
+
+It can also be written together with earlier options such as pitch bend.
+```
+C~64;127;?M7 →シー・メジャーセブンス・コードをピッチ・ベンド
+```
+(Pitch bends the C major seventh chord.)
+
+**[See also]** The "|" command, the "&" command and the "_" command.
+
+*[p. 340]*
+
+#### (…)
+
+*Per track*
+
+**Function:** Specifies a chord within one track.
+
+**Syntax:** `(…)`
+
+**[Parameters]** None.
+
+**[Details]** Sounds the notes enclosed in "(…)" at the same time.
+
+Up to "32 notes" can be given in a chord, but the Sega Saturn sound source has at most 32 slots, so if the total, including other songs currently playing, exceeds 32, the later notes take priority. Giving 33 or more notes at once inside "(…)" causes an error.
+
+The length and strength of each note written inside "(…)" can be given independently. In this case, the length until the move to the next note is the length of the note given last inside "(…)". As with normal notes, the key-on time of each note is not affected. Used well, this feature can also express "broken chords".
+
+Processing related to key-on control, such as changing the "strength" or the "voice" of each note, can be given independently, but for settings that affect the whole track, such as "volume" and "pan", the one given last is the one in effect.
+
+Pitch bend is part of note-on control, but it can be controlled only per track. Also, its parameters are buffered each time a pitch bend appears, so in a chord give it on only one of the notes. Giving parameters to all three notes of a three-note chord counts as three pitch bends. For a concrete example, see the example of the tie command "&".
+
+**[Caution]** Always give "(…)" so that it fits within one string. Even if the octave is changed inside the chord symbol "(…)", it returns to the original octave at the end of the chord. This avoids a clutter of octave symbols when giving chords that span octaves.
+
+**[Example]**
+
+Sounds do, mi and sol (C major) at the same time.
+```
+(CEG)
+```
+
+Changes the velocity of each note, playing with emphasis on the notes you choose. If this is registered as a macro, quite natural expression should be easy.
+```
+(C;80 E;90 G;100)
+```
+
+A chord sounds good when the high notes are strong and the low notes weak. In this MML, this is done by giving the velocity of each note individually.
+
+*[p. 341]*
+
+#### {…}
+
+*Per track*
+
+**Function:** Specifies a tuplet.
+
+**Syntax:** `{…}[note length][.][.][.]`
+
+**[Parameters]**
+- `[note length]`: 1 to 128. Default = the value set with the "L" command.
+
+  Or:
+
+  `l<direct length>`: 0 to 8388607.
+- Number of notes in the tuplet: any number, as long as the internal value of [note length] divided by the number of notes is not less than "1".
+
+**[Details]** [note length] specifies the length of the notes. If omitted, it is the value set with the "L" command.
+
+[.] is a dot. The length becomes "1.5" times the given note length. Up to three can be given.
+
+The notes inside "{…}" are sounded with the length of the note given by [note length] divided equally between them.
+
+They are not keyed on at the same time as in a chord, so commands controlled per track, including voice changes, can also be given individually. As in the next example, the notes that make up the tuplet may be chords.
+
+**[Caution]** Always give "{…}" so that it fits within one string. As well as the velocity option, which specifies the key-on speed (strength), the ";temporary Gate/Delta ratio" option, which relates to the key-on time, can also be given. The key-on length in this case is a ratio of the length assigned to one note of the tuplet.
+
+**[Example]**
+
+Plays a triplet of do, re, mi (C major) in the time of one quarter note.
+```
+{CDE}4
+```
+
+Plays a "sextuplet of chords", including voice changes, in the time of one quarter note.
+```
+{@32 (FD) (GE) (FD) @40 (GE) (FD) (AF)}4
+```
+
+The next is an example of a compound form.
+```
+{@44 C @35 (GEC) G#.;90}2
+```
+
+**When used with a tie**
+
+| MML | Result |
+|---|---|
+| `(1) C4&{CCC}4` | Joined up to the first note of the tuplet. |
+| `(2) {C&CC}&C` | This kind of specification is not supported. |
+
+*[p. 342]*
+
+#### N
+
+*Per track*
+
+**Function:** Specifies the pitch by note number (Note).
+
+**Syntax:** `N<note number>['note length][.][.][.][;temporary velocity[;temporary Gate/Delta ratio]][~[V|P][initial value[;target value[;bend length]]]][?[chord name][;inversions]]`
+
+**[Parameters]**
+- `<note number>`: 0 to 127. No default; cannot be omitted. The other options are the same as for note names.
+
+**[Details]** Sounds a note by giving the note number directly instead of a note name. \<note number\> is the same as the MIDI note number, and "N60" corresponds to "C" in octave 4 (see the "Table of note numbers and note names" in "2.2 Explanation of terms").
+
+The parameters from [note length] onwards are the same as for the note-on command by note name, but "'" is used to separate the note number from the note length.
+
+"N0–N11" and "N120–N127" are outside the octave range "0–8", so they cannot be sounded by note name. Use this command to sound them if needed.
+
+**[Caution]** Notes sounded with this command are not affected by the "S" command (key signature) or the "K" command (key transpose). To sound voices with a limited range, such as percussion, use this command.
+
+**[Example]**
+
+Sounds "C# in octave 4" strongly as a quarter note.
+```
+N61'4;127
+```
+
+#### R
+
+*Per track*
+
+**Function:** Specifies a rest (Rest).
+
+**Syntax:** `R[rest length][.][.][.][;temporary velocity[;temporary Gate/Delta ratio]][~[V|P][initial value[;target value[;bend length]]]]`
+
+**[Parameters]**
+- `[rest length]`: 1 to 128. Default = the value set with the "L" command. The other parameters are the same as for the "A–G" and "N" commands, but [;temporary velocity[;temporary Gate/Delta ratio]] has no effect.
+
+*[p. 343]*
+
+**[Details]** [rest length] specifies the length of the rest. If omitted, it is the value set with the "L" command.
+
+[.] is a dot. The length becomes "1.5" times the given rest length. Up to three can be given. The other parameters mean the same as for the note-on commands "A–G" and "N".
+
+**[Example]**
+
+Specifies a dotted half rest.
+```
+R2.
+```
+
+The next is a special application example.
+```
+EFFECT 1,"@44 Rl0~P0;127;2000 & Rl0~P127;0;2000 CDEFGAB"
+                      ↑
+この部分は、オートパン用のベンドパラメータを設定しているだけです。
+```
+(The underlined part, "Rl0~P0;127;2000 & Rl0~P127;0;2000", only sets the bend parameters for auto pan.)
+
+Making the rest length "l0" means the rest is not actually performed. Because the bend parameters are set in auto pan mode, "CDEFGAB" is played while the position moves left and right with a period of length "2000".
+
+#### <
+
+*Per track*
+
+**Function:** Lowers the octave by one.
+
+**Syntax:** `<`
+
+**[Parameters]** None.
+
+**[Details]** Lowers the octave by one without using the "O" command. If lowering it would go below octave "0", it becomes "8".
+
+**[Caution]** An octave change given inside the chord symbol "(…)" is in effect only inside the chord symbol. On leaving the chord symbol, the octave returns to what it was before the chord symbol. Entering chords tends to need many octave change symbols, but this feature removes the bother of changing octaves.
+
+**[Example]**
+```
+O3 CDE<FG
+```
+"FG" are one octave lower, so they are the same as "O2".
+
+*[p. 344]*
+
+#### \>
+
+*Per track*
+
+**Function:** Raises the octave by one.
+
+**Syntax:** `>`
+
+**[Parameters]** None.
+
+**[Details]** Raises the octave by one without using the "O" command. The range is 0 to 8, and if raising it would go above octave "8", it becomes "0".
+
+**[Caution]** An octave change given inside the chord symbol "(…)" is in effect only inside the chord symbol. On leaving the chord symbol, the octave returns to what it was before the chord symbol. Entering chords tends to need many octave change symbols, but this feature removes the bother of changing octaves.
+
+**[Example]**
+```
+O3 CDE>FG
+```
+
+#### &
+
+*Per track*
+
+**Function:** Specifies a tie (tie).
+
+**Syntax:** `&`
+
+**[Parameters]** None.
+
+**[Details]** Joins the notes before and after so that they sound as one long note. The pitch bend parameters can be set for each note, so the bend rate can be adjusted freely while the note sounds.
+
+When a chord "(…)" and a tie are used together, give the tie inside the chord symbol (see the example below).
+
+**[Caution]** The notes joined by a tie must always fit within one string. If they are split over two lines with a DATA statement, the timing is not guaranteed.
+
+The effect of the symbols that modify a note differs with their kind and where they are placed.
+
+*[p. 345]*
+
+For a note name that includes an accidental such as a sharp or flat, the first of the notes joined with "&" is the one in effect.
+
+For temporary symbols other than note name and note length, the one given on the last of the notes joined with "&" is in effect. The key-on time given with the "q" command or the ";temporary Gate/Delta ratio" option is calculated as a ratio of "the total length of the joined notes". However, if the "bend length" of a pitch bend is omitted, it is not "the total length of the joined notes": each note length separated by "&" is set instead, so fine bending control is possible.
+
+When bars are written separately and a tie across a bar is to be expressed, put it before the bar symbol. "&|" makes a tie, but "|&" causes an error. Only for ties in chords, the bar symbol is ignored.
+
+**[Example]**
+
+Sounds three whole-note "C"s joined. The key-on strength is set to the maximum.
+```
+C1 & C1 & C1;127
+```
+
+Sounds three "C"s joined. The pitches of "D&E" are ignored.
+```
+C&D&E
+```
+
+Sets the pitch bend option in fine detail.
+```
+C1~64;70; & C2~;127; & C1~;80; & C2~;30;
+```
+
+In length this is "C1+C2+C1+C2", three whole notes, but it is written split up finely so that the pitch bend is controlled per note length.
+
+A tie across a bar.
+```
+C& | C
+```
+
+Joins a whole-note chord (C1E1G1) with ties.
+```
+(C1&C1&C1&C1 E1&E1&E1&E1 G1&G1&G1&G1)      ←こちらが正解
+```
+(This is the correct way.)
+
+Giving it as follows causes an error.
+```
+(C1E1G1)&(C1E1G1)&(C1E1G1)&(C1E1G1)        ←これはエラーになる
+```
+(This causes an error.)
+
+When pitch bend is also used, give it on only one note of the chord, as below. If the note lengths of the chord do not match, it does not play correctly.
+```
+EFFECT 1,"(C1~;127;&C1~;0;&C1~;80;&C1~;; E1&E1&E1&E1 G1&G1&G1&G1)"
+```
+
+*[p. 346]*
+
+#### \_
+
+*Per track*
+
+**Function:** Specifies a slur (Slur).
+
+**Syntax:** `_`
+
+**[Parameters]** None.
+
+**[Details]** Plays without a break. Internally, the key-on lasts for the "note length" regardless of the "q" command.
+
+**[Caution]** Unlike a tie, a slur does not need to fit within one string. It has no effect with voices that have a strong attack and a fast release. A ";temporary Gate/Delta ratio" is ignored. By default, every note is slurred.
+
+**[Example]**
+
+Plays do, re, mi (C major) without a break.
+```
+C_D_E
+```
+
+#### %
+
+*Per track*
+
+**Function:** Controls the damper.
+
+**Syntax:** `%<damper switch>`
+
+**[Parameters]**
+- `<damper switch>`: 1 for on, 0 for off. Default = 0.
+
+**[Details]** When the damper is on, the notes sounded from then on are not keyed off.
+
+The effect is like playing while holding down the damper pedal of a piano.
+
+When sounding the "LOOP rhythm voices" of the "EXTRA3" and "EXTRA4" sets, they keep sounding for as long as the note is on, so give a long note length or sound them with the damper on.
+
+**[Caution]** Some instruments, depending on the voice, keep sounding unless they are keyed off. In such cases, switch on and off frequently. Occasionally the sound does not stop even when "PLAYINIT" is executed (control may not return until the sound stops).
+
+*[p. 347]*
+
+**[Example]**
+```
+CD%1EF%0GA
+```
+
+#### !
+
+*Per track, but for "ON MMLSTAT GOSUB" only track "0"*
+
+**Function:** Embeds a control command that serves as the value read by the MMLSTAT(n,0) function and as the trigger signal for "ON MMLSTAT GOSUB".
+
+**Syntax:** `!<control command>`
+
+**[Parameters]**
+- `<control command>`: 1 to 127.
+
+**[Details]** When playing reaches the position of this command, a value is returned to the main side. The returned value can be obtained by giving item number "0" to the MMLSTAT function. Once it is read on the main side, "0" is set until the next control command appears.
+
+When an interrupt routine has been registered with "ON MMLSTAT GOSUB", this command works as the trigger for the subroutine call only when it is written in track "0". Any value in the range "1–127" is a trigger, so sort out the handling for each value in the interrupt subroutine. For details, see the MMLSTAT function and the ON MMLSTAT GOSUB statement.
+
+**[Example]**
+```
+CDE!10FG
+```
+
+#### /
+
+*Per track*
+
+**Function:** Plays several sounds with different voices or pitches layered on one note-on command (software layer). With no option, toggles the software layer function on and off.
+
+**Syntax:** `/[<voice number;relative note number>[;<voice number;relative note number>[;<…>]]]`
+
+**[Parameters]**
+- `<voice number>`: the same as for the "@" command.
+- `<relative note number>`: the same as for the "K" command (giving 0 has no effect). The two parameters are separated by ";" and must always be given as a pair. They cannot be omitted. Up to 16 pairs (16-fold playing) can be given per track.
+
+*[p. 348]*
+
+**[Details]** Given to layer another voice on the voice currently playing, or to layer a note at a different pitch. The same score data can be used to play several instruments layered within one track, so it can give a weighty feel like an orchestra.
+
+Even when the same instrument (voice) is used, the range of expression can be widened, for example by layering the note one octave up.
+
+If no option is given to the "/" command, this mode is toggled on and off. If an option is given, the mode is "on".
+
+Normally, the options of the "/" command are given at the start of the track to register the notes to be layered. After that, it can be switched "on/off" anywhere, any number of times, while playing.
+
+This command only simulates the layer function in software, so for more varied layer settings, build voice data with "BUILDLAYER" of the TARG statement.
+
+**[Caution]** Up to 16 notes can be layered in one track, but the total across all tracks cannot exceed "32" notes.
+
+A note-on command is issued for each of the given notes, so that many slots are occupied.
+
+**[Example]**
+
+Of the three voices added as layers, voice 41 is used as it is, voice 36 one octave up and voice 38 one octave down.
+```
+@44 /41;0; 36;12; 38;-12 CDEFGAB / CEG
+                                 ↑
+                  ここで、ソフトウェア・レイヤー機能オフになり、残った音符は
+                  ベース音色(ここでは@44)だけで演奏します。
+```
+(At this point the software layer function is switched off, and the remaining notes are played with the base voice only, @44 here.)
+
+#### dc
+
+*BASE*
+
+**Function:** Specifies da capo (an infinite loop).
+
+**Syntax:** `dc`
+
+**[Parameters]** None.
+
+*[p. 349]*
+
+**[Details]** Normally this is the symbol that returns to the start of the piece, but in this MML the part enclosed by "dc" loops forever. For game BGM and the like, the phrase to loop forever is written enclosed by "dc".
+
+**[Caution]** Normally it is tied in with segno, dal segno and coda, but in this MML it is kept simply as an infinite loop.
+
+**[Example]**
+```
+ABdcGACDdcEF
+```
+
+#### $
+
+*BASE*
+
+**Function:** Specifies segno (the start position of a repeat).
+
+**Syntax:** `$[label[;<label>[;<…>]]]`
+
+**[Parameters]**
+- `[label]`: 0 to 7. Default = 0.
+
+**[Details]** Specifies where to return to from dal segno (the "ds" symbol). The symbol on a score is "𝄋".
+
+The "label" is an identifying number used when several segno symbols are placed. If there is only one, giving just "$" is fine. If the label is omitted, the repeat start position is registered as if "0" had been given. To return to the same place several times, give the label as many times as it is returned to, separated by ";", and give the same number of dal segno "ds" with the matching label. When playing reaches the dal segno "ds" with the same number as the "label", it returns from there "only once".
+
+**[See also]** The "ds" command and the "*" command. See "2.7 Repeat structure details".
+
+**[Example]**
+```
+CD$FFdsG
+CD$1EFds1G
+CD$1;2;3FFds1GAds2BGds3
+```
+
+*[p. 350]*
+
+#### ds
+
+*BASE*
+
+**Function:** Specifies dal segno (the end position of a repeat).
+
+**Syntax:** `ds`
+
+**[Parameters]**
+- `[label]`: 0 to 7. Default = 0.
+
+**[Details]** Returns once only to the segno symbol "$" that has the matching "label".
+
+The symbol on a score is "D.S.". The "label" is an identifying number used when there are several segno symbols to return to. If there is only one, giving just "ds" is fine. If the label is omitted, the repeat end position is registered as if "0" had been given.
+
+**[Example]**
+```
+CD$EGdsFE
+CD$1;2CEds1FGds2A
+```
+
+**[See also]** The "$" command and the "*" command. See "2.7 Repeat structure details".
+
+#### \*
+
+*BASE*
+
+**Function:** Leaves the repeated part and skips to the MML after the dal segno that has the matching label (it doubles as the coda symbol and the to Coda symbol).
+
+**Syntax:** `*[label[;<label>[;<…>]]]`
+
+**[Parameters]**
+- `[label]`: 0 to 7. Default = 0.
+
+**[Details]** Skips to the MML after the dal segno symbol "ds" that has the matching "label". The symbol on a score is "𝄌". It is written in the part repeated between the segno symbol "$" and the dal segno symbol "ds". When played, it is ignored before the repeat by dal segno (the first time), and after the repeat, "only on the second time through", it skips to the music after the dal segno "ds" with the same "label". When it is repeated from several dal segnos and passes this coda symbol several times, it skips each time to the MML after the dal segno that made that repeat.
+
+In actual music notation, the skip is from the part marked "to Coda" to the coda symbol "𝄌", but that is a matter of notation: in practice it skips to the music after the dal segno symbol,
+
+*[p. 351]*
+
+so in this MML "to Coda" and "𝄌" are combined. In most scores the coda symbol comes straight after the dal segno symbol, so you need not think about the coda symbol when typing in MML.
+
+**[Example]**
+```
+CD$EG*FGdsAG
+```
+
+**[See also]** The "$" command and the "ds" command. See "2.7 Repeat structure details".
+
+#### \|
+
+*Per track*
+
+**Function:** Specifies a bar line.
+
+**Syntax:** `|`
+
+**[Parameters]** None.
+
+**[Details]** Given to divide bars clearly. When the key signature command "S" is not given, it has no meaning musically or for timing (it is ignored).
+
+When the key signature command "S" is given, it becomes the command that sets the range over which sharps, flats and naturals take effect as accidentals.
+
+In standard notation there is a rule that accidentals are in effect only within the bar, so when entering a score written to that rule as it is, take particular care in giving it (otherwise the notes will not match the score).
+
+However, this symbol only makes the "range of effect" clear, so it need not be given if accidentals are not used.
+
+**[Caution]** It is called a bar line, but it does not have to be written at every bar division. It is also no problem if its positions differ between tracks (it has no effect on the playing data). This symbol may not be placed on its own at the end of an MML string.
+
+**[Example]**
+```
+CDEF|EFGC
+```
+
+*[p. 352]*
+
+#### \|:
+
+*BASE*
+
+**Function:** Specifies the start position of a repeat.
+
+**Syntax:** `|:`
+
+**[Parameters]** None.
+
+**[Details]** Returns once only from a symbol that includes the repeat end position ":|", such as ":|:" or ":|2".
+
+**[Example]**
+```
+CD|:EG:|
+```
+
+**[See also]** See "2.7 Repeat structure details".
+
+#### :\|
+
+*BASE*
+
+**Function:** Specifies the end position of a repeat.
+
+**Syntax:** `:|`
+
+**[Parameters]** None.
+
+**[Details]** Returns once only to a repeat start position symbol such as ":|:" or "|:". There are also compound forms such as ":|2" and ":|:".
+
+**[Example]**
+```
+CDE|:FG:|
+```
+
+**[See also]** See "2.7 Repeat structure details".
+
+#### :\|:
+
+*BASE*
+
+**Function:** Specifies at the same time the end position of a repeat ":|" and the start position of the next repeat "|:".
+
+**Syntax:** `:|:`
+
+**[Parameters]** None.
+
+*[p. 353]*
+
+**[Details]** Returns once only from a symbol that includes the repeat end position ":|", such as ":|:" or ":|2".
+
+**[Example]**
+```
+|:CD:|:EF:|
+```
+
+**[See also]** See "2.7 Repeat structure details".
+
+#### \|1
+
+*BASE*
+
+**Function:** Specifies the position played the first time.
+
+**Syntax:** `|1`
+
+**[Parameters]** None.
+
+**[Details]** Specifies the start position of the part played only once, until the ":|2" symbol appears.
+
+**[Example]**
+```
+|:CD|1EF:|2GAB
+```
+
+**[See also]** See "2.7 Repeat structure details".
+
+#### :\|2
+
+*BASE*
+
+**Function:** Specifies the position played the second time.
+
+**Syntax:** `:|2`
+
+**[Parameters]** None.
+
+**[Details]** Plays up to just before "|1", and skips from that position to this symbol.
+
+**[Example]**
+```
+|:CD|1FEG:|2AB
+```
+
+**[See also]** See "2.7 Repeat structure details".
+
+*[p. 354]*
+
+#### ^
+
+*Per track*
+
+**Function:** The part enclosed by this symbol is not played.
+
+**Syntax:** `^`
+
+**[Parameters]** None.
+
+**[Details]** A debugging command for use while entering music. Enclose the place you temporarily do not want played between two "^". If only one is given, nothing is played from there to the end of the string.
+
+**[Caution]** Rests equivalent to the enclosed part must be written. If they are not, the timing of the track goes wrong.
+
+**[Example]**
+```
+CDE^FG^CD
+```
+"FG" is not played.
 
 *[p. 355]*
 
@@ -11658,7 +14565,7 @@ Data files used by a program are listed indented beneath it (shown here with "·
 | File name | Contents |
 |---|---|
 | CLOCK.B | Clock sample program |
-| DEMO.B | GAME BASIC for SEGASATURN demo program |
+| DEMO.B | GAME BASIC for SEGA SATURN demo program |
 | · FONT161.D | Kanji font data (loaded into memory with KLOAD) |
 | · FONT162.D | Kanji font data (loaded into memory with KLOAD) |
 | G_BOMB.B | Sample game "Bomb" for the Multi-Terminal 6 |

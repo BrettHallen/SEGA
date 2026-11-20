@@ -25,10 +25,12 @@ ACK = 0x02
 NAK = 0x03
 DATA = 0x04
 READ_BLOCK = 0x05
-STATUS_1 = 0x06
-STATUS_2 = 0x07
-STATUS_RUNNING = 0x08  # status 3
-STATUS_DONE = 0x09  # status 4 (BASTERM beeps)
+# Status frames, as the Saturn interpreter sends them (see
+# Documentation/GAME_BASIC_CD_analysis.md). BASTERM calls them status 1-4.
+STATUS_IDLE = 0x06  # status 1: a command ended normally, or idle after STOP
+STATUS_BREAK = 0x07  # status 2: a command or program ended by break or STOP
+STATUS_RUNNING = 0x08  # status 3: a direct command or RUN has started
+STATUS_ERROR = 0x09  # status 4: stopped with an error (BASTERM beeps)
 OPEN_READ = 0x0A
 OPEN_WRITE = 0x0B
 OPEN_RW = 0x0C
@@ -49,12 +51,12 @@ DISK_FREE_A = 0x1A
 DISK_FREE_B = 0x1B
 ABORT = 0x1F  # BASTERM treats a decoded 0x1F as "abort current operation"
 
-STATUS_FRAMES = (STATUS_1, STATUS_2, STATUS_RUNNING, STATUS_DONE)
+STATUS_FRAMES = (STATUS_IDLE, STATUS_BREAK, STATUS_RUNNING, STATUS_ERROR)
 
 COMMAND_NAMES = {
     LINK: "LINK", ACK: "ACK", NAK: "NAK", DATA: "DATA", READ_BLOCK: "READ_BLOCK",
-    STATUS_1: "STATUS_1", STATUS_2: "STATUS_2", STATUS_RUNNING: "STATUS_RUNNING",
-    STATUS_DONE: "STATUS_DONE", OPEN_READ: "OPEN_READ", OPEN_WRITE: "OPEN_WRITE",
+    STATUS_IDLE: "STATUS_IDLE", STATUS_BREAK: "STATUS_BREAK", STATUS_RUNNING: "STATUS_RUNNING",
+    STATUS_ERROR: "STATUS_ERROR", OPEN_READ: "OPEN_READ", OPEN_WRITE: "OPEN_WRITE",
     OPEN_RW: "OPEN_RW", CLOSE: "CLOSE", SEEK: "SEEK", DELETE: "DELETE",
     FILE_SIZE: "FILE_SIZE", DIR_FIRST: "DIR_FIRST", DIR_NEXT: "DIR_NEXT",
     DIR_END: "DIR_END", HANDLE_0: "HANDLE_0", HANDLE_1: "HANDLE_1",

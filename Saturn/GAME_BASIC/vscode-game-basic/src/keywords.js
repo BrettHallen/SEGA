@@ -98,7 +98,9 @@ const STATEMENTS = [
   'LET', 'RANDOMIZE', 'KILL', 'LIST', 'DELETE', 'RENUM',
   'EDIT', 'FIND', 'FKEY', 'FORMAT', 'GSAVE', 'LFO', 'OBJLINK', 'OBJROT',
   'OBJZOOM', 'PLAYCONT', 'PLAYPAN', 'PLAYPAUSE', 'RGBADD', 'RGBTO', 'SEEK',
-  'SETSPRITE', 'SHIFT', 'TLIST', 'WINDOW', 'COPY', 'OPTION', 'OFF',
+  'SETSPRITE', 'TLIST', 'WINDOW', 'COPY', 'OPTION', 'OFF',
+  // statement and function (see DUAL below)
+  'MID$',
 ];
 
 // AND!, OR!, XOR! and NOT! work on the fraction bits too (reference manual
@@ -119,7 +121,18 @@ const FUNCTIONS = [
   'POLYGONID', 'READHEX$', 'SFRE', 'SPRITE$', 'TEXID', 'TFRE', 'VERSION',
   'WADD$', 'WANDOR$', 'WMUL$', 'WXOR$', 'XATN', 'XDIST', 'XSQR', 'XTAN',
   'VERTEXID',
+  // a system value with no arguments, like ERR and VERSION (interpreter
+  // token flags 0x0042)
+  'SHIFT',
+  // statement and function (see DUAL below)
+  'OBJ', 'PALETTE', 'TPROP',
 ];
+
+// Words the interpreter's token table marks as both statement and function
+// (flags 0x005A / 0x0238), such as OBJ(1,4)=10 and A=OBJ(1,4). They are in
+// both STATEMENTS and FUNCTIONS. Highlighting shows MID$ as a function and
+// the others as statements, their more common use.
+const DUAL = ['OBJ', 'PALETTE', 'TPROP', 'MID$'];
 
 // Words after which a line number or *label is a jump target.
 const JUMP_WORDS = ['GOTO', 'GOSUB', 'THEN', 'ELSE', 'RESTORE', 'RUN', 'RESUME', 'LIST', 'DELETE'];
@@ -134,6 +147,7 @@ module.exports = {
   STATEMENTS: uniq(STATEMENTS.filter((w) => !CONTROL.includes(w))),
   OPERATORS: uniq(OPERATORS),
   FUNCTIONS: uniq(FUNCTIONS),
+  DUAL: uniq(DUAL),
   JUMP_WORDS: uniq(JUMP_WORDS),
   ALL: uniq([...CONTROL, ...STATEMENTS, ...OPERATORS, ...FUNCTIONS]),
 };

@@ -67,6 +67,8 @@ class Stats:
     saturn_text: List[str] = field(default_factory=list)  # lines it printed
     saturn_errors: List[str] = field(default_factory=list)  # ones that look like errors
     last_line: Optional[int] = None  # from "Line N"
+    end_status: Optional[int] = None  # status frame that ended the LOAD, if any
+    error_status: bool = False  # the Saturn sent STATUS_ERROR (0x09) for the LOAD
 
 
 class SaturnLink:
@@ -93,6 +95,7 @@ class SaturnLink:
         self.current = 0
         self.status: Optional[int] = None  # last STATUS_x frame number
         self.status_seq = 0
+        self._close_seq = 0
         self.stop_echo = False
         self.stats = Stats()
         self._nul_run = 0
@@ -240,7 +243,7 @@ class SaturnLink:
         elif n in P.STATUS_FRAMES:
             self.status = n
             self.status_seq += 1
-            self.log(f"  Saturn status {n - P.STATUS_1 + 1} ({P.command_name(n)})")
+            self.log(f"  Saturn status {n - P.STATUS_IDLE + 1} ({P.command_name(n)})")
         else:
             self.log(f"  ignoring {P.command_name(n)}")
 
@@ -411,6 +414,7 @@ class SaturnLink:
             self._cmd(P.NAK)
             return
         self.stats.closed.append(h.name)
+        self._close_seq = self.status_seq  # statuses after this follow the close
         self.log(f"  closed {h.name} ({h.bytes_moved} bytes)")
         self._cmd(P.ACK)
 
@@ -527,11 +531,15 @@ class SaturnLink:
                      timeout: float = 120.0) -> Stats:
         """Type LOAD "COM:TBASTERM.B" and serve the file.
 
-        Afterwards stats.saturn_text holds what the Saturn printed during the
-        load, stats.saturn_errors the lines that look like error messages and
-        stats.last_line the number from its "Line N" message. Output from the
-        program itself (with run=True) comes after the status that ends the
-        send, so it is not included.
+        The Saturn reports the result with a status frame: STATUS_IDLE (0x06)
+        when the LOAD ended normally, STATUS_ERROR (0x09) when it stopped with
+        an error. With ,R the program starts straight after loading, so no
+        status comes until it ends. Afterwards stats.end_status holds that
+        frame and stats.error_status is True after an error.
+
+        The real Saturn never sends its screen text over the link, so
+        stats.saturn_text, stats.saturn_errors and stats.last_line ("Line N")
+        are only filled in by a mock that echoes text.
         """
         self.virtual[TRANSFER_NAME] = data
         self.stats = Stats()
@@ -550,14 +558,17 @@ class SaturnLink:
             names_closed = [n.upper() for n in self.stats.closed]
             if closed_at is None and TRANSFER_NAME in names_closed:
                 closed_at = time.monotonic()
-                status_at_close = self.status_seq
+                status_at_close = self._close_seq
             if closed_at is not None:
                 if self.status_seq > status_at_close:
-                    break  # Saturn reported "done" (or "running" with ,R)
-                if time.monotonic() - closed_at > 3.0:
-                    self.log("  no status after the transfer; assuming it loaded")
+                    self.stats.end_status = self.status
+                    self.stats.error_status = self.status == P.STATUS_ERROR
                     break
-            elif (self.status == P.STATUS_DONE and self.status_seq > seq
+                if time.monotonic() - closed_at > 3.0:
+                    self.log("  no status after the transfer"
+                             + ("; the program is running" if run else "; assuming it loaded"))
+                    break
+            elif (self.status == P.STATUS_ERROR and self.status_seq > seq
                   and TRANSFER_NAME not in [n.upper() for n in self.stats.opened]):
                 self._screen_report(screen_start)
                 said = "; ".join(self.stats.saturn_text[-3:])

@@ -120,13 +120,17 @@ test('PLAY with more notes than its song buffer holds', () => {
   assert.match(d.message, /160 notes/);
 });
 
-// Runs over the sample programs on the GAME BASIC CD when they sit next to
-// this folder (GAME_BASIC/GAME_BASIC_CD). They should come up with no errors
-// or warnings apart from two strings with no closing quote.
+// Runs over the sample programs on the GAME BASIC CD when they have been
+// extracted next to this folder, either straight into GAME_BASIC/GAME_BASIC_CD
+// or into GAME_BASIC_CD/extracted (tools/gbcd_extract.py --out). They should
+// come up with no errors or warnings apart from two strings with no closing
+// quote.
 const fs = require('fs');
 const path = require('path');
-const cd = path.join(__dirname, '..', '..', 'GAME_BASIC_CD');
-test('GAME BASIC CD samples', { skip: !fs.existsSync(cd) && 'GAME_BASIC_CD not found' }, () => {
+const cdRoot = path.join(__dirname, '..', '..', 'GAME_BASIC_CD');
+const hasB = (d) => fs.existsSync(d) && fs.readdirSync(d).some((f) => /\.B$/i.test(f));
+const cd = [cdRoot, path.join(cdRoot, 'extracted')].find(hasB);
+test('GAME BASIC CD samples', { skip: !cd && 'no extracted GAME BASIC CD samples found' }, () => {
   const allowed = new Set(['direct-command', 'unnumbered-comment', 'unclosed-string', 'out-of-order']);
   const files = fs.readdirSync(cd).filter((f) => /\.B$/i.test(f));
   assert.ok(files.length > 0);
@@ -136,4 +140,15 @@ test('GAME BASIC CD samples', { skip: !fs.existsSync(cd) && 'GAME_BASIC_CD not f
       assert.ok(allowed.has(d.code), `${f}:${d.line + 1} ${d.code}: ${d.message}`);
     }
   }
+});
+
+test('direct-only commands in a program line', () => {
+  const codes = (t) => analyze(t).filter((d) => d.code === 'direct-only').map((d) => d.start);
+  assert.deepStrictEqual(codes('10 NEW'), [3]);
+  assert.deepStrictEqual(codes('10 PRINT "LIST":LIST'), [16]);
+  assert.deepStrictEqual(codes('10 IF A THEN SAVE "X" ELSE NEW'), [13, 27]);
+  assert.deepStrictEqual(codes('10 LISTX=1'), []);
+  assert.deepStrictEqual(codes('10 DATA NEW,LIST'), []);
+  assert.deepStrictEqual(codes('10 REM NEW'), []);
+  assert.deepStrictEqual(codes('10 LOAD "COM:A"'), []);
 });

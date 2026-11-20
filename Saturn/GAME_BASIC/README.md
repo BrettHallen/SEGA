@@ -30,6 +30,8 @@ Created:         1998/04/16 00:00:00:00
 Maker type:      third party (SEGA TP)
 ```
 
+[`Documentation/GAME_BASIC_CD_analysis.md`](Documentation/GAME_BASIC_CD_analysis.md) explains how the interpreter on this CD works: the boot loader, the memory map, the Saturn's side of the serial link, the tokenised program format and the file formats. [`tools/gbcd_extract.py`](tools/gbcd_extract.py) extracts the CD and unpacks the interpreter for anyone who wants to check it. The CD image and anything extracted from it are copyrighted and stay out of this repository.
+
 ### [WIN_TOOLS_CD](/Saturn/GAME_BASIC/WIN95_TOOLS_CD)
 | File | Description |
 |---|---|
@@ -52,7 +54,7 @@ BASTERM is the only tool that talks to the Saturn. It is an editor with Send, Re
 | `BASTERM_help_text_JP.txt` | The help text pulled out of `BASTERM.HLP` as plain Japanese text |
 | `readme.txt` | Original release note (Japanese, Shift-JIS) |
 
-In short, the PC acts as a file server. BASTERM types `LOAD "COM:TBASTERM.B"` at the Saturn as encoded keystrokes, and the Saturn then reads the program as plain text. The link is 9600 or 19200 baud, 8N1, no flow control, and data moves in 252-byte blocks with a CRC-16 check. Tokenising happens on the Saturn, not the PC.
+In short, the PC acts as a file server. BASTERM types `LOAD "COM:TBASTERM.B"` at the Saturn as encoded keystrokes, and the Saturn then reads the program as plain text. The link is 9600 or 19200 baud (up to 115200 after the undocumented `OPTION HD352`), 8N1, no flow control, and data moves in 252-byte blocks with a CRC-16 check. Tokenising happens on the Saturn, not the PC. The protocol has been read from both ends, BASTERM and the Saturn interpreter, and they agree.
 
 ### [DXFCONV](/Saturn/GAME_BASIC/DXFCONV)
 DXFCONV turns `3DFACE` entities in a DXF model into BASIC `DATA` lines for `SETVERTEX` and `SETPOLYGON`. It works offline and never touches the serial port.
@@ -77,14 +79,14 @@ GAME BASIC came with two Japanese manuals: the *Tutorial Manual* (チュート�
 | [`GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf) | The original Japanese Tutorial Manual (184 pages), including Chapter 3 on BASTERM |
 | [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf) | The original Japanese Reference Manual, part 1: the front matter and Chapter 1, up to p228 |
 | [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part2_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part2_JP.pdf) | The original Japanese Reference Manual, part 2: the back matter and Chapter 2, from p229 |
-| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.pdf)) | English translation of the Reference Manual, page by page (work in progress) |
+| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.pdf)) | English translation of the Reference Manual, page by page |
 | [`GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.pdf)) | **Start here** for using GAME BASIC in English: a guide in its own words, with page references to both manuals |
 | [`Tutorial_Manual_findings.md`](Documentation/Tutorial_Manual_findings.md) | Notes from the Tutorial Manual for the BASTERM replacement: connecting, controls, what the Saturn prints, and BASTERM's own behaviour |
-| [`Reference_Manual_findings.md`](Documentation/Reference_Manual_findings.md) | Notes from the Reference Manual, chapter by chapter: syntax, limits, error messages and what matters for sending files (work in progress) |
+| [`Reference_Manual_findings.md`](Documentation/Reference_Manual_findings.md) | Notes from the Reference Manual, chapter by chapter: syntax, limits, error messages and what matters for sending files |
+| [`GAME_BASIC_CD_analysis.md`](Documentation/GAME_BASIC_CD_analysis.md) | How the interpreter on the Saturn CD works: boot loader, memory map, serial link, hidden baud rates, raw `COM:` mode, token format and file formats |
 
-## Next steps
-- Confirm the protocol on real hardware with a logic analyser; the open questions are listed at the end of `BASTERM/BASTERM_serial_protocol.md`.
-- Try `tools/saturn_send.py` and the VS Code extension on real hardware; the checks still to do are listed in [tools/README.md](tools/README.md).
+## Hardware
+The protocol is fully described by the code on both sides. What only real hardware can show is electrical: which speeds a given USB-TTL adapter handles reliably, and the timing on the wire. [`USB_Serial_Connection.md`](USB_Serial_Connection.md) covers the wiring.
 
 ## Copyright
 The CD contents, `Basterm.exe` and the decompiled code are ©1998 ASCII Corp./Bits Laboratory/ESP inc. They are kept here for research and preservation.

@@ -21,6 +21,12 @@ const INCLUDE_RE = /^\s*#include\s+"([^"]+)"\s*$/i;
 // lines, so they are never numbered and are left out when sending.
 const DIRECT_RE = /^\s*(LOAD|SAVE|RUN|NEW|LIST|LLIST|CONT|FILES|MERGE|DELETE|RENUM|AUTO|KILL|BLOAD|BSAVE|GLOAD|KLOAD)(?![A-Za-z0-9_$])/i;
 const COMMENT_RE = /^\s*('|REM(?![A-Za-z0-9_$]))/i;
+// Keywords the interpreter marks as direct mode only (flag 0x0008 in its
+// token table). In a program line they stop with error 28 "Direct statement
+// only" when reached (Documentation/GAME_BASIC_CD_analysis.md).
+const DIRECT_ONLY = ['EDIT', 'LIST', 'RENUM', 'DELETE', 'NEW', 'SAVE', 'CONT', 'FIND', 'FORMAT'];
+const DIRECT_ONLY_RE = new RegExp(
+  `(^|:|(?<![A-Za-z0-9_$])(?:THEN|ELSE))(\\s*)(${DIRECT_ONLY.join('|')})(?![A-Za-z0-9_$])`, 'gi');
 const LABEL_DEF_RE = /^\*([A-Za-z_][A-Za-z0-9_]*)/;
 
 const SEVERITY = { error: 'error', warning: 'warning', info: 'info' };
@@ -338,6 +344,22 @@ function analyze(text, opts = {}) {
         'String has no closing quote (GAME BASIC may accept this, but check it).');
     }
     const code = segs.map((s) => s.text).join(' ');
+
+    // direct-only commands inside a program line
+    {
+      const mask = Array.from({ length: l.text.length }, () => ' ');
+      for (const sg of segs) for (let i = 0; i < sg.text.length; i++) mask[sg.col + i] = sg.text[i];
+      const masked = mask.join('').slice(0, bodyCol).replace(/./g, ' ') + mask.join('').slice(bodyCol);
+      DIRECT_ONLY_RE.lastIndex = 0;
+      let dm;
+      const text = masked.slice(bodyCol);
+      while ((dm = DIRECT_ONLY_RE.exec(text)) !== null) {
+        const c = bodyCol + dm.index + dm[1].length + dm[2].length;
+        add(lineNo, c, c + dm[3].length, SEVERITY.warning, 'direct-only',
+          `${dm[3].toUpperCase()} works only as a direct command. In a program it stops with ` +
+          'error 28 "Direct statement only".');
+      }
+    }
 
     // brackets, per statement
     let depth = 0;

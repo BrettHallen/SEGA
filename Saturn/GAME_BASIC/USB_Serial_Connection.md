@@ -13,7 +13,7 @@ What this tells us:
 - **Saturn RX is driven at 5V.** The chip's receiver output swings to its VCC (5V), so the original cable drives the Saturn's RX pin with 5V CMOS levels.
 - **Saturn TX only needs to be above 2.0V.** The chip's driver input is TTL-threshold (VIH 2.0V, VIL 0.8V), so the Saturn's TX could be 3.3V or 5V logic.
 
-A **5V-logic USB-to-TTL serial adapter** is therefore an exact electrical replacement for the original cable plus the PC's RS232 port. A 3.3V adapter would probably work, but because the Saturn's RX threshold is unconfirmed, 5V is the safe choice.
+A **5V-logic USB-to-TTL serial adapter** is therefore an exact electrical replacement for the original cable plus the PC's RS232 port. A 3.3V adapter may work too, but the Saturn's RX threshold can only be measured on the hardware, so 5V is the safe choice.
 
 ## Saturn communication port pinout
 
@@ -69,25 +69,23 @@ The Saturn's 12-pin communication port is the awkward part. Options:
 
 ## Build options, from easiest to most work
 
-1. **Works today, nothing to build.** Use the original Windows Communication Cable, a straight-through RS232 extension cable and an FTDI-based USB-to-RS232 adapter. This is a good setup for developing the host software and capturing the protocol while the USB-TTL cable is still being built.
+1. **Nothing to build.** Use the original Windows Communication Cable, a straight-through RS232 extension cable and an FTDI-based USB-to-RS232 adapter.
 2. **Simple build.** Splice a 5V USB-TTL cable onto a link-cable plug, wired as in the table above.
 3. **Neat build.** Re-spin the [KiCad board](../Windows_Communication_Cable/Original/) with a CH340 or FT231X and a USB-C connector, sized to fit inside the original plug shell, so it's a true drop-in modern cable.
 4. **Later, if needed.** A microcontroller bridge (Raspberry Pi Pico, ESP32) only adds value for wireless uploads or a standalone uploader. It would also need level shifting to 5V on its TX.
 
 ## Check before wiring
 
-With the Saturn **on** and nothing plugged into the port, use a multimeter to check:
+The pin numbering and the logic levels are electrical facts that only a meter can confirm on your Saturn. With the Saturn **on** and nothing plugged into the port, check:
 
-- [ ] **Pin 2 reads about +5V** relative to pin 8/12. This confirms the pin numbering and ground.
-- [ ] **Pin 5 idles high.** The idle voltage tells us whether the Saturn's TX is 3.3V or 5V logic.
+- **Pin 2 reads about +5V** relative to pin 8/12. This confirms the pin numbering and ground.
+- **Pin 5 idles high.** The idle voltage shows whether the Saturn's TX is 3.3V or 5V logic.
 
-## Still to find out
-
-- **Confirm the protocol on hardware.** The baud rate, data format and protocol are no longer unknown (see below), but nothing has been tested on a real Saturn yet. A logic-analyser capture on pins 5 and 6 of a real transfer, with the original cable and Windows software, would still be the best check.
-
-## Serial settings (now known)
+## Serial settings
 
 - **Baud rate: 9600 (default) or 19200.** Set on the Saturn in GAME BASIC's system settings screen: from the edit screen hold **L+R+Z** on a pad in port 1, or **Q+E+D** on the Saturn keyboard; change **Baudrate**, then move to **Exit** and press **C** (Reference Manual pp. 19–20). The PC must use the same rate. Use 9600 if 19200 gives errors.
 - The setting is saved in the Saturn's backup RAM as `GBASICSS_01` (comment `Config`). Deleting it in the Saturn's memory manager puts GAME BASIC back to its defaults, including 9600.
-- **Data format: 8 data bits, no parity, 1 stop bit, no flow control.** This comes from `Basterm.exe`, not the manuals. See `BASTERM/BASTERM_serial_protocol.md`, which also describes the transfer protocol.
-- The FTDI cable and the tools in `tools/` and `vscode-game-basic/` handle both rates.
+- **Faster rates.** After the undocumented `OPTION HD352` the Saturn runs at its 28.6 MHz clock and the settings screen also offers 14400, 28800, 38400, 57600 and 115200. The Saturn's rate generator is within about 1% of each, so whether they work depends on the adapter and the cable; an FTDI adapter is the best bet. `OPTION HD320` returns to the normal list.
+- **Data format: 8 data bits, no parity, 1 stop bit, no flow control.** Both ends agree: `Basterm.exe` sets it up this way, and the GAME BASIC interpreter programs the Saturn's serial port for 8N1. See `BASTERM/BASTERM_serial_protocol.md` for the transfer protocol and `Documentation/GAME_BASIC_CD_analysis.md` for the Saturn side.
+- **Without BASTERM** the port is a plain serial line, and the Saturn sends XON/XOFF to pace incoming text. A terminal program used that way should have XON/XOFF turned on.
+- The FTDI cable and the tools in `tools/` and `vscode-game-basic/` handle 9600 and 19200.

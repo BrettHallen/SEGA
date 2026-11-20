@@ -6,7 +6,7 @@ This guide is written for English speakers who want to use GAME BASIC on a real 
 
 Where something here is worked out from the sample programs or the PC software rather than stated in the manuals, it says so.
 
-> **Work in progress.** The serial protocol used by the modern PC tools (section 19) was worked out from BASTERM's code and has not yet been confirmed on real hardware; the open questions are listed in `tools/README.md`. The polygon example in section 14 has also not yet been run on a Saturn.
+> **About the PC link.** The serial protocol used by the modern PC tools (section 19) was worked out from both ends: BASTERM's code on the PC and the GAME BASIC interpreter's own code from the Saturn CD, which agree. The details are in `BASTERM/BASTERM_serial_protocol.md` and `Documentation/GAME_BASIC_CD_analysis.md`.
 
 ---
 
@@ -158,6 +158,19 @@ From the edit screen, press **L+R+Z** on the pad in port 1, or hold **Q+E+D** on
 | Background RED / GREEN / BLUE | 0–15 each | 0, 0, 0 | Edit screen background colour |
 
 A frame is 1/60 of a second.
+
+### Hidden OPTION commands
+
+`OPTION` is a reserved word that neither manual describes. The interpreter's code shows four hidden forms:
+
+| Command | What it does |
+|---|---|
+| `OPTION HD352` | Saves the setting and restarts GAME BASIC in a 352-pixel-wide screen mode, which runs the Saturn at its faster 28.6 MHz clock. The **Baudrate** setting then offers 9600, 14400, 28800, 38400, 57600 and 115200 |
+| `OPTION HD320` | Goes back to the normal 320-pixel mode and the 9600/19200 list |
+| `OPTION COM` | Resets the serial port and drops the link to the PC |
+| `OPTION VERSION` | Shows a hidden staff credit list |
+
+**The faster speeds have not been tested on hardware yet.** Whether they work depends on your USB adapter and cable, so drop back a step if transfers fail. The setting is saved in `GBASICSS_01`, so the Saturn stays in this mode until you type `OPTION HD320`. Programs drawn for a 320-pixel screen sit slightly off-centre in the wider mode.
 
 These settings are stored in the Saturn's backup RAM in a file called **`GBASICSS_01`** (1 block). If you delete that file in the Saturn's memory manager, every setting goes back to its default.
 
@@ -613,7 +626,7 @@ The original cable is only an RS-232 level converter. A **5 V USB-to-TTL serial 
 
 | Setting | Value |
 |---|---|
-| Speed | 9600 (default) or 19200 baud. Must match the Saturn's **Baudrate** setting (section 6) |
+| Speed | 9600 (default) or 19200 baud. After `OPTION HD352` (section 6) also 14400 to 115200, not yet tested on hardware. Must match the Saturn's **Baudrate** setting |
 | Format | 8 data bits, no parity, 1 stop bit |
 | Flow control | None |
 
@@ -621,7 +634,9 @@ The original cable is only an RS-232 level converter. A **5 V USB-to-TTL serial 
 
 ### How the link works
 
-The PC acts as a file server for the `COM:` device. To send a program, the PC "types" a command such as `LOAD "COM:TBASTERM.B"` at the Saturn, and the Saturn then reads the program from the PC as a file. So anything that works with `COM:` on the Saturn (`LOAD`, `SAVE`, `FILES`, `OPEN`) needs the PC software running and connected.
+The PC acts as a file server for the `COM:` device. To send a program, the PC "types" a command such as `LOAD "COM:TBASTERM.B"` at the Saturn, and the Saturn then reads the program from the PC as a file. So the file commands on `COM:` (`FILES`, `KILL`, `BSAVE`, `GSAVE`, and `LOAD`, `SAVE`, `OPEN` as files on the PC) need the PC software running and connected.
+
+**Without a file server.** Until a PC program connects, the Saturn's port also works as a plain serial line. A terminal program set to the same speed, 8N1, can type at the Saturn's `Ready.` prompt. `SAVE "COM:NAME"` then sends the program as plain text, ending with `'LOAD END`, and `LOAD "COM:NAME"` reads a program typed or pasted as text, so a terminal can capture and replay programs. `FWRITE` and `FREAD` on a `COM:` file send and receive raw bytes. The Saturn uses XON/XOFF to slow a sender down, so turn on XON/XOFF in the terminal program. The Saturn's screen output is never sent to the PC.
 
 ## 18. BASTERM, the original Windows 95 tool
 
@@ -644,7 +659,7 @@ Useful BASTERM features:
 - **`#include "FILE.B"`** pulls another file into the program when it is sent.
 - **Filter**: runs a DOS program over your source before sending, for example to convert a structured BASIC dialect.
 
-**Always check the Saturn's screen after a transfer.** If something goes wrong, BASTERM may not show an error, but the Saturn will (TM pp. 163–164). A successful send shows `Line` and the last line number, then `Ready.`.
+**Always check the Saturn's screen after a transfer.** If something goes wrong, BASTERM may not show an error, but the Saturn will (TM pp. 163–164). A successful send shows `Line` and the last line number, then `Ready.`. The Saturn also tells the PC whether a command ended normally or with an error, so newer tools can report a failed send, but the message itself only appears on the Saturn's screen.
 
 ## 19. The modern tools: VS Code and saturn_send.py
 

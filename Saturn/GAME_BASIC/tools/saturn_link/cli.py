@@ -158,6 +158,10 @@ def cmd_send(a) -> int:
             _err("Error: The Saturn reported: " + "; ".join(st.saturn_errors[:3])
                  + (f" ({why})" if why else ""))
             return 4
+        if st.error_status:
+            _err("Error: The Saturn stopped the LOAD with an error. "
+                 "The message is on the Saturn's screen.")
+            return 4
         if a.run:
             print("Program is running.", flush=True)
         if a.serve:

@@ -41,11 +41,11 @@ Pages 2, 12, 14, 144 and 146 are blank. Notes on the Reference Manual are in `Re
 **Setting the baud rate on the Saturn (Reference pp. 19–20).** The rate is set on GAME BASIC's **system settings screen**:
 - Open it from the edit screen (blinking `_` cursor) with **L+R+Z** on a pad in controller port 1, or **Q+E+D** held together on the Saturn keyboard.
 - Move with the D-pad up/down, change a value with left/right, then move to **Exit** and press **C** to go back.
-- **Baudrate**: `19200BPS` or `9600BPS`. "Select the same speed as the communication software. If communication errors occur, set 9600BPS."
+- **Baudrate**: `19200BPS` or `9600BPS`. "Select the same speed as the communication software. If communication errors occur, set 9600BPS." The interpreter also has a second list, 9600, 14400, 28800, 38400, 57600 and 115200, which this screen shows only after the undocumented `OPTION HD352` (see `GAME_BASIC_CD_analysis.md`).
 - The other settings: **Keyboard** INITIAL (4–255 frames before key repeat, default 17), AFTER (1–255 frames between repeats, default 3), Ctrl key NORMAL or SWAP (swaps Ctrl and Caps Lock); **Edit width** LEFT/TOP/RIGHT/BOTTOM (default 1, 1, 38, 26) and background colour RED/GREEN/BLUE (0–15, default 0). A frame is 1/60 s at start-up, but `SCREEN` can change it.
 - The settings are saved in the Saturn's backup RAM as **`GBASICSS_01`** (comment `Config`, 1 block), visible in the Saturn's own memory manager. Deleting that file puts every setting back to its default, including 9600 baud.
 
-So if the link gets no answer, the first things to check are the rate on this screen and that `GBASICSS_01` hasn't been left at 19200 from an earlier session.
+So if the link gets no answer, the first things to check are the rate on this screen and that `GBASICSS_01` hasn't been left at 19200, or at a 28 MHz rate, from an earlier session.
 
 **Connection failure (p. 151).** BASTERM says 「セガサターンとの接続に失敗しました。接続を確認してください。」 ("Connection to the Saturn failed. Check the connection."). While the link comes up the progress dialog says 「通信ネゴシエーション中」 ("negotiating"). The advice is to check the port and connector, and keep electrical appliances away from the cable.
 
@@ -98,7 +98,7 @@ This is what a PC terminal sees, and what a sending tool can read back after a s
 
 The tutorial shows only `Syntax error` and says the full list of error messages is in the Reference Manual. Typos such as `1022 NAXT` only show up when the program runs (p. 155).
 
-**Errors may only show on the Saturn (pp. 163–164).** If a transfer fails, or is aborted from the Saturn keyboard, BASTERM may show no error. The manual says to always check the Saturn's own message. So a replacement should read the Saturn's screen text after a send, not just trust the protocol result.
+**Errors may only show on the Saturn (pp. 163–164).** If a transfer fails, or is aborted from the Saturn keyboard, BASTERM may show no error. The manual says to always check the Saturn's own message. The Saturn never sends its screen text over the link, but it does report the outcome: status frame 0x09 means the statement stopped with an error, and 0x06 means it ended normally. A replacement should check for 0x09 after a send and tell the user to look at the Saturn's screen for the message.
 
 ---
 
@@ -112,9 +112,10 @@ The tutorial shows only `Syntax error` and says the full list of error messages 
 - `NEW` clears the program in work RAM, and so does power-off. The manual recommends `NEW` before typing a new program, which matches BASTERM's plain `LOAD` doing a `NEW` first (pp. 24, 29).
 
 **`COM:` is a full device, not only for LOAD.**
-- `FILES "COM:"` should make the Saturn use BASTERM's directory search: 0x11 (first), 0x12 (next) and 0x13 (end), then the two disk-space requests 0x1A and 0x1B. The `Free size … / … file blocks` line fits those last two as "free" and "total". This is still inferred, because the manual never shows `FILES "COM:"`. LAUNCH.B can list `COM:` but leaves it out by default because it is slow (`MAX_DEVICE=5 :'COM:を含める場合は6但し遅い`).
+- `FILES "COM:"` uses BASTERM's directory search: 0x11 (first), 0x12 (next) and 0x13 (end), then 0x1A for free space and 0x1B for total space, which fill the `Free size … / …` line. The Saturn prints the two numbers as the PC sends them; `DSKF("COM:")` returns the 0x1A number unchanged, while for `BRAM:` it counts 64-byte blocks. BASTERM answers in bytes. LAUNCH.B can list `COM:` but leaves it out by default because it is slow (`MAX_DEVICE=5 :'COM:を含める場合は6但し遅い`).
 - The file dialogs in T_KAMI.B, T_OTO.B and T_HIBIKI.B offer all six devices, including `COM:` (p. 132).
-- **TRANSFOR.B** (p. 128) copies a `.D` data file from the Saturn "to Basterm". It is 19 lines: `OPEN B$+":"+A$ FOR INPUT AS 1`, `OPEN "COM:"+A$ FOR OUTPUT AS 2`, then one `FREAD #1,DT$,1` / `FWRITE #2,DT$` per byte. On the link this is the Saturn opening a PC file for writing and then sending data blocks, one byte per block, which is the worst case for a file server.
+- **TRANSFOR.B** (p. 128) copies a `.D` data file from the Saturn "to Basterm". It is 19 lines: `OPEN B$+":"+A$ FOR INPUT AS 1`, `OPEN "COM:"+A$ FOR OUTPUT AS 2`, then one `FREAD #1,DT$,1` / `FWRITE #2,DT$` per byte. On the link this is the Saturn opening a PC file for writing and then sending one data block per `FWRITE`, so one byte per block, which is the worst case for a file server.
+- **`COM:` without BASTERM.** Without the link handshake, `SAVE "COM:…"`, `LOAD "COM:…"`, `FREAD` and `FWRITE` work over the bare serial port as plain text or raw bytes, and characters typed in a terminal program reach the Saturn's prompt. The manual doesn't mention this; `BASTERM/BASTERM_serial_protocol.md` has the details.
 
 **BASTERM as a file server (pp. 162–165).** BASTERM's Connect must be on for programs that use `COM:` files. On disconnect, BASTERM closes any files the Saturn still has open, and later access gives an error, so programs should close files first. Send and Receive connect automatically and disconnect afterwards. Settings > Change current directory sets the PC folder that `COM:` maps to.
 
@@ -128,7 +129,7 @@ The tutorial shows only `Syntax error` and says the full list of error messages 
 
 **Send.** BASTERM types `LOAD "COM:TBASTERM.B"` on the Saturn and serves the file (photo on p. 152). The send order is: save, filter, number lines, check, diff, then `LOAD` or `LOAD,M`.
 
-**Receive (p. 163).** It replaces the editor contents and keeps the file name. If `SAVE "COM:…"` writes the same format as `LIST`, received lines will start with spaces before the line number.
+**Receive (p. 163).** It replaces the editor contents and keeps the file name. `SAVE "COM:…"` writes the same format as `LIST`, with line numbers right-aligned in 5 characters, so received lines start with spaces before the line number. GAME BASIC's own `LOAD` accepts those spaces; a replacement tool should strip them when it shows the file.
 
 **Run and Stop (p. 164).** Run sends `RUN`, stopping the program first if it is running. Stop keeps sending the stop key until the program stops. BASTERM's display of whether a program is running is approximate.
 
@@ -207,15 +208,8 @@ The rest (G_HATA, G_MOBIL/G_MOBILS, G_BOMB, G_BOU, G_JUMP/_A/_M, G_MAZE, G_SABA,
 
 ---
 
-## 9. Open questions
+## 9. What the tutorial leaves out
 
-**Not settled by the manual; to check on hardware.**
-- Whether the Saturn echoes its screen text over the link at all.
-- `FILES "COM:"`, to confirm the 0x11–0x13 directory calls and what units 0x1A/0x1B use.
-- What `FILES "COM:"` and `DSKF("COM:")` show for free space, which the Reference Manual counts in 64-byte blocks.
-- TRANSFOR.B against a PC file server, for Saturn→PC writes one byte at a time.
-- Whether Receive copes with `LIST`-style leading spaces before line numbers.
+The tutorial has no wire-level protocol and no full error-message list. The Reference Manual covers the error messages (see `Reference_Manual_findings.md`, section 7). The wire protocol, derived from Basterm.exe and the Saturn interpreter, is in `BASTERM/BASTERM_serial_protocol.md`: byte formats, keystroke packets, 252-byte data blocks with checksum and CRC-16, the handshake, the command table and the timeouts.
 
-**Not in the tutorial.** It has no wire-level protocol and no full error-message list. The Reference Manual covers the error messages (see `Reference_Manual_findings.md`, section 7). The wire protocol is derived from Basterm.exe in `BASTERM/BASTERM_serial_protocol.md`: byte formats, keystroke packets, 252-byte data blocks with checksum and CRC-16, the handshake, the command table and the timeouts.
-
-**Status codes.** From the same analysis, status 3 means a program is running (it drives the check mark on the Run menu item) and status 4 means a command has finished (BASTERM beeps, and Send and Receive wait for it). BASTERM treats 1 and 2 only as "not running" and never tells them apart, and it sends both STOP modifiers (4 and 5) in exactly the same way. What 1 and 2 mean, and whether the Saturn handles the two STOP modifiers differently, can only be settled on hardware.
+**Status codes.** From the Saturn interpreter's code: status 1 (frame 0x06) means idle at the prompt or a command ended normally, status 2 (0x07) means a program was ended by break or STOP, status 3 (0x08) means a command or program has started, and status 4 (0x09) means an error. BASTERM's beep on status 4 is therefore an error beep. STOP with modifier 4 is a plain STOP; modifier 5, which BASTERM sends before `LOAD` and `SAVE`, also resets the graphics and sprite work area ready for a transfer.

@@ -148,7 +148,11 @@ const grammar = {
     },
     'keyword-control': { match: word(K.CONTROL), name: 'keyword.control.game-basic' },
     'keyword-operator-word': { match: word(K.OPERATORS), name: 'keyword.operator.word.game-basic' },
-    function: { match: word(K.FUNCTIONS), name: 'support.function.builtin.game-basic' },
+    function: {
+      // OBJ, PALETTE and TPROP are mostly statements, so colour them as such.
+      match: word(K.FUNCTIONS.filter((w) => !K.DUAL.includes(w) || w === 'MID$')),
+      name: 'support.function.builtin.game-basic',
+    },
     'keyword-statement': { match: word(K.STATEMENTS), name: 'keyword.other.statement.game-basic' },
     'print-shorthand': { match: '\\?', name: 'keyword.other.statement.print.game-basic' },
     variable: {

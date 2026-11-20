@@ -140,9 +140,9 @@ class PreprocessTests(unittest.TestCase):
             self.assertEqual(build(p).encode(), b'10 PRINT "\x83Z\x83K"\r\n')
 
 
-def _session(nak=False, baud=None):
+def _session(nak=False, baud=None, echo=False):
     pc, sat = pipe_pair(baud)
-    mock = MockSaturn(sat, nak_first_block=nak)
+    mock = MockSaturn(sat, nak_first_block=nak, echo=echo)
     mock.start()
     link = SaturnLink(pc, key_delay=0)
     link.connect()
@@ -190,7 +190,7 @@ class LinkTests(unittest.TestCase):
 
     def test_saturn_echo_reaches_terminal(self):
         out = bytearray()
-        link, mock = _session()
+        link, mock = _session(echo=True)
         link.on_char = lambda m, k: out.append(k)
         link.send_program(b"10 A=1\r\n")
         link.pump_for(0.2)
@@ -199,7 +199,7 @@ class LinkTests(unittest.TestCase):
 
     def test_reads_back_line_and_errors(self):
         # Tutorial manual p. 152: after a load the Saturn shows "Line 120".
-        link, mock = _session()
+        link, mock = _session(echo=True)
         st = link.send_program(b"100 SCREEN\r\n110 PRINT 1\r\n120 GOTO 110\r\n")
         self.assertEqual(st.last_line, 120)
         self.assertEqual(st.saturn_errors, [])
@@ -211,11 +211,34 @@ class LinkTests(unittest.TestCase):
 
     def test_break_reports_line(self):
         # Tutorial manual p. 28: Ctrl+C (BASTERM's STOP) prints "Break at N".
-        link, mock = _session()
+        link, mock = _session(echo=True)
         link.send_program(b"120 *LOOP\r\n130 GOTO *LOOP\r\n", run=True)
         st = link.send_program(b"10 A=1\r\n")  # sends STOP first
         self.assertIn("Break at 130", link.screen_lines)
         self.assertEqual(st.last_line, 10)
+        mock.stop_thread()
+
+    def test_status_frames_report_the_result(self):
+        # The Saturn reports the end of a LOAD with 0x06 (ok) or 0x09 (error)
+        # and never echoes its screen, so the result must come from status.
+        link, mock = _session()
+        st = link.send_program(b"10 A=1\r\n")
+        self.assertEqual(st.end_status, P.STATUS_IDLE)
+        self.assertFalse(st.error_status)
+        self.assertEqual(st.saturn_text, [])
+        st = link.send_program(b"10 A=1\r\nNAXT\r\n")
+        self.assertEqual(st.end_status, P.STATUS_ERROR)
+        self.assertTrue(st.error_status)
+        mock.stop_thread()
+
+    def test_stop_while_running_reports_break(self):
+        link, mock = _session()
+        link.send_program(b"10 GOTO 10\r\n", run=True)
+        self.assertTrue(mock.running)
+        link.stop()
+        self.assertEqual(link.status, P.STATUS_BREAK)
+        link.stop()
+        self.assertEqual(link.status, P.STATUS_IDLE)
         mock.stop_thread()
 
     def test_serves_other_files_from_folder_only(self):

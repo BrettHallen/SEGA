@@ -158,7 +158,7 @@ Section 1.1 ends on p. 95 (XTAN); section 1.2, file commands, starts on p. 96. P
 
 **CLEAR (p. 30), for file transfers.** CLEAR wipes variables, undeclares arrays, closes open files and resets FOR/GOSUB stacks. File areas are counted in 256-byte blocks, 1–2048, and default to 256 (64 KB) when left out; they set the largest file `OPEN` can handle. They share memory with the user area and the program store. If both file areas are 1360 or more and unused, `PLAYINIT`/`TARG` use them as a sound cache.
 
-**For the terminal.** `CHR$(&H0C)` clears the screen and `CHR$(&H0B)` homes the cursor, so a program's output can contain these control codes. If the Saturn echoes screen text over the link (still untested), the receive view should treat them as screen controls, not text.
+**For the terminal.** `CHR$(&H0C)` clears the screen and `CHR$(&H0B)` homes the cursor, so a program's output can contain these control codes. The Saturn never sends its screen text over the link, so they matter only in data a program writes to `COM:` itself with `FWRITE`.
 
 ---
 
@@ -176,7 +176,7 @@ Section 1.2 (file commands) runs pp. 96–112 and section 1.3 (file functions) p
 **For the PC link and file transfer.**
 - **LOAD (p. 109).** `.B` is always added, even if another extension is typed. `M` merges over `COM:`: lines with the same number are replaced, new ones added, and lines without a line number are ignored. A text program made outside the Saturn needs CR+LF at the end of every line (CR is ignored and LF ends the line). Files sent to the Saturn therefore need `\r\n` line ends. An error during a plain LOAD loses the program in memory, because memory is cleared first.
 - **SAVE is direct-only (p. 111).** It can't be used inside a program; Receive types it, so that is fine. `SAVE "…",A` (text as `.D`) works only on FD0:, FD1:, BRAM: and CRAM:, not on COM:.
-- **FILES over COM: (pp. 100–101).** It shows names in 12-character columns and, except on CD:, a last line "Free size <free> / <total> file blocks", where 1 block is 64 bytes. `FILES$` puts spaces in place of the size on COM:. `DSKF("COM:")` also returns free space in 64-byte blocks, so a PC-side file server should report free space in those units.
+- **FILES over COM: (pp. 100–101).** It shows names in 12-character columns and, except on CD:, a last line "Free size <free> / <total> file blocks", where 1 block is 64 bytes. `FILES$` puts spaces in place of the size on COM:. `DSKF("COM:")` also returns free space in 64-byte blocks. On `COM:` the Saturn passes on whatever number the PC sends (commands 0x1A for free and 0x1B for total), so a PC-side file server should report free space in those units.
 - **Directory listing.** PC file names that break the Saturn rules (over 8 characters before the dot, a dash, a space, other extensions) can't be loaded, so a file server's listing is only useful when limited to valid `XXXXXXXX.Y` names.
 - **Slow transfers.** `GSAVE` of a large area to `COM:` takes 1–2 minutes or more (p. 107). GLOAD/GSAVE need a free file buffer from `CLEAR` larger than the picture: 282 blocks (.0) or 560 blocks (.1) for 320 × 224.
 - **Bitmap file format (pp. 105–106).** `.0`: width and height (2 bytes each, high byte first, up to 512 × 256), a 512-byte palette (256 RGB words), then 1 byte per dot with 0 transparent. `.1`: width, height, then 2 bytes per dot, high byte first, with bit 15 set (black is &H8000; 0 is transparent). Colour words are 5 bits each: red in bits 0–4, green 5–9, blue 10–14. A PC-side PNG ↔ `.0`/`.1` converter would be straightforward from this.
@@ -310,7 +310,7 @@ Each is a shorthand for writing one OBJ item. Values in a group can be left out 
 | OBJTYPE | `OBJTYPE <object no>,<TYPE>` | TYPE (0) |
 | OBJZOOM | `OBJZOOM <object no>,[<X scale>],[<Y scale>],[<Z scale>]` | XS (12) |
 
-- OBJATR's syntax puts the polygon ID first, but it is described as an alias of `OBJ(n,16)=…`, which would put the attribute ID (16) before the polygon ID (17). The parameter list also names the attribute first. Which order the Saturn uses needs checking on hardware.
+- OBJATR takes the polygon ID first and the attribute ID second, as its syntax line says. The interpreter's handler (0x060218A8) stores the first value with the same routine as `OBJ(n,17)` (polygon) and the second with the one for `OBJ(n,16)` (attribute). The parameter list, which names the attribute first, has the order wrong, and the alias column is best read as items 17 and 16 together.
 - OBJPOS's example `OBJPOS 1,200` is described as setting X to 100, a misprint.
 - OBJZOOM does not rescale normal vectors.
 - OBJTYPE takes 0–7 and drops any fraction.
@@ -644,7 +644,7 @@ Page 414 is a diagram and p. 415 is blank. The index follows on pp. 416–421, t
 
 The index (pp. 416–421) lists every GAME BASIC command with its page, and the reserved-word list (pp. 9–10) has 203 words. Together with the CD's programs and the Tutorial Manual they give 208 keywords.
 
-- **Easy to miss:** `COPY`, `OFF` (as in `INTERVAL OFF`, used 79 times on the CD), `OPTION`, `VERTEXID` (`SYS_I=VERTEXID(-1)` on the CD), and the operators `NOT!`, `OR!`, `XOR!` and `AND!`. `REM` is reserved and starts a comment.
+- **Easy to miss:** `COPY`, `OFF` (as in `INTERVAL OFF`, used 79 times on the CD), `OPTION` (undocumented; its hidden forms `OPTION HD352`, `OPTION HD320`, `OPTION COM` and `OPTION VERSION` are described in `GAME_BASIC_CD_analysis.md`), `VERTEXID` (`SYS_I=VERTEXID(-1)` on the CD), and the operators `NOT!`, `OR!`, `XOR!` and `AND!`. `REM` is reserved and starts a comment.
 - **Not keywords:** `VERTEX` (it only appears in comments on the CD). `TIME` and `MSTR$` are ordinary user variables in the CD's games (`TIME = TIME + .05`; `DIM MSTR$(…)`), and `TIME$` exists nowhere.
 - **Standard BASIC words that GAME BASIC doesn't have:** `AUTO`, `CDBL`, `CSNG`, `CSRLIN`, `DEF`, `FN`, `EOF`, `EQV`, `IMP`, `ERASE`, `FIELD`, `GET`, `PUT`, `LLIST`, `MERGE`, `OCT$`, `PRESET`, `SOUND`, `SPC`, `TAB`, `TRON`, `TROFF`, `WHILE`, `WEND`. There are no structured loops, and no `&O` octal numbers.
 - **Not reserved but part of statements:** `AS`, `OUTPUT` and `APPEND` (`OPEN … FOR OUTPUT AS 2`), and `USING` in `PRINT USING`.

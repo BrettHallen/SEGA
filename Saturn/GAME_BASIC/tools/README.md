@@ -18,11 +18,11 @@ python3 saturn_send.py send GAME.B --mock --run        # pretend Saturn
 | `run` / `stop` | STOP, then `RUN`; or just STOP |
 | `receive -o FILE` | Types `SAVE "COM:TBASTERM.B"` and saves what the Saturn sends |
 | `type TEXT` | Types text at the Saturn, then Enter |
-| `serve` | Stays connected, serves `COM:` files from `--serve-dir`, and prints the Saturn's screen echo |
+| `serve` | Stays connected and serves `COM:` files from `--serve-dir` |
 | `ports` | Lists serial ports |
-| `selftest` | Sends and receives a program with the mock Saturn, including a NAK and resend |
+| `selftest` | Sends and receives a program with the mock Saturn, including a NAK and the Saturn's seek-and-retry |
 
-Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATURN_BAUD`), `--mock`, `--trace` (hex dump), `-v`, `--key-delay`, and for programs `-n/--auto-number`, `--start`, `--step`, `--label-interval`, `--max-line-bytes`. Exit codes: 0 ok, 1 link error, 2 program errors, 3 usage, 4 sent but the Saturn printed an error (such as `Syntax error`). After a send, `send` reports the Saturn's `Line N` message and any error lines it printed.
+Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATURN_BAUD`), `--mock`, `--trace` (hex dump), `-v`, `--key-delay`, and for programs `-n/--auto-number`, `--start`, `--step`, `--label-interval`, `--max-line-bytes`. Exit codes: 0 ok, 1 link error, 2 program errors, 3 usage, 4 sent but the Saturn stopped the LOAD with an error.
 
 `serve` and `send --serve` list only names the Saturn can use (1-8 of A-Z, 0-9 and `_`, then `.B`, `.0`, `.1` or `.D`; Reference Manual pp. 96-97), so `FILES "COM:"` doesn't show files it couldn't load.
 
@@ -56,26 +56,27 @@ PNG transparency becomes the Saturn's transparent value (dot 0 in `.0`, word 0 i
 | `saturn_link/transport.py` | pyserial port, in-process pipe, and a byte-logging tap |
 | `tests/` | `python3 -m unittest discover tests`. Includes a run of the real pyserial code over a pseudo-terminal (macOS/Linux) |
 
-## What the mock does and doesn't prove
+## What the Saturn's own code shows
 
-The mock is written from the same reading of `Basterm.exe` as the sender, so passing tests show the PC side is self-consistent and that the pyserial path works. They can't show the real Saturn behaves the same way. These need checking on hardware, ideally with a logic analyser on TX and RX:
+The mock is written from the same reading of `Basterm.exe` as the sender. The Saturn side has since been read from the interpreter on the GAME BASIC CD (`Documentation/GAME_BASIC_CD_analysis.md`), and it settles how the real Saturn behaves:
 
-1. **Handshake.** Does the Saturn answer the PC's `0x00` probe with `0x00`, and is it happy with frame `0x01` after it?
-2. **Status after STOP.** The sender waits up to 5 s for any status frame (`0x06` to `0x09`) after STOP, as BASTERM does.
-3. **Typing speed.** The LOAD command is typed one keystroke packet every 30 ms. If characters go missing, raise `--key-delay`.
-4. **File name in the open request.** The sender trims it the way BASTERM does (`"TBASTERM.B"`, `"TEST    .B"` and `"TEST."` all work). Check what the Saturn really sends with `--trace`.
-5. **NAK on a data block.** The sender rewinds so the next read request gets the same block again. BASTERM itself doesn't rewind (its `ReadFile` has already moved on), so if the Saturn seeks before re-reading, both work; if it doesn't, only this one does.
-6. **Status after the transfer.** The sender waits for a status frame after the close, and gives up waiting after 3 s and reports success, because it isn't known yet which status the Saturn sends there.
-7. **Receive.** `SAVE "COM:..."` is handled as open-for-write, data blocks, close. That path is untested on hardware.
-8. **Line length.** BASTERM refuses over-long lines, but the limit isn't known; 255 bytes is a guess.
-9. **Japanese text.** Programs go as Shift-JIS. Typing Japanese with `type` sends each Shift-JIS byte as a key, which may not be what the Saturn expects.
-10. **Wiring.** The adapter must be 5 V TTL. TX to Saturn RX, RX to Saturn TX, GND to GND.
+1. **Handshake.** The Saturn sends four `0x00` bytes, then one every 50 ms, and waits 3 s for frame `0x01`. The sender's probe-and-answer matches this.
+2. **Status after STOP.** STOP makes the Saturn send `0x06` (idle at the prompt), so waiting for any status frame is correct.
+3. **Status after the transfer.** Every typed command starts with `0x08` (`STATUS_RUNNING`) and ends with `0x06` (`STATUS_IDLE`), or `0x09` (`STATUS_ERROR`) when it stops with an error. The sender reports a `0x09` after a LOAD as a failed send (exit code 4). With `,R` the program starts straight away and no end status follows, so after 3 s the sender reports the program as running.
+4. **Screen text.** The Saturn never sends its screen text over the link, so on real hardware the `Line N` count and the screen echo printed by `serve` stay empty; the status frames are its only report. The mock behaves the same way by default; tests that check the PC's text handling turn its echo on.
+5. **NAK on a data block.** The Saturn recovers by itself: it sends a seek (`0x0E`) to the position it expects and then asks for the block again, up to 6 times for reads and 4 for writes. The sender's rewind and a seek-following server both work.
+6. **Receive.** `SAVE "COM:..."` is open-for-write, data blocks, close, as handled. The text is in `LIST` format, so line numbers have leading spaces.
+7. **Line length.** The Saturn's editor and its error 15 *String too long* set the limit at 255 characters per line, which is what the sender checks.
+8. **Japanese text.** The Saturn's character set is single-byte (Reference Manual p. 411), so typing Shift-JIS with `type` arrives as two graphic characters per kanji. Put Japanese text in the program file for `KPRINT` instead.
+9. **Faster speeds.** After the undocumented `OPTION HD352` the Saturn also offers 14400, 28800, 38400, 57600 and 115200 baud; `-b` accepts only 9600 and 19200 today.
+
+Two things depend on the hardware rather than the code: how fast a given USB-TTL adapter runs reliably, and whether one keystroke packet every 30 ms is slow enough on a busy Saturn (raise `--key-delay` if characters go missing). The adapter must be 5 V TTL, with TX to Saturn RX, RX to Saturn TX and GND to GND.
 
 ## Details checked in the decompiled code
 
-These go a little beyond `BASTERM/BASTERM_serial_protocol.md`, and the sender follows them:
+These come from `Basterm.exe`, and the sender follows them:
 
-- String packet filler after the NUL is `'0' + i % 9`, CRC over all 14 bytes (`FUN_00404660`).
+- String packet filler after the NUL is `'0' + i % 9`, CRC over all 14 bytes (`FUN_00404660`). The Saturn uses the same filler.
 - An incoming string packet is ACKed or NAKed first, and only then answered (handle frame, error, and so on).
 - Sizes and offsets in string packets are lowercase hex (`%lx` at `0x466418`).
 - A successful open makes the new handle the current one. Errors: not found `0x17`, access denied `0x18`, other `0x03`, and `0x03` when all three handles are in use.
