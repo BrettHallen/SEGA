@@ -17,7 +17,7 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 ### [GAME BASIC CD](/Saturn/GAME_BASIC/GAME_BASIC_CD)
 Files, ISO and analysis of GAME BASIC itself.<br>
 
-The analysis explains how the interpreter on this CD works: the boot loader, the memory map, the Saturn's side of the serial link, the tokenised program format and the file formats. [`tools/gbcd_extract.py`](tools/gbcd_extract.py) extracts the CD and unpacks the interpreter for anyone who wants to check it. 
+The analysis explains how the interpreter on this CD works: the boot loader, the memory map, the Saturn's side of the serial link, the tokenised program format and the file formats. [`tools/gbcd_extract.py`](tools/gbcd_extract.py) extracts the CD and unpacks the interpreter for anyone who wants to check it, and [`tools/gbcd_disasm.py`](tools/gbcd_disasm.py) turns it into a commented disassembly (`GAME_BASIC_CD/GAME_BASIC_main.s`, kept out of the repository). 
 
 ### [WIN_TOOLS_CD](/Saturn/GAME_BASIC/WIN95_TOOLS_CD)
 | File | Description |
@@ -70,7 +70,7 @@ GAME BASIC came with two Japanese manuals: the *Tutorial Manual* (チュート�
 | [`GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.pdf)) | **Start here** for using GAME BASIC in English: a guide in its own words, with page references to both manuals |
 | [`Tutorial_Manual_findings.md`](Documentation/Tutorial_Manual_findings.md) | Notes from the Tutorial Manual for the BASTERM replacement: connecting, controls, what the Saturn prints, and BASTERM's own behaviour |
 | [`Reference_Manual_findings.md`](Documentation/Reference_Manual_findings.md) | Notes from the Reference Manual, chapter by chapter: syntax, limits, error messages and what matters for sending files |
-| [`GAME_BASIC_CD_analysis.md`](Documentation/GAME_BASIC_CD_analysis.md) | How the interpreter on the Saturn CD works: boot loader, memory map, serial link, hidden baud rates, raw `COM:` mode, token format and file formats |
+| [`GAME_BASIC_CD/README.md`](GAME_BASIC_CD/README.md) | How the interpreter on the Saturn CD works: boot loader, memory map, serial link, hidden baud rates, raw `COM:` mode, token format and file formats |
 
 ## Hardware
 The protocol is fully described by the code on both sides. What only real hardware can show is electrical: which speeds a given USB-TTL adapter handles reliably, and the timing on the wire. [`USB_Serial_Connection.md`](USB_Serial_Connection.md) covers the wiring.

@@ -6,7 +6,7 @@ This guide is written for English speakers who want to use GAME BASIC on a real 
 
 Where something here is worked out from the sample programs or the PC software rather than stated in the manuals, it says so.
 
-> **About the PC link.** The serial protocol used by the modern PC tools (section 19) was worked out from both ends: BASTERM's code on the PC and the GAME BASIC interpreter's own code from the Saturn CD, which agree. The details are in `BASTERM/BASTERM_serial_protocol.md` and `Documentation/GAME_BASIC_CD_analysis.md`.
+> **About the PC link.** The serial protocol used by the modern PC tools (section 19) was worked out from both ends: BASTERM's code on the PC and the GAME BASIC interpreter's own code from the Saturn CD, which agree. The details are in `BASTERM/BASTERM_serial_protocol.md` and `GAME_BASIC_CD/README.md`.
 
 ---
 

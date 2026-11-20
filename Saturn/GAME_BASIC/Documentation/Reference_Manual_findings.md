@@ -644,7 +644,7 @@ Page 414 is a diagram and p. 415 is blank. The index follows on pp. 416–421, t
 
 The index (pp. 416–421) lists every GAME BASIC command with its page, and the reserved-word list (pp. 9–10) has 203 words. Together with the CD's programs and the Tutorial Manual they give 208 keywords.
 
-- **Easy to miss:** `COPY`, `OFF` (as in `INTERVAL OFF`, used 79 times on the CD), `OPTION` (undocumented; its hidden forms `OPTION HD352`, `OPTION HD320`, `OPTION COM` and `OPTION VERSION` are described in `GAME_BASIC_CD_analysis.md`), `VERTEXID` (`SYS_I=VERTEXID(-1)` on the CD), and the operators `NOT!`, `OR!`, `XOR!` and `AND!`. `REM` is reserved and starts a comment.
+- **Easy to miss:** `COPY`, `OFF` (as in `INTERVAL OFF`, used 79 times on the CD), `OPTION` (undocumented; its hidden forms `OPTION HD352`, `OPTION HD320`, `OPTION COM` and `OPTION VERSION` are described in `GAME_BASIC_CD/README.md`), `VERTEXID` (`SYS_I=VERTEXID(-1)` on the CD), and the operators `NOT!`, `OR!`, `XOR!` and `AND!`. `REM` is reserved and starts a comment.
 - **Not keywords:** `VERTEX` (it only appears in comments on the CD). `TIME` and `MSTR$` are ordinary user variables in the CD's games (`TIME = TIME + .05`; `DIM MSTR$(…)`), and `TIME$` exists nowhere.
 - **Standard BASIC words that GAME BASIC doesn't have:** `AUTO`, `CDBL`, `CSNG`, `CSRLIN`, `DEF`, `FN`, `EOF`, `EQV`, `IMP`, `ERASE`, `FIELD`, `GET`, `PUT`, `LLIST`, `MERGE`, `OCT$`, `PRESET`, `SOUND`, `SPC`, `TAB`, `TRON`, `TROFF`, `WHILE`, `WEND`. There are no structured loops, and no `&O` octal numbers.
 - **Not reserved but part of statements:** `AS`, `OUTPUT` and `APPEND` (`OPEN … FOR OUTPUT AS 2`), and `USING` in `PRINT USING`.

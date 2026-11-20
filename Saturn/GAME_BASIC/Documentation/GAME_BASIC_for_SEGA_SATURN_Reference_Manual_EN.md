@@ -395,7 +395,7 @@ The maximum number of files that can be handled by the OPEN command and the like
 > - `OPTION COM` resets the serial port and drops the link to the PC.
 > - `OPTION VERSION` shows a hidden staff credit list.
 >
-> Any other word after `OPTION` gives a Syntax error. Details are in `GAME_BASIC_CD_analysis.md`.
+> Any other word after `OPTION` gives a Syntax error. Details are in `GAME_BASIC_CD/README.md`.
 
 *[p. 11]*
 

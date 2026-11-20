@@ -1,6 +1,6 @@
 # GAME BASIC BASTERM serial protocol
 
-BASTERM turns the PC into a file server for GAME BASIC for SEGASATURN: it types `LOAD "COM:TBASTERM.B"` into the Saturn as keystrokes, and the Saturn then pulls the plain-text program over 8N1 serial in CRC-checked 252-byte blocks. Findings come from static analysis of the 1998 installers and of the Saturn interpreter itself; [`GAME_BASIC_CD_analysis.md`](../Documentation/GAME_BASIC_CD_analysis.md) has the Saturn-side addresses.
+BASTERM turns the PC into a file server for GAME BASIC for SEGASATURN: it types `LOAD "COM:TBASTERM.B"` into the Saturn as keystrokes, and the Saturn then pulls the plain-text program over 8N1 serial in CRC-checked 252-byte blocks. Findings come from static analysis of the 1998 installers and of the Saturn interpreter itself; [`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md) has the Saturn-side addresses.
 
 ## What is on the CD
 

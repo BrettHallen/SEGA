@@ -56,9 +56,27 @@ PNG transparency becomes the Saturn's transparent value (dot 0 in `.0`, word 0 i
 | `saturn_link/transport.py` | pyserial port, in-process pipe, and a byte-logging tap |
 | `tests/` | `python3 -m unittest discover tests`. Includes a run of the real pyserial code over a pseudo-terminal (macOS/Linux) |
 
+## The GAME BASIC CD: extractor and disassembler
+
+Two standard-library scripts read the GAME BASIC CD. Their output is copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material, so it goes into `GAME_BASIC_CD`, whose `.gitignore` keeps it out of the repository.
+
+```
+python3 gbcd_extract.py ../GAME_BASIC_CD/GAME_BASIC.iso --out ../GAME_BASIC_CD/extracted
+python3 gbcd_disasm.py  ../GAME_BASIC_CD/GAME_BASIC.iso -o ../GAME_BASIC_CD/GAME_BASIC_main.s
+```
+
+| File | Contents |
+|---|---|
+| `gbcd_extract.py` | Prints the IP.BIN header, extracts the files, unpacks the interpreter (`0`) to `main.bin` and writes `tokens.tsv` |
+| `gbcd_disasm.py` | Writes a commented SH-2 listing of the interpreter. Takes the ISO or `main.bin`. The same input always gives the same listing |
+| `gbcd_symbols.txt` | Our names and comments for routines, variables and tables. Edit it and re-run `gbcd_disasm.py` to add your own |
+| `sh2.py` | The SH-2 instruction decoder `gbcd_disasm.py` uses |
+
+The listing finds code by following control flow from the entry point, the keyword token table, every call and `switch` jump table, so literal pools, strings and tables print as data. Labels come from `gbcd_symbols.txt`, then from the token table (`stmt_PRINT`, `fn_ABS`), then `sub_`/`loc_`/`str_`/`dat_` by use. Each PC-relative load shows the value it loads and what that points at. The token table, the `@` sub-keyword table and the error message table print decoded.
+
 ## What the Saturn's own code shows
 
-The mock is written from the same reading of `Basterm.exe` as the sender. The Saturn side has since been read from the interpreter on the GAME BASIC CD (`Documentation/GAME_BASIC_CD_analysis.md`), and it settles how the real Saturn behaves:
+The mock is written from the same reading of `Basterm.exe` as the sender. The Saturn side has since been read from the interpreter on the GAME BASIC CD ([`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md)), and it settles how the real Saturn behaves:
 
 1. **Handshake.** The Saturn sends four `0x00` bytes, then one every 50 ms, and waits 3 s for frame `0x01`. The sender's probe-and-answer matches this.
 2. **Status after STOP.** STOP makes the Saturn send `0x06` (idle at the prompt), so waiting for any status frame is correct.

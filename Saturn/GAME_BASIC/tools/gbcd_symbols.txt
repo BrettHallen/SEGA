@@ -1,0 +1,172 @@
+# GAME BASIC for SEGA SATURN (1998), main.bin loaded at 0x0600A000.
+# Names and comments for gbcd_disasm.py. This file is our own analysis and holds
+# no code or data from the CD, so it can live in the public repo.
+#
+# Format, one entry per line:
+#   ADDR name                  label an address (code or data)
+#   ADDR name ; text           label with a header comment
+#   ADDR - ; text              a comment printed above the instruction at ADDR
+#   .table ADDR kind count     a structured table (tokens, subkw, errptrs)
+#   .section ADDR text         a banner printed before ADDR
+# ADDR is hex without 0x. Anything after '#' at the start of a line is ignored.
+
+.section 0600A000 Start-up, SCI serial driver and COM: link file commands
+.section 0604A7E0 Backup RAM library (BUP)
+.section 0604CFD0 C runtime library (libc)
+.section 0605C7BF SEGA Graphics Library (SGL)
+.section 06075A00 Interpreter variables and initialised data
+
+.table 0609CBE0 tokens 288
+.table 0609DEE0 subkw 104
+.table 06075A80 errptrs 97
+
+# --- start-up and system ---
+0600A000 start ; Entry from IP.BIN: set SR, stack and GBR, then jump to main_init
+0600A040 start_clear_bss ; Clear BSS, call main_init and enter the SGL main loop
+0600E578 main_init ; Interpreter initialisation
+0600A080 sci_set_baud ; Program SCI BRR from the baud index and the 26/28 MHz clock flag
+0600A0E0 rx_drain_until_break ; Throw away received bytes until a break or timeout
+
+# --- SCI serial driver ---
+0600A144 sci_rxi_isr ; SCI receive interrupt: XON/XOFF, ring buffer, key packets
+0600A26C sci_eri_isr ; SCI receive error interrupt: clear ORER/FER/PER
+0600A298 sci_txi_isr ; SCI transmit interrupt: drain tx_ring
+0600A32C sci_send_byte ; Queue one byte for transmit (waits while tx_ring is full)
+0600A3F0 sci_xonxoff ; Send XON or XOFF as the receive ring fills and empties
+0600A44C sci_init ; Set up the SCI, interrupt vectors and both rings
+0600A520 keyq_push ; Push a key code into the key queue
+0600A5E0 sci_send_buf ; Send a buffer of bytes
+0600A60C timeout_check ; Has the link timeout (in VBLANK ticks) run out?
+
+# --- COM: link file commands (Saturn side of BASTERM's protocol) ---
+0600A7C0 com_close ; Command 0x0D: close a file on the PC
+0600A8A0 com_delete ; Command 0x0F: delete a file on the PC
+0600AA24 com_disk_free ; Command 0x1A: free space on the PC drive
+0600AAC8 com_disk_total ; Command 0x1B: total size of the PC drive
+0600ABB0 com_dir_first ; FILES: first directory entry
+0600AC4C com_dir_next ; FILES: next directory entry
+0600AC98 com_dir_end ; FILES: end of the directory listing
+0600ACE4 com_select_handle ; Pick a free file handle slot
+0600ADC0 com_open ; Open a file on the PC (read, write or append)
+0600B468 com_write_file ; Write a whole file to the PC
+0600B714 com_file_size ; Size of an open PC file
+0600B810 link_send_string ; Send a NUL-terminated string as a link block
+0600B9A4 link_recv_string ; Receive a string block
+0600BC54 key_packet_handler ; Handle a PC keyboard packet (0xF5 STOP, modifiers)
+0600BD4C stop_flag_test ; Test and clear stop_flag
+0600BD60 com_write ; Write bytes to an open PC file
+0600BD90 com_read ; Read bytes from an open PC file
+0600BDC0 com_close_file ; Close an open PC file and free its handle
+0600BE18 com_seek ; Seek in an open PC file (probable)
+0600BE44 com_loc ; LOC() for a PC file
+0600BE84 com_lof ; LOF() for a PC file
+0600BEB0 link_send_cmd ; Send a command frame and wait for ACK/NAK
+0600C3D0 crc_table_init ; Build crc16_table
+0600C418 link_recv_block ; Receive a data block, check its CRC, ACK or NAK it
+0600C588 link_send_block ; Send a data block with CRC, retry on NAK
+0600C708 com_read_block ; Read one block of a PC file
+0600C840 link_connect ; Handshake with BASTERM
+0600C9F8 sci_send_nul ; Send a NUL byte
+0600D2B8 link_rx_parser ; Byte-by-byte parser for incoming link frames
+0600D628 link_init ; Reset the link state at start-up
+0600D658 link_reset_state ; Drop the link after an error or timeout
+0600D6E8 link_send_frame ; Send a status or command frame
+
+# --- errors, status frames and LIST ---
+0600DF3C basic_error ; Raise BASIC error r4: unwind to the command loop
+0600E0C4 print_error ; Print "<message> in <line>" and send status 0x09 ERROR if linked
+0600E0DC - ; Status frame 0x09 ERROR to the PC when linked
+0600E3D6 - ; Status frame 0x08 RUNNING, sent at the start of every direct command when linked
+0600E3F2 - ; Status frame 0x06 IDLE, sent when a command finishes
+0600E3FA - ; Status frame 0x07 BREAK
+0600FB50 list_number ; LIST: print a number token (DE/DF/E0 4-byte, E1-E3 1-byte, E4 double)
+0600FCA0 list_line_ref ; LIST: print a DD line reference
+0600FD7C list_line ; LIST: detokenise and print one program line
+0601048C list_walk ; LIST: walk the program between two line numbers
+06013B5E - ; STOP key during a program: send status 0x07 BREAK
+
+# --- OPTION, graphics, number formatting ---
+06016990 option_set_screen_mode ; Apply the screen mode from settings
+06016A5C stmt_OPTION ; OPTION statement, including the hidden faster baud rate forms
+060169BC str_option_credits
+0601E520 gfx_work_reset ; Reset sprite and graphics work areas
+06020ECC obj_set_polygon ; OBJ: set polygon data
+06020F88 obj_set_attribute ; OBJ: set attributes
+0602CCD0 fmt_fixed ; Format an 18.14 fixed-point number as decimal
+0602CDFC fmt_hex ; Format a number as &H hex
+0602CEC0 fmt_bin ; Format a number as &B binary
+0602CF94 fmt_double ; Format an 8-byte double
+
+# --- system, editor, raw serial ---
+0602F910 com_reset_link ; Reset the COM: link before a new command
+0602F97C system_start ; Title screen, settings and the direct-mode loop
+0602FDA0 print_string ; Print a string to the screen
+0602FED8 get_key ; Wait for a key from pad, keyboard or the link
+06030028 serial_read_raw ; Read one byte from the raw (non-link) serial port
+060336DC settings_baud_display ; Settings screen: show the baud rate
+06034F4E - ; Editor: STOP key (0xF5) from the PC keyboard
+06035808 rng_next ; RND: next pseudo-random number
+06035838 rng_seed ; RANDOMIZE: seed the generator
+06035858 program_checksum ; Checksum of the program text
+06035888 option_match_word ; OPTION: match a sub-keyword
+06036C24 print_free_size ; Print free program memory
+06036EA0 serial_put_raw ; Raw serial: send one byte
+06036EB4 serial_write_raw ; Raw serial: send a buffer
+06036EE8 serial_puts_raw ; Raw serial: send a string
+
+# --- COM: device statements ---
+06037434 parse_file_spec ; Split "COM:NAME" style file specs
+06037848 files_com ; FILES "COM:"
+06037B44 load_com_link ; LOAD "COM:file" over the BASTERM link
+06037CD0 save_com_link ; SAVE "COM:file" over the BASTERM link
+06037D78 kill_com_link ; KILL "COM:file"
+06037DBC load_com_raw ; LOAD "COM:" from a raw serial stream
+06037FBC save_com_raw ; SAVE "COM:" to a raw serial stream
+060388C0 open_com_link ; OPEN "COM:file"
+06038978 close_com_link ; CLOSE for a COM: file
+060389A8 fread_com_link ; Read from an open COM: link file
+06038A84 fread_com_raw ; Read from the raw serial port
+0603AF0C settings_save ; Save settings to backup RAM
+0603AF8C settings_load ; Load settings from backup RAM
+
+# --- libraries and BIOS ---
+06062D30 slInitSystem ; SGL: initialise the system
+06000310 SYS_SETSINT ; BIOS: set an interrupt handler
+06000320 SYS_CHGSYSCK ; BIOS: change the system clock
+06000324 bios_clock_flag
+
+# --- variables ---
+06075A10 stop_flag
+06075A11 modifier_state
+06075A34 link_up
+06075A68 link_error_bits
+06075A70 str_undefined_error
+06075C10 settings
+06075C19 settings_screen_mode
+06075C1A baud_index_26mhz
+06075C1B baud_index_28mhz
+06075C20 pause_flag
+06075C21 break_flags
+06075C30 keyq_read
+06075C34 keyq_write
+06075C38 key_queue
+06075CBC rx_ring
+06075EBC rx_read
+06075EC0 rx_write
+06075EC8 tx_ring
+060760D4 vblank_ticks
+060761C4 program_end_ptr
+060761F0 text_ptr
+06076BFD interp_mode
+06085070 program_start_ptr
+
+# --- tables and buffers ---
+06075A80 error_msg_table ; Error message pointers, error n at +4n (clamped at 96)
+0609CBE0 token_table ; Keyword descriptors: {statement, function, name, flags}
+0609DEE0 subkw_table ; @ sub-keywords: {name, value}
+060A500C baud_display_26
+060A5010 baud_display_28
+060A508C str_free_size
+060BDF00 file_handles
+060BE240 crc16_table
+060BE450 link_rx_ring

@@ -41,7 +41,7 @@ Pages 2, 12, 14, 144 and 146 are blank. Notes on the Reference Manual are in `Re
 **Setting the baud rate on the Saturn (Reference pp. 19–20).** The rate is set on GAME BASIC's **system settings screen**:
 - Open it from the edit screen (blinking `_` cursor) with **L+R+Z** on a pad in controller port 1, or **Q+E+D** held together on the Saturn keyboard.
 - Move with the D-pad up/down, change a value with left/right, then move to **Exit** and press **C** to go back.
-- **Baudrate**: `19200BPS` or `9600BPS`. "Select the same speed as the communication software. If communication errors occur, set 9600BPS." The interpreter also has a second list, 9600, 14400, 28800, 38400, 57600 and 115200, which this screen shows only after the undocumented `OPTION HD352` (see `GAME_BASIC_CD_analysis.md`).
+- **Baudrate**: `19200BPS` or `9600BPS`. "Select the same speed as the communication software. If communication errors occur, set 9600BPS." The interpreter also has a second list, 9600, 14400, 28800, 38400, 57600 and 115200, which this screen shows only after the undocumented `OPTION HD352` (see `GAME_BASIC_CD/README.md`).
 - The other settings: **Keyboard** INITIAL (4–255 frames before key repeat, default 17), AFTER (1–255 frames between repeats, default 3), Ctrl key NORMAL or SWAP (swaps Ctrl and Caps Lock); **Edit width** LEFT/TOP/RIGHT/BOTTOM (default 1, 1, 38, 26) and background colour RED/GREEN/BLUE (0–15, default 0). A frame is 1/60 s at start-up, but `SCREEN` can change it.
 - The settings are saved in the Saturn's backup RAM as **`GBASICSS_01`** (comment `Config`, 1 block), visible in the Saturn's own memory manager. Deleting that file puts every setting back to its default, including 9600 baud.
 
