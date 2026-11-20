@@ -629,8 +629,6 @@ python3 GAME_BASIC/tools/gbcd_extract.py GAME_BASIC/GAME_BASIC_CD/GAME_BASIC.iso
 
 `main.bin` loads into Ghidra as SuperH SH-2, big-endian, base 0x0600A000. Good starting points are the serial driver at 0x0600A080, the link protocol at 0x0600B810–0x0600D7EF, LIST at 0x0600FD7C and the token table at 0x0609CBE0.
 
-**Copyright.** The ISO, the extracted files, `main.bin` and `tokens.tsv` are ©1998 ASCII Corp./Bits Laboratory/ESP inc. Keep them out of any public repository. `gbcd_extract.py` and this report contain no CD data apart from the keyword names and addresses quoted here.
-
 ## Limits of this analysis
 
 Everything above comes from reading the code. These points depend on the hardware and can only be measured on a real Saturn:
