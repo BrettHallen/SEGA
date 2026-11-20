@@ -1,7 +1,7 @@
 ; GAME BASIC for SEGA SATURN, interpreter image main.bin (SH-2, big-endian)
 ; Load address 0x0600A000, 738784 bytes, SHA-1 5ce6eb94dca55b1c7c9efdcaec6bd125fbb16f1f
 ; Generated from GAME_BASIC.iso by gbcd_disasm.py with gbcd_symbols.txt.
-; Copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material: keep out of public repositories.
+; Copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc.
 ; 157967 instructions found by control flow; everything else prints as data.
 ;
 ; Columns: address, raw bytes, instruction, comment. "=X" is a PC-relative literal value.
