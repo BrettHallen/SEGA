@@ -13,24 +13,10 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 | [Documentation](Documentation) | The two Japanese manuals as PDFs, English versions and notes on both manuals. |
 | [tools](tools) | `saturn_send.py`, the Python (pyserial) replacement for BASTERM's serial link that the extension uses. Has a mock Saturn for testing without hardware. |
 
-### GAME BASIC CD
-```
-RAW (2352):      NO
-Header offset:   0x0
-Hardware ID:     SEGA SEGASATURN
-Maker ID:        SEGA TP T-21
-Product number:  T-2111G
-Version:         V1.002
-Release date:    1998/04/16
-Area codes:      J
-Peripherals:     AEFGJKMSTZ
-Title:           GAME BASIC for SEGASATURN
-Volume label:    BASIC
-Created:         1998/04/16 00:00:00:00
-Maker type:      third party (SEGA TP)
-```
+### [GAME BASIC CD](//Saturn/GAME_BASIC/GAME_BASIC_CD)
+Files, ISO and analysis of GAME BASIC itself.<br>
 
-[`Documentation/GAME_BASIC_CD_analysis.md`](Documentation/GAME_BASIC_CD_analysis.md) explains how the interpreter on this CD works: the boot loader, the memory map, the Saturn's side of the serial link, the tokenised program format and the file formats. [`tools/gbcd_extract.py`](tools/gbcd_extract.py) extracts the CD and unpacks the interpreter for anyone who wants to check it. The CD image and anything extracted from it are copyrighted and stay out of this repository.
+The analysis explains how the interpreter on this CD works: the boot loader, the memory map, the Saturn's side of the serial link, the tokenised program format and the file formats. [`tools/gbcd_extract.py`](tools/gbcd_extract.py) extracts the CD and unpacks the interpreter for anyone who wants to check it. 
 
 ### [WIN_TOOLS_CD](/Saturn/GAME_BASIC/WIN95_TOOLS_CD)
 | File | Description |
