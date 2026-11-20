@@ -1,7 +1,7 @@
 # Documentation for GAME BASIC
 
 ## Original Japanese Manuals
-Scans of the original manuals:
+Scans of the original manuals.  Had to split the Reference Manual due to its size.
 - [Tutorial Manual](/Saturn/GAME_BASIC/Documentation/GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf)
 - [Reference Manual Chapter 1](/Saturn/GAME_BASIC/Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf)
 - [Reference Manual Chapter 2](/Saturn/GAME_BASIC/Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part2_JP.pdf)
