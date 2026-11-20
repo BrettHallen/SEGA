@@ -25,7 +25,15 @@ python3 srp.py patch game.bin -a U -n         # dry run: list the writes only
 | `--compat` | Reproduces the original's behaviour even where it damages the image. |
 | `-n/--dry-run` | Shows the writes without changing anything. |
 
-Area letters: **J** Japan, **T** Taiwan and Philippines, **U** USA and Canada, **B** Brazil, **K** Korea, **A** Asia PAL, **E** Europe, **L** Latin America.
+Area letters: 
+- **J** Japan,
+- **T** Taiwan and Philippines,
+- **U** USA and Canada,
+- **B** Brazil,
+- **K** Korea,
+- **A** Asia PAL,
+- **E** Europe,
+- **L** Latin America.
 
 Image formats: any file containing the Saturn IP.BIN. A file whose size is a multiple of 2352 is treated as RAW (2352-byte sectors, e.g. `.bin` from a `.cue`, or `.img`). Anything else is treated as a 2048-byte image (`.iso`, track 1 `.bin` at 2048, and similar). This is the same rule SRP uses. For multi-track BIN/CUE sets, patch the data-track file.
 
@@ -59,21 +67,61 @@ The port matches the original on normal images. Where the original would damage 
 
 Not ported: the GUI-only features (reading a physical CD drive, TOC/track counts, the online database links and the TXT export). `info` shows the same header and PVD fields the GUI displays.
 
-## Verification
+## Example
+GAME BASIC:<br>
+```
+% python3 srp.py info GAME_BASIC.iso
 
-- `tests/test_srp.py` has 22 unit tests, including **40 golden outputs recorded from the original `SRP3.0GE.exe`**. They cover ISO and RAW, 1-8 slots, first and third party, SRP-filler slots, gap slots, stale ECC and the `--compat` cases. Run them with:
-  ```sh
-  python3 -m unittest discover -s tests
-  ```
-- `oracle/` holds the harness used to run the original. `harness.cs` loads `SRP3.0GE.exe` under Mono + Xvfb, sets the file name and checkboxes, and invokes `Regionpatchbutton_Click`. Mono's VB runtime (mono-basic) doesn't implement `FileSystem.FileOpen/FileGet/FilePut/Seek` and can't parse `&H` hex strings. `Rewrite.cs` (Mono.Cecil) therefore redirects just those 35 call sites, in a *copy* of the exe, to `VbShim.cs`, which follows the documented .NET semantics. All other logic, including EDC/ECC, is the original IL. `compare_with_original.py` runs both tools on every case and diffs the outputs. The result was **46/46 identical**, both on synthetic images and on images built from the real SGL 3.02J sample `IP.BIN`.
-- `tests/make_test_images.py` builds the test images (ISO + RAW with valid sync, MSF headers, EDC and ECC). It uses a synthetic IP.BIN, or a real one if you pass its path.
-
-## Files
+File:            GAME_BASIC.iso
+Size:            23,035,904 bytes
+RAW (2352):      NO
+Header offset:   0x0
+Sector 1 offset: 0x800
+Hardware ID:     SEGA SEGASATURN
+Maker ID:        SEGA TP T-21
+Product number:  T-2111G
+Version:         V1.002
+Release date:    19980416
+Device info:     CD-1/1
+Area codes:      J
+Peripherals:     AEFGJKMSTZ
+Title:           GAME BASIC for SEGASATURN                                                                                       
+Volume label:    BASIC
+Created:         1998/04/16 00:00:00:00
+Modified:        1998/04/16 00:00:00:00
+Area slots:      J, -, -, -, -, -, -, -
+Maximum areas:   1
+Current areas:   J
+Maker type:      third party (SEGA TP)
+```
 
 ```
-srp.py                         the tool (single file, stdlib only)
-tests/test_srp.py              unit + golden tests
-tests/golden_original_srp.json SHA-256 of original SRP outputs
-tests/make_test_images.py      deterministic test image generator
-oracle/                        Mono harness and comparison script used to verify against SRP3.0GE.exe
+% python3 srp.py patch GAME_BASIC.iso -a E -o GAME_BASIC_EUR.iso
+
+File patched! Areas J -> E (ISO) -> GAME_BASIC_EUR.iso
 ```
+
+```
+% python3 srp.py info GAME_BASIC_EUR.iso
+
+File:            GAME_BASIC_EUR.iso
+Size:            23,035,904 bytes
+RAW (2352):      NO
+Header offset:   0x0
+Sector 1 offset: 0x800
+Hardware ID:     SEGA SEGASATURN
+Maker ID:        SEGA TP T-21
+Product number:  T-2111G
+Version:         V1.002
+Release date:    19980416
+Device info:     CD-1/1
+Area codes:      E
+Peripherals:     AEFGJKMSTZ
+Title:           GAME BASIC for SEGASATURN                                                                                       
+Volume label:    BASIC
+Created:         1998/04/16 00:00:00:00
+Modified:        1998/04/16 00:00:00:00
+Area slots:      E, -, -, -, -, -, -, -
+Maximum areas:   1
+Current areas:   E
+Maker type:      third party (SEGA TP)
