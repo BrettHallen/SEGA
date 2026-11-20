@@ -1,6 +1,6 @@
 # SRP for Python: Saturn Region Patcher
 
-`srp.py` is a cross-platform Python 3 port of **SRP (Saturn Region Patcher) v3.0 Gold Edition** by Madroms (2004-2009), the Windows-only VB.NET tool that changes the area (region) codes of Sega Saturn disc images.
+`srp.py` is a cross-platform Python 3 port of [**SRP (Saturn Region Patcher) v3.0 Gold Edition** by Madroms (2004-2009)](https://madroms.satakore.com), the Windows-only VB.NET tool that changes the area (region) codes of Sega Saturn disc images.
 
 It was reverse engineered from the IL of `SRP3.0GE.exe` (MD5 `c712e5a455555b73a341e5be7227bda7`). On every test case it writes **exactly the same bytes as the original**. That was checked by running the real executable under Mono next to the port (see [Verification](#verification)).
 
