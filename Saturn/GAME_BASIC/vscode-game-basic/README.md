@@ -11,8 +11,8 @@ The extension does the editing side itself. Anything that touches the serial por
 | Highlighting | Line numbers, keywords, built-in functions, strings, `'` and `REM` comments, `*labels`, `@ATR`-style object fields, `&H` hex and `&B` binary numbers (with fixed-point fractions), BASTERM's `#include` |
 | Live checks | Unnumbered direct commands such as `LOAD"COM:DDD"` and unnumbered comments are shown as notes and left out when sending. Otherwise, the same checks BASTERM makes before sending (missing, duplicate or too-big line numbers, over-long lines), plus characters Shift-JIS can't carry, missing `#include` files, unbalanced brackets, unclosed strings, `GOTO`/`GOSUB`/`RESTORE` to a line or `*label` that doesn't exist, `IF` without `THEN`, and a `PLAY` with more than about 150 notes, which the Saturn stops with `Sound:Song bank full` (Reference Manual p. 271) |
 | Automatic line numbers | Optional, BASTERM style: unnumbered lines get numbers when sent, a numbered line resets the counter, and inlay hints show the number each line will get |
-| Hover and completion help | Hover a keyword for its syntax and manual page where known (`src/reference.js`), or an `@NAME` constant such as `@PAD_START` for its value. Inside the MML string of a `PLAY`, `EFFECT` or `DATA` statement, hover a command such as `T150` or `:|2` for its meaning |
-| Go to definition | On a `GOTO 100` target or a `*LABEL`. Labels also show in the Outline view |
+| Hover and completion help | Hover a keyword for its syntax and manual page where known (`src/reference.js`), or an `@NAME` constant such as `@PAD_START` for its value. Inside the MML string of a `PLAY`, `EFFECT` or `DATA` statement, hover a command such as `T150` or `:|2` for its meaning. Hover a `*LABEL`, where it's defined or after a `GOTO`, `GOSUB`, `RESTORE` and so on, to see the line it's on, its first lines, and every line that jumps to it |
+| Go to definition and references | **F12** on a `GOTO 100` target or a `*LABEL` goes to it; **Shift+F12** on a `*LABEL` lists every use. Labels also show in the Outline view |
 | Send to Saturn | **F6**, or the upload button in the editor title. Saves, checks, then types `LOAD "COM:TBASTERM.B"` at the Saturn and serves the file |
 | Send and Run | **Shift+F6**. Same, with `,R` |
 | Stop | **Ctrl+F6** |
@@ -24,16 +24,57 @@ The extension does the editing side itself. Anything that touches the serial por
 
 All commands are under **GAME BASIC:** in the Command Palette.
 
-## Setup
+## Getting started
 
-1. Install Python 3 and pyserial: `python3 -m pip install pyserial`. On a Mac with Homebrew Python you may need a virtual environment (`python3 -m venv ~/.venvs/saturn && ~/.venvs/saturn/bin/pip install pyserial`), then set **gameBasic.pythonPath** to `~/.venvs/saturn/bin/python` (written out in full).
-2. Install the extension, using either way:
-   - **Try it from source:** run `code --extensionDevelopmentPath="$PWD" examples` in this folder (or open the folder in VS Code and press **F5**, choosing *VS Code Extension Development*). A second VS Code window opens on `examples/`. Run **GAME BASIC: Select Serial Port** there and pick *Use the mock Saturn* to try everything without hardware, and turn on **gameBasic.autoLineNumbers** for `HELLO.B`.
-   - **Install it:** run `npm install` and then `npm run package` in this folder, and install the `.vsix` it makes with **Extensions: Install from VSIX...**. The package carries its own copy of the Python sender.
-3. Plug in the adapter, run **GAME BASIC: Select Serial Port**, and set **gameBasic.baudRate** to the rate set in GAME BASIC (9600 or 19200). To see or change the Saturn's rate, open GAME BASIC's system settings screen with **L+R+Z** on the pad (or **Q+E+D** on the Saturn keyboard), change **Baudrate**, then go to **Exit** and press **C**. A fresh install uses 9600.
-4. Open a `.B` file and press **F6**.
+### 1. Install the extension (one time)
+
+1. In VS Code, open the Command Palette with **Cmd+Shift+P** (Ctrl+Shift+P on Windows and Linux).
+2. Type `Install Extension from Location` and choose **Developer: Install Extension from Location...**
+3. Pick this folder (`GAME_BASIC/vscode-game-basic`) and click **Select**.
+4. If VS Code asks to reload, say yes. **GAME BASIC** now shows in the Extensions view (**Cmd+Shift+X**).
+
+The extension is used straight from this folder, so edits here take effect after **Developer: Reload Window**. It finds the Python sender in `../tools` by itself.
+
+If your VS Code doesn't have that command, link the folder in by hand, then quit and reopen VS Code:
+
+```
+ln -s ~/Documents/GitHub/SEGA/Saturn/GAME_BASIC/vscode-game-basic ~/.vscode/extensions/local.game-basic-0.1.0
+```
+
+Other ways in:
+- **Packaged:** run `npm install` and then `npm run package` in this folder, then install the `.vsix` it makes with **Extensions: Install from VSIX...**. The package carries its own copy of the Python sender.
+- **Development window:** run `code --extensionDevelopmentPath="$PWD" examples` in this folder, or open the folder and press **F5**.
+
+### 2. Check the language mode
+
+Open any `.B` file (upper or lower case), for example `examples/HELLO.B`. The bottom-right corner of the status bar should say **GAME BASIC**, and the keywords should be coloured. If it says *Plain Text*, click that word and choose **GAME BASIC**.
 
 Files ending in `.b` (any case) and `.gbas` open as GAME BASIC. For `.bas` files, add `"files.associations": { "*.bas": "game-basic" }` to your settings.
+
+### 3. Try it without a Saturn
+
+1. In the Command Palette, run **GAME BASIC: Select Serial Port** and choose **Use the mock Saturn (no hardware)**.
+2. `HELLO.B` has no line numbers, so turn on automatic numbering: open Settings (**Cmd+,**), search for `gameBasic.autoLineNumbers` and tick it. Grey numbers appear at the start of each line, showing the number each line will be sent with.
+3. Press **F6** to send, or **Shift+F6** to send and run. On a Mac keyboard you may need **fn+F6**. You can also use the upload and play buttons at the top right of the editor.
+4. Progress shows in a notification. The full log is in **View > Output**, under **GAME BASIC** in the drop-down.
+
+### 4. Use the real Saturn
+
+1. Install Python 3 and pyserial once: `python3 -m pip install pyserial`. On a Mac with Homebrew Python you may need a virtual environment (`python3 -m venv ~/.venvs/saturn && ~/.venvs/saturn/bin/pip install pyserial`), then set **gameBasic.pythonPath** to `~/.venvs/saturn/bin/python` (written out in full).
+2. Plug in the USB-TTL adapter, run **GAME BASIC: Select Serial Port** again, and pick it (on a Mac, something like `/dev/cu.usbserial-...`).
+3. Set **gameBasic.baudRate** to the rate set in GAME BASIC (9600 or 19200). To see or change the Saturn's rate, open GAME BASIC's system settings screen with **L+R+Z** on the pad (or **Q+E+D** on the Saturn keyboard), change **Baudrate**, then go to **Exit** and press **C**. A fresh install uses 9600.
+4. With GAME BASIC at its prompt, press **F6**.
+
+The status bar shows the port and baud rate in use. Click it to change the port.
+
+### 5. Other things to know
+
+- **Problems** are underlined as you type and listed in the Problems panel (**Cmd+Shift+M**). Errors stop a send. Warnings and notes don't.
+- **Go to a jump target:** Cmd+click a line number after `GOTO`, `GOSUB` or `RESTORE`, or a `*LABEL`. Labels also show in the Outline view.
+- **Completion:** start typing a keyword for suggestions.
+- **Stop** a running program with **Ctrl+F6**.
+- **More commands:** type `GAME BASIC` in the Command Palette for Run, Stop, Receive, Type Text, Show Program as It Will Be Sent, the COM: file server console, and the self-test.
+- Point at a keyword, an `@NAME` constant or a `*LABEL` for help on it. Press **F12** on a label to jump to it, and **Shift+F12** to list the lines that use it.
 
 ## Settings
 
