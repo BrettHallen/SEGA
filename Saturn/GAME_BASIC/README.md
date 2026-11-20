@@ -13,7 +13,24 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 | [Documentation](Documentation) | The two Japanese manuals as PDFs, English versions and notes on both manuals. |
 | [tools](tools) | `saturn_send.py`, the Python (pyserial) replacement for BASTERM's serial link that the extension uses. Has a mock Saturn for testing without hardware. |
 
-### WIN_TOOLS_CD
+### GAME BASIC CD
+```
+RAW (2352):      NO
+Header offset:   0x0
+Hardware ID:     SEGA SEGASATURN
+Maker ID:        SEGA TP T-21
+Product number:  T-2111G
+Version:         V1.002
+Release date:    1998/04/16
+Area codes:      J
+Peripherals:     AEFGJKMSTZ
+Title:           GAME BASIC for SEGASATURN
+Volume label:    BASIC
+Created:         1998/04/16 00:00:00:00
+Maker type:      third party (SEGA TP)
+```
+
+### [WIN_TOOLS_CD](/Saturn/GAME_BASIC/WIN95_TOOLS_CD)
 | File | Description |
 |---|---|
 | `autorun.inf` | Runs `ToolLoad.exe /1 instbt10.exe instdc10.exe` when the CD is inserted |
@@ -23,7 +40,7 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 
 The installers don't need Windows to unpack. Each is a ZIP-based self-extractor holding an InstallShield 3 `data.z` archive, compressed with PKWARE DCL implode.
 
-### BASTERM
+### [BASTERM](/Saturn/GAME_BASIC/BASTERM)
 BASTERM is the only tool that talks to the Saturn. It is an editor with Send, Receive, Run, Stop and live key-send commands.
 
 | File | Description |
@@ -37,7 +54,7 @@ BASTERM is the only tool that talks to the Saturn. It is an editor with Send, Re
 
 In short, the PC acts as a file server. BASTERM types `LOAD "COM:TBASTERM.B"` at the Saturn as encoded keystrokes, and the Saturn then reads the program as plain text. The link is 9600 or 19200 baud, 8N1, no flow control, and data moves in 252-byte blocks with a CRC-16 check. Tokenising happens on the Saturn, not the PC.
 
-### DXFCONV
+### [DXFCONV](/Saturn/GAME_BASIC/DXFCONV)
 DXFCONV turns `3DFACE` entities in a DXF model into BASIC `DATA` lines for `SETVERTEX` and `SETPOLYGON`. It works offline and never touches the serial port.
 
 | File | Description |
@@ -52,13 +69,14 @@ DXFCONV turns `3DFACE` entities in a DXF model into BASIC `DATA` lines for `SETV
 | `README.TXT` | Original Japanese documentation (Shift-JIS) |
 | `Python/` | Modern Python versions of the DXFCONV programs |
 
-### Documentation
+### [Documentation](/Saturn/GAME_BASIC/Documentation)
 GAME BASIC came with two Japanese manuals: the *Tutorial Manual* (チュートリアルマニュアル), and the *Reference Manual* (リファレンスマニュアル) with the full command details.
 
 | File | Description |
 |---|---|
 | [`GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_JP.pdf) | The original Japanese Tutorial Manual (184 pages), including Chapter 3 on BASTERM |
-| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf) | The original Japanese Reference Manual, part 1: the front matter and Chapter 1, up to p. 228 |
+| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part1_JP.pdf) | The original Japanese Reference Manual, part 1: the front matter and Chapter 1, up to p228 |
+| [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part2_JP.pdf`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_Part2_JP.pdf) | The original Japanese Reference Manual, part 2: the back matter and Chapter 2, from p229 |
 | [`GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.pdf)) | English translation of the Reference Manual, page by page (work in progress) |
 | [`GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md`](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md) ([PDF](Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.pdf)) | **Start here** for using GAME BASIC in English: a guide in its own words, with page references to both manuals |
 | [`Tutorial_Manual_findings.md`](Documentation/Tutorial_Manual_findings.md) | Notes from the Tutorial Manual for the BASTERM replacement: connecting, controls, what the Saturn prints, and BASTERM's own behaviour |
