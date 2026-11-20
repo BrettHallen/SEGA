@@ -18,3 +18,4 @@ fp-info-cache
 *.lck
 *.csv#
 *.tiff
+/Saturn/Python_Region_Patcher/tests
