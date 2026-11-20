@@ -6,6 +6,7 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 ## Folders
 | Folder | What it contains |
 |---|---|
+| [GAME BASIC CD](GAME_BASIC_CD) | The GAME BASIC CD for the Saturn |
 | [WIN_TOOLS_CD](WIN95_TOOLS_CD) | The original Windows 95 tools CD, as shipped. Japanese InstallShield 3 installers. |
 | [BASTERM](BASTERM) | BASTERM 1.0, the editor and serial terminal, unpacked from `Instbt10.exe`, plus my analysis of it. |
 | [DXFCONV](DXFCONV) | The DXF to BASIC 3D model converters, unpacked from `Instdc10.exe`, with their C source and samples. |
@@ -13,7 +14,7 @@ The aim here is a modern Mac/Linux/Windows workflow: edit BASIC on a PC and send
 | [Documentation](Documentation) | The two Japanese manuals as PDFs, English versions and notes on both manuals. |
 | [tools](tools) | `saturn_send.py`, the Python (pyserial) replacement for BASTERM's serial link that the extension uses. Has a mock Saturn for testing without hardware. |
 
-### [GAME BASIC CD](//Saturn/GAME_BASIC/GAME_BASIC_CD)
+### [GAME BASIC CD](/Saturn/GAME_BASIC/GAME_BASIC_CD)
 Files, ISO and analysis of GAME BASIC itself.<br>
 
 The analysis explains how the interpreter on this CD works: the boot loader, the memory map, the Saturn's side of the serial link, the tokenised program format and the file formats. [`tools/gbcd_extract.py`](tools/gbcd_extract.py) extracts the CD and unpacks the interpreter for anyone who wants to check it. 
