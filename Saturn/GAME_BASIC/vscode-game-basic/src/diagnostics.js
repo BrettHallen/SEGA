@@ -443,4 +443,44 @@ function effectiveNumbers(text, opts = {}) {
   return map;
 }
 
-module.exports = { analyze, effectiveNumbers, sjisBytes, MAX_LINE_NUMBER };
+// Where each *LABEL is defined and used in a document (no #include
+// expansion). Returns Map(NAME -> { defs: [{line, col, name}],
+// refs: [{line, col, word, name}] }); lines are 0-based document lines and
+// col is where the '*' is. A use is a label after a jump word (GOTO, GOSUB,
+// THEN, ELSE, RESTORE, RUN, RESUME, LIST, DELETE), including lists such as
+// ON N GOTO *A,,*B; strings, comments and DATA are skipped.
+function labelUses(text) {
+  const out = new Map();
+  const get = (name) => {
+    const k = name.toUpperCase();
+    if (!out.has(k)) out.set(k, { defs: [], refs: [] });
+    return out.get(k);
+  };
+  const T = '(?:\\d+|\\*[A-Za-z_][A-Za-z0-9_]*)';
+  const jumpRe = new RegExp(
+    `(?<![A-Za-z0-9_$])(${K.JUMP_WORDS.join('|')})((?:\\s*,)*\\s*${T}(?:(?:\\s*,)+\\s*${T})*)`, 'gi');
+  text.split(/\r?\n/).forEach((raw, line) => {
+    if (INCLUDE_RE.test(raw)) return;
+    const m = LINE_NUM_RE.exec(raw);
+    const bodyCol = m ? m[0].length : 0;
+    const body = raw.slice(bodyCol);
+    const lead = body.length - body.trimStart().length;
+    const dm = LABEL_DEF_RE.exec(body.slice(lead));
+    if (dm) get(dm[1]).defs.push({ line, col: bodyCol + lead, name: dm[1] });
+    for (const s of scan(body, bodyCol).segs) {
+      jumpRe.lastIndex = 0;
+      let jm;
+      while ((jm = jumpRe.exec(s.text)) !== null) {
+        const listStart = jm.index + jm[1].length;
+        const targetRe = /\*([A-Za-z_][A-Za-z0-9_]*)/g;
+        let tm;
+        while ((tm = targetRe.exec(jm[2])) !== null) {
+          get(tm[1]).refs.push({ line, col: s.col + listStart + tm.index, word: jm[1].toUpperCase(), name: tm[1] });
+        }
+      }
+    }
+  });
+  return out;
+}
+
+module.exports = { analyze, effectiveNumbers, labelUses, sjisBytes, MAX_LINE_NUMBER };

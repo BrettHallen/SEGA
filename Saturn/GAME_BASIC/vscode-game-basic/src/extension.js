@@ -9,7 +9,7 @@ const vscode = require('vscode');
 const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { analyze, effectiveNumbers } = require('./diagnostics');
+const { analyze, effectiveNumbers, labelUses } = require('./diagnostics');
 const K = require('./keywords');
 const R = require('./reference');
 
@@ -243,12 +243,83 @@ function mmlHover(line, col) {
   return null;
 }
 
+// Hover for a *LABEL at its definition or at a GOTO/GOSUB/RESTORE/... use:
+// what a label is (Reference Manual p. 7), where it is defined and where it
+// is used. text is the document, (line, col) the hover position. Returns
+// { text, start, end } with columns in that line, or null.
+const LABEL_MAX = 31;
+function labelHover(text, line, col, numbers) {
+  const uses = labelUses(text);
+  const lines = text.split(/\r?\n/);
+  const nums = numbers || effectiveNumbers(text);
+  const where = (l) => (nums.has(l) ? `${nums.get(l)}` : `editor line ${l + 1}, no line number`);
+  for (const [key, u] of uses) {
+    const hit = [...u.defs, ...u.refs].find((x) => x.line === line && col >= x.col && col <= x.col + x.name.length + 1);
+    if (!hit) continue;
+    const name = `*${key}`;
+    const out = [`**\\${name}**: label`];
+    if (u.defs.length === 0) {
+      out.push('Not defined in this file.');
+    } else {
+      out.push(`Defined on line ${where(u.defs[0].line)}.` +
+        (u.defs.length > 1 ? ` Also defined on ${u.defs.slice(1).map((d) => `line ${where(d.line)}`).join(', ')}: ` +
+          'a label can only be defined once in a program.' : ''));
+      const first = u.defs[0].line;
+      const preview = lines.slice(first, first + 3).map((t) => t.replace(/\s+$/, ''));
+      out.push('```game-basic\n' + preview.join('\n') + '\n```');
+    }
+    if (u.refs.length === 0) {
+      out.push('Not used by any GOTO, GOSUB, RESTORE or other jump in this file.');
+    } else {
+      const byWord = new Map();
+      for (const r of u.refs) {
+        if (!byWord.has(r.word)) byWord.set(r.word, []);
+        byWord.get(r.word).push(where(r.line));
+      }
+      const parts = [...byWord].map(([w, ls]) => {
+        const shown = [...new Set(ls)];
+        const list = shown.length > 8 ? `${shown.slice(0, 8).join(', ')} and ${shown.length - 8} more` : shown.join(', ');
+        return `${w} on line${shown.length > 1 ? 's' : ''} ${list}`;
+      });
+      out.push(`Used ${u.refs.length} time${u.refs.length > 1 ? 's' : ''}: ${parts.join('; ')}.`);
+    }
+    if (key.length > LABEL_MAX) out.push(`The name is ${key.length} characters; the limit is ${LABEL_MAX}.`);
+    out.push('A label is a name for a line: `*` and up to 31 letters, digits and `_`, starting with a letter, ' +
+      'written straight after the line number. Any command that takes a line number can take a label instead ' +
+      '(GOTO, GOSUB, RESTORE, RUN, ON ... GOTO and so on), and unlike a line number, a label doesn\'t change as the listing grows. ' +
+      '*(Ref. p. 7, and the Tutorial\'s GOTO example)*');
+    return { text: out.join('\n\n'), start: hit.col, end: hit.col + hit.name.length + 1 };
+  }
+  return null;
+}
+
+// Shift+F12 / Find All References on a *LABEL.
+const referenceProvider = {
+  provideReferences(doc, pos, ctx) {
+    const uses = labelUses(doc.getText());
+    for (const u of uses.values()) {
+      const all = [...u.defs, ...u.refs];
+      if (!all.some((x) => x.line === pos.line && pos.character >= x.col && pos.character <= x.col + x.name.length + 1)) continue;
+      const list = ctx && ctx.includeDeclaration === false ? u.refs : all;
+      return list.map((x) => new vscode.Location(doc.uri,
+        new vscode.Range(x.line, x.col, x.line, x.col + x.name.length + 1)));
+    }
+    return null;
+  },
+};
+
 const hoverProvider = {
   provideHover(doc, pos) {
     const mml = mmlHover(doc.lineAt(pos.line).text, pos.character);
     if (mml) {
       const r = new vscode.Range(pos.line, mml.start, pos.line, mml.end);
       return new vscode.Hover(new vscode.MarkdownString(mml.text), r);
+    }
+    const label = labelHover(doc.getText(), pos.line, pos.character,
+      effectiveNumbers(doc.getText(), numberingOptions()));
+    if (label) {
+      const r = new vscode.Range(pos.line, label.start, pos.line, label.end);
+      return new vscode.Hover(new vscode.MarkdownString(label.text), r);
     }
     const range = doc.getWordRangeAtPosition(pos, /@?[A-Za-z_][A-Za-z0-9_]*[$!#]?/);
     if (!range) return null;
@@ -289,7 +360,14 @@ function senderScript() {
     configured,
     path.join(extensionPath, 'python', 'saturn_send.py'),
     path.join(extensionPath, '..', 'tools', 'saturn_send.py'),
-  ].filter(Boolean);
+  ];
+  try { // installed by symlink or "Install Extension from Location": follow it back
+    candidates.push(path.join(fs.realpathSync(extensionPath), '..', 'tools', 'saturn_send.py'));
+  } catch (e) { /* ignore */ }
+  return pick(candidates.filter(Boolean));
+}
+
+function pick(candidates) {
   const hit = candidates.find((p) => fs.existsSync(p));
   if (!hit) {
     throw new Error('saturn_send.py not found. Set "gameBasic.senderScript" to its path.');
@@ -697,6 +775,7 @@ function activate(context) {
     vscode.languages.registerDocumentSymbolProvider(sel, symbolProvider),
     vscode.languages.registerCompletionItemProvider(sel, completionProvider),
     vscode.languages.registerHoverProvider(sel, hoverProvider),
+    vscode.languages.registerReferenceProvider(sel, referenceProvider),
     vscode.workspace.onDidOpenTextDocument(refresh),
     vscode.workspace.onDidChangeTextDocument((e) => later(e.document)),
     vscode.workspace.onDidCloseTextDocument((doc) => diagnostics.delete(doc.uri)),
@@ -717,4 +796,4 @@ function deactivate() {
   if (busy) busy.kill();
 }
 
-module.exports = { activate, deactivate, hoverText, mmlHover };
+module.exports = { activate, deactivate, hoverText, mmlHover, labelHover };

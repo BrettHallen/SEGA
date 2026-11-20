@@ -49,6 +49,7 @@ function makeVscode(state) {
       registerDocumentSymbolProvider: (s, p) => { state.providers.symbols = p; return disposable; },
       registerCompletionItemProvider: (s, p) => { state.providers.completion = p; return disposable; },
       registerHoverProvider: (s, p) => { state.providers.hover = p; return disposable; },
+      registerReferenceProvider: (s, p) => { state.providers.references = p; return disposable; },
     },
     workspace: {
       getConfiguration: () => ({
@@ -240,4 +241,35 @@ test('PNG and Saturn bitmaps convert both ways', { skip: !hasPython }, async () 
   const spr = fs.readFileSync(path.join(dir, 'SPR_spr.B'), 'ascii');
   assert.match(spr, /PALETTE 10,257,RGB\(0,0,0\)/);
   assert.match(spr, /SPRITE\$\(0\)=READHEX\$\(256\)\r\nDATA (01){16}\r\n/);
+});
+
+test('hover and references for *labels (Ref. p. 7)', () => {
+  const state = { config: {}, commands: {}, providers: {}, diags: new Map(), errors: [], info: [], opened: [], log: '', editor: null };
+  const ext = load(state);
+  const src = [
+    '100 GOSUB *HERI_VERTEX_1',
+    '110 ON N GOTO ,*HERI_VERTEX_1,*NOWHERE',
+    '120 PRINT "GOTO *HERI_VERTEX_1":Y=X*HERI_VERTEX_1 \' GOSUB *HERI_VERTEX_1',
+    '1622 *HERI_VERTEX_1',
+    '1630 SETVERTEX 0,1,2',
+    '1640 RETURN',
+    '1700 *UNUSED',
+  ].join('\n');
+  const def = ext.labelHover(src, 3, 8);
+  assert.ok(def, 'hover at definition');
+  assert.deepStrictEqual([def.start, def.end], [5, 19]);
+  assert.match(def.text, /^\*\*\\\*HERI_VERTEX_1\*\*: label/);
+  assert.match(def.text, /Defined on line 1622\./);
+  assert.match(def.text, /Used 2 times: GOSUB on line 100; GOTO on line 110\./);
+  assert.match(def.text, /1630 SETVERTEX 0,1,2/);
+  assert.match(def.text, /Ref\. p\. 7/);
+  const ref = ext.labelHover(src, 0, 12);
+  assert.match(ref.text, /Defined on line 1622/);
+  assert.match(ext.labelHover(src, 1, 32).text, /Not defined in this file/);
+  assert.match(ext.labelHover(src, 6, 7).text, /Not used by any GOTO/);
+  assert.strictEqual(ext.labelHover(src, 2, 18), null, 'not inside a string');
+  assert.strictEqual(ext.labelHover(src, 2, 36), null, 'multiplication is not a label');
+  assert.strictEqual(ext.labelHover(src, 2, 60), null, 'not inside a comment');
+  assert.match(ext.labelHover('10 *A\n20 *A', 0, 3).text, /a label can only be defined once/);
+  assert.ok(state.providers.references, 'reference provider registered');
 });
