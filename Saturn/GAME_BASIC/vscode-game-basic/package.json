@@ -1,7 +1,7 @@
 {
   "name": "game-basic",
   "displayName": "GAME BASIC",
-  "description": "Edit, check and send GAME BASIC for SEGASATURN programs to a Sega Saturn over a serial cable.",
+  "description": "Edit, check and send GAME BASIC for SEGA SATURN programs to a Sega Saturn over a serial cable.",
   "version": "0.1.0",
   "publisher": "local",
   "license": "MIT",
@@ -28,7 +28,7 @@
         "id": "game-basic",
         "aliases": [
           "GAME BASIC",
-          "GAME BASIC for SEGASATURN"
+          "GAME BASIC for SEGA SATURN"
         ],
         "extensions": [
           ".b",
@@ -264,7 +264,7 @@
         "gameBasic.maxLineBytes": {
           "type": "number",
           "default": 255,
-          "description": "Longest line allowed, in Shift-JIS bytes including the line number. The real GAME BASIC limit is not confirmed yet."
+          "description": "Longest line allowed, in Shift-JIS bytes including the line number. 255 is GAME BASIC's own limit."
         },
         "gameBasic.keyDelayMs": {
           "type": "number",

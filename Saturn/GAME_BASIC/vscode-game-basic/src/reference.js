@@ -222,8 +222,8 @@ const COMMANDS = {
   },
   OPTION: {
     syntax: "OPTION HD352\nOPTION HD320\nOPTION COM\nOPTION VERSION",
-    summary: "Not in the manuals; found in the interpreter's code. HD352 saves the setting and restarts GAME BASIC in a 352-pixel-wide screen mode at the Saturn's faster 28.6 MHz clock, which adds 14400, 28800, 38400, 57600 and 115200 to the Baudrate setting (L+R+Z). The faster rates have not been tested on hardware yet. HD320 goes back to the normal 320-wide mode and the 9600/19200 list. COM resets the serial port and drops the PC link. VERSION shows a hidden staff credit list. Any other word gives Syntax error.",
-    source: "GAME_BASIC_CD_analysis.md",
+    summary: "Not in the manuals; found in the interpreter's code. HD352 saves the setting and restarts GAME BASIC in a 352-pixel-wide screen mode at the Saturn's faster 28.6 MHz clock, which adds 14400, 28800, 38400, 57600 and 115200 to the Baudrate setting (L+R+Z). The faster rates are untested on hardware. HD320 goes back to the normal 320-wide mode and the 9600/19200 list. COM resets the serial port and drops the PC link. VERSION shows a hidden staff credit list. Any other word gives Syntax error.",
+    source: "GAME_BASIC_CD/README.md",
   },
   UNLOCK: {
     syntax: "UNLOCK",

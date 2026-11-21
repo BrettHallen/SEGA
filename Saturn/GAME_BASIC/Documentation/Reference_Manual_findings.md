@@ -2,7 +2,7 @@
 
 > These notes cover the whole manual: pp. 1–20 (basic specification and system settings), Chapter 1 (pp. 23–227), Chapter 2 (pp. 229–388) and the Appendix (pp. 389–421).
 
-These are notes from the Japanese *GAME BASIC for SEGASATURN Reference Manual* (リファレンスマニュアル), with attention to what matters for a PC-side replacement for BASTERM. Notes from the *Tutorial Manual* are in `Tutorial_Manual_findings.md`.
+These are notes from the Japanese *GAME BASIC for SEGA SATURN Reference Manual* (リファレンスマニュアル), with attention to what matters for a PC-side replacement for BASTERM. Notes from the *Tutorial Manual* are in `Tutorial_Manual_findings.md`.
 
 Page numbers are the book's own page numbers.
 
@@ -176,7 +176,7 @@ Section 1.2 (file commands) runs pp. 96–112 and section 1.3 (file functions) p
 **For the PC link and file transfer.**
 - **LOAD (p. 109).** `.B` is always added, even if another extension is typed. `M` merges over `COM:`: lines with the same number are replaced, new ones added, and lines without a line number are ignored. A text program made outside the Saturn needs CR+LF at the end of every line (CR is ignored and LF ends the line). Files sent to the Saturn therefore need `\r\n` line ends. An error during a plain LOAD loses the program in memory, because memory is cleared first.
 - **SAVE is direct-only (p. 111).** It can't be used inside a program; Receive types it, so that is fine. `SAVE "…",A` (text as `.D`) works only on FD0:, FD1:, BRAM: and CRAM:, not on COM:.
-- **FILES over COM: (pp. 100–101).** It shows names in 12-character columns and, except on CD:, a last line "Free size <free> / <total> file blocks", where 1 block is 64 bytes. `FILES$` puts spaces in place of the size on COM:. `DSKF("COM:")` also returns free space in 64-byte blocks. On `COM:` the Saturn passes on whatever number the PC sends (commands 0x1A for free and 0x1B for total), so a PC-side file server should report free space in those units.
+- **FILES over COM: (pp. 100–101).** It shows names in 12-character columns and, except on CD:, a last line "Free size <free> / <total> file blocks", where 1 block is 64 bytes. `FILES$` puts spaces in place of the size on COM:. The manual says `DSKF("COM:")` also returns free space in 64-byte blocks. On `COM:` the Saturn passes on whatever number the PC sends (commands 0x1A for free and 0x1B for total), so a PC-side file server should report free space in those units.
 - **Directory listing.** PC file names that break the Saturn rules (over 8 characters before the dot, a dash, a space, other extensions) can't be loaded, so a file server's listing is only useful when limited to valid `XXXXXXXX.Y` names.
 - **Slow transfers.** `GSAVE` of a large area to `COM:` takes 1–2 minutes or more (p. 107). GLOAD/GSAVE need a free file buffer from `CLEAR` larger than the picture: 282 blocks (.0) or 560 blocks (.1) for 320 × 224.
 - **Bitmap file format (pp. 105–106).** `.0`: width and height (2 bytes each, high byte first, up to 512 × 256), a 512-byte palette (256 RGB words), then 1 byte per dot with 0 transparent. `.1`: width, height, then 2 bytes per dot, high byte first, with bit 15 set (black is &H8000; 0 is transparent). Colour words are 5 bits each: red in bits 0–4, green 5–9, blue 10–14. A PC-side PNG ↔ `.0`/`.1` converter would be straightforward from this.
@@ -642,7 +642,7 @@ Page 414 is a diagram and p. 415 is blank. The index follows on pp. 416–421, t
 
 ## 9. Reserved words and the index
 
-The index (pp. 416–421) lists every GAME BASIC command with its page, and the reserved-word list (pp. 9–10) has 203 words. Together with the CD's programs and the Tutorial Manual they give 208 keywords.
+The index (pp. 416–421) lists every GAME BASIC command with its page, and the reserved-word list (pp. 9–10) has 203 words. With the nine word operators (p. 4) that makes 212, exactly the named words in the interpreter's token table (`GAME_BASIC_CD/README.md`), so the list is complete.
 
 - **Easy to miss:** `COPY`, `OFF` (as in `INTERVAL OFF`, used 79 times on the CD), `OPTION` (undocumented; its hidden forms `OPTION HD352`, `OPTION HD320`, `OPTION COM` and `OPTION VERSION` are described in `GAME_BASIC_CD/README.md`), `VERTEXID` (`SYS_I=VERTEXID(-1)` on the CD), and the operators `NOT!`, `OR!`, `XOR!` and `AND!`. `REM` is reserved and starts a comment.
 - **Not keywords:** `VERTEX` (it only appears in comments on the CD). `TIME` and `MSTR$` are ordinary user variables in the CD's games (`TIME = TIME + .05`; `DIM MSTR$(…)`), and `TIME$` exists nowhere.

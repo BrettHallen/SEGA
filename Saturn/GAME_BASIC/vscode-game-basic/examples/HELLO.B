@@ -1,4 +1,4 @@
-' Hello world for GAME BASIC for SEGASATURN.
+' Hello world for GAME BASIC for SEGA SATURN.
 ' Written without line numbers: turn on "gameBasic.autoLineNumbers"
 ' (the inlay hints show the numbers each line will be sent with).
 *START

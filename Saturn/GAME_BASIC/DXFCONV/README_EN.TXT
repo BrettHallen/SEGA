@@ -5,7 +5,7 @@ on a line starting with 'EN: ', indented like the original. Lines with no Japane
 
 
 DXFファイルからＧＡＭＥ ＢＡＳＩＣ ｆｏｒ ＳＥＧＡＳＡＴＵＲＮへのデータコンバータ
-EN: Data converter from DXF files to GAME BASIC for SEGASATURN
+EN: Data converter from DXF files to GAME BASIC for SEGA SATURN
 
 ――――――――――――――――――――――――――――――――――――――――――――――――
 	Ｗｉｎ９５バージョン
@@ -16,7 +16,7 @@ EN: [Overview]
 ＤＸＦＣＯＮＶ．ｅｘｅ        ＤＸＦファイルから“3Dface”情報を抜き出しGAME BASIC for
 EN: DXFCONV.exe        A tool that extracts "3Dface" information from a DXF file and creates a text file in GAME BASIC for
                                SEGASATURNフォーマットのテキストファイルを作成するツール。
-                               EN: SEGASATURN format.
+                               EN: SEGA SATURN format.
                               又、選択により標準表示プログラムを先頭に付加する事も可能。
                               EN: Optionally, it can also prepend a standard display program.
 
@@ -39,7 +39,7 @@ EN: DXFCONV.exe        A tool that extracts "3Dface" information from a DXF file
         又、“表示プログラムを付加する”のチェックボックスを選択していると標準表示プログラム
         EN: Also, if the "Add display program" (表示プログラムを付加する) checkbox is selected, the standard display program
        “HEADBAS.B”を先頭に付加し、このままGAME BASIC for SEGASATURNへ転送して実行すること
-       EN: "HEADBAS.B" is prepended, so the result can be sent straight to GAME BASIC for SEGASATURN and run
+       EN: "HEADBAS.B" is prepended, so the result can be sent straight to GAME BASIC for SEGA SATURN and run
         が可能です。
         EN: as-is.
         尚、付加するプログラムはユーザーの書き換えが可能です。（ファイルネーム固定）
@@ -143,7 +143,7 @@ EN: POL2bas2.exe      Same as above, but a converter that splits the data into o
 【詳細】
 EN: [Details]
 3Dモデリングソフト等で作成されたDXFファイルをGAME BASIC for SEGASATURNのVERTEXデータ、
-EN: A DOS tool that converts DXF files created with 3D modelling software etc. into GAME BASIC for SEGASATURN VERTEX data
+EN: A DOS tool that converts DXF files created with 3D modelling software etc. into GAME BASIC for SEGA SATURN VERTEX data
 POLYGONデータに変換するＤＯＳ用のツールです。
 EN: and POLYGON data.
 
@@ -258,7 +258,7 @@ EN: 2nd pass: converts the "3DFACE" information into BASIC text files.)
     に存在したレイヤー名の一覧およびレイヤー数が表示されます。
     EN: in the original DXF file and the number of layers.
     GAME BASIC for SEGASATURN上でプログラムを作成する際には、このレイヤー数を元にオブジ
-    EN: When writing the program in GAME BASIC for SEGASATURN, you need to register objects based on this
+    EN: When writing the program in GAME BASIC for SEGA SATURN, you need to register objects based on this
     ェクトを登録する必要があります。
     EN: number of layers.
 

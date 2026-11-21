@@ -1,6 +1,6 @@
 # GAME BASIC BASTERM serial protocol
 
-BASTERM turns the PC into a file server for GAME BASIC for SEGASATURN: it types `LOAD "COM:TBASTERM.B"` into the Saturn as keystrokes, and the Saturn then pulls the plain-text program over 8N1 serial in CRC-checked 252-byte blocks. Findings come from static analysis of the 1998 installers and of the Saturn interpreter itself; [`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md) has the Saturn-side addresses.
+BASTERM turns the PC into a file server for GAME BASIC for SEGA SATURN: it types `LOAD "COM:TBASTERM.B"` into the Saturn as keystrokes, and the Saturn then pulls the plain-text program over 8N1 serial in CRC-checked 252-byte blocks. Findings come from static analysis of the 1998 installers and of the Saturn interpreter itself; [`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md) has the Saturn-side addresses.
 
 ## What is on the CD
 
@@ -34,7 +34,7 @@ The port is plain 8N1 with no flow control, which fits a TX/RX/GND-only 5 V TTL 
 
 | Setting | Value | Note |
 | --- | --- | --- |
-| Baud | 9600 (default) or 19200 | Must match the Saturn's setting (system settings screen: L+R+Z on the pad or Q+E+D on the keyboard, Reference Manual pp. 19–20); drop to 9600 if 19200 gives errors. After the undocumented `OPTION HD352` the Saturn also offers 14400, 28800, 38400, 57600 and 115200, which BASTERM's menu does not list |
+| Baud | 9600 (default) or 19200 | Must match the Saturn's setting (system settings screen: L+R+Z on the pad or Q+E+D on the keyboard, Reference Manual pp. 19–20); drop to 9600 if 19200 gives errors. After the undocumented `OPTION HD352` (28 MHz mode) the Saturn also offers 14400, 28800, 38400, 57600 and 115200, which BASTERM's menu does not list. These rates are untested on hardware |
 | Framing | 8 data bits, no parity, 1 stop bit | `fBinary` on |
 | Flow control | None | CTS, DSR, XON/XOFF all off |
 | DTR / RTS | Both asserted while open | DTR raised on connect, dropped on disconnect; harmless on a 3-wire cable |
@@ -181,8 +181,8 @@ A cross-platform replacement is small: a serial port, the frame codec, a file-se
 4. To send a program, write it as CRLF text to `TBASTERM.B`, send STOP (05, 03) until a status frame arrives, then type `LOAD "COM:TBASTERM.B",R` and CR as keystroke packets. Treat 0x06 or 0x08 as success and 0x09 as an error.
 5. Optionally add line numbering, `#include`, diff sends and a live keyboard pass-through.
 
-Only the electrical side is left for hardware: how fast a given USB-TTL adapter runs reliably, and the real timing on the wire. The protocol itself is fully covered by the code on both sides.
+Only the electrical side depends on hardware: how fast a given USB-TTL adapter runs reliably (the 28 MHz rates above 19200 are untested), and the real timing on the wire. The protocol itself is fully covered by the code on both sides.
 
 Addresses such as `0x4011C0` are virtual addresses in `Basterm.exe` (image base `0x400000`), and addresses such as `0x0600C840` are in the unpacked Saturn interpreter, for anyone re-checking the disassembly.
 
-The unpacked CD files and Ghidra's decompiled C for `Basterm.exe` are in `BASTERM/` and `DXFCONV/` next to this file.
+The files unpacked from the Windows tools CD, and Ghidra's decompiled C for `Basterm.exe`, are in `BASTERM/` (this folder) and `../DXFCONV/`.

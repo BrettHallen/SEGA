@@ -1,6 +1,6 @@
 # Created with Claude Opus 5.5, Nov 2026
 # Guided by Brett Hallen
-"""Wire format of the BASTERM <-> GAME BASIC for SEGASATURN serial link.
+"""Wire format of the BASTERM <-> GAME BASIC for SEGA SATURN serial link.
 
 Everything here is pure (no I/O) so it can be unit tested. The layouts come
 from BASTERM_serial_protocol.md and were re-checked against the decompiled
@@ -26,7 +26,7 @@ NAK = 0x03
 DATA = 0x04
 READ_BLOCK = 0x05
 # Status frames, as the Saturn interpreter sends them (see
-# Documentation/GAME_BASIC_CD_analysis.md). BASTERM calls them status 1-4.
+# GAME_BASIC_CD/README.md). BASTERM calls them status 1-4.
 STATUS_IDLE = 0x06  # status 1: a command ended normally, or idle after STOP
 STATUS_BREAK = 0x07  # status 2: a command or program ended by break or STOP
 STATUS_RUNNING = 0x08  # status 3: a direct command or RUN has started

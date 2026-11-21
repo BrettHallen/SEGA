@@ -36,7 +36,8 @@ def _log_fn(verbose: bool):
 
 
 class Terminal:
-    """Prints characters the Saturn sends back (its screen echo)."""
+    """Prints keystroke packets sent back to the PC. The real Saturn sends none;
+    only the mock with echo on does."""
 
     def __init__(self, enabled: bool = True):
         self.enabled = enabled
@@ -327,7 +328,7 @@ def cmd_selftest(a) -> int:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
         prog="saturn_send.py",
-        description="Send GAME BASIC for SEGASATURN programs over a serial cable "
+        description="Send GAME BASIC for SEGA SATURN programs over a serial cable "
                     "(a cross-platform BASTERM replacement).")
     ap.add_argument("--version", action="version", version=__version__)
     sub = ap.add_subparsers(dest="command", required=True)
@@ -342,7 +343,7 @@ def main(argv=None) -> int:
         p.add_argument("--mock-nak", action="store_true", help=argparse.SUPPRESS)
         p.add_argument("--trace", action="store_true", help="hex dump every byte")
         p.add_argument("-v", "--verbose", action="store_true", help="log protocol steps")
-        p.add_argument("-q", "--quiet", action="store_true", help="hide the Saturn's screen echo")
+        p.add_argument("-q", "--quiet", action="store_true", help="hide screen text from a mock with echo on (a real Saturn sends none)")
         p.add_argument("--key-delay", type=float, default=0.03,
                        help="seconds between typed keystrokes (default 0.03)")
         p.add_argument("--connect-timeout", type=float, default=5.0)

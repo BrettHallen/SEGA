@@ -390,7 +390,7 @@ The maximum number of files that can be handled by the OPEN command and the like
 
 > Translator's note: `OPTION` is reserved but has no entry in this manual. The GAME BASIC interpreter on the CD accepts four hidden forms, found by reading its code:
 >
-> - `OPTION HD352` saves the setting and restarts GAME BASIC in a 352-pixel-wide screen mode, which runs the Saturn at its faster 28.6 MHz clock. The **Baudrate** setting (pp. 19–20) then offers 9600, 14400, 28800, 38400, 57600 and 115200BPS. These faster rates have not yet been tested on hardware.
+> - `OPTION HD352` saves the setting and restarts GAME BASIC in a 352-pixel-wide screen mode, which runs the Saturn at its faster 28.6 MHz clock. The **Baudrate** setting (pp. 19–20) then offers 9600, 14400, 28800, 38400, 57600 and 115200BPS. These faster rates are untested on hardware.
 > - `OPTION HD320` goes back to the normal 320-pixel mode and the 9600/19200BPS list.
 > - `OPTION COM` resets the serial port and drops the link to the PC.
 > - `OPTION VERSION` shows a hidden staff credit list.
@@ -671,7 +671,7 @@ The settings are as follows.
 
 Sets the communication speed for connecting to a PC. You must choose the same speed as the communication software. If communication errors occur, set it to 9600BPS.
 
-> Translator's note: after the undocumented `OPTION HD352` this setting also offers 14400, 28800, 38400, 57600 and 115200BPS (see the note under Reserved words). These rates have not yet been tested on hardware.
+> Translator's note: after the undocumented `OPTION HD352` this setting also offers 14400, 28800, 38400, 57600 and 115200BPS (see the note under Reserved words). These rates are untested on hardware.
 
 **■ Keyboard: Sega Saturn keyboard settings**
 
@@ -12075,6 +12075,8 @@ v100
 ppp
 ff=120
 ```
+
+*[p. 334]*
 
 #### q
 

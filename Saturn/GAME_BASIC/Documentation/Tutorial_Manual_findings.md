@@ -1,6 +1,6 @@
 # GAME BASIC Tutorial Manual: reference notes for the BASTERM replacement
 
-These are notes from the whole Japanese *GAME BASIC for SEGASATURN Tutorial Manual* (チュートリアルマニュアル). They are read with a PC-side replacement for BASTERM in mind, alongside `BASTERM/BASTERM_serial_protocol.md`. Notes on the *Reference Manual* are in `Reference_Manual_findings.md`.
+These are notes from the whole Japanese *GAME BASIC for SEGA SATURN Tutorial Manual* (チュートリアルマニュアル). They are read with a PC-side replacement for BASTERM in mind, alongside `BASTERM/BASTERM_serial_protocol.md`. Notes on the *Reference Manual* are in `Reference_Manual_findings.md`.
 
 The manual is written for users, so it has no wire-level protocol detail. It does settle many behaviour questions, shows what the Saturn prints, and describes BASTERM itself in Chapter 3. Page numbers below are the book's own page numbers.
 
@@ -41,7 +41,7 @@ Pages 2, 12, 14, 144 and 146 are blank. Notes on the Reference Manual are in `Re
 **Setting the baud rate on the Saturn (Reference pp. 19–20).** The rate is set on GAME BASIC's **system settings screen**:
 - Open it from the edit screen (blinking `_` cursor) with **L+R+Z** on a pad in controller port 1, or **Q+E+D** held together on the Saturn keyboard.
 - Move with the D-pad up/down, change a value with left/right, then move to **Exit** and press **C** to go back.
-- **Baudrate**: `19200BPS` or `9600BPS`. "Select the same speed as the communication software. If communication errors occur, set 9600BPS." The interpreter also has a second list, 9600, 14400, 28800, 38400, 57600 and 115200, which this screen shows only after the undocumented `OPTION HD352` (see `GAME_BASIC_CD/README.md`).
+- **Baudrate**: `19200BPS` or `9600BPS`. "Select the same speed as the communication software. If communication errors occur, set 9600BPS." The interpreter also has a second list, 9600, 14400, 28800, 38400, 57600 and 115200, which this screen shows only after the undocumented `OPTION HD352` (see `GAME_BASIC_CD/README.md`). Those rates are untested on hardware.
 - The other settings: **Keyboard** INITIAL (4–255 frames before key repeat, default 17), AFTER (1–255 frames between repeats, default 3), Ctrl key NORMAL or SWAP (swaps Ctrl and Caps Lock); **Edit width** LEFT/TOP/RIGHT/BOTTOM (default 1, 1, 38, 26) and background colour RED/GREEN/BLUE (0–15, default 0). A frame is 1/60 s at start-up, but `SCREEN` can change it.
 - The settings are saved in the Saturn's backup RAM as **`GBASICSS_01`** (comment `Config`, 1 block), visible in the Saturn's own memory manager. Deleting that file puts every setting back to its default, including 9600 baud.
 
@@ -137,7 +137,7 @@ The tutorial shows only `Syntax error` and says the full list of error messages 
 
 **Line numbering (pp. 170–171).** A numbered line resets the counter. `*label` lines are rounded up to the label interval. Blank lines become `'` when numbering and are dropped otherwise. `#include "FILE"`, written without a line number, is a BASTERM-only directive (p. 172).
 
-**Checks before sending (p. 171).** Missing, duplicate or invalid line numbers, and too many characters per line. The manual gives no figure for the line limit.
+**Checks before sending (p. 171).** Missing, duplicate or invalid line numbers, and too many characters per line. The manual gives no figure for the line limit; the interpreter's editor and its error 15 *String too long* put it at 255 characters.
 
 **Diff send (pp. 169–171).**
 - Only changed lines go, with `LOAD …,M`.

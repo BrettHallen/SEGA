@@ -170,7 +170,7 @@ A frame is 1/60 of a second.
 | `OPTION COM` | Resets the serial port and drops the link to the PC |
 | `OPTION VERSION` | Shows a hidden staff credit list |
 
-**The faster speeds have not been tested on hardware yet.** Whether they work depends on your USB adapter and cable, so drop back a step if transfers fail. The setting is saved in `GBASICSS_01`, so the Saturn stays in this mode until you type `OPTION HD320`. Programs drawn for a 320-pixel screen sit slightly off-centre in the wider mode.
+**The faster speeds are untested on hardware.** Whether they work depends on your USB adapter and cable, so drop back a step if transfers fail. The setting is saved in `GBASICSS_01`, so the Saturn stays in this mode until you type `OPTION HD320`. Programs drawn for a 320-pixel screen sit slightly off-centre in the wider mode.
 
 These settings are stored in the Saturn's backup RAM in a file called **`GBASICSS_01`** (1 block). If you delete that file in the Saturn's memory manager, every setting goes back to its default.
 
@@ -626,7 +626,7 @@ The original cable is only an RS-232 level converter. A **5 V USB-to-TTL serial 
 
 | Setting | Value |
 |---|---|
-| Speed | 9600 (default) or 19200 baud. After `OPTION HD352` (section 6) also 14400 to 115200, not yet tested on hardware. Must match the Saturn's **Baudrate** setting |
+| Speed | 9600 (default) or 19200 baud. After `OPTION HD352` (section 6) also 14400 to 115200, untested on hardware. Must match the Saturn's **Baudrate** setting |
 | Format | 8 data bits, no parity, 1 stop bit |
 | Flow control | None |
 

@@ -1,25 +1,20 @@
 // Created with Claude Opus 5.5, Nov 2026
 // Guided by Brett Hallen
 'use strict';
-// GAME BASIC for SEGASATURN keyword list.
+// GAME BASIC for SEGA SATURN keyword list.
 //
-// The GAME BASIC manual is not in this project, so the list was built from
-// how the CD's own sample programs use each word (statement position, never
-// assigned to, called like a function). Words marked "not seen on the CD"
-// are standard BASIC that GAME BASIC may or may not have. Highlighting a
-// word that GAME BASIC lacks does no harm, and the checker never reports an
+// Every word here is a GAME BASIC keyword: it is in the interpreter's token
+// table on the CD (GAME_BASIC_CD/README.md, "Tokenised program format"), in
+// the Reference Manual's reserved-word list (pp. 9-10) and keyword index
+// (pp. 416-421), or both. The only extras are AS, OUTPUT and APPEND, which
+// OPEN uses as plain words. REM is handled as a comment, not a keyword.
+// Standard BASIC words that GAME BASIC lacks (WHILE/WEND, DEF FN, TRON,
+// SOUND, TAB and so on) are left out, as are TIME, TIME$ and MSTR$, which the
+// CD's programs use as ordinary variables. The checker never reports an
 // unknown word as an error.
 //
-// The GAME BASIC Tutorial Manual (scanned into ../Documentation) has since
-// added PUTSPRITE, the fixed-point operator AND!, OBJTYPE, OBJATR, OBJPOS,
-// OBJTURN and FRAC, and confirmed HEX$; they are listed in CONFIRMED with a
-// "tutorial manual" note.
-//
-// The Reference Manual's index (pp. 416-421) lists every GAME BASIC command.
-// Words from it are listed under "reference manual index" below. Standard
-// BASIC words that are not in the index (WHILE/WEND, DEF FN, TRON, SOUND, TAB
-// and so on) were removed, as were TIME and MSTR$, which the CD's programs
-// use as ordinary variables, and TIME$.
+// CONFIRMED groups the words by where they were first found: in use in the
+// CD's sample programs, in the Tutorial Manual, or in the Reference Manual.
 //
 // If you change these lists, also update syntaxes/game-basic.tmLanguage.json
 // (run `npm run grammar` to regenerate it from this file).
@@ -97,10 +92,10 @@ const STATEMENTS = [
   // reference manual index
   'LET', 'RANDOMIZE', 'KILL', 'LIST', 'DELETE', 'RENUM',
   'EDIT', 'FIND', 'FKEY', 'FORMAT', 'GSAVE', 'LFO', 'OBJLINK', 'OBJROT',
-  'OBJZOOM', 'PLAYCONT', 'PLAYPAN', 'PLAYPAUSE', 'RGBADD', 'RGBTO', 'SEEK',
+  'OBJZOOM', 'PLAYCONT', 'PLAYPAN', 'PLAYPAUSE', 'SEEK',
   'SETSPRITE', 'TLIST', 'WINDOW', 'COPY', 'OPTION', 'OFF',
   // statement and function (see DUAL below)
-  'MID$',
+  'MID$', 'SPRITE$',
 ];
 
 // AND!, OR!, XOR! and NOT! work on the fraction bits too (reference manual
@@ -120,19 +115,20 @@ const FUNCTIONS = [
   'ATRID', 'BINHEX$', 'BITW$', 'DSKF', 'MMLSTAT', 'PEEK$', 'POINT',
   'POLYGONID', 'READHEX$', 'SFRE', 'SPRITE$', 'TEXID', 'TFRE', 'VERSION',
   'WADD$', 'WANDOR$', 'WMUL$', 'WXOR$', 'XATN', 'XDIST', 'XSQR', 'XTAN',
-  'VERTEXID',
+  'VERTEXID', 'RGBADD', 'RGBTO',
   // a system value with no arguments, like ERR and VERSION (interpreter
   // token flags 0x0042)
   'SHIFT',
   // statement and function (see DUAL below)
-  'OBJ', 'PALETTE', 'TPROP',
+  'OBJ', 'PALETTE', 'TPROP', 'USERDATA',
 ];
 
 // Words the interpreter's token table marks as both statement and function
-// (flags 0x005A / 0x0238), such as OBJ(1,4)=10 and A=OBJ(1,4). They are in
-// both STATEMENTS and FUNCTIONS. Highlighting shows MID$ as a function and
-// the others as statements, their more common use.
-const DUAL = ['OBJ', 'PALETTE', 'TPROP', 'MID$'];
+// (flags 0x025A, 0x0238, 0x0252, 0x0218), such as OBJ(1,4)=10 and
+// A=OBJ(1,4). They are in both STATEMENTS and FUNCTIONS. Highlighting shows
+// the string ones (MID$, SPRITE$) as functions and the others as statements,
+// their more common use.
+const DUAL = ['OBJ', 'PALETTE', 'TPROP', 'USERDATA', 'MID$', 'SPRITE$'];
 
 // Words after which a line number or *label is a jump target.
 const JUMP_WORDS = ['GOTO', 'GOSUB', 'THEN', 'ELSE', 'RESTORE', 'RUN', 'RESUME', 'LIST', 'DELETE'];

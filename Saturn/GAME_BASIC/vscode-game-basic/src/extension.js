@@ -1,7 +1,7 @@
 // Created with Claude Opus 5.5, Nov 2026
 // Guided by Brett Hallen
 'use strict';
-// VS Code front end for GAME BASIC for SEGASATURN.
+// VS Code front end for GAME BASIC for SEGA SATURN.
 // Live checks run in-process (diagnostics.js). Anything that touches the
 // serial port is done by the Python sender (tools/saturn_send.py).
 

@@ -1,6 +1,6 @@
 # saturn_send.py
 
-A cross-platform stand-in for BASTERM's serial link to GAME BASIC for SEGASATURN, in Python 3 with pyserial. The VS Code extension in [`../vscode-game-basic`](../vscode-game-basic) uses it, and it also works on its own from a terminal.
+A cross-platform stand-in for BASTERM's serial link to GAME BASIC for SEGA SATURN, in Python 3 with pyserial. The VS Code extension in [`../vscode-game-basic`](../vscode-game-basic) uses it, and it also works on its own from a terminal.
 
 ```
 python3 -m pip install pyserial
@@ -58,7 +58,7 @@ PNG transparency becomes the Saturn's transparent value (dot 0 in `.0`, word 0 i
 
 ## The GAME BASIC CD: extractor and disassembler
 
-Two standard-library scripts read the GAME BASIC CD. Their output is copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material, so it goes into `GAME_BASIC_CD`, whose `.gitignore` keeps it out of the repository.
+Two standard-library scripts read the GAME BASIC CD. Their output is copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material, so it goes into `GAME_BASIC_CD`, and the repository's `.gitignore` keeps it out.
 
 ```
 python3 gbcd_extract.py ../GAME_BASIC_CD/GAME_BASIC.iso --out ../GAME_BASIC_CD/extracted
@@ -76,7 +76,7 @@ The listing finds code by following control flow from the entry point, the keywo
 
 ## What the Saturn's own code shows
 
-The mock is written from the same reading of `Basterm.exe` as the sender. The Saturn side has since been read from the interpreter on the GAME BASIC CD ([`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md)), and it settles how the real Saturn behaves:
+The sender and the mock follow both sides of the protocol: `Basterm.exe` for the PC side and the interpreter on the GAME BASIC CD ([`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md)) for the Saturn side. The Saturn's code settles how the real Saturn behaves:
 
 1. **Handshake.** The Saturn sends four `0x00` bytes, then one every 50 ms, and waits 3 s for frame `0x01`. The sender's probe-and-answer matches this.
 2. **Status after STOP.** STOP makes the Saturn send `0x06` (idle at the prompt), so waiting for any status frame is correct.
@@ -86,7 +86,7 @@ The mock is written from the same reading of `Basterm.exe` as the sender. The Sa
 6. **Receive.** `SAVE "COM:..."` is open-for-write, data blocks, close, as handled. The text is in `LIST` format, so line numbers have leading spaces.
 7. **Line length.** The Saturn's editor and its error 15 *String too long* set the limit at 255 characters per line, which is what the sender checks.
 8. **Japanese text.** The Saturn's character set is single-byte (Reference Manual p. 411), so typing Shift-JIS with `type` arrives as two graphic characters per kanji. Put Japanese text in the program file for `KPRINT` instead.
-9. **Faster speeds.** After the undocumented `OPTION HD352` the Saturn also offers 14400, 28800, 38400, 57600 and 115200 baud; `-b` accepts only 9600 and 19200 today.
+9. **Faster speeds.** After the undocumented `OPTION HD352` (28 MHz mode) the Saturn also offers 14400, 28800, 38400, 57600 and 115200 baud. These are untested on hardware, and `-b` accepts only 9600 and 19200.
 
 Two things depend on the hardware rather than the code: how fast a given USB-TTL adapter runs reliably, and whether one keystroke packet every 30 ms is slow enough on a busy Saturn (raise `--key-delay` if characters go missing). The adapter must be 5 V TTL, with TX to Saturn RX, RX to Saturn TX and GND to GND.
 

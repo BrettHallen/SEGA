@@ -109,6 +109,13 @@ test('grammar scopes', async () => {
   assert.strictEqual(scopeOf(t, 'VERSION'), 'support.function.builtin.game-basic');
   assert.strictEqual(scopeOf(t, 'MMLSTAT'), 'support.function.builtin.game-basic');
 
+  // Kinds from the interpreter's token table: RGBADD/RGBTO are functions,
+  // USERDATA is statement and function (shown as a statement).
+  t = tokens(g, '410 C=RGBADD(C,1,1,1):C=RGBTO(C,T):USERDATA END');
+  assert.strictEqual(scopeOf(t, 'RGBADD'), 'support.function.builtin.game-basic');
+  assert.strictEqual(scopeOf(t, 'RGBTO'), 'support.function.builtin.game-basic');
+  assert.strictEqual(scopeOf(t, 'USERDATA'), 'keyword.other.statement.game-basic');
+
   // Reference manual pp. 2-4 and 9-10
   t = tokens(g, '410 INTERVAL OFF:N=&B101.01 XOR! M:I=VERTEXID(-1)');
   assert.strictEqual(scopeOf(t, 'OFF'), 'keyword.other.statement.game-basic');

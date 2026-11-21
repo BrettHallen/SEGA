@@ -5,7 +5,7 @@
 It speaks the Saturn side of the protocol: answers the NUL probe, takes
 keystrokes, and runs LOAD "COM:..." / SAVE "COM:..." / RUN / LIST by issuing
 file requests to the PC. Its status frames and retries follow the GAME BASIC
-interpreter's own code (Documentation/GAME_BASIC_CD_analysis.md):
+interpreter's own code (GAME_BASIC_CD/README.md):
 
 - every typed command starts with STATUS_RUNNING (0x08) and ends with
   STATUS_IDLE (0x06), or STATUS_ERROR (0x09) if it stopped with an error;
@@ -21,7 +21,9 @@ tests can still exercise the PC's text handling.
 Its screen messages follow the GAME BASIC Tutorial Manual: "Ready." after a
 command (p. 15), "Line 120" for the last line loaded (p. 152), "Syntax error"
 (p. 17), "Break at 130" (p. 28), and LIST with 5-wide line numbers (p. 24).
-File-error wording such as "File not found" is a guess.
+File errors use the Reference Manual's wording (53 "File not found", 50
+"File access error"); which one the real Saturn prints for each PC reply
+was not traced.
 """
 
 from __future__ import annotations

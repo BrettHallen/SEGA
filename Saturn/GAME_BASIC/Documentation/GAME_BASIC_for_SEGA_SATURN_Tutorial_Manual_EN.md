@@ -2379,7 +2379,7 @@ The installing screen
 
 When the software has been installed in the directory, a dialog asks whether to read the README file. Normally press [Yes (Y)]. README.TXT then opens in Notepad, the program that comes with Windows 95.
 
-*[Screen: README.TXT open in Notepad. It reads, in Japanese: "Data converter from DXF files to GAME BASIC for SEGASATURN – Win95 version. [Overview] DXFCONV.exe: a tool that extracts the "3Dface" information from a DXF file and makes a text file in GAME BASIC for SEGASATURN format; it can also optionally add the standard display program at the start. [Installation] Copy the 4 files DXF2POL.EXE, POL2BAS.EXE, POL2BAS2.EXE and HEADBAS.B into the same directory as DXFCONV.EXE. [How to run] Double-click the DXFCONV.EXE icon. Give the source file name. Give the destination file name; if you don't, the output takes the source file name with the extension changed to ".B". Click "Convert" to start the conversion. When the "File converted" dialog appears, the conversion is finished. Click "Exit" to close DXFCONV.EXE. If the "Add display program" check box is selected, the standard display program "HEADBAS.B" is added at the start, and the result can be sent straight to GAME BASIC for SEGASATURN and run. The added program can be rewritten by the user (the file name is fixed)."]*
+*[Screen: README.TXT open in Notepad. It reads, in Japanese: "Data converter from DXF files to GAME BASIC for SEGA SATURN – Win95 version. [Overview] DXFCONV.exe: a tool that extracts the "3Dface" information from a DXF file and makes a text file in GAME BASIC for SEGA SATURN format; it can also optionally add the standard display program at the start. [Installation] Copy the 4 files DXF2POL.EXE, POL2BAS.EXE, POL2BAS2.EXE and HEADBAS.B into the same directory as DXFCONV.EXE. [How to run] Double-click the DXFCONV.EXE icon. Give the source file name. Give the destination file name; if you don't, the output takes the source file name with the extension changed to ".B". Click "Convert" to start the conversion. When the "File converted" dialog appears, the conversion is finished. Click "Exit" to close DXFCONV.EXE. If the "Add display program" check box is selected, the standard display program "HEADBAS.B" is added at the start, and the result can be sent straight to GAME BASIC for SEGA SATURN and run. The added program can be rewritten by the user (the file name is fixed)."]*
 
 The README.TXT screen
 
@@ -2427,7 +2427,7 @@ If [Add display program] is ticked, a short program for displaying the data in B
 
 During conversion its progress is shown in the [Console], and the [Conversion finished dialog] appears to tell you the conversion is over.
 
-*[Screen: the DXFCONV window with C:¥Program Files¥dxf_conv¥test.dxf as the source file and a "DXFCONV" message box: "ファイルが変換されました" (The file has been converted) [OK]. The console shows: "DXFファイルから 3Dface 情報を…" (… the 3Dface information from the DXF file), "3Dface 情報をGAME BASIC for SEGASATURNのデータに変換します" (Converting the 3Dface information to GAME BASIC for SEGASATURN data), "VTXファイルとPNTファイルをマージします" (Merging the VTX file and the PNT file).]*
+*[Screen: the DXFCONV window with C:¥Program Files¥dxf_conv¥test.dxf as the source file and a "DXFCONV" message box: "ファイルが変換されました" (The file has been converted) [OK]. The console shows: "DXFファイルから 3Dface 情報を…" (… the 3Dface information from the DXF file), "3Dface 情報をGAME BASIC for SEGASATURNのデータに変換します" (Converting the 3Dface information to GAME BASIC for SEGA SATURN data), "VTXファイルとPNTファイルをマージします" (Merging the VTX file and the PNT file).]*
 
 The conversion finished dialog
 
@@ -5121,7 +5121,7 @@ With a long program listing, sending the whole listing every time you make a cor
 
 Choose the [Key send] command from the [Communication] menu, and a picture of a keyboard appears in the middle of the BASTERM screen as a sign that it is ready. Press keys on the PC keyboard, and the key presses are typed on the TV screen.
 
-*[Screenshot: the BASTERM window with a "GAME BASIC for SEGASATURNへのキー送信" (Key send to GAME BASIC for SEGASATURN) window in the middle, showing a picture of a keyboard.]*
+*[Screenshot: the BASTERM window with a "GAME BASIC for SEGASATURNへのキー送信" (Key send to GAME BASIC for SEGA SATURN) window in the middle, showing a picture of a keyboard.]*
 
 *A keyboard appears in the middle*
 

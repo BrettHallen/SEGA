@@ -1,6 +1,6 @@
 # GAME BASIC for SEGA SATURN: analysis of the Saturn CD
 
-The interpreter on the Saturn CD is one compressed file, `0`, that IP.BIN decrypts and unpacks to 0x0600A000. Unpacked, it contains everything a modern PC tool needs: the keyword token table, the tokenised program format and the Saturn's side of the BASTERM serial protocol. The protocol matches [`BASTERM_serial_protocol.md`](../BASTERM/BASTERM_serial_protocol.md), and the Saturn side settles every point that the PC side alone left unclear. Three findings are new: an undocumented `OPTION HD352` that switches the Saturn to its 28 MHz clock and unlocks **baud rates up to 115200**, a **raw serial mode** that lets `LOAD`, `SAVE`, `FREAD` and `FWRITE` use `COM:` with a plain terminal and no BASTERM, and the full encoding of numbers and line references in tokenised programs.
+The interpreter on the Saturn CD is one compressed file, `0`, that IP.BIN decrypts and unpacks to 0x0600A000. Unpacked, it contains everything a modern PC tool needs: the keyword token table, the tokenised program format and the Saturn's side of the BASTERM serial protocol. The protocol matches [`BASTERM_serial_protocol.md`](../BASTERM/BASTERM_serial_protocol.md), and the Saturn side settles every point that the PC side alone left unclear. The image also holds three things that neither the manuals nor BASTERM mention: hidden forms of `OPTION` (`HD352`, `HD320`, `COM` and `VERSION`), where `OPTION HD352` switches the Saturn to its 28 MHz clock and unlocks **baud rates up to 115200**; a **raw serial mode** that lets `LOAD`, `SAVE`, `FREAD` and `FWRITE` use `COM:` with a plain terminal and no BASTERM; and the full encoding of numbers and line references in tokenised programs.
 
 This is static analysis of the disc image only. Nothing was run on hardware or in an emulator. Addresses are SH-2 addresses in the unpacked image (load address 0x0600A000), so `file offset = address − 0x0600A000`.
 
@@ -17,9 +17,9 @@ The disc is mixed mode: one Mode 1 data track and one short CD-DA track. `GAME_B
 | Volume size in the PVD | 12,155 sectors, which counts `WARNNING.PCM` |
 | Root directory | 261 entries, no subdirectories |
 
-`WARNNING.PCM` (sic) is not in the image. Its directory entry points at LBA 11405 with a size of 1,536,000 bytes, which is about 8.7 s of CD audio: the file is a pointer into track 2, the usual "don't play this disc in a CD player" warning. Every other file is inside the ISO, and the 260 extracted files match the `FILES.zip` that was copied off the disc on the Mac byte for byte.
+`WARNNING.PCM` (sic) is not in the image. Its directory entry points at LBA 11405 with a size of 1,536,000 bytes, which is about 8.7 s of CD audio: the file is a pointer into track 2, the usual "don't play this disc in a CD player" warning. Every other file is inside the ISO, and the 260 extracted files match `GAME_BASIC_files.zip`, a copy of the disc's files, byte for byte.
 
-`STAFF.TXT` holds the credits (translated in [Staff credits](#staff-credits)). The interpreter's main system was by 金山 素志 (Bits Laboratory), the sound system by 本間 直純 (Bits Laboratory) and BASTERM by Ikkou.Noku.
+`STAFF.TXT` holds the credits (translated in [Staff credits](#staff-credits)). The interpreter's main system was by 金山 素志 (Bits Laboratory), the sound system by 本間 直純 (Bits Laboratory) and BASTERM by Ikkou Noku.
 
 ### What the files are
 
@@ -35,7 +35,7 @@ The disc is mixed mode: one Mode 1 data track and one short CD-DA track. `GAME_B
 | `*.0`, `*.1` | 2, 2 | Pictures in `GSAVE` format (below) |
 | `WIN_ALL.BIN` | 1 | Graphics for the on-screen software keyboard |
 
-The User Guide (section 18) and RM pp. 407–410 already describe what each sample program does.
+The User Guide (section 21) and the Reference Manual (pp. 407–410) describe what each sample program does.
 
 ## IP.BIN
 
@@ -53,7 +53,7 @@ The User Guide (section 18) and RM pp. 407–410 already describe what each samp
 | Stacks (0xE8, 0xEC) | 0, 0 | BIOS defaults |
 | 1st read address (0xF0) | **0x06080000** | Not the usual 0x06004000: `0` is loaded high and unpacked downwards |
 
-`GAME_BASIC_EUR.iso` differs from the original in 8 bytes only: area code `J` → `E` and `For JAPAN. ` → `For EUROPE.`. That is the SRP region patch and nothing else.
+A copy region-patched for Europe with SRP (`GAME_BASIC_EUR.iso`, not kept here) differs from the original in 8 bytes only: area code `J` → `E` and `For JAPAN. ` → `For EUROPE.`. That is the SRP region patch and nothing else.
 
 ## Boot chain
 
@@ -122,7 +122,7 @@ The flag is set only by an undocumented form of `OPTION` (statement handler 0x06
 | `OPTION HD352` | Sets the flag to 1, saves the settings and restarts the interpreter in 352-wide mode at 28.6 MHz. The baud list on the settings screen becomes 9600–115200 |
 | `OPTION HD320` | Sets the flag to 0, saves and restarts in the normal 320-wide mode at 26.8 MHz |
 | `OPTION COM` | Re-initialises the serial port and drops the BASTERM link (0x0602F910), returning the port to raw mode |
-| `OPTION VERSION` | Prints a hidden "PROGRAM DESIGN" credit list (BASTERM Ikkou.Noku, polygon font Satoru.Miyazaki, sound system Naozumi.Honma, other programs Motoyuki.Kanayama) |
+| `OPTION VERSION` | Prints a hidden "PROGRAM DESIGN" credit list: BASTERM by Ikkou Noku, polygon font by Satoru Miyazaki, sound system by Naozumi Honma ("nao"), other programs by Motoyuki Kanayama ("motos"). On screen the names are written given name first, with a dot between the two parts |
 
 Any other word gives *Syntax error*. Because the mode is saved, the 28 MHz setting survives a power cycle until `OPTION HD320` is run. The screen is 32 pixels wider in this mode, so programs written for 320 pixels may sit off-centre.
 
@@ -601,7 +601,7 @@ The 104 `@` sub-keywords (table at 0x0609DEE0), with the value each stands for. 
 | `@TRI` | 2 | `LFO` waveform |
 | `@NOISE` | 3 | `LFO` waveform |
 
-The VS Code extension's keyword list can be checked against this table. `tokens.tsv` from the extractor has it in machine-readable form.
+The VS Code extension's keyword list matches this table word for word, apart from `REM` (handled as a comment) and the `OPEN` words `AS`, `OUTPUT` and `APPEND`, which have no tokens of their own. `tokens.tsv` from the extractor has the table in machine-readable form.
 
 ## File formats seen on the CD
 
@@ -622,7 +622,7 @@ The message table is at 0x06075A84, one pointer per error number from 1. Numbers
 
 This is an English translation of `STAFF.TXT`, the Shift-JIS credits file in the root of the CD. After `tools/gbcd_extract.py` has run, the original is in `extracted/STAFF.TXT`.
 
-Names are kept as the credits write them, in Japanese order (family name first), with a romanisation after each one. Japanese names can often be read more than one way, so the romanisations are the most likely readings. The readings marked ✓ are confirmed by the hidden credit list that `OPTION VERSION` prints, which spells those names in Latin letters. Names written in Latin letters in the original are left unchanged. Company names follow the original: (株) is a kabushiki kaisha (Co., Ltd.) and (有) a yūgen kaisha (Ltd.).
+Names are kept as the credits write them, in Japanese order (family name first), with a romanisation after each one. Japanese names can often be read more than one way, so the romanisations are the most likely readings. The readings marked ✓ are confirmed by the hidden credit list that `OPTION VERSION` prints, which spells those names in Latin letters. Names written in Latin letters in the original are kept as written, except that the dot between the two parts of a name is shown as a space. Company names follow the original: (株) is a kabushiki kaisha (Co., Ltd.) and (有) a yūgen kaisha (Ltd.).
 
 ### Producer
 - 杉山 一郎 (Sugiyama Ichirō) / ASCII Corp.
@@ -643,11 +643,11 @@ Names are kept as the credits write them, in Japanese order (family name first),
 - 本間 直純 (Honma Naozumi ✓) / Bits Laboratory
 
 ### Communication software "BASTERM" design & programming
-- Ikkou.Noku
+- Ikkou Noku
 
 ### Modelling data conversion tools
 - 三橋 正邦 (Mitsuhashi Masakuni)
-- Ikkou.Noku
+- Ikkou Noku
 
 ### Sample programs
 - 蜷川 幸広 (Ninagawa Yukihiro): MML samples
@@ -731,7 +731,7 @@ Names are kept as the credits write them, in Japanese order (family name first),
 - 協力 (kyōryoku) means "cooperation" or "assistance". It is translated here as "Special thanks", the usual English credit heading for it.
 - ESP is ESP inc., one of the three copyright holders shown on the CD.
 - 岩垂 徳行 (Iwadare Noriyuki) of TWO FIVE is the composer known for the Lunar and Grandia series, both published by Game Arts, who also provided music.
-- The hidden `OPTION VERSION` list credits BASTERM to Ikkou.Noku, the polygon font to Satoru.Miyazaki, the sound system to Naozumi.Honma and other programs to Motoyuki.Kanayama. That matches the roles above.
+- The hidden `OPTION VERSION` list credits BASTERM to Ikkou Noku, the polygon font to Satoru Miyazaki, the sound system to Naozumi Honma and other programs to Motoyuki Kanayama. That matches the roles above.
 - The original file ends with a line of dots.
 
 ## How to reproduce
@@ -758,5 +758,5 @@ The listing (about 200,000 lines, 8 MB) uses the names and comments in `tools/gb
 
 Everything above comes from reading the code. These points depend on the hardware and can only be measured on a real Saturn:
 
-- Whether a given USB-TTL adapter keeps up at 57600 and 115200 baud once `OPTION HD352` is set. The BRR values are within about 1% of nominal.
+- Whether the 28 MHz rates work in practice. None of 14400–115200 has been tried on hardware, and whether a given USB-TTL adapter keeps up at 57600 and 115200 is untested. The BRR values are within about 1% of nominal.
 - The real timing margins on the wire, for example how close the Saturn's 50 ms NUL spacing and 1 s timeouts run on hardware.

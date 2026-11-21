@@ -1,7 +1,7 @@
 // Created with Claude Opus 5.5, Nov 2026
 // Guided by Brett Hallen
 'use strict';
-// Checks for GAME BASIC for SEGASATURN source. No VS Code dependency, so it
+// Checks for GAME BASIC for SEGA SATURN source. No VS Code dependency, so it
 // runs under plain `node --test`.
 //
 // Errors are things BASTERM itself refuses to send (missing / duplicate / too
@@ -23,7 +23,7 @@ const DIRECT_RE = /^\s*(LOAD|SAVE|RUN|NEW|LIST|LLIST|CONT|FILES|MERGE|DELETE|REN
 const COMMENT_RE = /^\s*('|REM(?![A-Za-z0-9_$]))/i;
 // Keywords the interpreter marks as direct mode only (flag 0x0008 in its
 // token table). In a program line they stop with error 28 "Direct statement
-// only" when reached (Documentation/GAME_BASIC_CD_analysis.md).
+// only" when reached (GAME_BASIC_CD/README.md).
 const DIRECT_ONLY = ['EDIT', 'LIST', 'RENUM', 'DELETE', 'NEW', 'SAVE', 'CONT', 'FIND', 'FORMAT'];
 const DIRECT_ONLY_RE = new RegExp(
   `(^|:|(?<![A-Za-z0-9_$])(?:THEN|ELSE))(\\s*)(${DIRECT_ONLY.join('|')})(?![A-Za-z0-9_$])`, 'gi');

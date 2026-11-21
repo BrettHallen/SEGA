@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Created with Claude Opus 5.5, Nov 2026
 # Guided by Brett Hallen
-"""Convert between PNG and GAME BASIC for SEGASATURN bitmap files (.0 / .1).
+"""Convert between PNG and GAME BASIC for SEGA SATURN bitmap files (.0 / .1).
 
     python3 saturn_bitmap.py PICTURE.png              # -> PICTURE.1 (32768 colours)
     python3 saturn_bitmap.py PICTURE.png --256        # -> PICTURE.0 (256 colours)

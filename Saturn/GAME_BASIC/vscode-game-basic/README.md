@@ -1,6 +1,6 @@
 # GAME BASIC for VS Code
 
-Edit, check and send GAME BASIC for SEGASATURN programs from VS Code on macOS, Linux or Windows, over a 5 V USB-TTL serial adapter. It replaces the editing and Send/Run/Receive side of BASTERM.
+Edit, check and send GAME BASIC for SEGA SATURN programs from VS Code on macOS, Linux or Windows, over a 5 V USB-TTL serial adapter. It replaces the editing and Send/Run/Receive side of BASTERM.
 
 The extension does the editing side itself. Anything that touches the serial port is done by the Python sender in [`../tools`](../tools), which the extension runs for you.
 
@@ -86,7 +86,7 @@ The status bar shows the port and baud rate in use. Click it to change the port.
 | `gameBasic.autoLineNumbers` | false | Number unnumbered lines when sending |
 | `gameBasic.lineNumberStart` / `lineNumberStep` | 10 / 10 | Automatic numbering |
 | `gameBasic.labelLineInterval` | 0 | Round `*label` lines up to a multiple of this (BASTERM option; 0 is off) |
-| `gameBasic.maxLineBytes` | 255 | Longest line, in Shift-JIS bytes. The real GAME BASIC limit isn't known yet |
+| `gameBasic.maxLineBytes` | 255 | Longest line, in Shift-JIS bytes. 255 is GAME BASIC's own limit: its editor and error 15 *String too long* stop there |
 | `gameBasic.keyDelayMs` | 30 | Pause between typed keystrokes |
 | `gameBasic.serveDirectory` | the file's folder | Where the Saturn's own `COM:` file accesses go |
 | `gameBasic.pythonPath` | auto | Python 3 that has pyserial |
@@ -97,7 +97,7 @@ The extension also sets Shift-JIS as the file encoding (with encoding guessing o
 
 ## Where the keyword list comes from
 
-[`src/keywords.js`](src/keywords.js) was first built from how the 67 sample programs in `../GAME_BASIC_CD` use each word (in statement position and never assigned to, or called like a function), then checked against the Reference Manual's reserved-word list (pp. 9–10) and keyword index (pp. 416–421). Every word now comes from the CD, the Tutorial Manual or the Reference Manual, 214 in all, including the operators `AND! OR! XOR! NOT!`. Standard BASIC words that GAME BASIC doesn't have (`WHILE`/`WEND`, `DEF FN`, `TRON` and so on) were removed, and so were `TIME` and `MSTR$`, which the sample games use as ordinary variables. See `../Documentation/Reference_Manual_findings.md` (section 9) for the details. The checker never flags an unknown word. After editing `src/keywords.js`, run `npm run grammar` to rebuild the grammar.
+[`src/keywords.js`](src/keywords.js) holds 214 words, including the operators `AND! OR! XOR! NOT!`. They come from how the 67 sample programs on the CD use each word, the Tutorial Manual, and the Reference Manual's reserved-word list (pp. 9–10) and keyword index (pp. 416–421), and they match the token table in the interpreter itself ([`GAME_BASIC_CD/README.md`](../GAME_BASIC_CD/README.md#tokenised-program-format)) word for word and kind for kind. The only extras are `AS`, `OUTPUT` and `APPEND`, the words `OPEN` uses, and `REM` is treated as a comment. Standard BASIC words that GAME BASIC doesn't have (`WHILE`/`WEND`, `DEF FN`, `TRON` and so on) were removed, and so were `TIME` and `MSTR$`, which the sample games use as ordinary variables. See `../Documentation/Reference_Manual_findings.md` (section 9) for the details. The checker never flags an unknown word. After editing `src/keywords.js`, run `npm run grammar` to rebuild the grammar.
 
 [`src/reference.js`](src/reference.js) holds the hover help: each command's syntax as the manual writes it, a one-line summary and the page it came from, plus the values of the `@` constants (Reference Manual pp. 11–14) and the MML commands (section 2.6, pp. 318–354). Every command and function in the manual has an entry; a word without one (such as an operator) still gets a plain hover.
 

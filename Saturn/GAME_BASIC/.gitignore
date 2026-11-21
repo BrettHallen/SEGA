@@ -1,0 +1,39 @@
+# Suggested .gitignore for Saturn/GAME_BASIC/
+# Keeps copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material,
+# and anything derived directly from it, out of the public repository.
+# Paths are relative to this folder (GAME_BASIC/).
+
+# --- The Saturn CD ---------------------------------------------------------
+#GAME_BASIC_CD/*.iso
+#GAME_BASIC_CD/GAME_BASIC_files.zip
+GAME_BASIC_CD/extracted/
+# Disassembly listing of the interpreter (made by tools/gbcd_disasm.py)
+GAME_BASIC_CD/*.s
+# Leftover from the credits translation, now in GAME_BASIC_CD/README.md
+GAME_BASIC_CD/STAFF_EN.md
+
+# --- The Windows 95 tools CD and the programs unpacked from it -------------
+#WIN95_TOOLS_CD/*.exe
+#BASTERM/Basterm.exe
+#BASTERM/BASTERM.HLP
+#BASTERM/basterm.cnt
+#DXFCONV/*.EXE
+# Ghidra decompilation of Basterm.exe
+#BASTERM/Basterm_decompiled.c
+
+# --- Python and macOS clutter ----------------------------------------------
+__pycache__/
+*.pyc
+.DS_Store
+
+# --- Optional: other original material from the CDs ------------------------
+# These are also (C)1998 originals. They are small and useful to readers,
+# but uncomment them to keep the repository free of original content.
+# The DXFCONV tests skip themselves when SAMPLE/ is missing.
+# BASTERM/BASTERM_help_text_JP.txt
+# BASTERM/readme_JP.txt
+# DXFCONV/README_JP.TXT
+# DXFCONV/HEADBAS.B
+# DXFCONV/SOURCE/
+# DXFCONV/SAMPLE/
+# GAME_BASIC_box_*.jpg
