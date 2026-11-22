@@ -54,3 +54,18 @@ SW4 is an unpopulated switch footprint near the backup battery. JP17 goes to SW4
 
 ## Video Mode Switch
 The JP1/JP2 common line feeds VDP2 (315-5690) pin 79 (NTSC/PAL). On VA1 boards the same line also drives IC20 pin 1 (NPSEL). To switch a PAL 50Hz to 60Hz, move the 100KΩ (104) resistor from R29 to JP1.
+
+![50Hz to 60Hz](50Hz_to_60Hz.jpg)
+
+## EUR to JAP
+To change a PAL (area code C) board to Japan (area code 1), open the old jumpers first, then bridge the alternates:
+
+1. Cut the JP12 and JP10 traces, and bridge JP13 and JP11 (AC4 and AC3 go to 0).
+2. Cut the JP7 trace and bridge JP6 (AC1 goes to 1).
+3. Leave JP8/JP9 as they are (AC2 stays 0).
+
+![EUR to JAP, JP10 to JP13](EUR_to_JAP_1.jpg)
+
+![EUR to JAP, JP6/JP7](EUR_to_JAP_2.jpg)
+
+Changing region does not change the video rate. Do the 50Hz to 60Hz change as well if you want Japanese games to run at full speed.
