@@ -19,3 +19,5 @@ Machine translations (Claude Opus 5.5) of both Japanese manuals, complete and pa
 Notes on each Japanese manual, including the errata found in them.
 - [Tutorial Manual findings](/Saturn/GAME_BASIC/Documentation/Tutorial_Manual_findings.md)
 - [Reference Manual findings](/Saturn/GAME_BASIC/Documentation/Reference_Manual_findings.md)
+- [Saturn SDK cross-reference](/Saturn/GAME_BASIC/Documentation/Saturn_SDK_cross_reference.md): what Sega's own developer documents (SGL, the sound driver, the backup library) confirm about GAME BASIC
+

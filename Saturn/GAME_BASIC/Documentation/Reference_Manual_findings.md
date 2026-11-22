@@ -650,3 +650,16 @@ The index (pp. 416–421) lists every GAME BASIC command with its page, and the 
 - **Not reserved but part of statements:** `AS`, `OUTPUT` and `APPEND` (`OPEN … FOR OUTPUT AS 2`), and `USING` in `PRINT USING`.
 - **Numbers:** `&B` binary can have a fraction (`&B101.01`).
 - `OBJ` and `TPROP()` take numbered `@` fields (`@TYPE`, `@FLAG`, `@XP`…, `@ATR`, `@PARENT`, `@CHILD`, `@RADIUS`…; `@BEND`, `@LAYER`, `@TONE`, `@LOOP`, `@DPAN`…), and the `@PAD_…` constants work the same way.
+
+---
+
+## 10. What Sega's SDK documents confirm
+
+GAME BASIC is built on SGL 2.12, the BUP backup library and Sega's sound driver 2.08, so Sega's developer manuals explain several points in this file. The details and page references are in `Saturn_SDK_cross_reference.md`. In short:
+
+- **SETATR (section 6a)** is SGL's `ATTRIBUTE` macro. SURFACE, SORT, TYPE and the MODE bits for draw mode, lighting, palette and mesh have SGL's own values. Only the window field is moved, to bits 6–7. SORT 0 is `SORT_BFR`, which draws the face just in front of the last polygon registered, for decals.
+- **SETTEX (section 6a)** data is VDP1's native format. The widths in steps of 8 are a hardware rule, and bit 15 of a 32768-colour dot is SGL's `RGB()` flag.
+- **Sound (sections 6c and 6d).** The 468 KB of user sound memory is 512 KB less the driver's fixed 44 KB system area. The 8 sequences with sequence 0 for BGM, PLAYTEMPO's 4096 = double speed, PLAYFADE's rate and PLAYPAN's 16 steps each side are all the sound driver's own behaviour. The `.WV` tone-bank format is still not documented.
+- **BRAM:** uses Sega's backup library, where `FILES`'s 512 "file blocks" are the internal 32 KB in 64-byte blocks.
+- **Still open:** why about 1000 polygons can hang the sprite system (p. 147) when SGL's default limit is 1800, and how 8.1 file names map onto 11-character backup names.
+

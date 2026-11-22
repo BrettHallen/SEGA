@@ -35,6 +35,7 @@ Where something here is worked out from the sample programs or the PC software r
 21. [Sample programs on the CD](#21-sample-programs-on-the-cd)
 22. [Character codes](#22-character-codes)
 23. [Quick reference](#23-quick-reference)
+24. [Under the hood: Sega's libraries](#24-under-the-hood-segas-libraries)
 
 ---
 
@@ -524,7 +525,7 @@ The steps are always the same:
 1. `SETTEX id,width,height,colours,data$` makes a texture.
 2. `SETVERTEX id,count,READ` reads corner positions from `DATA`.
 3. `SETPOLYGON id,...,(0,1,2,3)` joins the corners into a face. List them **clockwise**, so the face points towards you.
-4. `SETATR id,...` sets the face's attributes, such as which texture it uses.
+4. `SETATR id,...` sets the face's attributes, such as which texture it uses. Section 24 explains what each value means.
 5. `OBJTYPE`, `OBJATR` and `OBJPOS` create an object, give it the polygon and attribute, and place it.
 6. `OBJTURN` sets it spinning.
 
@@ -1014,6 +1015,35 @@ These are the same symbols as on the software keyboard's GRPH page (section 3). 
 | Play notes | `EFFECT "@44 CDEFG"` |
 | Read the pad | `IF PAD(0,1) AND @PAD_A THEN ...` |
 | Send from VS Code | F6 (Shift+F6 to run as well, Ctrl+F6 to stop) |
+
+## 24. Under the hood: Sega's libraries
+
+GAME BASIC is built on the libraries Sega gave to Saturn game developers: **SGL** for graphics and the control pads, **BUP** for backup RAM, and Sega's **sound driver** on the sound CPU. Knowing this explains some of GAME BASIC's numbers. The details, with page references to Sega's manuals, are in `Saturn_SDK_cross_reference.md`.
+
+### SETATR values
+
+The six values in a `SETATR` group, `(TYPE,SURFACE,SORT,texture,COLOR,MODE)`, are Sega's own polygon attribute settings:
+
+| Value | Meaning |
+|---|---|
+| TYPE | 0 texture, 1 flipped left-right, 2 flipped up-down, 3 both; 4 plain polygon, 5 outline, 6 line |
+| SURFACE | 0 one-sided (hidden from behind), 1 two-sided |
+| SORT | Which point decides what is in front: 1 nearest corner, 2 farthest corner, 3 centre. 0 draws the face just in front of the polygon before it, which keeps a marking or decal on top of the face it sits on |
+| MODE | Add together: 0 normal, 1 shadow, 2 half-bright, 3 half-transparent; +8 lit by `SETLIGHT`; +32 colour from the palette; +64 only inside the sprite window, +128 only outside it; +256 mesh (every other dot) |
+
+The default MODE, 72, is 64 + 8: inside the window and lit. For a face whose colour shouldn't change with the light, use 64.
+
+### Textures
+
+`SETTEX` widths go in steps of 8 because the Saturn's sprite hardware needs that. A 32768-colour dot is stored the way the hardware wants it, which is why bit 15 must be set (`OR &H8000`). A dot of all zeros is see-through, and other values with bit 15 clear aren't guaranteed to show (RM p. 222).
+
+### Sound
+
+Sound memory is 512 KB. Sega's sound driver keeps 44 KB for itself, which leaves the 468 KB GAME BASIC reports. The driver plays up to 8 sequences at once and keeps sequence 0 for background music, which is why `BGM` always uses sequence 0 and `EFFECT` gets 1–7. `PLAYTEMPO 4096` doubles the speed and `-4096` halves it, and `PLAYPAN` has 16 steps to each side, because those are the driver's and the sound chip's own steps.
+
+### Backup RAM
+
+The Saturn's internal backup RAM is 32 KB, counted in 512 blocks of 64 bytes. Those are the "file blocks" that `FILES "BRAM:"` reports. It is shared with every game's saves, so a GAME BASIC program of a few KB already takes a noticeable share.
 
 ---
 

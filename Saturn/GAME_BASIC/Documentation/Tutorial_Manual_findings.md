@@ -213,3 +213,6 @@ The rest (G_HATA, G_MOBIL/G_MOBILS, G_BOMB, G_BOU, G_JUMP/_A/_M, G_MAZE, G_SABA,
 The tutorial has no wire-level protocol and no full error-message list. The Reference Manual covers the error messages (see `Reference_Manual_findings.md`, section 7). The wire protocol, derived from Basterm.exe and the Saturn interpreter, is in `BASTERM/BASTERM_serial_protocol.md`: byte formats, keystroke packets, 252-byte data blocks with checksum and CRC-16, the handshake, the command table and the timeouts.
 
 **Status codes.** From the Saturn interpreter's code: status 1 (frame 0x06) means idle at the prompt or a command ended normally, status 2 (0x07) means a program was ended by break or STOP, status 3 (0x08) means a command or program has started, and status 4 (0x09) means an error. BASTERM's beep on status 4 is therefore an error beep. STOP with modifier 4 is a plain STOP; modifier 5, which BASTERM sends before `LOAD` and `SAVE`, also resets the graphics and sprite work area ready for a transfer.
+
+**Sega's SDK documents.** How GAME BASIC's graphics, sound, backup RAM and peripherals sit on Sega's own libraries (SGL, BUP and the sound driver) is in `Saturn_SDK_cross_reference.md`.
+
