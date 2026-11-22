@@ -17,9 +17,9 @@ If modiyfing jumpers, ensure you open jumpers first and verify they are open bef
 | JP11 | Open    | Ties SMPC AC3 (p8) to GND                 | Topside   |
 | JP12 | Closed  | Ties SMPC AC4 (p9) to +5v                 | Topside   |
 | JP13 | Open    | Ties SMPC AC4 (p9) to GND                 | Topside   |
-| JP17 | Open    |                                           | Underside |
-| JP18 | Closed  |                                           | Underside |
-| JP19 | Open    |                                           | Underside |
+| JP17 | Open    | Unpopulated SW4 p2                        | Underside |
+| JP18 | Closed  | Unpopulated SW4 p4, tied to GND           | Underside |
+| JP19 | Open    | Unpopulated SW4 p3                        | Underside |
 | JP20 | Open    | Clock/crystal option for IC20             | Topside   |
 | JP21 | Closed  | Clock/crystal option for IC20             | Topside   |
 
