@@ -19,3 +19,4 @@ fp-info-cache
 *.csv#
 *.tiff
 /Saturn/Python_Region_Patcher/tests
+Saturn/PAL_Jumpers/Mainboard_Jumpers_VA_SD_PAL.md
