@@ -67,6 +67,16 @@ python3 gbcd_extract.py ../GAME_BASIC_CD/GAME_BASIC.iso --out ../GAME_BASIC_CD/e
 python3 gbcd_disasm.py  ../GAME_BASIC_CD/GAME_BASIC.iso -o ../GAME_BASIC_CD/GAME_BASIC_main.s
 ```
 
+`gbcd_disasm.py` also lists other raw SH-2 images: `--base` gives the load address (hex) and `--title` the first header line. For example, the BIOS backup library that drives the floppy drive:
+
+```
+python3 gbcd_disasm.py ../../FDD_Operator_HSS-0128/BIOS_BUP/BUP_BIOS_1994-11-15_US.bin --base 060F0000 \
+    --symbols ../../FDD_Operator_HSS-0128/BIOS_BUP/bup_symbols.txt \
+    --title "Saturn BIOS 1.00 (1994-11-15) backup library (BUP)" -o BUP.s
+```
+
+Calls and jumps through `bsrf`/`braf` are followed when the register holds a known constant, and the listing shows the target as `-> name`.
+
 | File | Contents |
 |---|---|
 | `gbcd_extract.py` | Prints the IP.BIN header, extracts the files, unpacks the interpreter (`0`) to `main.bin` and writes `tokens.tsv` |
