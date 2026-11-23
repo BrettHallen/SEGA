@@ -1,0 +1,351 @@
+2727	- So that no direct output except operator 4
+2728	 comes out as sound, set "
+2729	.
+2730	- Set the modulation depth on the other
+2731	 operators to taste, imagining the sound.
+2732	Make sounds with FM!            13/17
+2733	Envelope information
+2734	 also 
+2735	affects the tone
+2736	 depending on whether the operator is a
+2737	 carrier or a modulator
+2738	 
+2739	 (values are the same as for PCM).
+2740	Make sounds with FM!            14/17
+2741	Total level
+2742	 gives the operator's output level
+2743	as attenuation
+2744	 (
+2745	 = none).
+2746	- Like the envelope, it also affects
+2747	 the tone.
+2748	Make sounds with FM!            15/17
+2749	Multiple
+2750	" set the modulation wave's
+2751	frequency
+2752	 ratio
+2753	, and 
+2754	detune
+2755	" fine-tunes it.
+2756	Key rate scaling
+2757	 is how much the
+2758	 envelope changes with pitch
+2759	Make sounds with FM!            16/17
+2760	- The tone you just heard is the 
+2761	 actually used in the sample tune (Veigues):
+2762	chopper bass
+2763	 sound
+2764	- Every parameter has to be balanced, so
+2765	 it's hard to get the tone you imagine,
+2766	 but try changing the parameters
+2767	 and experiment.
+2768	 
+2769	* Look at the sample tunes' source.
+2770	Make sounds with FM!            17/17
+2771	" instead of "
+2772	", 
+2773	 use it and 
+2774	 can be set too.
+2775	 can be set too,
+2776	 so as with PCM layers, 
+2777	 
+2778	 is possible.
+2779	      (down)
+2780	Techniques for expression      1/36
+2781	- MML strings can be written more briefly
+2782	- There are special macros that set the
+2783	 default velocity, and general macros
+2784	 you can define freely.
+2785	[Velocity macros]
+2786	[General macros]
+2787	" and "
+2788	 kinds)
+2789	Techniques for expression      2/36
+2790	Velocity macros
+2791	" is added
+2792	 they are defined; without it, the velocity
+2793	velocity value
+2794	 default is rewritten.
+2795	              ^     ^^^^^     ^
+2796	- Next, the kinds of velocity macro and
+2797	 their preset values.
+2798	Techniques for expression      3/36
+2799	Kind:meaning         :default value
+2800	:very soft   :pianissimo     : 32
+2801	:soft        :piano          : 48
+2802	:fairly soft :mezzo piano    : 64
+2803	:fairly loud :mezzo forte    : 80
+2804	:loud        :forte          : 96
+2805	:very loud   :fortissimo     :112
+2806	Techniques for expression      4/36
+2807	General macros
+2808	" plus one letter
+2809	 can hold an MML string of up to 
+2810	 characters
+2811	- Capital and small letters are
+2812	- To register, add "
+2813	" and put the string between "
+2814	 marks.
+2815	 <- register
+2816	<- run
+2817	Techniques for expression      5/36
+2818	- Sub-options of note names "
+2819	" can be put in
+2820	 general macros too.
+2821	- The example registers a pitch-bend option
+2822	 to make the writing simpler.
+2823	Techniques for expression      6/36
+2824	the software layer command
+2825	".
+2826	- This is useful 
+2827	for one Note ON
+2828	several tones
+2829	 or 
+2830	 
+2831	notes of different pitch
+2832	 to sound together.
+2833	 
+2834	- For example, to add the notes an octave
+2835	 above and below, write this; each "
+2836	"
+2837	 
+2838	toggles
+2839	 it on and off.
+2840	 @44 CDE... /44;12;44;-12 CDE... / CDE...
+2841	Techniques for expression      7/36
+2842	- The example adds three tones: tone 41
+2843	 as it is, tone 36 an octave up and
+2844	 tone 38 an octave down,
+2845	 layered together.
+2846	                             ^
+2847	  Here the software layer turns OFF,
+2848	  and the rest plays with the base tone (
+2849	  only.
+2850	Techniques for expression      8/36
+2851	The software layer command
+2852	 only simulates layers in software,
+2853	 
+2854	 so for richer layer settings
+2855	 build the tone data with the 
+2856	" command's "
+2857	 
+2858	- One more example.
+2859	Techniques for expression      9/36
+2860	the damper switch
+2861	".
+2862	- Normally you play with "
+2863	", but with "
+2864	 it sounds as if you were holding the piano's
+2865	 damper pedal down.
+2866	Techniques for expression     10/36
+2867	" all it does is not do 
+2868	 
+2869	Key OFF
+2870	 for the notes that follow.
+2871	- So with tones that have a long release,
+2872	 or that never decay, they keep sounding:
+2873	 take care.
+2874	- With it you can easily play the "
+2875	 sets' "
+2876	LOOP-type rhythm tones
+2877	" 
+2878	.
+2879	Techniques for expression     11/36
+2880	" are special tones that keep
+2881	 the rhythm going while Note ON lasts.
+2882	- With an ordinary note they only play
+2883	 for the note's length, but with "
+2884	"
+2885	 
+2886	there is no Key OFF
+2887	, so they keep playing.
+2888	(Press Space to stop)
+2889	Techniques for expression     12/36
+2890	the control command
+2891	".
+2892	- This command returns a value from the
+2893	 MML string to the BASIC program.
+2894	 function gives, at any time, the note
+2895	 number, volume etc. now playing on each
+2896	 track, but putting this command in the
+2897	 MML string lets you send any
+2898	 number (
+2899	) at any moment
+2900	.
+2901	Techniques for expression     13/36
+2902	- When MML like this plays, the BASIC
+2903	 program can use the 
+2904	 function to know how far
+2905	 it has played.
+2906	 when run: if "
+2907	", "
+2908	" is playing.
+2909	                if "
+2910	", playing has ended.
+2911	Techniques for expression     14/36
+2912	" is defined,
+2913	 the MML above causes an
+2914	track 0
+2915	 
+2916	 interrupt, only if it is written in
+2917	interrupt
+2918	.
+2919	- Handy to change the BGM only when a
+2920	 condition is met, or for a karaoke program
+2921	* A sample of this is in "
+2922	  (Fire Hawk BGM collection).
+2923	Techniques for expression     15/36
+2924	- Next, let's play chords.
+2925	" can take "
+2926	" followed by
+2927	 a chord name.
+2928	 chord names can be
+2929	 used.
+2930	- And each chord can go up to 
+2931	the third inversion
+2932	.
+2933	- Capital and small letters are different
+2934	 commands, so take care.
+2935	- Let's listen in turn.
+2936	Techniques for expression     16/36
+2937	the major triad
+2938	: let's
+2939	 listen. Nothing goes after "
+2940	".
+2941	- This is the same as the chord command "
+2942	" example
+2943	 "
+2944	": the root "
+2945	" plus the major third "
+2946	 and the perfect fifth "
+2947	" played together
+2948	- The two lines below play the same.
+2949	 @44 L2 (CEG)(DF#A)(EG#B)(FA>C)...
+2950	Techniques for expression     17/36
+2951	the minor triad
+2952	- The command is "
+2953	Techniques for expression     18/36
+2954	Augmented triad
+2955	 @44 L2 C?aug D?aug E?aug F?aug ...
+2956	Techniques for expression     19/36
+2957	Diminished triad
+2958	?°
+2959	 @44 L2 C?dim D?dim E?dim F?dim ...
+2960	Techniques for expression     20/36
+2961	Seventh chord
+2962	Techniques for expression     21/36
+2963	Minor seventh chord
+2964	 @44 L2 C?m7 D?m7 E?m7 F?m7 G?m7 ...
+2965	Techniques for expression     22/36
+2966	Minor seventh flat five
+2967	 chord
+2968	 @44 L2 C?m7-5 D?m7-5 E?m7-5 F?m7-5...
+2969	Techniques for expression     23/36
+2970	Major seventh chord
+2971	 @44 L2 C?M7 D?M7 E?M7 F?M7 G?M7 ...
+2972	Techniques for expression     24/36
+2973	Minor major seventh chord
+2974	 @44 L2 C?mM7 D?mM7 E?mM7 F?mM7 ...
+2975	Techniques for expression     25/36
+2976	Diminished seventh chord
+2977	 @44 L2 C?dim7 D?dim7 E?dim7 F?dim7...
+2978	Techniques for expression     26/36
+2979	Major sixth chord
+2980	Techniques for expression     27/36
+2981	Minor sixth chord
+2982	 @44 L2 C?m6 D?m6 E?m6 F?m6 G?m6 ...
+2983	Techniques for expression     28/36
+2984	Suspended fourth
+2985	 @44 L2 C?sus4 D?sus4 E?sus4 F?sus4...
+2986	Techniques for expression     29/36
+2987	Seventh suspended fourth
+2988	 @44 L2 C?7sus4 D?7sus4 E?7sus4 ...
+2989	Techniques for expression     30/36
+2990	- That's the 14 kinds of chord.
+2991	- Chords make it easy to enter an
+2992	- Let's play something simple with 4 chords.
+2993	Techniques for expression     31/36
+2994	- Finally, 
+2995	chord inversions
+2996	, and that ends the
+2997	 tutorial.
+2998	- The lowest note of a chord is the 
+2999	bass
+3000	; all the
+3001	 chords so far were played with the
+3002	 root as the bass.
+3003	- This is called the 
+3004	root position
+3005	.
+3006	- With a bass 
+3007	other than the root
+3008	, the order of the notes
+3009	 changes and so does the sound.
+3010	- A chord made this way is an 
+3011	inversion
+3012	Techniques for expression     32/36
+3013	- In this MML each chord can be inverted
+3014	 up to 
+3015	 times.
+3016	- Let's take the C seventh chord "
+3017	C7
+3018	" and
+3019	 invert it.
+3020	- First play C seventh in root position.
+3021	" 
+3022	 gives the same.
+3023	Techniques for expression     33/36
+3024	the first inversion
+3025	: let's play it.
+3026	- This raises the root "
+3027	" of the root position one octave.
+3028	 
+3029	- With the chord command it is "
+3030	", and
+3031	 the bass becomes "
+3032	".
+3033	- For chord entry, after "
+3034	" add "
+3035	" and
+3036	 the inversion count "
+3037	Techniques for expression     34/36
+3038	the second inversion
+3039	- This raises the note that was the bass
+3040	" one octave.
+3041	" and
+3042	Techniques for expression     35/36
+3043	the third inversion
+3044	- This raises the note that was the bass
+3045	" one octave.
+3046	", and
+3047	".
+3048	Techniques for expression     36/36
+3049	- That's the end of the tutorial.
+3050	- Used well, these commands let you make
+3051	 music as wonderful as the tunes in the
+3052	 sample programs.
+3053	- Don't try to master it all at once;
+3054	 learn a little at a time as you try.
+3055	BASIC main program
+3056	   Kanayama Motoyuki
+3057	Sound system program
+3058	   Honma Naozumi
+3059	MML sample programs
+3060	   Ninagawa Yukihiro / Mitsuhashi Masakuni
+3061	Thanks to
+3062	   Mitsuhashi Masakuni / Kunishima Ken'ichi (FM Tune)
+3063	   Meshida Hideki / Ono Naoko / Shimada Tomoyuki
+3064	   Yamada Koji / Yoshida Yukihiro / Honma Naotsugu
+3065	●Listen to the sound samples!
+3066	  Listen to the sound samples!
+3067	1: Classic Game Arts works - BGM collection
+3068	2: Famous classical pieces
+3069	Title display
+3070	  From here on, use the
+3071	  control pad.
+3072	Up/Down
+3073	(direction buttons)---
+3074	  START / C button
+3075	          B button
+3076	●Instrument names by tone set
+965	C4D8E8...

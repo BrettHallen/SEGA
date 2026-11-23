@@ -1,0 +1,424 @@
+3077	Event description
+3078	event  : event 0..Note 1..Exp 2..Pan 3..Pit 4..Vol 5..Prg 6..Hold
+3079	length : length
+3080	param1 : note number   expression  pan     pitch bend  volume  program
+3081	param2 : volume
+3082	Max events per track
+3083	Max simultaneous notes per track
+3084	Converting TRACK ##   FREE(#####)
+3085	Setting tones
+3086	Play back
+3087	Setting MML
+3088	Save it? (Y/N)
+3089	Couldn't play TRACK 16
+3090	Couldn't play TRACKS 15-16
+3091	Couldn't play TRACKS 14-16
+3092	Couldn't play TRACKS 13-16
+3093	Couldn't play TRACKS 12-16
+3094	Couldn't play TRACKS 11-16
+3095	Couldn't play TRACKS 10-16
+3096	Couldn't play TRACKS 9-16
+3097	Couldn't play TRACKS 8-16
+3098	Couldn't play TRACKS 7-16
+3099	Couldn't play TRACKS 6-16
+3100	Couldn't play TRACKS 5-16
+3101	Couldn't play TRACKS 4-16
+3102	Couldn't play TRACKS 3-16
+3103	Couldn't play TRACKS 2-16
+3104	Converted, but couldn't play it
+3105	Tone settings
+3106	MML settings
+3107	Save data name=
+3108	Saving
+3109	Save finished
+3110	Couldn't save
+3111	Not MML data
+3112	Load failed
+3113	1. Check the MIDI file
+3114	2. Turn the MIDI file into events
+3115	3. Find the tones used
+3116	1. Convert events to MML
+3117	Write out what is left
+3118	Couldn't convert
+3119	Insert R if needed
+3120	1. Tone settings
+3121	Couldn't set
+3122	Read MThd
+3123	Not a MIDI file
+3124	This file can't be converted
+3125	An error occurred while reading
+3126	Read MTrk
+3127	The MIDI file is strange
+3128	Meta event
+3129	Initialisation
+3130	Data overflow!!
+3131	File OPEN
+3132	File OPEN failed
+3133	File CLOSE
+3134	File CLOSE failed
+3135	Get 1 character
+3136	Put back 1 character
+3137	The top byte is ignored
+3138	Read the DELTA time
+3139	<<< number of MENU items >>>
+3140	Famous classical pieces
+3141	1:Air on the G String/J.S.Bach : Pipe Organ
+3142	2:Air on the G String          : Strings
+3143	6:Pachelbel's Canon /J.Pachelbel
+3144	---------------- Copyright display
+3145	Pachelbel's Canon
+3146	Set as many as there are layers
+3147	GAME ARTS sound sample menu
+3148	1:Notes
+3149	2:Silpheed              (Hi-Speed version)
+3150	17:LUNAR  TSU BA SA          (TARG version)
+3151	* About the Hi-Speed versions (tunes 2-9):
+3152	- The tones each sample rearranges with
+3153	 TARG are ready-made on the CD-ROM,
+3154	 so the rearranging time is skipped.
+3155	* About the TARG versions (tunes 10-17):
+3156	- The TARG command rearranges the tones
+3157	 every time.
+3158	C button / ENTER -> NEXT
+3159	SUPER DOGFIGHTER SILPHEED
+3160	- 3D shooting game
+3161	Released 5 December 1986
+3162	PC-8801mk2SR series / FM77AV / IBM-PC
+3163	- Includes a version close to the original
+3164	 and a new arrangement.
+3165	- Fans will love how the melody keeps
+3166	 the feel of the original.
+3167	Zeliard
+3168	- Action RPG
+3169	Released 19 December 1987
+3170	PC-8801mk2SR series / X1turbo
+3171	- MML written for the PC-88 Sound Board 2,
+3172	 ported as it was.
+3173	- Uses no FM at all; recreated only by
+3174	 rearranging the standard tone sets.
+3175	TACTICAL GLADIATOR VEIGUES
+3176	- Side-scrolling action game
+3177	Released 16 December 1988
+3178	PC-8801mk2SR series / PC Engine
+3179	- Its sound is rhythm-led.
+3180	- This sample recreates only the
+3181	 opening.
+3182	- Almost all FM.
+3183	FIRE HAWK (THEXDER 2)
+3184	- The sequel to Thexder
+3185	Released 2 November 1989
+3186	PC-8801mk2SR series / MSX2
+3187	- Listen for the seamless switch to the
+3188	 boss tune just before the boss appears.
+3189	- Recreates almost all the PC-88 FM and Sound
+3190	 Board 2 tones, percussion included.
+3191	- "#/P/O/E" in the menu marks tunes that
+3192	 share the same tone arrangement.
+3193	Alisia Dragoon
+3194	- System inherits Thexder's auto-aim
+3195	Released 24 April 1992
+3196	Mega Drive version
+3197	- Includes tunes not in the released
+3198	 game.
+3199	- Listen for where FM and PCM weave
+3200	 together in a fine balance to play a
+3201	 beautiful melody.
+3202	LUNAR THE SILVER STAR
+3203	- Version A
+3204	SEGA Saturn version
+3205	- Every tune uses the same tone layout so
+3206	 it can be used as BGM in your own game.
+3207	- And the first 30 tones are kept as
+3208	 sound-effect tones.
+3209	- Version B
+3210	- Version A with every tune's tones
+3211	 arranged for listening.
+3212	- DSP modes vary by tune; as MML
+3213	 programs, these use quite advanced
+3214	 techniques.
+3215	- TSU BA SA
+3216	- Just the opening theme, taken out as
+3217	 a program.
+3218	- A karaoke-style sample that uses
+3219	 "ON MMLSTAT GOSUB".
+3220	Silpheed               (C)GAME ARTS
+3221	1: The Legend of SILPHEED / Mitsuhashi Masakuni
+3222	Sound sample's own initialisation routine
+3223	================ Sound sample's own initialisation routine
+3224	For the original version, cut the DSP output.
+3225	Zeliard                (C)GAME ARTS
+3226	1: Opening
+3227	2: Town above ground, part 1
+3228	17: Ending
+3229	FM synthesis sample
+3230	Fire Hawk - THEXDER 2 - (C)GAME ARTS
+3231	1: Prologue     :MECANO ASSOCIATES:#
+3232	2: Moonlight    :Beethoven        :P
+3233	14: Ending      :Mitsuhashi Masakuni :E
+3234	Where to jump when a ! command runs
+3235	---------------- Song that changes the BGM
+3236	C button/ENTER
+3237	B button
+3238	Don't change the BGM until it has played to a good break point
+3239	---------------- ON MMLSTAT GOSUB interrupt routine
+3240	Read it to clear the status
+3241	If no key is pressed, just RETURN
+3242	----------Brass       : @1
+3243	Alisia Dragoon         (C)GAME ARTS
+3244	2: STAGE 1-1 Forest
+3245	24: Game over
+3246	1: M01 Small-fry battle 1
+3247	2: M02 Tavern
+3248	13: M62 Battle won 2
+3249	15: M46 Resolved to fight
+3250	Each tune in this program has a different arrangement, so it initialises every time.
+3251	Far, far away
+3252	to beyond the horizon
+3253	the wind forgot
+3254	come on, let's set off
+3255	far, far away
+3256	Lyrics: Mizoguchi Isao
+3257	END
+3258	Tone name data per file
+3259	Use 6 to include COM:, but it's slow.
+3260	List here the CD file names to put first.
+3261	The name written last is shown first.
+3262	Always write the file name part as 10 characters.
+3263	Files starting with '-' are not shown.
+3264	Terminator
+3265	FILE number at top left of the current PAGE
+3266	Current FILE position
+3267	Last FILE position
+3268	FILE cursor position
+3269	Number of FILEs the window can show at once
+3270	A button/TAB   ... select device
+3271	D-pad ... move cursor
+3272	Show the title in the centre
+3273	Set the work area for GLOAD, GSAVE
+3274	Max X size
+3275	Max Y size
+3276	Message queue
+3277	WIN order
+3278	For UNDO
+3279	For tile patterns
+3280	Define tile patterns
+3281	Define sprites
+3282	Define windows
+3283	BG settings
+3284	Initialise the system
+3285	--- No input device found ---
+3286	Initialise UNDO
+3287	Set window positions and display
+3288	At first only the system menu is shown
+3289	Set the window priority order
+3290	Main loop
+3291	Convert the coordinate system
+3292	Capture handling
+3293	Window hit test
+3294	Quit?
+3295	Draw Tool   KAMI (paper)
+3296	Scroll the screen
+3297	Pick up a colour
+3298	Zoom the screen
+3299	Draw lines
+3300	Draw a straight line
+3301	Draw a rectangle
+3302	Fill a rectangle
+3303	Draw a circle
+3304	Fill a circle
+3305	Fill an area
+3306	The area to fill
+3307	is too complicated
+3308	Spray
+3309	Random dots
+3310	Draw a pattern
+3311	T_MODE: pattern number
+3312	Draw a tile pattern
+3313	T_MODE: tile pattern number
+3314	Copy
+3315	The area is too big
+3316	Paste
+3317	System menu window handling
+3318	Pen window handling
+3319	Colour window handling
+3320	IF EVENT=3 THEN GPEN_COLOR=FIX(TX/8)+FIX(TY/8)*16:PRINT "Palette change";GPEN_COLOR
+3321	Edit window handling
+3322	If it isn't on top, move the window
+3323	to the top
+3324	Capture the mouse while the left button is held
+3325	If the title bar is pressed, enter window-move mode
+3326	In window-move mode, move the window
+3327	When the button is released, stop capturing and clear move mode
+3328	Close with the right button
+3329	System window handling
+3330	Erase all windows
+3331	Hide all windows (SPRITEs) by clipping
+3332	The window for window handle (TOPW)
+3333	is brought to the top
+3334	ENTRY : TOPW...window handle
+3335	Find the index matching the
+3336	window handle
+3337	Move to the top
+3338	Set the window display
+3339	priority order
+3340	(set by the sprites' Z axis)
+3341	Load a picture
+3342	File access error
+3343	Failed to read
+3344	the file
+3345	Retry
+3346	Cancel
+3347	Save the picture
+3348	While writing the file
+3349	Picture DO handling
+3350	Picture UNDO handling
+3351	[icon]
+3352	[icon]
+3353	Switch to text mode
+3354	Erase the BG
+3355	Switch to graphics mode
+3356	Set position
+3357	Select a rectangular area
+3358	Cancel handling
+3359	Mouse pointer
+3360	Make the system menu window
+3361	Window size
+3362	Frame & title bar
+3363	Pen menu button
+3364	Colour menu button
+3365	Edit menu button
+3366	System menu button
+3367	Make the pen window
+3368	Line button
+3369	Straight line button
+3370	Rectangle button
+3371	Filled rectangle button
+3372	Circle button
+3373	Filled circle button
+3374	Fill button
+3375	Brush button
+3376	Make the edit window
+3377	Copy button
+3378	Paste button
+3379	For expansion
+3380	UNDO button
+3381	Make the system window
+3382	Load button
+3383	Save button
+3384	Load rectangle
+3385	Save rectangle
+3386	Quit button
+3387	Colour bar
+3388	- Version 0.00
+3389	- Just get it made for now
+3390	FILENAME$: name of the file to read
+3391	Cause an error on purpose
+3392	Failed on OPEN
+3393	Failed while reading data
+3394	Failed while closing
+3395	Monochrome BMP LOAD
+3396	16-colour BMP LOAD
+3397	Transfer the BMP to the screen
+3398	256-colour BMP LOAD
+3399	17-million-colour BMP LOAD
+3400	Shared routines
+3401	Set the PALETTE
+3402	- Made a mouse input routine for KAMI
+3403	- Made the pad usable too
+3404	- LOCK, UNLOCK commands now exist, so supported them
+3405	- Made an initialisation routine
+3406	- Added a busy cursor
+3407	- Added a simple message window
+3408	(the source is messy but it works)
+3409	- Optimised a little (the source got even messier)
+3410	Initialise the system so it can be used
+3411	For the message queue
+3412	Holds the message box button captions
+3413	For the file selection device
+3414	Set the texture for the cursor
+3415	Set the icons for the message box
+3416	Reserve the textures for the system window
+3417	Change the mouse pointer's shape
+3418	MOUSEPOINTER  0  normal pointer
+3419	1  busy pointer
+3420	Detect the input device
+3421	Detecting input device
+3422	Control pad found.
+3423	Shuttle Mouse found.
+3424	SEGA Saturn keyboard found.
+3425	Pad input handling
+3426	MB..PAD state
+3427	MX..mouse pointer X coordinate
+3428	MY..mouse pointer Y coordinate
+3429	BR..right button (C) state
+3430	BC..middle button (B) state
+3431	BL..left button (A) state
+3432	BS..start button state
+3433	MX2..mouse pointer X coordinate (previous)
+3434	MY2..mouse pointer Y coordinate (previous)
+3435	MR..right button (C) state (previous)
+3436	MC..middle button (B) state (previous)
+3437	ML..left button (A) state (previous)
+3438	MS..start button state (previous)
+3439	TR..right button timer (used for clicks)
+3440	TC..right button timer (used for clicks)
+3441	TL..right button timer (used for clicks)
+3442	TS..right button timer (used for clicks)
+3443	EV(x,0)..kind of event
+3444	EV(x,1)..mouse X coordinate where the event happened
+3445	EV(x,2)..mouse Y coordinate where the event happened
+3446	Mouse input handling
+3447	Write a message to the message queue
+3448	Read a message from the message queue
+3449	Clear the message queue
+3450	Show a message box
+3451	SYS_MES_TITLE$   string shown in the title
+3452	SYS_MES_MESSAGE$ message to show
+3453	1 ... rotating display
+3454	2 ... zooming display
+3455	3 ... ---- (for expansion)
+3456	4 ... no sound
+3457	5-7 ... kind of icon
+3458	0..none
+3459	1..warning
+3460	2..question
+3461	3..danger(?)
+3462	8-9 ... buttons
+3463	0..none (shown for about 2 s)
+3464	1..1 button
+3465	2..2 buttons
+3466	Button hit check
+3467	Show the file selection dialog
+3468	*NEW*
+3469	Double-click handling
+3470	*NEW*
+3471	Draw the buttons
+3472	An error occurred
+3473	Draw a button
+3474	Cursor handling
+3475	Keyboard handling
+3476	Mouse pointer
+3477	Number of mouse pointers defined - 1
+3478	Define palettes
+3479	Define textures
+3480	Define vertices
+3481	Define attributes
+3482	Define polygons
+3483	Redefine the vertex data to animate
+3484	A flag-like change
+3485	A raster-like change
+3486	Palette data
+3487	System device
+3488	Clear the copy buffer
+3489	Main loop
+3490	Capture
+3491	Keyboard accelerator handling
+3492	Hit test
+3493	Note mode
+3494	Line mode
+3495	INPUT :EVENTX  "ASCII code pressed"
+3496	OUTPUT: none
+3497	0...move to the start of the phrase
+3498	1...move to the end of the phrase
+3499	2...phrase -1
+3500	3...phrase +1

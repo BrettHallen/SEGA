@@ -1,0 +1,500 @@
+1801	- Each note's length and strength can be
+1802	 set independently, but the time until
+1803	 the next note is the length of the last
+1804	" 
+1805	 note given inside "()".
+1806	            ~~this chord lasts a quarter note
+1807	Make a sound!            32/47
+1808	- Chords can mix different tones too
+1809	- The note after the chord then uses the
+1810	 last tone given.
+1811	- In the example above, "
+1812	" plays with
+1813	 tone 35.
+1814	Make a sound!            33/47
+1815	Tuplets
+1816	 are written in the tuplet brackets "
+1817	".
+1818	- Any number of notes is allowed, as long
+1819	 as the direct length divided by the count
+1820	 is not less than 1.
+1821	- Even tuplets that don't divide evenly
+1822	 never drift from the other tracks.
+1823	- The example plays a quarter note, then
+1824	 three triplets in a quarter note's length.
+1825	Make a sound!            34/47
+1826	- Inside tuplets you can use chords, and
+1827	 commands that work per track, such as
+1828	 volume or tone changes
+1829	- The example plays a "5-note tuplet of
+1830	 chords" with tone changes in a half note
+1831	* Tuplets can't go inside chord brackets.
+1832	Make a sound!            35/47
+1833	To set the volume per track
+1834	, use the "
+1835	"
+1836	 or "
+1837	" command.
+1838	" command has
+1839	16 steps
+1840	, changing by
+1841	 about the same amount per step.
+1842	128 steps
+1843	; each step
+1844	 is in
+1845	decibels
+1846	. Half of 127's volume
+1847	 is not 64.
+1848	" and "
+1849	" 
+1850	affect each other
+1851	.
+1852	Make a sound!            36/47
+1853	" or "
+1854	" command's setting
+1855	 
+1856	to raise or lower the volume
+1857	 relatively, use the "[" and
+1858	" marks (per track).
+1859	- The number is relative to the "
+1860	" command, but
+1861	 in fact giving 1 changes it
+1862	 by 2 levels (
+1863	twice the number given
+1864	- For example, after "
+1865	" the volume
+1866	 is 125.
+1867	Make a sound!            37/47
+1868	- To set a track's position (
+1869	)
+1870	, use the "
+1871	 (left) - 
+1872	 (centre) - 
+1873	 (right): 128 steps
+1874	.
+1875	- If not set, the position stored in the
+1876	 tone data (
+1877	layer pan
+1878	
+1879	) is used.
+1880	Setting the tone again restores it
+1881	Make a sound!            38/47
+1882	- As you just heard, some tones change
+1883	 instrument or sample range when the note
+1884	 name changes. In this sound
+1885	 system these are called 
+1886	.
+1887	- For example, with tone 31 (drums) of
+1888	 the STANDARD set, each note name plays
+1889	 a completely different instrument.
+1890	~~~only a drum tone is set.
+1891	Make a sound!            39/47
+1892	The key signature command
+1893	" (
+1894	) shifts
+1895	 notes by semitones from what you wrote,
+1896	 which is awkward for tones like drums
+1897	 where the instrument changes with the
+1898	 note name.
+1899	" setting can be changed per
+1900	 track, but for percussion the "
+1901	 note-number "
+1902	" command
+1903	 is handier.
+1904	Make a sound!            40/47
+1905	- Written with the "
+1906	" command, the example becomes
+1907	 the 4 lines below.
+1908	Make a sound!            41/47
+1909	- Let's hear some drum section
+1910	 samples.
+1911	STANDARD set
+1912	 drum tones used.
+1913	- This sample is built into this program
+1914	' 
+1915	 under that label.
+1916	* Press Space to stop playing
+1917	Make a sound!            42/47
+1918	ETHNIC set
+1919	 tones used.
+1920	Make a sound!            43/47
+1921	METAL set
+1922	Make a sound!            44/47
+1923	Make a sound!            45/47
+1924	ROCK set
+1925	' 
+1926	 under that label.
+1927	 
+1928	Make a sound!            46/47
+1929	DANCE set
+1930	Make a sound!            47/47
+1931	TARG command
+1932	 rearranged tones.
+1933	Type in a score as written!     1/13
+1934	- In a score, after the 
+1935	treble clef
+1936	 or 
+1937	bass clef
+1938	 come,
+1939	 in some pieces,
+1940	sharps
+1941	#
+1942	" or 
+1943	flats
+1944	b
+1945	", 1 to
+1946	 7 of them.
+1947	- Typing such a score in older MML meant
+1948	 keeping track of which notes go up
+1949	 (or down) a semitone as you typed.
+1950	 
+1951	Type in a score as written!     2/13
+1952	- And when sharps and flats appear,
+1953	 their 
+1954	scope
+1955	 (the rule: within the bar and
+1956	 within one octave) meant notes could
+1957	 come out wrong even when you thought
+1958	 you had typed them correctly.
+1959	Type in a score as written!     3/13
+1960	- These commands let you type a score
+1961	 exactly as written:
+1962	  key signature command
+1963	bar command
+1964	  loop (repeat) control commands
+1965	        "
+1966	- "As written" here means you can type
+1967	exactly as written
+1968	" 
+1969	 it without thinking about the key or
+1970	 the scope of accidentals,
+1971	in the shape of the score as you see it
+1972	.
+1973	 
+1974	Type in a score as written!     4/13
+1975	" command takes the number of
+1976	 sharps or flats at the left of the
+1977	 score (
+1978	- For example, 
+1979	two sharps
+1980	 is
+1981	four flats
+1982	 is "
+1983	" and so on
+1984	.
+1985	- Normally it goes at the start of the MML,
+1986	 but pieces that
+1987	 change key are supported too.
+1988	Type in a score as written!     5/13
+1989	" in use: let's listen.
+1990	Type in a score as written!     6/13
+1991	" isn't used, "
+1992	" 
+1993	 affect only that note, and the bar command
+1994	 and "
+1995	) mean nothing.
+1996	           ^        ^
+1997	   no meaning.      this note only.
+1998	Type in a score as written!     7/13
+1999	" is used, it switches to
+2000	score mode
+2001	, and "
+2002	" become true
+2003	 
+2004	the scope of accidentals
+2005	 is marked with it.
+2006	) works too.
+2007	(an accidental lasts for the underlined part)
+2008	Type in a score as written!     8/13
+2009	Da capo
+2010	" normally means going back to the start,
+2011	 but in this MML the part between two "
+2012	 is 
+2013	repeated forever
+2014	 
+2015	 (for game BGM).
+2016	 playing order -> A B B B B B...
+2017	Type in a score as written!     9/13
+2018	Segno
+2019	Dal segno
+2020	" jumps back to it
+2021	 (used as a pair).
+2022	 playing order -> A B B C
+2023	* Repeat marks can only be written in the
+2024	  base track (see the glossary).
+2025	Type in a score as written!    10/13
+2026	- Normally the 
+2027	coda mark
+2028	" etc. are used to enter
+2029	 scores that leave things out 
+2030	 for notation reasons
+2031	 
+2032	.
+2033	 playing order -> A B C B D
+2034	" leaves the repeat
+2035	 and skips to the MML after "
+2036	"
+2037	Type in a score as written!    11/13
+2038	Repeat marks
+2039	: if there are several,
+2040	labels
+2041	 make the pairs of commands
+2042	 clear.
+2043	 playing order -> A B C B C D B E
+2044	- Labels are integers 
+2045	. (If several are in the same
+2046	 place, "
+2047	")
+2048	Type in a score as written!    12/13
+2049	repeat once
+2050	 
+2051	 between them.
+2052	Type in a score as written!    13/13
+2053	- There are many other repeat marks.
+2054	 playing order -> A A B B C D C E
+2055	Rearrange the tones!         1/17
+2056	- With the tone arrange command "
+2057	" you can take
+2058	16 kinds
+2059	 of tone file, pick out the tones
+2060	 you need
+2061	rebuild
+2062	 them.
+2063	 command uses the
+2064	file buffer
+2065	, so you must
+2066	 first reserve blocks with the 
+2067	 command
+2068	 (
+2069	1360 blocks needed
+2070	        ~~~~reserve 1360 blocks
+2071	Rearrange the tones!         2/17
+2072	 command can take its
+2073	command line
+2074	 parameters
+2075	 on the command line or read them from
+2076	 statements:
+2077	 two ways.
+2078	- First, 
+2079	 method: let's
+2080	 test it.
+2081	Rearrange the tones!         3/17
+2082	 strings and
+2083	 shakuhachi play together.
+2084	 command's "
+2085	" expands the tone data area
+2086	 and 
+2087	 picks the tones.
+2088	* Numbers are given from 1 upwards.
+2089	Rearrange the tones!         4/17
+2090	- To do the same by reading
+2091	 statements,
+2092	 it looks like this.
+2093	 (only the 
+2094	 part is changed)
+2095	Rearrange the tones!         5/17
+2096	 statements allow rearranging
+2097	per layer
+2098	.
+2099	 set drums (31)
+2100	 copied as a whole tone the usual way
+2101	 copies every drum
+2102	 sound.
+2103	Put the tone-area expansion back as it was.
+2104	Rearrange the tones!         6/17
+2105	" to pick out only
+2106	 particular layers.
+2107	layer 1
+2108	 (Snare) wave only is copied
+2109	 (other sounds don't play).
+2110	Rearrange the tones!         7/17
+2111	                  ~Snare layer
+2112	- The three "
+2113	" values are
+2114	- If all are "
+2115	", the original information
+2116	 is copied. So the Snare
+2117	 only sounds at note number "
+2118	", and
+2119	 with the MML "
+2120	" command, anything but "
+2121	"
+2122	 plays nothing.
+2123	Rearrange the tones!         8/17
+2124	 is rewritten to make 
+2125	the whole range
+2126	 play it.
+2127	- Running the MML like this, the Snare
+2128	 sounds on every note
+2129	 number.
+2130	        ~~~the original Snare sound
+2131	Rearrange the tones!         9/17
+2132	- When combined with drums from another
+2133	 set, note numbers may clash.
+2134	 
+2135	- Then rewrite the 
+2136	 to 
+2137	 
+2138	shift the note number
+2139	 it plays at
+2140	 (
+2141	38->0
+2142	/
+2143	37-38->47-48
+2144	Rearrange the tones!        10/17
+2145	- You can give notes the same number on
+2146	 purpose to play them together.
+2147	- What is normally "
+2148	" is shifted by "
+2149	" so it sounds
+2150	" 
+2151	 on "N10".
+2152	Rearrange the tones!        11/17
+2153	- Some tones use several samples
+2154	by range
+2155	 
+2156	 
+2157	switched by note number
+2158	 
+2159	.
+2160	 set is split into "
+2161	" 
+2162	10 layers
+2163	.
+2164	- Let's hear the PIANO set as it is.
+2165	 @1 O1 L8 CDEFGAB>CDEFGAB>CDEFGAB>C...
+2166	Rearrange the tones!        12/17
+2167	 set takes up a lot of wave
+2168	the piano alone
+2169	 
+2170	 memory, so even after rearranging,
+2171	 other instruments no longer
+2172	 fit.
+2173	- In such cases, copy only 
+2174	the range you actually use
+2175	 of the wave data to
+2176	 
+2177	save
+2178	 memory.
+2179	 expands the tone area,
+2180	 so you can add even more tones)
+2181	Rearrange the tones!        13/17
+2182	- Copy only the waves of note numbers "
+2183	layer 4
+2184	)
+2185	 and play them over
+2186	 
+2187	 (useful when 
+2188	only the middle range
+2189	 is used).
+2190	" range plays at
+2191	its original sampled range
+2192	 
+2193	. Outside it the quality drops.
+2194	Rearrange the tones!        14/17
+2195	Layer editing
+2196	: the part between makes one tone.
+2197	low range
+2198	high range
+2199	 as separate
+2200	 tones ("
+2201	@1 O1 L8 CDEF... @2 O1 CDEF...
+2202	Rearrange the tones!        15/17
+2203	By note number
+2204	different instruments
+2205	 can be
+2206	 registered too (
+2207	 function).
+2208	 DATA          41,0,67,70,-1:'O.D. guitar
+2209	Rearrange the tones!        16/17
+2210	- Rearranging reads the CD, so tones
+2211	 from the same tone file are faster
+2212	 grouped together.
+2213	 (later file names can be left out)
+2214	●Slow (4 LOADs)  ●Fast (2 LOADs)
+2215	Rearrange the tones!        17/17
+2216	 reserving two file areas of 1360
+2217	 blocks each lets tones switch
+2218	 quickly.
+2219	- When a different tone is loaded and a
+2220	 file area is free, the previous file is
+2221	 kept there automatically.
+2222	 (it works like a cache)
+2223	* Even one file area helps.
+2224	Shape the tones!           1/18
+2225	 command lets you shape any tone
+2226	 (including FM) freely
+2227	tone#
+2228	layer#
+2229	item#
+2230	"
+2231	: 
+2232	 parameters pick a tone's item
+2233	 to 
+2234	read or write
+2235	.
+2236	(Ex 1)
+2237	 tone 
+2238	 layer 
+2239	 item 
+2240	's value 
+2241	into variable A
+2242	.
+2243	(Ex 2)
+2244	set to 31
+2245	Shape the tones!           2/18
+2246	Item numbers are grouped like this:
+2247	●Voice ( 0-)       ●Note ON control (10-)
+2248	●EG control (20-)  ●Wave data control (30-)
+2249	●LFO control (50-) ●FM wiring       (60-)
+2250	●Mixer control (70-)
+2251	- A shaped tone is written into the
+2252	at Note ON time
+2253	 real 
+2254	 
+2255	sound slot registers
+2256	 
+2257	.
+2258	* See the manual for parameter defaults.
+2259	Shape the tones!           3/18
+2260	- Items numbered 
+2261	single-digit
+2262	 (
+2263	 part) apply to
+2264	the whole tone
+2265	, so the layer number is ignored.
+2266	number of tones - 1
+2267	) applies to the whole set,
+2268	 so the tone number is ignored too.
+2269	(Ex)
+2270	FOR T=0 TO TPROP(0,0,2) :'tones -1
+2271	 FOR L=0 TO TPROP(T,0,1):'layers -1
+2272	(looping over the tones and layers)
+2273	- Item numbers can be the "
+2274	" 
+2275	constant symbols
+2276	 
+2277	 too (
+2278	see next page
+2279	Shape the tones!           4/18
+2280	Shape the tones!           5/18
+2281	- Now let's take tone 
+2282	 set's number
+2283	 
+2284	) and shape it in
+2285	 various ways.
+2286	 tone, how many layers is it
+2287	 made of? Let's check.
+2288	 should be shown (item 
+2289	 is
+2290	number of layers - 1
+2291	Shape the tones!           6/18
+2292	" is "
+2293	", so layers 
+2294	 and 
+2295	 exist.
+2296	- Next, layer 
+2297	 
+2298	 (
+2299	item 10
+2300	item 11

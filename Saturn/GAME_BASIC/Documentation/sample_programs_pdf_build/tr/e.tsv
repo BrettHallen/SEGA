@@ -1,0 +1,400 @@
+1401	 so mind the volume.        
+1402	Choose a number.   Back->Enter 
+1403	Compatibility with MSX MML        1/2
+1404	- These commands are compatible with
+1405	 MSX MML:
+1406	 note names "
+1407	", sharp/flat "
+1408	", 
+1409	 volume "
+1410	", octave "
+1411	", length "
+1412	 tone change "
+1413	", rest "
+1414	", tuplet "
+1415	 tie "
+1416	", tempo "
+1417	"
+1418	- The sharp/flat "
+1419	" commands change meaning
+1420	" when the key signature is set.
+1421	 (natural "
+1422	" then has a meaning)
+1423	Compatibility with MSX MML        2/2
+1424	- These commands are new in this BASIC:
+1425	 
+1426	 loop control "
+1427	" etc.
+1428	 macros "
+1429	 DSP control "
+1430	", chords within a track "
+1431	 key signature "
+1432	", key transpose "
+1433	 damper control "
+1434	", status control "
+1435	 velocity "
+1436	", pitch bend "
+1437	" and other
+1438	 sub-options of the note commands.
+1439	         MML tutorial           
+1440	1: Make a sound!               
+1441	2: Type in a score as written!       
+1442	3: Rearrange the tones!           
+1443	4: Shape the tones!             
+1444	5: Use the DSP effector!    
+1445	6: Make sounds with FM!               
+1446	7: Techniques for expression   
+1447	* Press a key other than Space, Enter or 0,
+1448	  then Space again to replay.
+1449	Make a sound!             1/47
+1450	Do-re-mi-fa-so-la-ti
+1451	: let's play it.
+1452	Do
+1453	 is "
+1454	re
+1455	mi
+1456	" and so on.
+1457	        or
+1458	* This sample uses the 
+1459	 command.
+1460	  From here on only the string is shown.
+1461	* 
+1462	Note-name commands
+1463	capital letters
+1464	 are used.
+1465	Run/Next->Space  Back->Enter  TOP->0
+1466	Make a sound!             2/47
+1467	- The tone you just heard is the 
+1468	default
+1469	 tone 
+1470	 
+1471	 (the 
+1472	 command's tone).
+1473	- If nothing is set, the defaults are
+1474	 used to play.
+1475	- The 
+1476	 set is loaded now,
+1477	 so this time let's play using the
+1478	 tone
+1479	.
+1480	 ~~~ STANDARD no. 44 is Strings.
+1481	Make a sound!             3/47
+1482	- Like this, the "
+1483	" command picks any
+1484	 tone you like.
+1485	- The example below switches from no. 
+1486	 
+1487	 to no. 
+1488	 and plays.
+1489	Make a sound!             4/47
+1490	Spaces
+1491	 do nothing.
+1492	- They can go anywhere, and any number
+1493	 of them is ignored.
+1494	- Use them to make the listing easier
+1495	 to read.
+1496	- The examples below all play the same.
+1497	     Next->Space  Back->Enter  TOP->0
+1498	Make a sound!             5/47
+1499	To set the octave
+1500	 directly, use the "
+1501	" com
+1502	mand ("
+1503	"-"
+1504	").
+1505	- To move the current octave up or down,
+1506	 use:
+1507	    octave down "
+1508	    octave up "
+1509	    (the two lines above play the same)
+1510	Make a sound!             6/47
+1511	Rests
+1512	 use the rest command "
+1513	".
+1514	Make a sound!             7/47
+1515	- After the note commands "
+1516	" or the rest command
+1517	" you can give various
+1518	options
+1519	 
+1520	.
+1521	Options of the note commands
+1522	-
+1523	][length][
+1524	velocity [
+1525	][start]
+1526	[target]
+1527	[bend length]]
+1528	[chord name][;inversions]]
+1529	Make a sound!             8/47
+1530	- "
+1531	" or "
+1532	" raises it a semitone
+1533	sharp
+1534	).
+1535	" lowers it a semitone (
+1536	flat
+1537	- When the key command "
+1538	" is in use, the
+1539	" 
+1540	natural note names
+1541	 are taken as
+1542	 and "
+1543	" "
+1544	" act as
+1545	accidentals
+1546	.
+1547	 Also, "n", which returns a shifted note
+1548	 to natural, "
+1549	" works (
+1550	natural
+1551	* For keys, see "
+1552	Tutorial menu 2
+1553	Make a sound!             9/47
+1554	- Now let's actually make the sounds.
+1555	  is not an error either.
+1556	- Double sharps and flats aren't supported.
+1557	Make a sound!            10/47
+1558	- A number after a note name sets a
+1559	 one-off
+1560	 note
+1561	length
+1562	.
+1563	- These are the lengths you can give.
+1564	- Each means the whole note "
+1565	" divided
+1566	 into that many parts
+1567	.
+1568	- Let's play every length in turn.
+1569	, with rests in between)
+1570	@35 C1 R C2 R C3 ... C64 R C96 R C128
+1571	Make a sound!            11/47
+1572	- After the number you can add up to 
+1573	 
+1574	dot
+1575	 marks "
+1576	.
+1577	- A dot adds 
+1578	half
+1579	 the length
+1580	 
+1581	 of the previous length
+1582	.
+1583	- These options work the same on
+1584	 rests too.
+1585	  quarter note, quarter rest, dotted quarter...
+1586	("
+1587	" is "
+1588	" added together)
+1589	Make a sound!            12/47
+1590	- The note options from here on are new
+1591	 in this MML.
+1592	- If you just want to play music, skip
+1593	 ahead and come back once you're used
+1594	 to it.
+1595	Make a sound!            13/47
+1596	- After the "
+1597	" following a note name, 
+1598	a one-off velocity
+1599	 and 
+1600	one-off Gate / Delta
+1601	 can be given.
+1602	- Velocity is how fast a key is struck;
+1603	 bigger numbers are stronger and
+1604	 faster (
+1605	(default: the value set by the "
+1606	" command)
+1607	- Note that it does not set the
+1608	 playback volume.
+1609	Make a sound!            14/47
+1610	- Add a further "
+1611	" after velocity to
+1612	 give a one-off Gate / Delta.
+1613	- This is the ratio of the real 
+1614	 time
+1615	 to the note length, as a fraction; use it
+1616	 for stac
+1617	cato
+1618	. 
+1619	- As above, you can
+1620	 leave out the numerator
+1621	 
+1622	 (the two lines above mean the same).
+1623	Make a sound!            15/47
+1624	- Make the Gate / Delta numerator bigger
+1625	 to sound longer than the note length
+1626	, too.
+1627	- Even then it moves to the next note
+1628	 after the note length, so the earlier
+1629	 note carries on and the sounds overlap
+1630	 (
+1631	arpeggio
+1632	" is held for 
+1633	3 times
+1634	 its length, "
+1635	twice
+1636	, 
+1637	 so it keeps sounding until "
+1638	" ends)
+1639	Make a sound!            16/47
+1640	- If the same one-off setting repeats,
+1641	 you can register it as the default:
+1642	   length command      : "
+1643	   velocity command    : "
+1644	   Gate / Delta command: "
+1645	 (the two lines above mean the same)
+1646	Make a sound!            17/47
+1647	- Next, 
+1648	the bend wheel
+1649	.
+1650	- This simulates the disc-shaped roller
+1651	 beside the keys of a keyboard
+1652	 instrument.
+1653	* Chord entry is shown in tutorial 7.
+1654	Make a sound!            18/47
+1655	- After the note name put the bend-wheel mark "
+1656	, and give "
+1657	start
+1658	", "
+1659	target
+1660	bend length
+1661	" 
+1662	.
+1663	- Any value can be left out, but the
+1664	 separator "
+1665	" cannot.
+1666	" range is "
+1667	. If "
+1668	" is left out, the previous
+1669	" is used. If "
+1670	" is left
+1671	 out, it is the middle value "
+1672	".
+1673	Make a sound!            19/47
+1674	" is how long the bend wheel
+1675	 moves. If left out, it bends from
+1676	 "start" to "target" over the note's length
+1677	 from "
+1678	".
+1679	 So the smaller the value, the faster
+1680	 the movement it shows.
+1681	(over a whole note, from "
+1682	one octave down
+1683	" to
+1684	 "
+1685	one octave up
+1686	")
+1687	Make a sound!            20/47
+1688	- The example plays three "
+1689	" (whole notes) in a row;
+1690	 the first "
+1691	" bends up one octave,
+1692	 the second "
+1693	" has no
+1694	" so from one octave up it
+1695	 drops two octaves, and the
+1696	 third "
+1697	" has neither value,
+1698	 so it returns to the centre (
+1699	.
+1700	Make a sound!            21/47
+1701	- The bend wheel can be 
+1702	auto volume
+1703	 or
+1704	auto pan
+1705	 
+1706	switched to
+1707	 
+1708	 (not both at once).
+1709	" put "
+1710	" right after it.
+1711	- The example plays the three kinds in
+1712	 turn with the same numbers.
+1713	Make a sound!            22/47
+1714	- The example you just heard didn't use
+1715	" with song number
+1716	 
+1717	 written explicitly.
+1718	- Pitch bend uses a lot of memory, so
+1719	 it uses song number 1, which has the
+1720	 most memory by default.
+1721	 
+1722	- Auto volume and auto pan use even
+1723	 more memory.
+1724	Make a sound!            23/47
+1725	The length command
+1726	 "
+1727	" and the note
+1728	 commands' one-off lengths
+1729	 can use 
+1730	, an
+1731	, written
+1732	 in (add a small "
+1733	").
+1734	- And the bend wheel's "
+1735	" accepts
+1736	 only direct lengths
+1737	.
+1738	 
+1739	     ~ same ~~~~~    ^^^^set to an 8th note
+1740	Make a sound!            24/47
+1741	- Direct length treats a quarter note
+1742	 as a resolution
+1743	 of 480
+1744	.
+1745	(an 8th note is 240, a half note 960)
+1746	- In the bend-wheel sample earlier,
+1747	 with the bend length left out
+1748	 a direct length equal to the note
+1749	 length is set internally, like this.
+1750	Make a sound!            25/47
+1751	- To join notes into a longer one, use
+1752	 the tie mark
+1753	- When notes are tied, only the first
+1754	 note name counts.
+1755	- Writing it as below is the same.
+1756	* See the manual for details.    
+1757	Make a sound!            26/47
+1758	- With a tie and the bend wheel, you can
+1759	 change the rate of change note by note
+1760	 while it sounds long.       
+1761	- In length it's "
+1762	", three whole
+1763	 notes, but pitch bend is controlled per
+1764	 note length, so it is split finely
+1765	 (direct lengths can split it
+1766	 even finer)
+1767	Make a sound!            27/47
+1768	" note, make a scale
+1769	 with pitch bend.
+1770	- As here, you can fake a
+1771	portamento
+1772	 too.
+1773	* With bend range 12, a semitone is "5.33"
+1774	Make a sound!            28/47
+1775	- Let's play a tune with fake
+1776	 portamento.
+1777	Plays "@44 D F2 G A4.B8 A G2 E C4."
+1778	Make a sound!            29/47
+1779	- To play without breaks, use the
+1780	slur mark
+1781	.
+1782	- Gate / Delta is ignored for that note,
+1783	 which is keyed on for its full length.
+1784	- The example sets Gate / Delta to 1/8
+1785	 for staccato, but notes joined
+1786	 by a slur play
+1787	 without breaks.
+1788	Make a sound!            30/47
+1789	chords
+1790	: let's play some.
+1791	- In MSX MML, a C-E-G chord had to be
+1792	 split across tracks (channels) like
+1793	 this.
+1794	chords within one track
+1795	" brackets.
+1796	           ~~~~~this part sounds at once.
+1797	Make a sound!            31/47
+1798	- With the chord marks "
+1799	" up to 32 notes
+1800	 can sound at once.

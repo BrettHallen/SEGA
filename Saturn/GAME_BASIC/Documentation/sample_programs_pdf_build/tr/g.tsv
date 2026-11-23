@@ -1,0 +1,426 @@
+2301	 and 
+2302	 also work)
+2303	the low range
+2304	 wave
+2305	 is managed by it.
+2306	Shape the tones!           7/18
+2307	- From here on, to keep it simple, we
+2308	 work only on the low-range layer
+2309	).
+2310	Layer boundaries
+2311	: the range that doesn't cross them is
+2312	 octave 
+2313	), so the samples
+2314	 below all use "
+2315	".
+2316	- First listen to the unshaped 
+2317	 tone.
+2318	Shape the tones!           8/18
+2319	- Now let's rewrite the 
+2320	envelope
+2321	 (EG)
+2322	 (item numbers in the 
+2323	20s
+2324	).
+2325	attack rate
+2326	: change it to make the
+2327	 sound's
+2328	attack
+2329	 slower at key on.
+2330	 <- attack rate (AR)
+2331	  <- AR's initial value
+2332	 Ready.  (down) EG 44,0,8
+2333	 does the same.
+2334	  <- smaller is slower
+2335	Shape the tones!           9/18
+2336	: when rewriting, 
+2337	consecutive
+2338	 item numbers
+2339	 can be set at once, separated by "
+2340	"
+2341	.
+2342	attack rate
+2343	release rate
+2344	: let's rewrite them.
+2345	- After rewriting, the values stay until
+2346	 the tone file is reloaded.
+2347	 
+2348	if an error occurs, initialise
+2349	Shape the tones!          10/18
+2350	bend range
+2351	: let's change it (
+2352	item 0
+2353	- This is the pitch change when the MML
+2354	 pitch bend command is given its
+2355	 maximum
+2356	pitch change
+2357	 in MIDI notes
+2358	.
+2359	", and "
+2360	" can be set.
+2361	" gives
+2362	+/-1 octave
+2363	" gives up to 
+2364	+/-2 octaves
+2365	- First play with the 
+2366	+/-1 octave
+2367	).
+2368	Put the envelope back as it was
+2369	Shape the tones!          11/18
+2370	- Next set it to 
+2371	 and run 
+2372	the same MML
+2373	 again.
+2374	* The bend range's initial value differs
+2375	  from tone to tone.
+2376	Shape the tones!          12/18
+2377	+/- a semitone
+2378	 again
+2379	.
+2380	- So even maximum pitch bend has
+2381	 little effect when the range is
+2382	 narrow.
+2383	 (with 0 the pitch doesn't change)
+2384	Shape the tones!          13/18
+2385	 (low frequency oscillator):
+2386	 let's use it. It's used as a
+2387	modulator of the
+2388	 sound signal
+2389	.
+2390	per tone
+2391	 
+2392	 (amplitude modulation) and 
+2393	 (frequency
+2394	 modulation): their
+2395	waveform
+2396	modulation depth
+2397	can be controlled independently
+2398	 (only the frequency is shared by ALFO/PLFO)
+2399	- The output wave can be 
+2400	sawtooth
+2401	square
+2402	triangle
+2403	 white noise
+2404	4 kinds
+2405	: choose one.
+2406	Shape the tones!          14/18
+2407	 (amplitude modulation): let's apply it.
+2408	- This amplitude modulation gives a 
+2409	tremolo effect
+2410	 (the volume
+2411	 changes periodically).
+2412	- Item number "
+2413	" sets 
+2414	the ALFO wave
+2415	 to triangle (
+2416	)
+2417	, and item number "
+2418	amplitude depth
+2419	 to max
+2420	 (
+2421	) (both at once).
+2422	Shape the tones!          15/18
+2423	the LFO frequency
+2424	: let's raise it.
+2425	 can be given. For the real frequencies
+2426	 see the manual.
+2427	- Here "
+2428	" is set,
+2429	 giving 
+2430	 command works the same.
+2431	Shape the tones!          16/18
+2432	 (frequency modulation): let's apply it.
+2433	- This frequency modulation gives a
+2434	vibrato effect
+2435	 (the pitch changes periodically).
+2436	- Reset ALFO; item number "
+2437	PLFO wave
+2438	
+2439	), item number "
+2440	 frequency depth
+2441	 to max (
+2442	).
+2443	Shape the tones!          17/18
+2444	 command copies a tone several times
+2445	 and shapes each copy differently,
+2446	 widening what you can express.
+2447	copying the same tone several times
+2448	 still uses only
+2449	  the wave data's
+2450	one copy of space
+2451	.
+2452	  Separate data says 
+2453	how
+2454	  to play
+2455	 the original wave data, and
+2456	  tone shaping works on that
+2457	  data.
+2458	Shape the tones!          18/18
+2459	's wave: copy it 
+2460	 times and shape each
+2461	 differently.
+2462	 only tone no. 1 stays original)
+2463	@1 kept original
+2464	@2 change the attack rate
+2465	Use the DSP effector!  1/11
+2466	 is a module
+2467	 
+2468	separate
+2469	 from the normal signal lines.
+2470	- To use it you must do the 
+2471	wiring
+2472	input mix
+2473	 level
+2474	output level
+2475	 adjustments
+2476	 (mixer control).
+2477	- Some tones have these preset; if the
+2478	 input mix level is not "
+2479	"
+2480	 
+2481	 just switching to DSP mode
+2482	 applies the effect.
+2483	Use the DSP effector!  2/11
+2484	 DSP modes are provided.
+2485	[Single effector mode]
+2486	- Several effector modules, switched by
+2487	" command
+2488	 switching
+2489	.
+2490	[Multi-effector mode]
+2491	- Several effector modules are assigned
+2492	 in the tone data
+2493	assigned
+2494	 and used at once
+2495	.
+2496	Use the DSP effector!  3/11
+2497	single effector mode
+2498	: let's use it.
+2499	- Now the DSP can be used.
+2500	- Only 
+2501	 effector can be used at a time,
+2502	 so 
+2503	input select
+2504	 (item 70) is "
+2505	 fixed
+2506	- Initially 
+2507	every tone
+2508	 is "
+2509	", so you don't need to
+2510	 change it.
+2511	 
+2512	Use the DSP effector!  4/11
+2513	 tone: compare 
+2514	normal mode
+2515	 DSP mode
+2516	 by ear.
+2517	- Initially 
+2518	 mix
+2519	 level
+2520	", so 
+2521	rever
+2522	b
+2523	 is applied.
+2524	 <- normal mode
+2525	          <- DSP mode
+2526	Use the DSP effector!  5/11
+2527	input mix level
+2528	 command item number
+2529	" sets it (the DSP command's [level]).
+2530	- Set the input mix level to max to send
+2531	 more signal to the effector.
+2532	     <- max level
+2533	* See the manual for each tone's default.
+2534	* It doesn't set the output level (the
+2535	  output level is the MML "
+2536	" command).
+2537	Use the DSP effector!  6/11
+2538	 can be set, but
+2539	 the value changes 
+2540	how many notes can go in
+2541	,
+2542	 so take care
+2543	 (it causes distortion).
+2544	- Lower the input mix level to send
+2545	 less signal to the effector.
+2546	     <- weaker
+2547	 also sets it.
+2548	Use the DSP effector!  7/11
+2549	 mode, the MML
+2550	 "
+2551	effect change
+2552	) command
+2553	 switches between these effectors:
+2554	  "
+2555	"...
+2556	reverb 1
+2557	 (stereo)
+2558	reverb 2
+2559	delay
+2560	 (stereo)
+2561	distortion
+2562	 (mono)
+2563	* Initially it is "
+2564	".
+2565	Use the DSP effector!  8/11
+2566	- Let's play them in turn, switching
+2567	 effectors.
+2568	" command takes a little time
+2569	 
+2570	to switch after it runs
+2571	, so a rest "
+2572	 
+2573	" is put first.
+2574	Use the DSP effector!  9/11
+2575	- The effect data's 
+2576	 is changed with "
+2577	effect level
+2578	) command
+2579	.
+2580	ef
+2581	fect pan
+2582	) command.
+2583	- These MML commands are about 
+2584	the mixer settings
+2585	, so they work the same whichever track
+2586	 they are in.
+2587	Use the DSP effector! 10/11
+2588	multi-effector mode
+2589	: let's
+2590	 use it.
+2591	- Now 
+2592	 kinds of effector can be used
+2593	 for different tones.
+2594	values for input select
+2595	 are:
+2596	reverb
+2597	 (output mixer 0, 1)
+2598	delay
+2599	 (output mixer 2, 3)
+2600	distortion
+2601	 (output 4)
+2602	Use the DSP effector! 11/11
+2603	) 
+2604	 delay
+2605	 applied:
+2606	 compare with normal mode.
+2607	(distortion has a high output level; adjust with "el")
+2608	Make sounds with FM!             1/17
+2609	 command's layer editing (
+2610	) lets you make FM tones
+2611	- FM uses less wave memory than PCM,
+2612	 which uses sample data.
+2613	 
+2614	- And it 
+2615	doesn't depend on the sampled range
+2616	, so
+2617	 it plays with the same quality everywhere
+2618	 
+2619	.
+2620	Make sounds with FM!             2/17
+2621	- It can simulate older FM slot (operator)
+2622	 wiring, so you can port old work
+2623	 and keep it as BASIC text.
+2624	 
+2625	- And the Saturn's hardware can 
+2626	 sound slots 
+2627	wire freely
+2628	, so
+2629	 a wide range of sounds is possible.
+2630	* The sample tunes Veigues and Fire Hawk
+2631	  recreate FM tones of their day.
+2632	Make sounds with FM!             3/17
+2633	the modulation wave as it is
+2634	: let's play
+2635	 it (
+2636	 -> sawtooth).
+2637	- There are many parameters, so it's
+2638	 split over 2 lines (green lines are comments).
+2639	Make sounds with FM!             4/17
+2640	" and later parameters are
+2641	 information
+2642	total level
+2643	multiple
+2644	: they're
+2645	 settings, so we leave them for now.
+2646	Operator number
+2647	modulation wave
+2648	modulation input
+2649	 direct data output level
+2650	" are set.
+2651	- Let's make a tone using 4-operator wiring.
+2652	Make sounds with FM!             5/17
+2653	" identifies the
+2654	 connection information
+2655	 when wiring FM; it is the
+2656	 number of the operator whose parameters
+2657	 follow (its own number).
+2658	Make sounds with FM!             6/17
+2659	, and the "
+2660	" mark
+2661	 followed by 
+2662	a layer number
+2663	 can be given, but
+2664	 here all operators' modulation waves are
+2665	 set to an ordinary
+2666	sine wave
+2667	".
+2668	Make sounds with FM!             7/17
+2669	" and 
+2670	" take the actual
+2671	 wiring (1-32).
+2672	operator 1
+2673	self-feedback
+2674	 
+2675	- That means its own (operator 1) output
+2676	 goes back to itself, so 
+2677	 are both set to "
+2678	"
+2679	.
+2680	Make sounds with FM!             8/17
+2681	direct data output level
+2682	" sets the
+2683	 when taking its output directly
+2684	mixer level
+2685	 
+2686	 (
+2687	" or more takes the operator's output
+2688	 out as actual sound.
+2689	" and play it.
+2690	 (modulation depth "
+2691	" is
+2692	 0 for now)
+2693	Make sounds with FM!             9/17
+2694	 connect the input signals: from them
+2695	 
+2696	how much modulation it takes
+2697	 is set
+2698	: but 0-4 is no modulation).
+2699	" (none) to "
+2700	" (+/-2 pi): let's
+2701	 listen as it changes.
+2702	- To change it while playing, the 
+2703	 command is used
+2704	 (item 
+2705	: modulation level "
+2706	4-10
+2707	Make sounds with FM!            10/17
+2708	- Let's wire the other operators the same.
+2709	 
+2710	Operator 2
+2711	feedback = 0
+2712	Operator 3
+2713	 takes operator 2's output. 
+2714	Operator 4
+2715	 takes
+2716	 operators 1 and 3.
+2717	Make sounds with FM!            11/17
+2718	- Now set the 
+2719	operator 1 we played as a test
+2720	 output "
+2721	" so it doesn't
+2722	 go to the mixer. The wiring shows 
+2723	the final
+2724	 output is operator 4 only
+2725	.
+2726	Make sounds with FM!            12/17

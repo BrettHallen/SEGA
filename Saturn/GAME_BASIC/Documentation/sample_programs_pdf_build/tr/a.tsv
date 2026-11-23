@@ -1,0 +1,549 @@
+0	BGM & sound effects set
+1	SONG#4 = pylon touch sound
+2	Viewing direction
+3	Player X speed
+4	Player Y speed
+5	Player acceleration parameter
+6	Deceleration parameter
+7	Pylon touch
+8	MOBIL Racing Controller version
+9	X input item number = 3 (Neutral = 127)
+10	BGM & sound effects set   by nao-chan
+11	Plug the Racing Controller
+12	into control port 1
+13	Two-player
+14	System flag display position
+15	Number of control pads connected
+16	Number of players in the game
+17	Check the control pads
+18	Opening
+19	Hide the screen
+20	Set the palette
+21	Set the interval-timer subroutine
+22	Key input (PAD1)
+23	Change flags
+24	Time display
+25	Sun display
+26	Key input (PAD2)
+27	Read the subject words
+28	Read the predicate words
+29	Draw the screen
+30	Camera (OBJ0) position
+31	Set up the object (person)
+32	Red and white down
+33	Red up
+34	White up
+35	Red and white up
+36	Miss
+37	Win
+38	Lose
+39	Show object 1 at X=-70,Y=0,Z=0 (PLAYER1)
+40	Polygon display
+41	Attribute ID 0, polygon ID 0
+42	Display position: X,Y,Z
+43	Polygon scale: X,Y,Z
+44	Show object 2 at X=70,Y=0,Z=0 (PLAYER2)
+45	OBJ(2,12)=.5,.5,.5:'Polygon scale: X,Y,Z
+46	Set up the object (sun)
+47	Sun
+48	Show object 3 at X=140,Y=-60,Z=0
+49	Set up the object (cloud)
+50	Cloud
+51	Show object 4 at X=-140,Y=-60,Z=200
+52	4-point polygon display
+53	Attribute ID 8, polygon ID 0
+54	Set up the object (System-kun, the referee)
+55	Red and white down
+56	Red up
+57	White up
+58	Red and white up
+59	Show object 5 at X=-140,Y=-50,Z=0
+60	1/2 sun, cloud
+61	*  Main routine  *
+62	F L A G   U P
+63	Key input OFF
+64	Time display OFF
+65	Decide the mode
+66	Initial settings
+67	Set PAD1 interval timer to 1/60 s
+68	LVL = level
+69	Continue: clear the previous state
+70	Allow input
+71	Level up
+72	Set up random numbers
+73	Red OR white
+74	Keep the previous R
+75	Continue
+76	For "stay as you are", "don't raise", "don't lower", operate a different flag from last time
+77	Information display
+78	Subject display
+79	No wait if there was input
+80	Wait
+81	Stop all interrupts
+82	Start interrupts
+83	Predicate display
+84	Wait
+85	Wait for input
+86	Compare
+87	Score if red and white flags match the system flags, lose points if they differ
+88	Skip player 2 in one-player mode
+89	Back to START
+90	*  End of main routine  *
+91	When you get it wrong
+92	Eek!
+93	Wait 1 second
+94	System-kun appears
+95	Stop the clock
+96	Show the system flag state
+97	Resume
+98	System-kun leaves
+99	Game over
+100	Stop key interrupt (PAD1)
+101	Stop key interrupt (PAD2)
+102	Stop time display
+103	FINISHED!!
+104	Player # wins!!
+105	Score :
+106	Draw!
+107	A button: RESTART     Z button: END
+108	Smile
+109	Hmph
+110	Whaaat
+111	Blackout
+112	Clear the screen
+113	Display (score etc.)
+114	Player 1 score: ### pts
+115	Player 2 score: ### pts
+116	Flag display
+117	Player 1
+118	Player 2
+119	Wait for display
+120	Wait at least 5 syncs
+121	Change flags
+122	Replace the system flags
+123	Interrupt flag (end)
+124	Key input
+125	Stop the interrupt so it doesn't loop
+126	Input already done: return
+127	Keep the previous key input
+128	Read control pad 1
+129	Same as last time?
+130	If the A button was pressed, skip
+131	If it was the same as last time, return
+132	Input OK!
+133	Start key-input interrupt
+134	Read control pad 2
+135	Start key-input interrupt
+136	Time left
+137	Left: ### s
+138	Flag state
+139	Sun rotation
+140	Z-axis acceleration
+141	Sun rotation speed x10 (provisional)
+142	Cloud buildings
+143	BG settings
+144	Screen priority settings
+145	Draw on BG0
+146	Window 1
+147	Window 1 frame
+148	Window 2
+149	Window 2 frame
+150	Draw on BG1
+151	Sky
+152	Ground
+153	Centre line
+154	Screen effects
+155	Define palettes
+156	Palette for BG10 (polygons)
+157	Palette for BG0 (BITMAP0)
+158	Palette for BG1 (BITMAP1)
+159	Pad error
+160	Connect a control pad
+161	to control port 1
+162	For two players, connect control pads
+163	to control ports 1 and 2
+164	Word data
+165	RED
+166	WHITE
+167	UP
+168	DOWN
+169	DON'T RAISE
+170	DON'T LOWER
+171	STAY AS YOU ARE
+172	DON'T RAISE IT
+173	DON'T LOWER IT
+174	RAISE
+175	LOWER
+176	STAY
+177	Clear the whole screen
+178	Fade in
+179	sample game  FLAG UP
+180	Plug two or more control pads
+181	into the Multi-Terminal 6
+182	please
+183	| Register the whole maze as one OBJ.       |
+184	|  It needs a lot of vertex data, but       |
+185	|   fewer OBJs, so the maze can be bigger   |
+186	Please wait a moment
+187	Time left
+188	Map size
+189	Movement speed
+190	Items left for the A button
+191	Items left for the B button
+192	Items left for the C button
+193	Items left for the X button
+194	Items left for the Y button
+195	Items left for the Z button
+196	Make the map
+197	Make the exit
+198	Check where the walls are
+199	Define the checked map as polygons
+200	Place the items
+201	Draw the background
+202	Ceiling
+203	Always add the ceiling
+204	All faces point outwards
+205	Telescope  X button: left
+206	 times
+207	Wall pass  Z button: left
+208	Bad luck!
+209	YES: C button / NO: B button
+210	Telescope mode
+211	Can't use any more
+212	In use
+213	Lasts 5 seconds
+214	Wall pass
+215	IF FLAG_Z=1 THEN *LOOP:'In use
+216	Define the item polygons
+217	First place the items
+218	First place them in the 4 corners (not in the corner with the exit)
+219	Place a few at random (1-5)
+220	If it's a wall, choose again
+221	If one is already there, choose again
+222	Kind of item placed
+223	Embed the exit information
+224	Back up the item positions for a replay
+225	Entry point for a replay
+226	Blue polygon
+227	Red polygon
+228	Green polygon
+229	Place the item polygons
+230	Subroutine that sets the item polygon colours
+231	Item pick-up check
+232	Initial viewing direction
+233	Player turn parameter
+234	Player initial X speed
+235	Player initial Y speed
+236	Player acceleration parameter
+237	Gravity parameter
+238	Rising speed
+239	JUMP Multi Controller version
+240	X input item number = 3 (Neutral = 128)
+241	Y input item number = 4 (Neutral = 128)
+242	Analogue R trigger item number = 5 (Max 255)
+243	Analogue L trigger item number = 6 (Max 255)
+244	Switch the SEGA Multi Controller
+245	to analogue mode and
+246	JUMP Mission Stick version
+247	A button: jump
+248	B button: jump
+249	Plug the Mission Stick
+250	Saba (mackerel)
+251	Initialise effects
+252	Don't show the screen
+253	Load the screen
+254	Get GUNPORT
+255	For Virtua Gun correction
+256	Temporary for correction
+257	Calibration
+258	Number of mackerel (max displayed)
+259	Mackerel parameters
+260	Number of appearance positions (counted from 0)
+261	Initial parameters
+262	Virtua Gun
+263	Sight XY correction
+264	Magazine capacity
+265	Hit-count upper limit
+266	Appearance probability
+267	Appearance probability (base)
+268	Object-related
+269	Object XY size
+270	Change attribute to fish-man
+271	Change attribute to surfer
+272	Change attribute to waiter
+273	Flip attribute on hit
+274	Hit-mark object number
+275	Hit-mark attribute number
+276	Hit screen bottom edge
+277	Bullet attribute number
+278	Bullet object numbers (10)
+279	Score attribute number
+280	Score object numbers (49)
+281	BG object attribute number
+282	BG object number
+283	System-related
+284	Game mode: 0 = aimed shooting, 1 = rapid fire
+285	Game-over flag
+286	Game level (time)
+287	(score)
+288	MISS count MAX
+289	Time MAX
+290	Title (end title) attribute number
+291	Title (end title) object number
+292	Colour offset on
+293	Interval timer
+294	Stop interrupts
+295	Screen priority
+296	Text screen
+297	Object screen
+298	Set appearance positions
+299	Rotate appearance positions
+300	X,Y size
+301	X,Y coordinates
+302	DMYPRMT(I,3)=DMYPRMT(I,3)-160:'adjust X position
+303	DMYPRMT(I,4)=DMYPRMT(I,4)-112:'adjust Y position
+304	X,Y speed
+305	X,Y acceleration
+306	X,Y limiter
+307	Palette settings
+308	Palette for BG0 (bitmap)
+309	Palette for BG10 (sprites)
+310	Set up the sprite (mackerel)
+311	Load the mackerel texture
+312	SETVERTEX 0,4,READ,(1,1,1,-PRMT(1,1)/2,-PRMT(1,2)/2,0):'set vertices
+313	Set vertices
+314	Set polygons
+315	Set attribute 0
+316	Set up the fish-man
+317	Fish-man
+318	Load the fish-man texture
+319	Set attribute 4
+320	Set attribute 5
+321	Set attribute 6
+322	Set attribute 7
+323	Set up the surfer
+324	Surfer
+325	Set attribute 8
+326	Set attribute 9
+327	Set attribute 10
+328	Set attribute 11
+329	Set up the waiter
+330	Waiter
+331	Set attribute 12
+332	Set attribute 13
+333	Set attribute 14
+334	Set attribute 15
+335	Set up the hit mark
+336	Load the hit-mark texture
+337	Set attribute (HITATR)
+338	Hide object
+339	Object settings
+340	Attribute ID=HITATR, polygon ID=0
+341	Miss mark
+342	Load the miss-mark texture
+343	Set attribute (HITATR+1)
+344	Attribute ID=HITATR+1, polygon ID=0
+345	Bullet settings
+346	Load the bullet texture
+347	Set attribute (bullet)
+348	Bullets-left display position
+349	Hide bullets
+350	Apply bullet attribute
+351	Score settings
+352	Load the score texture
+353	Set attribute (score)
+354	Polygon ID=0
+355	BG object settings
+356	Attribute settings
+357	Hide
+358	Score window
+359	Game mode
+360	Time left, misses
+361	Set up the title (end title)
+362	Load title texture (SA-)
+363	..     (FIN-)
+364	..     (-ISH)
+365	Set attribute
+366	Set position
+367	Title
+368	Choose the game mode on the title
+369	Initialise colours
+370	Game over
+371	Background display
+372	Screen display
+373	AIMED SHOOTING!!
+374	RAPID FIRE!!
+375	Initial display
+376	Initialise game parameters
+377	Shots fired
+378	Hit rate
+379	Hit count
+380	Miss count
+381	Bullets left
+382	Score
+383	Game level
+384	Set up objects for the total number
+385	Not present
+386	Object X size
+387	Object Y size
+388	Character appears
+389	Object display
+390	Timer on
+391	Time
+392	1/60 interrupt
+393	INTERVAL(0) ON,60:'once per second
+394	Bullets-left display
+395	*   Main routine    *
+396	Time left:###
+397	Message display
+398	End when CLK=TIMEMAX
+399	End after MISSMAX misses
+400	Change level (every 10 s, change appearance positions)
+401	Get the state
+402	When there are bullets
+403	Reduce bullet count
+404	Get VGX,VGY
+405	Reload
+406	Use VGX,VGY
+407	Increment shots fired
+408	When there are no bullets
+409	IF GUNCHECK=&H800 THEN CLS -1:'clear screen
+410	Erase hit mark
+411	Erase miss mark
+412	*   Subroutines    *
+413	Watch objects
+414	Argument
+415	Escaped off screen (miss)
+416	Erase object
+417	Not present
+418	To where the Virtua Gun can't reach
+419	Detach the score object
+420	Appear?
+421	Appearance probability follows the level
+422	LOCATE 20,21:PRINT "APPEAR!!"
+423	Appearance settings
+424	Present
+425	Follows the game level
+426	How it appears
+427	Fixed appearance
+428	Appearance position (changes with level)
+429	Set appearance position
+430	X coordinate
+431	Y coordinate
+432	X initial speed
+433	Y initial speed
+434	X acceleration
+435	Y acceleration
+436	X limiter
+437	Y limiter
+438	Random appearance
+439	Attribute ID
+440	1 in 100 becomes a fish-man
+441	Change attribute from mackerel to fish-man
+442	1 in 100 becomes a surfer
+443	Change attribute from mackerel to surfer
+444	1 in 100 becomes a waiter
+445	Change attribute from mackerel to waiter
+446	Polygon ID
+447	Set the object that appears
+448	Attribute ID=0, polygon ID=0
+449	Hit test X
+450	Hit test Y
+451	Left edge of the object
+452	Right edge
+453	Top edge of the object
+454	Bottom edge
+455	First hit: upside down
+456	Increment hit count
+457	Attach the score object
+458	Falls away
+459	Argument for KESIOBJ
+460	Move the hit-mark object
+461	Show the hit mark
+462	Wait for display
+463	Virtua Gun trigger off
+464	Hit level (changes number appearing)
+465	Move the miss-mark object
+466	Show the miss mark
+467	Increment miss count
+468	Trigger off on a miss
+469	Attach the score object
+470	Attach to the parent object
+471	Set score attribute
+472	Parameter display
+473	Score     =########
+474	LOCATE 2,23:PRINT USING "Bullets left=  ##";BULLET
+475	Time increases
+476	End
+477	Display
+478	FINISHED!!!
+479	Score     :
+480	Game mode: AIMED SHOOTING
+481	Hit rate   :###.##%
+482	Shots fired :
+483	Misses     :
+484	Game mode: RAPID FIRE
+485	Stop until START is pressed
+486	Restore the score window
+487	Palette
+488	Texture
+489	Float
+490	Texture, two-sided, average position, texture ID, colour, overwrite
+491	Get Virtua Gun XY
+492	VGX: X coordinate
+493	VGY: Y coordinate
+494	GUNPORT: port the Virtua Gun is plugged into
+495	TRG: trigger flag
+496	CLBX: calibration X
+497	Trigger=&H400
+498	Start=&H800
+499	Merge=&HC00
+500	Flash
+501	BG flash
+502	Wait to read coordinates
+503	Adjust coordinate X
+504	Adjust coordinate Y
+505	Restore
+506	Restore BG
+507	VGX=((PAD(GUNPORT,3)-90)*(320/650))-CLBX:'adjust coordinates?
+508	Correct coordinate position
+509	CLBX: Virtua Gun correction X
+510	CLBY: Virtua Gun correction Y
+511	REVX: X correction value
+512	REVY: Y correction value
+513	DIM TEMPCLBX(3),TEMPCLBY(3):'temporary for correction
+514	CLBX=0:CLBY=0:'calibration
+515	Draw on screen 0
+516	Shoot the centre of the screen!!! (3 times)
+517	Go back if not shot
+518	LOCATE 1,10+CLBRT:PRINT USING "# shot:X:### Y:###";CLBRT;VGX;VGY
+519	CIRCLE(VGX,VGY),1,0,F:'show provisional hit mark
+520	Go back until 3 shots
+521	X total
+522	X correction
+523	Y correction
+524	Press START to return to the title
+525	Show provisional hit mark
+526	Gunshot
+527	CIRCLE(VGX,VGY),5,2,F:'HIT coordinate test
+528	Trigger flag ON
+529	Reload on
+530	Load the gun
+531	Clear the screen
+532	LOCATE 15,10:PRINT "MACKEREL!!!!!"
+533	AIMED SHOOTING
+534	RAPID FIRE
+535	CALIBRATE SIGHTS
+536	Calibrate
+537	Port search routine
+538	End of port search
+539	Connect the Virtua Gun to
+540	control port 1 of the SEGA Saturn
+541	Bullets-left display
+542	Background display
+543	Hide object
+544	End title
+545	Show the end
+546	FIN-
+547	-ISH
+548	sample game  SABA (mackerel)

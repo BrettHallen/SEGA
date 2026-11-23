@@ -1,0 +1,297 @@
+549	Detect the device
+550	No cartridge RAM
+551	Without cartridge RAM you can't save,
+552	but you can still play
+553	Cartridge RAM needs 982 free
+554	*************Register arrays
+555	***Play
+556	*************Register variables
+557	Detect the pad
+558	First time only
+559	*************Fade in
+560	>>>>>>>>Main loop
+561	Changes in time etc.
+562	All characters
+563	All things
+564	Judge
+565	Device check: check whether the device in DEV$ exists
+566	==>>>>>>>>>>>Layer 1
+567	Life parameter
+568	Motivation parameter
+569	Experience parameter
+570	******Move the food
+571	******Move the study
+572	******When playing
+573	*********Erase the rice etc.
+574	******Save / load
+575	******When it dies
+576	******When time runs out
+577	====>>>>>>>>>>Layer 2
+578	********When neither food nor study
+579	********When being held
+580	********When not asleep and not resting
+581	********Change direction at RND
+582	********Spin at RND
+583	********Speed when angry
+584	********Change direction
+585	********Stop spinning
+586	************Character facing
+587	*********Experience
+588	*********Rice
+589	*********Study
+590	**********How hungry
+591	**********Sleepiness
+592	**********Mood
+593	**It died
+594	**********Resting
+595	**********Anger wait
+596	**********Angry
+597	**********Transform
+598	**********Sleep
+599	*********Wake up
+600	**********Food / study
+601	******If it's doing something, skip the rest
+602	***********Resting or not T
+603	**********Stop resting
+604	**********Get angry or not
+605	**********Stop being angry
+606	********Decide the expression
+607	********Wait
+608	********Normal
+609	********Put on glasses
+610	********When happy
+611	********Wait calculation
+612	********Face display
+613	+++Sun
+614	+++Sea
+615	+++Cloud
+616	+++Mountain
+617	+++Mountain 2
+618	+++Tree
+619	+++House
+620	*********Cloud movement
+621	**** Animation of things
+622	))))))))))))Play
+623	*********Save the icon
+624	*********Fade out
+625	******************Place your own icon
+626	*****************Place objects
+627	*****************Ball position
+628	*****************Draw the screen
+629	*****************Place characters
+630	****************Character movement speed !!!!!!!!!!!!!!!!!!
+631	*************Score table
+632	The Pokepokes
+633	Your score
+634	*************Text display
+635	 wins in a row!!
+636	-game match!!
+637	Press the A button to start
+638	Press the B button to stop
+639	**Ready
+640	Total
+641	 wins!!
+642	*********Ball movement
+643	*********Arrow direction
+644	**********When the ball hits the arrow
+645	*********Character display, expression and movement speed
+646	********When the ball comes near you
+647	************Did the ball go out? 1
+648	************Did the ball go out? 2
+649	YOU WIN!!!
+650	IT'S A DRAW!!!
+651	THE POKEPOKES WIN!!
+652	Press any button
+653	*********Text shine
+654	********Change character parameters
+655	'*********Erase the rice etc.
+656	'******Move the study
+657	))))))))))))Save
+658	Really save??
+659	Press A to save!!
+660	Cancelled!!
+661	))))))))))))Load
+662	Really load??
+663	Press A to load!!
+
+
+666	Done!
+667	An error occurred, so it couldn't save
+668	An error occurred while saving
+669	Couldn't save
+670	An error occurred writing the data
+671	Loading.
+672	Right! Let's start!
+673	An error occurred, so it couldn't load
+674	An error occurred while reading
+675	Couldn't load
+676	An error occurred reading the data
+677	))))))))))))Die
+678	*****Character rotation
+679	LOCATE 10,12:PRINT "Hit the A button!!!"
+680	Pokepoke became light...!!
+681	Pikepike became air...!!
+682	Pekepeke became earth...!!!
+683	Pokepoke came back!!!!!!!!!!!
+684	Pikepike came back!!!!!!!!!!!
+685	Pekepeke came back!!!!!!!!!!!
+686	))))))))))))When everyone has died
+687	It's TIME OVER!
+688	Everyone has gone.....
+689	Well done. The ideal land you raised looks like this!
+690	Can you see me? If you can, that's good!
+691	Well, see you!
+692	******GLOAD?
+693	*****Because everyone died
+694	))))))))))))Out of time
+695	))))))))))))Opening
+696	LOCATE 10,10:PRINT "Teke-teke?"
+697	********When playing
+698	********When a character dies
+699	********While holding the R button
+700	*******When a button is pressed
+701	*******Button pictures
+702	*******Points display
+703	*******When a button is pressed
+704	*******When playing
+705	*******When saving/loading
+706	^^^^^^^^^^^^^^^^^^^Draw the sky and ground
+707	*********Register icons**********
+708	*********Screen settings
+709	********What time is it?
+710	**********Parameter window
+711	*********Colour of the window the parameters are written in
+712	*********Main settings
+713	**********Toolbar settings
+714	********Set OBJ(K,0) and PARAMETER
+715	*********Place objects
+716	Smarts
+717	Drive
+718	Life
+719	Fo
+720	o
+721	d
+722	St
+723	u
+724	d
+725	y
+726	=========Screen settings=================
+727	*********Initialise parameters
+728	Spinning or not
+729	Which way it spins
+730	Face
+731	Stomach
+732	Resting or not
+733	Amount of rest
+734	Cleverness
+735	Wears glasses or not
+736	Sleepiness
+737	Mood
+738	Amount of anger
+739	Discipline
+740	Multiplier when angry
+741	Colour when angry
+742	When laughing
+743	Experience
+744	Dead or not
+745	Number of births
+746	Parameter
+747	Being leaned on or not
+748	Play area
+749	How many have died
+750	Food
+751	Study
+752	Ball
+753	Control port 1?
+754	Control port 2?
+755	Plug a control pad into a control port!!
+756	Plug a Shuttle Mouse or a control pad
+757	into a control port!!
+758	Where PN1 is plugged in
+759	PN2: 1 = Shuttle Mouse, 2 = control pad
+760	***********Bitmap
+761	* Opening   *
+762	Please connect a Virtua Gun
+763	or a Shuttle Mouse
+764	* Opening-related         *
+765	C_X,C_Y,C_Z: camera position
+766	CN_X,CN_Y,CN_Z: camera coordinate increments
+767	CD_X,CD_Y,CD_Z: final object position
+768	C_N: number of steps
+769	OBJ 1,2,3: increments
+770	OBJ 7,8,9: current coordinates
+771	OBJ 4,5,6: final target
+772	********Detect the control pad
+773	*********Opening graphics
+774	Read number of vertices and faces
+775	READ N   :'read number of textures
+776	Texture size
+777	READ X1,Y1  :'read texture size
+778	Points...8
+779	Faces...6
+780	No.0 (32,38) D:\\Saturn\\Bou\\open\\op00.bmp
+781	* Register objects     *
+782	**********Set the BG
+783	*********Register OBJs**********
+784	* Main program     *
+785	****end start: initialise the animals
+786	***********Hit test for the arm-spinning guy
+787	****************When it hits an object
+788	Whether inside the arm's radius
+789	******************Both hands
+790	******************Animals
+791	Monkey
+792	****************Tiles
+793	****When riding a vehicle
+794	Not riding a vehicle
+795	****When it leaves the course
+796	***********Both hands moving up and down
+797	************Arm movement: rotation
+798	************Tiles appear
+799	************Animal movement
+800	Move vertically
+801	Move horizontally
+802	Change direction
+803	********Time bar display
+804	Animals up/down
+805	Arm-stretching alien
+806	Hand-spinning alien
+807	Animal moves up/down
+808	Animal moves left/right
+809	Animal changes direction
+810	Floating/sinking island 1
+811	START button
+812	END button
+813	******Arm rotation speed
+814	******Vehicle speed
+815	******Window speed
+816	Bou (Stick)
+817	<BOU> version 1.00
+818	* Initialise  *
+819	******Initialise WINDOW text
+820	1 Monkey
+821	2 Panda
+822	3 Gorilla
+823	******The arm-spinning guy
+824	********The guy holding both hands
+825	******Vehicle
+826	********Things shown at initialisation
+827	*************Detect Virtua Gun, Shuttle Mouse or control pad
+828	------Is a control pad plugged in?
+829	PN2: 1 = Shuttle Mouse, 2 = control pad, 3 = Virtua Gun
+830	Control port 1?
+831	Control port 2?
+832	Plug in a control pad!!
+833	************Virtua Gun
+834	Plug the Virtua Gun directly into a control port
+835	*************Shuttle Mouse
+836	*************Control pad
+837	Plug in a Shuttle Mouse or control pad!
+838	Plug in a Shuttle Mouse or Virtua Gun properly
+839	Forcing quit
+840	Retrying in 3 seconds
+841	[ DEMO.B ] Feature introduction auto-demo
+842	Test of the general graphics commands
+843	●[PSET,LINE,CIRCLE] DEMO
+844	●Shower 1
+845	Build parent-child links between the objects...

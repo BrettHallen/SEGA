@@ -1,0 +1,123 @@
+846	Graphics features
+847	Polygon features
+848	Tree-structured objects
+849	Light-source settings
+850	4-vertex distorted sprites
+851	Texture mapping
+852	Texture BG
+853	Perspective matrix calculation
+854	●Tank
+855	Let's model all sorts of things!
+856	Up to 4 character screens
+857	Up to 2 bitmap screens
+858	1-axis and 3-axis rotation
+859	Scaling
+860	Mosaic
+861	16, 256 and 32768 colours
+862	Display priority against polygons
+863	Scrolling
+864	●Helicopter
+865	Colour calculation
+866	Built-in kanji font
+867	Switchable JIS level 1 / level 2
+868	V-SYNC timing (1/60 s units)
+869	●TEXMAP.B texture draw test (motos)
+870	Use graphics commands on textures!
+871	Texture SIZE: multiple of 8
+872	Reserve it first
+873	Allocate the texture
+874	Delete the texture
+875	Assign the texture to the attribute
+876	Link the attribute and polygon to the OBJ
+877	Rotation speed
+878	Scale factor
+879	It gets clipped, so any value will do
+880	●2D sprite display sample
+881	Sound features
+882	32 channels / 16 tracks
+883	DSP effector
+884	Pitch bend
+885	Loop structures as in musical notation
+886	Key change
+887	Chord playing
+888	ALFO/PLFO/envelope control
+889	Put sprites behind the text screen
+890	<- Sprite type 1
+891	Sprite type 2 (down)
+892	(up) Sprite type 3
+893	TEXTURE number to assign
+894	TEXTURE width size
+895	TEXTURE height size
+896	ATTRIBUTE number to assign
+897	A sprite's Z position is used as the display priority between sprites.
+898	If it is beyond 100 it may not be displayed at all.
+899	Z-rotation sprite
+900	X,Y position given
+901	Sprite with independent H/V scale
+902	4-point sprite
+903	X,Y,Z position given (reference position for the 4 points)
+904	Tilt left and right
+905	Scale slowly
+906	Give the left/right scale factors
+907	●PFONT DEMO
+908	AIFF/WAVE file loading
+909	MML interrupts
+910	FM synthesis editing commands
+911	32 operators that can be wired freely
+912	Isn't name entry cool done like this?
+913	●AZ-1
+914	General commands
+915	Fixed point for speed
+916	Floating point too, of course
+917	Multi-dimensional arrays
+918	Labels, structured IF
+919	Process a digital-camera picture and
+920	●Register AZ-1
+921	●Register AZ-1 as parent of the 3D cube
+922	●Parent AZ-1 appears while growing
+923	it's fun stuck on a polygon too!
+924	●Register 3 child AZ-1s
+925	Parent-child relationship
+926	●Child AZ-1s appear
+927	●Child AZ-1s rotate
+928	●Keep going round forever (lol)
+929	●Subroutine to calculate child AZ-1 coordinates
+930	●Circular camera test with BG (motos)
+931	Supported peripherals
+932	SEGA Saturn keyboard
+933	Control pad
+934	SEGA Multi Controller
+935	Virtua Gun
+936	Shuttle Mouse
+937	Multi-Terminal 6
+938	Racing Controller
+939	...and many more
+940	On the SEGA Saturn
+941	you can make your own games!
+942	G A M E  B A S I C
+943	Circular camera test with BG (motos)
+944	2D sprite display sample
+945	Texture draw test (motos)
+946	[ S_TUTOR.B ] Sound features sample program
+947	After hearing the sound samples, go back to menu 4
+948	●Main menu
+949	Sound features sample program
+950	1: Glossary
+951	2: Sound system specification
+952	3: About tone data
+953	4: Using MML and the sound commands
+954	5: Listen to the sound samples!
+955	0: Quit
+956	[ IMPORTANT ]
+957	- If the Saturn's audio output is set to mono,
+958	  the pan-related commands have no effect.
+959	Choose a number.
+960	●Return the tones to the standard set
+961	●Glossary
+962	Glossary                         1/20
+976	Next->Space   Back->Enter    TOP->0
+977	Glossary                         2/20
+978	Note
+979	A musical note
+980	 is called a note.
+981	- One octave is

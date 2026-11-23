@@ -1,0 +1,433 @@
+664	Saving
+665	- 
+963	: it writes a score
+964	 "
+966	" and so on, as text: a
+967	 
+968	simple language just for music
+969	.
+970	- Most basic commands follow, as far
+971	 as possible, the MML of 
+972	 and other earlier personal
+973	 computers.
+974	- Unless you use this MML's own options,
+975	 it is almost fully compatible.
+982	 notes
+983	 (
+984	).
+985	- With the MML "
+986	" command you can give a note
+987	 name, including its octave,
+988	 directly.
+989	(octave 
+990	 C = 
+991	, octave 
+992	...)
+993	- Note numbers match MIDI.
+994	Glossary                         3/20
+995	Track
+996	- One of the MML strings split up by
+997	 instrument or effect: melody, bass, rhythm
+998	 and so on.
+999	- In this MML, 
+1000	 tracks can be controlled
+1001	 independently.
+1002	- One continuous MML string is one
+1003	 track.
+1004	* There is no one-note-per-track limit.
+1005	Glossary                         4/20
+1006	Base track
+1007	- When the MML
+1008	 has several tracks
+1009	,
+1010	 the lowest-numbered track
+1011	 is called the base track
+1012	 (not necessarily track 0).
+1013	- Some MML commands can only be written
+1014	 in the base track.
+1015	 (loops, tempo and so on)
+1016	- If you leave out track numbers,
+1017	 track 0 is the base.
+1018	Glossary                         5/20
+1019	Pitch bend
+1020	- Literally, "
+1021	bending the pitch
+1022	".
+1023	 all 16 tracks can be bent
+1024	 independently
+1025	.
+1026	- But because it works per track, every
+1027	 note sounding on the same track is
+1028	 affected.
+1029	Glossary                         6/20
+1030	Song data (score data / note data)
+1031	- Notes written in MML, converted into a
+1032	 form the SEGA Saturn can play.
+1033	, 
+1034	 registers it)
+1035	- MML for up to 
+1036	 tracks is converted in one go
+1037	.
+1038	- Registered song data is played, paused,
+1039	 faded or stopped by giving its song
+1040	 number.
+1041	Glossary                         7/20
+1042	Sequence number
+1043	- The number that manages registered song
+1044	 data when several play at once.
+1045	- In BASIC, 
+1046	 pieces of song data can play at
+1047	 once (
+1048	0-7
+1049	: 0 is for 
+1050	 only).
+1051	 So you can play BGM with 7 sound
+1052	 effects at the same time.
+1053	 (BGM with the 
+1054	 command, effects with 
+1055	)
+1056	* Sound commands work by sequence number
+1057	Glossary                         8/20
+1058	Slot
+1059	- The part of the Saturn's sound hardware
+1060	 that makes one sound.
+1061	- This MML can control each of the
+1062	 
+1063	 slots in the Saturn separately,
+1064	 but you don't need to think about
+1065	 slot numbers.
+1066	Glossary                         9/20
+1067	Layer
+1068	- A finer unit of sound data that makes
+1069	 up one tone in the tone data.
+1070	- A layer holds one of the following,
+1071	 never more than one at a time:
+1072	 (1) How to play one piece of PCM
+1073	    sample (waveform) data.
+1074	 (2) Control of one FM operator.
+1075	* One layer controls one slot dynamically.
+1076	Glossary                        10/20
+1077	Envelope generator (EG)
+1078	- Sets a sound from its attack to the tail
+1079	 after key-off with 
+1080	4 curves
+1081	1 level
+1082	.
+1083	 
+1084	- In this sound system it can be set
+1085	 per layer.
+1086	 -> See MML tutorial, menu 4
+1087	Glossary                        11/20
+1088	- A function generator that makes a wave
+1089	 below the range of human hearing.
+1090	 
+1091	- The LFO output is used as amplitude
+1092	tremolo
+1093	) or
+1094	 frequency modulation (
+1095	vibrato
+1096	).
+1097	 
+1098	- For PCM waves, set it with the 
+1099	 command.
+1100	 (For FM, the 
+1101	 command's 
+1102	 command)
+1103	Glossary                        12/20
+1104	- A fast circuit just for calculation,
+1105	 mainly multiply and add.
+1106	- BASIC's sound features use it to make
+1107	 
+1108	audio effects
+1109	 such as reverb
+1110	.
+1111	    Stereo reverb (2 kinds)
+1112	    Stereo delay
+1113	    Mono distortion
+1114	Glossary                        13/20
+1115	Direct data
+1116	 not passed through, or passed with no
+1117	 effect applied: the name for that sound
+1118	Effect data
+1119	 passed through with some effect
+1120	 applied: the name for that sound.
+1121	Glossary                        14/20
+1122	Panpot
+1123	Position
+1124	 (where the sound seems to come from):
+1125	 the feature that sets it.
+1126	Direct pan
+1127	 (position of direct data)
+1128	 and 
+1129	Effect pan
+1130	 (position of effect
+1131	 data): 
+1132	 kinds.
+1133	Glossary                        15/20
+1134	Modulator / carrier
+1135	- When slots are used for FM, the slot
+1136	 
+1137	applying
+1138	 the modulation is the 
+1139	modulator
+1140	 the slot 
+1141	receiving
+1142	carrier
+1143	 and 
+1144	.
+1145	Glossary                        16/20
+1146	Delta time
+1147	- Broadly, the 
+1148	timing of the whole song
+1149	: an
+1150	 
+1151	internal time code
+1152	 that manages it.
+1153	direct length
+1154	 reflects it
+1155	.
+1156	  -> "Make a sound! (23/47)"
+1157	
+1158	- Here, just think of it as the time
+1159	 from playing one note until moving
+1160	 on to the next.
+1161	Glossary                        17/20
+1162	Gate time
+1163	- The time a key is actually on
+1164	 
+1165	(on a keyboard, how long the key is held)
+1166	.
+1167	- Normally a quarter note is keyed on
+1168	 for a quarter note's length, but by
+1169	 changing 
+1170	 (next item)
+1171	 you can set the ratio of gate time
+1172	 to delta time freely.
+1173	Glossary                        18/20
+1174	 over 
+1175	: that
+1176	 is what it means.
+1177	- By changing the ratio of the two times
+1178	 you can make the sound shorter or
+1179	 longer than the real key-on time
+1180	-> MML "
+1181	" command
+1182	- An example follows on the next page.
+1183	Glossary                        19/20
+1184	Gate / Delta example (1)
+1185	- With Gate / Delta set to "
+1186	", a quarter
+1187	 note sounds for only half as long, an
+1188	 eighth note, but the next note starts
+1189	 after a full quarter note has passed,
+1190	 so you get a staccato effect.
+1191	 
+1192	(Details: see the MML tutorial)
+1193	Glossary                        20/20
+1194	Gate / Delta example (2)
+1195	 note sounds twice as long, a half
+1196	 note, but the next note still starts
+1197	 after only a quarter note's length
+1198	 has passed
+1199	, so it overlaps the next
+1200	 note and they sound together.
+1201	●Sound system specification
+1202	Sound system specification       1/9
+1203	32 slots / 16 tracks
+1204	 slots, shared: 
+1205	32
+1206	 of them.
+1207	 (max simultaneous notes = 32)
+1208	: 
+1209	one slot per tone
+1210	one slot per operator
+1211	 (carrier, modulator chosen freely)
+1212	- If all FM sounds use 4-operator
+1213	 algorithms, 32/4 = 
+1214	8 notes
+1215	.
+1216	One FM note
+1217	 uses any number of slots
+1218	 from 1 to 32
+1219	Sound system specification       2/9
+1220	Up to 251 songs (registrable songs)
+1221	- Sound memory can register, 
+1222	including effects
+1223	 up to 
+1224	 songs.
+1225	 and 
+1226	 together: 253)
+1227	DSP effector
+1228	 use, or expanding the tone
+1229	 data area
+1230	 
+1231	 means fewer
+1232	- Normally song number 
+1233	 is used
+1234	 for BGM.
+1235	 is fixed for 
+1236	ERROR sound
+1237	)
+1238	Sound system specification       3/9
+1239	Up to 26,000 notes (registrable notes)
+1240	Pitch bend
+1241	 and other special effects
+1242	 
+1243	use more memory
+1244	,
+1245	 so you get fewer.
+1246	- Memory per song can be changed freely
+1247	Sound system specification       4/9
+1248	Wave memory: 340 KB standard, 461 KB max
+1249	- The amount you can use at once 
+1250	in memory
+1251	 
+1252	 without swapping.
+1253	Wave data
+1254	 
+1255	 commands load from 
+1256	.
+1257	 waves / 
+1258	FM modulation
+1259	 waves)
+1260	- Traded off against the song data area
+1261	 and the DSP program area.
+1262	* Details -> "
+1263	3: About tone data
+1264	"
+1265	Sound system specification       5/9
+1266	Up to 128 tones (1 tone: up to 128 layers)
+1267	(patch/performance in synth terms)
+1268	Layer
+1269	 data that controls one waveform
+1270	.
+1271	 (for FM, controls one operator)
+1272	- Every tone is made of 
+1273	one or more
+1274	 layers
+1275	.
+1276	- To fine-tune a tone, use the 
+1277	 command
+1278	 to work on the layer data directly.
+1279	 command can rearrange them freely.
+1280	Sound system specification       6/9
+1281	DSP control for effects
+1282	 command switches the DSP mode
+1283	 (
+1284	/OFF).
+1285	- Reverb, delay and distortion can be
+1286	 switched from MML.
+1287	 mode lets you pick the effector
+1288	 per tone.
+1289	- To use the DSP, set the mixer with the
+1290	 command
+1291	.
+1292	Sound system specification       7/9
+1293	Over 200 PCM tones, 512 FM tones
+1294	 standard tones you can choose from
+1295	 files, any you like)
+1296	FM synthesis editing commands
+1297	 operators can be wired freely.
+1298	- Modulation waveforms: 
+1299	47 kinds
+1300	 as standard.
+1301	original PCM waves
+1302	 can be used for modulation)
+1303	 (compatible with older FM parameters)
+1304	Sound system specification       8/9
+1305	Specification details
+1306	- Wave resampling fixed at 44.1 kHz.
+1307	bit, sign-inverted wave data supported.
+1308	 formats)
+1309	-segment 
+1310	 supported.
+1311	 set independently.
+1312	- The FM tone files follow 
+1313	the GM layout
+1314	 sets).
+1315	Sound system specification       9/9
+1316	MML features
+1317	-version MML, 
+1318	almost an upward-compatible superset
+1319	- Key signatures (bar, accidentals).
+1320	- Velocity, Gate / Delta, pitch bend,
+1321	 auto volume, auto pan.
+1322	- DSP and mixer control commands.
+1323	 characters x 
+1324	 user-definable macros.
+1325	- Loops as in musical notation.
+1326	- Can be watched from the main program by interrupts.
+1327	●About tone data
+1328	About tone data                1/6
+1329	Basic specification
+1330	- Memory size is a 
+1331	song data area
+1332	DSP pro
+1333	gram area
+1334	 
+1335	trade-off with the
+1336	 bytes x 
+1337	 = about 
+1338	 bytes + 
+1339	GM-layout
+1340	 
+1341	 
+1342	 tone files, rearranged freely.
+1343	original PCM sample data
+1344	 can be regis
+1345	tered and played at other pitches.
+1346	 format, 
+1347	binary string
+1348	 format
+1349	 PCM data can be linked to tone data.
+1350	About tone data                2/6
+1351	Kinds of tone file 1/4
+1352	- Tone data files that include sound
+1353	 effects are provided so you can use them
+1354	 easily, with no special setting up.
+1355	Listen -> 1-4
+1356	About tone data                3/6
+1357	Kinds of tone file 2/4
+1358	3:ETHNIC  :Ethnic (folk instruments) set
+1359	- High-quality sets for particular
+1360	 music genres, laid out for sound quality
+1361	 rather than number of instruments.
+1362	About tone data                4/6
+1363	Kinds of tone file 3/4
+1364	- Good-quality waveforms not tied to any
+1365	 use or genre. Rearrange them with the
+1366	 command as you need.
+1367	About tone data                5/6
+1368	Kinds of tone file 4/4
+1369	1:GM_FM1  :GM-layout FM set 1
+1370	2:GM_FM2  :GM-layout FM set 2
+1371	3:GM_FM3  :GM-layout FM set 3
+1372	4:GM_FM4  :GM-layout FM set 4
+1373	- GM (General MIDI) layout sets made
+1374	 with FM. They use tone numbers 
+1375	0-127
+1376	 all of them
+1377	, so the BEEP sound differs from other sets.
+1378	About tone data                6/6
+1379	Rearranging
+1380	 tone files: choose any and
+1381	 rearrange them. -> 
+1382	 command
+1383	 (can be rearranged per layer)
+1384	- The envelope and other parameters
+1385	 can be reset. -> 
+1386	- FM tones are registered with the
+1387	 rearranging command (
+1388	) (can be mixed with PCM).
+1389	- Expand the wave area with 
+1390	.
+1391	   Make a sound! (         )   
+1392	Tone=    (max    )   Octave=    
+1393	"Up/Down" or "8 2"   "Left/Right" or "4 6"
+1394	             Back->Enter             
+1395	●Using MML and the sound commands
+1396	      Using MML and the sound commands      
+1397	1: Compatibility with MSX MML         
+1398	2: MML tutorial                  
+1399	           [ IMPORTANT ]               
+1400	- The tutorial really plays sounds

@@ -1,0 +1,429 @@
+3501	4...skip back to the previous repeat mark
+3502	5...skip on to the next repeat mark
+3503	10..track -1
+3504	11..track +1
+3505	12..octave -1
+3506	13..octave +1
+3507	20..play all
+3508	21..play 1 bar of every track
+3509	22..play 1 track
+3510	Phrase operations
+3511	[0 move to the start of the phrase]
+3512	[1 move to the end of the phrase]
+3513	[2 phrase -1]
+3514	[3 phrase +1]
+3515	[4 skip back to the previous repeat mark]
+3516	[5 skip on to the next repeat mark]
+3517	Track operations
+3518	[10 track -1]
+3519	[11 track +1]
+3520	[12 octave -1]
+3521	[13 octave +1]
+3522	Playing
+3523	[20 play all]
+3524	[21 play 1 bar of every track]
+3525	[22 play 1 track]
+3526	Extended copy
+3527	[30 paste 0]
+3528	[31 paste 1]
+3529	[32 paste 2]
+3530	[33 paste 3]
+3531	[34 paste 4]
+3532	[35 paste 5]
+3533	[36 paste 6]
+3534	[37 paste 7]
+3535	[38 paste 8]
+3536	[39 paste 9]
+3537	Extended paste
+3538	[40 paste 0]
+3539	[41 paste 1]
+3540	[42 paste 2]
+3541	[43 paste 3]
+3542	[44 paste 4]
+3543	[45 paste 5]
+3544	[46 paste 6]
+3545	[47 paste 7]
+3546	[48 paste 8]
+3547	[49 paste 9]
+3548	Track / phrase handling
+3549	Phrase +1
+3550	Bars
+3551	 bar
+3552	 is the last
+3553	Phrase -1
+3554	Track +1
+3555	Track -1
+3556	Update the phrase
+3557	Draw track / phrase
+3558	Track
+3559	Phrase
+3560	Track
+3561	Phrase
+3562	System menu bar handling
+3563	If it is hidden, bring it out
+3564	While it is moving
+3565	Change tone
+3566	Load button handling
+3567	Save button handling
+3568	OTO2MML button handling
+3569	Change tone
+3570	Copy button handling
+3571	Paste button handling
+3572	Play-all-tracks button handling
+3573	Rhythm button handling
+3574	Quit button handling
+3575	Track change handling
+3576	Bar change handling
+3577	NOTE MODE handling
+3578	Repeat sign on the left
+3579	Repeat sign on the right
+3580	Key handling
+3581	Octave handling
+3582	Notes
+3583	Edit one only
+3584	Edit several
+3585	Edit length
+3586	No change
+3587	# b n handling
+3588	Add
+3589	Length
+3590	Pitch
+3591	Adjust the note-head's length
+3592	Delete
+3593	Rest
+3594	Get the pitch from the position
+3595	Invert the cursor in NOTE MODE
+3596	INPUT  : invert the range ARG1 - ARG2
+3597	OUTPUT : none
+3598	Sub-window handling
+3599	Edit-one-only mode and edit-default-length mode
+3600	Drag-to-edit mode
+3601	Load
+3602	for BUG @@@ delete once fixed!!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+3603	Load error
+3604	Display
+3605	Save
+3606	Keep what is shown now
+3607	All tracks from start to end
+3608	Save error
+3609	The file exists
+3610	Overwrite it?
+3611	Convert to MML
+3612	Change tone
+3613	Set the tone
+3614	Copy
+3615	Paste
+3616	Quit
+3617	NOTE/TAMA handling
+3618	System menu bar up/down handling
+3619	Command button default handling
+3620	FLAG_CLICK=1 button pressed
+3621	Fade out
+3622	Erase notes
+3623	Erase the treble and bass clefs
+3624	Disable the left repeat sign
+3625	Disable the right repeat sign
+3626	Where the notes go
+3627	Disable key handling
+3628	Enable octave handling
+3629	Draw the volume
+3630	Draw the note heads
+3631	Draw the octave
+3632	Left repeat sign
+3633	Right repeat sign
+3634	Key handling
+3635	Disable octave handling
+3636	Draw the 5-line staff
+3637	Upper
+3638	Lower
+3639	Draw the repeat marks
+3640	Draw the key
+3641	Initialise the accidentals table when the key changes
+3642	Get the position from the note number
+3643	Get the accidental
+3644	Set the accidental
+3645	ARG2 SIG   0....none
+3646	Draw the volume window
+3647	Draw the length window
+3648	Draw the pitch bend window
+3649	Draw the pan window
+3650	Draw a note head
+3651	Shuttle Mouse text input
+3652	Clicking outside the area ends input
+3653	Data file [
+3654	OTO_DATA.D] not found
+3655	An error occurred reading [OTO_DATA.D]
+3656	Default
+3657	Keyboard accelerator file
+3658	 is supported
+3659	An error occurred reading [OTO_KEY.D]
+3660	Menu bar settings
+3661	Set up objects
+3662	Set position
+3663	Upper-left sign
+3664	Lower-right sign
+3665	Draw the tempo
+3666	Draw the tone
+3667	Convert to MML
+3668	Converting to MML
+3669	Track :
+3670	Phrase:
+3671	Error handling
+3672	Can't open the file
+3673	An error occurred
+3674	while writing
+3675	CLOSE failed
+3676	Getting ready to play
+3677	Error
+3678	An error occurred while playing
+3679	Play a whole track
+3680	Play just 1 bar of 1 track
+3681	Pick up 1 note
+3682	Check whether it is a single note.
+3683	CNV_MODE=0 note mode
+3684	CNV_MODE=1 volume
+3685	CNV_MODE=2 pan
+3686	CNV_MODE=3 volume & pan
+3687	CNV_MODE=4 pitch bend
+3688	CNV_MODE=5 pitch bend & volume
+3689	CNV_MODE=6 pitch bend & pan
+3690	CNV_MODE=7 pitch bend & volume & pan
+3691	Volume
+3692	Pan
+3693	Pitch bend
+3694	Notes-as-they-are mode
+3695	Set the octave
+3696	Set the volume
+3697	Set the pan
+3698	Set the pitch
+3699	Embed control codes
+3700	Set the tone list
+3701	Get 1 token from the file
+3702	No good
+3703	Tone settings
+3704	Set the sounds in the list
+3705	Home-made sounds
+3706	Music data operations
+3707	Initialise
+3708	Initialise all the data
+3709	Repeat signs
+3710	Tempo
+3711	For expansion
+3712	Find bar DA_FR
+3713	The bar after DA_FR
+3714	The bar before DA_FR
+3715	Delete bar DA_FR
+3716	Add bar DA_FR
+3717	Reserve arrays
+3718	Can't add any more
+3719	Get the last track
+3720	Save in the internal OTO format
+3721	DA_FILE_START: first phrase
+3722	DA_FILE_END  : last phrase
+3723	65535 for to the end
+3724	DA_FILE_TRACK: tracks to save
+3725	as bits: MSB is track 15
+3726	LSB is track 0
+3727	FILENAME$    : file name
+3728	Writing music data
+3729	OTO000
+3730	Write the magic number
+3731	Header length
+3732	ERROR handling
+3733	Load the internal OTO format
+3734	DA_FILE_TRACK: tracks to load
+3735	Reading music data
+3736	OTO format?
+3737	Read the HEADER part
+3738	Read the music part
+3739	Tone set: LIST
+3740	Tone set: TARG
+3741	Get 1 bar in OTO format
+3742	ENTRY: DA_CH : track number
+3743	DA_FR : bar number
+3744	Search for the bar RET:DA_FR
+3745	Stored format => OTO format
+3746	Left repeat sign
+3747	Right repeat sign
+3748	ENTRY: DA_FR : bar number
+3749	DA_CH : track number
+3750	Parameter out of range
+3751	Properties
+3752	Velocity
+3753	Pan
+3754	Tone
+3755	Damper switch
+3756	Tadpole (note head)
+3757	Place a note head
+3758	Key 0xA0 128+[MML S command]
+3759	Fade out
+3760	Fade in
+3761	Keyboard accelerator data
+3762	- Made a Shuttle Mouse input routine for KAMI
+3763	- Made the control pad usable too
+3764	- Supported left-button double-click
+3765	- Fixed a mistake in the Shuttle Mouse movement calculation
+3766	Change the Shuttle Mouse pointer's shape
+3767	No input device found
+3768	Control pad input handling
+3769	MB..PAD state
+3770	MX..Shuttle Mouse pointer X coordinate
+3771	MY..Shuttle Mouse pointer Y coordinate
+3772	BR..right button (C) state
+3773	BC..middle button (B) state
+3774	BL..left button (A) state
+3775	BS..start button state
+3776	MX2..Shuttle Mouse pointer X coordinate (previous)
+3777	MY2..Shuttle Mouse pointer Y coordinate (previous)
+3778	MR..right button (C) state (previous)
+3779	MC..middle button (B) state (previous)
+3780	ML..left button (A) state (previous)
+3781	MS..start button state (previous)
+3782	TR..right button timer (used for clicks)
+3783	TC..right button timer (used for clicks)
+3784	TL..right button timer (used for clicks)
+3785	TS..right button timer (used for clicks)
+3786	EV(x,0)..kind of event
+3787	EV(x,1)..Shuttle Mouse X coordinate where the event happened
+3788	EV(x,2)..Shuttle Mouse Y coordinate where the event happened
+3789	Shuttle Mouse input handling
+3790	Check the file exists
+3791	Shuttle Mouse pointer
+3792	Number of Shuttle Mouse pointers defined - 1
+3793	SPRITE miru-miru
+3794	Version 0.00 alpha
+3795	Palette data
+3796	Initialise tones
+3797	FM mode
+3798	FM-related
+3799	Algorithm
+3800	Program number handling
+3801	Name handling
+3802	Parameter part
+3803	System-menu-related
+3804	System menu title bar
+3805	Load button handling
+3806	Save button handling
+3807	Tone-set select button handling
+3808	Quit button handling
+3809	Tone set
+3810	No tone has been
+3811	selected
+3812	Built-in
+3813	Home-made
+3814	Tone select
+3815	New tone
+3816	Which do you want to make?
+3817	Make PCM
+3818	Get the PCM file name
+3819	Add to the tone list
+3820	Redraw
+3821	Make FM
+3822	NEIROSETFILENAME$: tone set file name
+3823	SYS_FILENAME$    : wave file name
+3824	Create
+3825	Cut spaces
+3826	Max number of tones
+3827	Left double-click (add tone to the tray)
+3828	Left click (set the tone)
+3829	Middle-button drag
+3830	Right-button click
+3831	Confirm delete
+3832	Delete it?
+3833	Tray-related
+3834	Right-button click (delete)
+3835	Find the place
+3836	Delete
+3837	Left-button click
+3838	Set the tone
+3839	Left-button double-click
+3840	Switch mode
+3841	Can't change for CD
+3842	Middle-button drag
+3843	Sounds built into the CD
+3844	Set the sounds in the tray
+3845	Delete a tone (from the list)
+3846	ARG1 : tone number
+3847	ARG2$: file name
+3848	Update a tone
+3849	ARG2$: name
+3850	ARG3$: file name
+3851	Initial settings
+3852	Repair sprite data broken by GLOAD etc.
+3853	Text scrolling
+3854	Tray scrolling
+3855	Screen settings
+3856	Draw the background
+3857	Draw text
+3858	Tone group tray
+3859	Upper bar (parent): use this to move the group tray
+3860	Lower bar
+3861	Left scroll bar
+3862	Right scroll bar
+3863	Left bar (parent): use this to move the bar
+3864	Right bar
+3865	Drawing part
+3866	Background part
+3867	Tone set tray
+3868	Upper scroll bar
+3869	Upper bar (parent): use this to move the bar
+3870	Lower scroll bar
+3871	Initialise windows
+3872	Keyboard
+3873	System menu bar
+3874	Button (base)
+3875	Button picture
+3876	FM edit screen
+3877	Algorithm
+3878	Program number
+3879	Name
+3880	Draw the FM algorithm
+3881	Draw the program and program name
+3882	New
+3883	Layer display
+3884	Layer display, text only
+3885	Show 1 layer only
+3886	Show 1 layer only (text)
+3887	Draw the picture
+3888	Tone set screen information
+3889	Background data file name
+3890	Tone select
+3891	--- New ---
+3892	No good
+3893	Built-in sounds
+3894	Tone set name
+3895	Tone number
+3896	Start note
+3897	End note
+3898	Base note
+3899	Made sounds
+3900	Made sounds: PCM
+3901	File name
+3902	Made sounds: FM
+3903	OP number
+3904	W wave format
+3905	C carrier
+3906	M modulation depth
+3907	S direct data send level
+3908	Undefined
+3909	- Fixed a mistake in the mouse movement calculation
+3910	- Made it remove move events piling up
+3911	in the message queue
+3912	Keyboard display X coordinate
+3913	Keyboard display
+3914	Quit
+3915	Fade
+3916	Mark where the sounding note is
+3917	Draw the volume
+3918	Draw the level meter
+3919	Draw the keyboard
+3920	Initialise
+3921	Define the level meter
+3922	Define the keyboard sprites
+3923	Mapping between keys and notes
+3924	Program that sends a .D file
+3925	to BASTERM
+3926	From here down, LOAD the DATA and play it
+3927	(the DATA is a file SAVEd by <UD_DATA1.B>)
+3928	This READs ordinary DATA.
+3929	Always specify it when you READ ordinary DATA after this!
