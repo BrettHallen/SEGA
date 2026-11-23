@@ -37,6 +37,35 @@ Area letters:
 
 Image formats: any file containing the Saturn IP.BIN. A file whose size is a multiple of 2352 is treated as RAW (2352-byte sectors, e.g. `.bin` from a `.cue`, or `.img`). Anything else is treated as a 2048-byte image (`.iso`, track 1 `.bin` at 2048, and similar). This is the same rule SRP uses. For multi-track BIN/CUE sets, patch the data-track file.
 
+## Area codes and console region
+
+A disc boots only if its area letters include the console's region. The console's region is a 4-bit **area code** that the SMPC (315-5744) reads from four jumper pairs on the main board (pins 5-8, AC1-AC4). At boot the BIOS compares that code with the letters at IP.BIN 0x40. A region-patched disc and a jumper change are two ways to fix the same mismatch: patch the disc to add the console's letter, or change the console's code to match the disc.
+
+Jumper names and locations below are for the PAL VA SD board (837-12135). See [../PAL_Jumpers/README.md](../PAL_Jumpers/README.md) for photos, pad locations and the step-by-step EUR to JAP change. Each pair is a +5V pad (bit = 1) and a GND pad (bit = 0): JP6/JP7 = AC1, JP8/JP9 = AC2, JP10/JP11 = AC3, JP12/JP13 = AC4. Open the old pad before bridging the other one.
+
+| Code | Bits AC4-AC1 | Disc letter | Sector 1 text (Sega standard) | Region | Jumpers bridged |
+|------|--------------|-------------|-------------------------------|--------|-----------------|
+| 1    | 0001         | J           | For JAPAN.                    | Japan                      | JP6, JP9, JP11, JP13 |
+| 2    | 0010         | T           | For TAIWAN and PHILIPINES.    | Asia NTSC                  | JP7, JP8, JP11, JP13 |
+| 4    | 0100         | U           | For USA and CANADA.           | North America              | JP7, JP9, JP10, JP13 |
+| 5    | 0101         | B           | For BRAZIL.                   | Central/South America NTSC | JP6, JP9, JP10, JP13 |
+| 6    | 0110         | K           | For KOREA.                    | Korea                      | JP7, JP8, JP10, JP13 |
+| A    | 1010         | A           | For ASIA PAL area.            | Asia PAL                   | JP7, JP8, JP11, JP12 |
+| C    | 1100         | E           | For EUROPE.                   | Europe PAL                 | JP7, JP9, JP10, JP12 |
+| D    | 1101         | L           | For LATIN AMERICA.            | Central/South America PAL  | JP6, JP9, JP10, JP12 |
+
+Codes 0, 3, 7, 8, 9, B, E and F have no disc letter ("Sega reserved"), and the BIOS refuses to boot any disc with them (see below). The top bit (AC4, JP12) is set on every PAL code.
+
+What the check does, in order (every failure returns -8, so the disc does not boot):
+
+1. It reads the 4-bit area code (kept by the BIOS in a word at 0x06000248) and looks up the console's letter and its "For ..." block. **A reserved code (0, 3, 7, 8, 9, B, E, F) has no letter, so the check fails at once and no disc will boot**, whatever its header says.
+2. It scans up to 10 bytes of the area field at IP.BIN 0x40 (loaded at 0x06002040). Spaces are skipped. Any byte other than `J T U B K A E L` fails the check. Each valid letter is counted, and the check fails if none of them is the console's letter.
+3. For as many 32-byte blocks as letters counted, it compares the console's "For ..." block with the blocks at IP.BIN 0xE00 (0x06002E00). If one matches exactly, the check passes (returns 0 and stores 0x06002100 at 0x06000254). Otherwise it fails.
+
+So a disc needs **both** the letter in the header and the matching "For ..." block in sector 1. That is why `srp.py` rewrites both. Each block starts with `A0 0E 00 09`, which is the SH-2 `bra` + `nop` pair that jumps over the text. That's presumably so the area blocks can sit inline in boot code that runs.
+
+Sources: the BIOS disassembly above; the Sega Target Box manual (area codes 1, 4 and 12 for Japan, USA and Europe); the Sega VA0 service schematic (SMPC jumper inputs R50-R53 on pins 5-8, which gives the jumper bit order).
+
 ## What SRP actually does
 
 All of this was read from the decompiled `TextBox1_TextChanged`, `Getcheckbox`, `Regionpatchbutton_Click` and `ECCEDCInit/EDCgenerate/ECCgenerate` methods.

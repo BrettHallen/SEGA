@@ -33,6 +33,8 @@ The four common pads of JP6/7, JP8/9, JP10/11 and JP12/13 go to the SMPC (Sega 3
 | North America | JP7 (0)     | JP9 (0)     | JP10 (1)    | JP13 (0)    | 0100 = 4     |
 | Europe / PAL  | JP7 (0)     | JP9 (0)     | JP10 (1)    | JP12 (1)    | 1100 = **C** |
 
+For all eight Saturn regions (with disc letters), see [../Python_Region_Patcher/README.md](../Python_Region_Patcher/README.md#area-codes-and-console-region).
+
 ## Clock chip (IC20 315-5746)
 
 IC20 is a Hitachi PLL clock generator. It is fed by crystal X1 (17.7344 MHz on PAL boards, which is 4x the PAL colour subcarrier). It produces the dot clock, the CPU/sound clocks and the colour subcarrier (FSC) for the video encoder. Pin functions are from the Sega Saturn PAL Service Manual 13-1 (1995):
