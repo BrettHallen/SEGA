@@ -20,3 +20,5 @@ fp-info-cache
 *.tiff
 /Saturn/Python_Region_Patcher/tests
 Saturn/PAL_Jumpers/Mainboard_Jumpers_VA_SD_PAL.md
+Saturn/Development/Sega_Saturn_BIOS_1994_11_15.bin
+Saturn/Development/Sega_Saturn_BIOS_JP_1.003_1994_10_12.bin
