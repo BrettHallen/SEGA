@@ -298,6 +298,78 @@ def cmd_ports(a) -> int:
     return 0
 
 
+def cmd_loopback(a) -> int:
+    """Adapter check: with TXD wired to RXD on the adapter, bytes must come back."""
+    if not a.port:
+        _err("No serial port given. Use --port (see: saturn_send.py ports).")
+        return 3
+    t = SerialTransport(a.port, a.baud)
+    pattern = bytes(range(256)) * 2
+    t.write(pattern)
+    got = bytearray()
+    deadline = time.monotonic() + 2.0 + len(pattern) * 10 / a.baud
+    while len(got) < len(pattern) and time.monotonic() < deadline:
+        got += t.read(1024, 0.1)
+    t.close()
+    if bytes(got) == pattern:
+        print(f"Loopback OK: {len(got)} bytes came back unchanged at {a.baud} baud.")
+        return 0
+    if not got:
+        print("Loopback FAILED: nothing came back. Check that TXD is wired to RXD on the "
+              "adapter, and that the port is the adapter's.")
+    else:
+        bad = sum(1 for x, y in zip(got, pattern) if x != y)
+        print(f"Loopback FAILED: {len(got)} of {len(pattern)} bytes came back, "
+              f"{bad} of them wrong.")
+    return 1
+
+
+def cmd_probe(a) -> int:
+    """Hardware check: wake the Saturn's link, send STOP, show every byte back."""
+    if not a.port:
+        _err("No serial port given. Use --port (see: saturn_send.py ports).")
+        return 3
+    t = SerialTransport(a.port, a.baud)
+    print(f"{a.port} at {a.baud} baud, 8N1. GAME BASIC should be at its prompt.")
+    seen = bytearray()
+
+    def listen(seconds):
+        end = time.monotonic() + seconds
+        while time.monotonic() < end:
+            seen.extend(t.read(256, 0.02))
+
+    listen(0.3)
+    if seen:
+        print(f"Before sending anything the Saturn sent: {bytes(seen).hex(' ')}")
+        seen.clear()
+    for _ in range(8):
+        t.write(b"\x00")
+        listen(0.05)
+    if seen:
+        print(f"After the wake-up NULs: {bytes(seen).hex(' ')}")
+        seen.clear()
+    stop = P.keystroke(*P.KEY_STOP_BEFORE_LOAD)
+    for _ in range(10):
+        t.write(stop)
+        listen(0.1)
+    t.close()
+    if not seen:
+        print("No reply to STOP. Nothing at all came back from the Saturn.")
+        return 1
+    print(f"Reply to STOP: {bytes(seen).hex(' ')}")
+    statuses = [n for n in P.STATUS_FRAMES if P.command_frame(n) in bytes(seen)]
+    if statuses:
+        print("The Saturn answered with " + ", ".join(P.command_name(n) for n in statuses)
+              + ". The cable and settings are good.")
+        return 0
+    echo = stop[:4] in bytes(seen)
+    print("Bytes came back, but no status frame. "
+          + ("They look like our own STOP echoed back: TX and RX may be shorted, "
+             "or the adapter is in loopback." if echo else
+             "Wrong baud rate, or inverted (RS-232 level) signals, are the usual causes."))
+    return 1
+
+
 def cmd_selftest(a) -> int:
     """End-to-end check against the mock Saturn: send, run, receive, NAK path."""
     from .mock import MockSaturn
@@ -414,6 +486,14 @@ def main(argv=None) -> int:
     p = sub.add_parser("ports", help="list serial ports")
     p.add_argument("--json", action="store_true")
     p.set_defaults(fn=cmd_ports)
+
+    p = sub.add_parser("probe", help="hardware check: wake the link, send STOP, show the raw reply")
+    link_args(p)
+    p.set_defaults(fn=cmd_probe)
+
+    p = sub.add_parser("loopback", help="adapter check, with its TXD wired to its RXD")
+    link_args(p)
+    p.set_defaults(fn=cmd_loopback)
 
     p = sub.add_parser("selftest", help="run send/receive against the mock Saturn")
     p.add_argument("--baud", type=int, default=9600)

@@ -274,10 +274,43 @@ class LinkTests(unittest.TestCase):
             self.assertEqual(link._dir_names("*.B"), ["GAME.B"])
 
     def test_no_saturn_times_out(self):
+        # The real Saturn never answers the wake-up NULs, so connect() can't
+        # fail; the missing Saturn shows up when STOP gets no status.
         pc, _sat = pipe_pair()
-        link = SaturnLink(pc)
-        with self.assertRaises(LinkError):
-            link.connect(timeout=0.3)
+        link = SaturnLink(pc, key_delay=0)
+        link.connect()
+        with self.assertRaises(LinkError) as cm:
+            link.stop(timeout=0.3)
+        self.assertIn("No answer from the Saturn", str(cm.exception))
+
+    def test_wake_switches_mock_to_link_mode_silently(self):
+        pc, sat = pipe_pair()
+        mock = MockSaturn(sat)
+        mock.start()
+        link = SaturnLink(pc, key_delay=0)
+        # Before the wake-up, keystrokes are raw bytes to the Saturn.
+        link._send(P.keystroke(*P.KEY_STOP_BEFORE_LOAD))
+        self.assertFalse(link.pump(0.3))
+        self.assertFalse(mock.linked)
+        link.connect()
+        self.assertTrue(mock.linked)
+        self.assertEqual(link.r.buf, b"")  # nothing came back
+        link.stop(timeout=2.0)
+        self.assertEqual(link.status, P.STATUS_IDLE)
+        mock.stop_thread()
+
+    def test_saturn_handshake_gets_link_frame(self):
+        # link_connect on the Saturn: four NULs, then one every 50 ms,
+        # until frame 0x01 arrives. The PC answers once per burst.
+        pc, sat = pipe_pair()
+        link = SaturnLink(pc, key_delay=0)
+        sat.write(b"\x00" * 4)
+        link.pump_for(0.2)
+        for _ in range(3):
+            sat.write(b"\x00")
+            link.pump_for(0.05)
+        got = sat.read(64, 0.2)
+        self.assertEqual(got, P.command_frame(P.LINK))
 
     def test_real_speed_19200(self):
         link, mock = _session(baud=19200)

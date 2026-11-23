@@ -20,6 +20,8 @@ python3 saturn_send.py send GAME.B --mock --run        # pretend Saturn
 | `type TEXT` | Types text at the Saturn, then Enter |
 | `serve` | Stays connected and serves `COM:` files from `--serve-dir` |
 | `ports` | Lists serial ports |
+| `probe` | Hardware check: sends the wake-up NULs and STOP, and shows the raw bytes the Saturn sends back. A good cable and matching baud rate give `STATUS_IDLE` |
+| `loopback` | Adapter check, with the adapter unplugged from the Saturn and its TXD wired to its RXD: 512 bytes must come back unchanged |
 | `selftest` | Sends and receives a program with the mock Saturn, including a NAK and the Saturn's seek-and-retry |
 
 Common options: `-p/--port` (or `SATURN_PORT`), `-b/--baud 9600|19200` (or `SATURN_BAUD`), `--mock`, `--trace` (hex dump), `-v`, `--key-delay`, and for programs `-n/--auto-number`, `--start`, `--step`, `--label-interval`, `--max-line-bytes`. Exit codes: 0 ok, 1 link error, 2 program errors, 3 usage, 4 sent but the Saturn stopped the LOAD with an error.

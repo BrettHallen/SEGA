@@ -116,7 +116,8 @@ File names are trimmed of trailing spaces and a trailing dot before use. Paths r
 
 The link comes up on a NUL-byte handshake and drops back to it on silence or a run of NULs. BASTERM's side is its receive state machine (`0x4094A0`, `0x4091C0`); the Saturn's side is the routine at 0x0600C840 in the interpreter.
 
-- **Probing.** While not linked, BASTERM sends one `0x00` byte every 50 ms.
+- **Probing.** While not linked, BASTERM sends one `0x00` byte every 50 ms, from the moment the port opens. It sends keystrokes whether or not the link is up.
+- **The Saturn doesn't answer the probe.** At the prompt the Saturn's port starts in raw mode, and four `0x00` bytes in a row switch it to link mode without any reply. After that it stays silent until a keystroke asks for something: STOP gets status 0x06. So the probe's job is to switch the Saturn into link mode, and a PC tool that waits for a `0x00` back before sending anything waits forever.
 - **Saturn side.** When a `COM:` statement needs the PC, the Saturn sends four `0x00` bytes, then one every 50 ms, and waits up to 3 s for frame 0x01. Four NULs received in a row also switch the Saturn's port from raw mode into link mode.
 - **Link up.** When the Saturn answers with `0x00`, BASTERM skips any further NULs, sends frame 0x01 (`61 41 21 01`) and treats the link as up. If the Saturn sees no 0x01 within 3 s, the statement fails with *Communication error*.
 - **Link lost.** Eight `0x00` bytes in a row while linked, or 2 s of silence with a part-frame in the buffer, reset the link to probing.
@@ -176,9 +177,9 @@ The Saturn never sends its screen output on the port, in either mode.
 A cross-platform replacement is small: a serial port, the frame codec, a file-server loop over one folder, and a keystroke sender. Python with pyserial would do it in a few hundred lines.
 
 1. Open the USB-TTL port at the Saturn's rate (9600 or 19200, or up to 115200 after `OPTION HD352`), 8N1, no flow control.
-2. Run the link handshake: send `0x00` every 50 ms, answer a `0x00` with frame 0x01.
+2. Send at least four `0x00` bytes to switch the Saturn into link mode. Don't wait for a reply, since none comes. Whenever the Saturn sends `0x00` bytes itself (its own handshake, when a `COM:` request got no answer), answer with frame 0x01.
 3. Run a receive loop that decodes command frames and serves 0x05, 0x0A to 0x16, 0x19 and 0x1A/0x1B from a project folder, with up to three open handles. Honour a seek at any time, because that is how the Saturn retries.
-4. To send a program, write it as CRLF text to `TBASTERM.B`, send STOP (05, 03) until a status frame arrives, then type `LOAD "COM:TBASTERM.B",R` and CR as keystroke packets. Treat 0x06 or 0x08 as success and 0x09 as an error.
+4. To send a program, write it as CRLF text to `TBASTERM.B`, send STOP (05, 03) until a status frame arrives (this is the first reply the Saturn gives, so it is also where a missing Saturn or a wiring fault shows up), then type `LOAD "COM:TBASTERM.B",R` and CR as keystroke packets. Treat 0x06 or 0x08 as success and 0x09 as an error.
 5. Optionally add line numbering, `#include`, diff sends and a live keyboard pass-through.
 
 Only the electrical side depends on hardware: how fast a given USB-TTL adapter runs reliably (the 28 MHz rates above 19200 are untested), and the real timing on the wire. The protocol itself is fully covered by the code on both sides.

@@ -2,8 +2,10 @@
 # Guided by Brett Hallen
 """A pretend Saturn running GAME BASIC, for testing without hardware.
 
-It speaks the Saturn side of the protocol: answers the NUL probe, takes
-keystrokes, and runs LOAD "COM:..." / SAVE "COM:..." / RUN / LIST by issuing
+It speaks the Saturn side of the protocol. Like the real interpreter it
+starts in raw mode, switches to link mode after four 0x00 bytes in a row
+without answering them (receive interrupt, 0x0600A144), and ignores
+keystroke packets until then. It takes keystrokes, and runs LOAD "COM:..." / SAVE "COM:..." / RUN / LIST by issuing
 file requests to the PC. Its status frames and retries follow the GAME BASIC
 interpreter's own code (GAME_BASIC_CD/README.md):
 
@@ -46,7 +48,8 @@ class MockSaturn(threading.Thread):
         self.r = Reader(transport)
         self.log = log
         self.echo = echo
-        self.linked = False
+        self.linked = False  # raw mode until four NULs arrive
+        self.raw_bytes = 0
         self.line = bytearray()
         self.program: Dict[int, str] = {}
         self.running = False
@@ -97,17 +100,21 @@ class MockSaturn(threading.Thread):
 
     # ----------------------------------------------------------- main loop
     def run(self) -> None:
+        nuls = 0
         while not self._stop.is_set():
             ev = self.r.next_event(0.05)
             if ev is None:
                 continue
             if ev == ("nul",):
-                if not self.linked:
-                    self.t.write(b"\x00")
+                nuls += 1
+                if nuls >= 4 and not self.linked:
+                    self.linked = True  # raw -> link mode; nothing is sent back
+                continue
+            nuls = 0
+            if not self.linked:
+                self.raw_bytes += 1  # raw mode: would be typed as junk characters
                 continue
             if ev[0] == "cmd":
-                if ev[1] == P.LINK:
-                    self.linked = True
                 continue
             _, mod, key = ev
             self._on_key(mod, key)

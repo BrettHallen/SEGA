@@ -41,6 +41,14 @@ HUNG_HINT = ("If the Saturn has locked up, soft reset it with A+B+C+Start on the
              "GAME BASIC keeps the program in memory.")
 
 
+NO_ANSWER = (
+    "No answer from the Saturn: it did not reply to STOP. Check that GAME BASIC "
+    "is at its prompt, the cable (adapter RX to Saturn TX, adapter TX to Saturn RX, "
+    "ground connected, 5 V TTL levels, not RS-232), the port, and the baud rate "
+    "(9600 or 19200, same as GAME BASIC; to see or change it on the Saturn, press "
+    "L+R+Z on the pad or Q+E+D on the keyboard). " + HUNG_HINT)
+
+
 class LinkError(Exception):
     pass
 
@@ -99,6 +107,7 @@ class SaturnLink:
         self.stop_echo = False
         self.stats = Stats()
         self._nul_run = 0
+        self._last_link_sent = 0.0
         self._dir_matches: List[str] = []
         self._last_rx = time.monotonic()
         self.screen_lines: List[str] = []  # complete lines the Saturn printed
@@ -112,29 +121,52 @@ class SaturnLink:
         self._send(P.command_frame(n))
 
     # ------------------------------------------------------------- link up
+    # How the link really comes up (GAME_BASIC_main.s, Basterm_decompiled.c):
+    #
+    # * The Saturn starts in raw mode. Its receive interrupt (0x0600A144)
+    #   switches to link mode after four 0x00 bytes in a row, silently: it
+    #   sends nothing back. At the prompt it then stays quiet until a
+    #   keystroke such as STOP makes it send a status frame.
+    # * BASTERM probes with 0x00 every 50 ms from the moment the port opens
+    #   and sends keystrokes whether or not the link is up, so its probe is
+    #   what flips the Saturn into link mode.
+    # * The Saturn sends 0x00 itself only when a COM: statement needs the
+    #   PC and its first try got no answer (link_connect, 0x0600C840): four
+    #   NULs, then one every 50 ms, waiting 3 s for frame 0x01. We answer
+    #   such a burst with frame 0x01 whenever it comes (see _dispatch).
+    #
+    # So connect() cannot wait for an answer to its NULs. It sends the
+    # wake-up, and the first command that expects a reply (STOP) is what
+    # shows whether the Saturn is there.
+
+    WAKE_NULS = 8
+
     def connect(self, timeout: float = 5.0) -> None:
-        """NUL handshake: send 0x00 every 50 ms until the Saturn answers 0x00."""
-        deadline = time.monotonic() + timeout
-        self.log("Probing for the Saturn (0x00 every 50 ms)...")
-        while time.monotonic() < deadline:
+        """Send the NUL wake-up that switches the Saturn's port to link mode.
+
+        The Saturn does not answer it, so this only fails if the port does.
+        A NUL burst or frame that does come back is handled as usual.
+        """
+        self.log("Waking the Saturn's link (0x00 x %d, 50 ms apart)..." % self.WAKE_NULS)
+        self.wake()
+        self.linked = True
+
+    def wake(self) -> None:
+        for _ in range(self.WAKE_NULS):
             self._send(b"\x00")
-            ev = self.r.next_event(0.05)
-            while ev is not None:
-                if ev == ("nul",):
-                    self._drain_nuls(0.1)
-                    self._cmd(P.LINK)
-                    self.linked = True
-                    self._nul_run = 0
-                    self.log("Link up.")
-                    return
-                self._dispatch(ev)  # e.g. a stray status frame
-                ev = self.r.next_event(0)
-        raise LinkError(
-            "No answer from the Saturn. Check the cable, the port, the baud rate "
-            "(9600 or 19200, same as GAME BASIC; to see or change it on the Saturn, "
-            "press L+R+Z on the pad or Q+E+D on the keyboard) and that GAME BASIC "
-            "is at its prompt. " + HUNG_HINT
-        )
+            self.pump_for(0.05)
+
+    def _answer_nuls(self) -> None:
+        """The Saturn sent 0x00: it is running its handshake. Answer frame 0x01."""
+        now = time.monotonic()
+        if now - self._last_link_sent < 0.25:
+            return  # one answer per burst is enough
+        self._drain_nuls(0.06)
+        self._cmd(P.LINK)
+        self._last_link_sent = time.monotonic()
+        if not self.linked:
+            self.log("Link up.")
+        self.linked = True
 
     def _drain_nuls(self, quiet: float) -> None:
         while True:
@@ -220,10 +252,7 @@ class SaturnLink:
         kind = ev[0]
         if kind == "nul":
             self._nul_run += 1
-            if self.linked and self._nul_run >= 8:
-                # BASTERM drops back to probing; serve()/connect() re-link.
-                self.log("Saturn sent 8 NULs in a row: link reset.")
-                self.linked = False
+            self._answer_nuls()
             return
         self._nul_run = 0
         if kind == "key":
@@ -510,12 +539,24 @@ class SaturnLink:
             self.key(mod, k)
 
     def stop(self, timeout: float = 5.0) -> None:
-        """Send STOP every 50 ms until the Saturn reports a status (5 s limit)."""
+        """Send STOP every 50 ms until the Saturn reports a status (5 s limit).
+
+        This is the first point where the Saturn has to answer, so it is
+        where a missing or miswired Saturn shows up. The wake-up NULs are
+        repeated every second in case the Saturn missed them (for example
+        it was reset after we connected).
+        """
         seq = self.status_seq
-        deadline = time.monotonic() + timeout
+        start = time.monotonic()
+        deadline = start + timeout
+        next_wake = start + 1.0
         while self.status_seq == seq:
-            if time.monotonic() > deadline:
-                raise LinkError("The Saturn did not answer STOP within 5 s. " + HUNG_HINT)
+            now = time.monotonic()
+            if now > deadline:
+                raise LinkError(NO_ANSWER)
+            if now > next_wake:
+                self.wake()
+                next_wake = time.monotonic() + 1.0
             self._send(P.keystroke(*P.KEY_STOP_BEFORE_LOAD))
             self.pump_for(0.05)
 
@@ -617,18 +658,9 @@ class SaturnLink:
         return self.received[TRANSFER_NAME]
 
     def serve(self, should_stop: Callable[[], bool] = lambda: False) -> None:
-        """Stay connected, answer file requests and show Saturn output."""
+        """Stay connected, answer file requests and show Saturn output.
+
+        A NUL burst from the Saturn (its handshake) is answered in _dispatch.
+        """
         while not should_stop():
-            if not self.linked:
-                self._send(b"\x00")
-                ev = self.r.next_event(0.05)
-                if ev == ("nul",):
-                    self._drain_nuls(0.1)
-                    self._cmd(P.LINK)
-                    self.linked = True
-                    self._nul_run = 0
-                    self.log("Link up.")
-                elif ev is not None:
-                    self._dispatch(ev)
-                continue
             self.pump(0.2)
