@@ -149,6 +149,10 @@ GAME BASIC has a full-screen editor, much like 1980s home computers (RM pp. 15â€
 
 From the edit screen, press **L+R+Z** on the pad in port 1, or hold **Q+E+D** on the Saturn keyboard (RM pp. 19â€“20). Move between settings with the D-pad up and down, change a value with left and right, and finish by moving to **Exit** and pressing **C**.
 
+![The SYSTEM CONFIGULATION settings screen on a PAL Saturn, normal 320-pixel mode](images/settings_screen_HD320.jpg)
+
+*The settings screen on a real Saturn, with every value at its default. The title really is spelt "CONFIGULATION" on screen.*
+
 | Setting | Values | Default | Notes |
 |---|---|---|---|
 | **Baudrate** | 9600BPS or 19200BPS | 9600 | Speed of the PC link. Must match the PC. Use 9600 if you get errors |
@@ -171,7 +175,22 @@ A frame is 1/60 of a second.
 | `OPTION COM` | Resets the serial port and drops the link to the PC |
 | `OPTION VERSION` | Shows a hidden staff credit list |
 
-**The faster speeds are untested on hardware.** Whether they work depends on your USB adapter and cable, so drop back a step if transfers fail. The setting is saved in `GBASICSS_01`, so the Saturn stays in this mode until you type `OPTION HD320`. Programs drawn for a 320-pixel screen sit slightly off-centre in the wider mode.
+`OPTION HD352` and `OPTION HD320` have been tried on a real PAL Saturn (an Australian console) and both work as described. The settings screen shows which mode you are in by its background: blue in the normal 320-pixel mode (picture above) and red in the 352-pixel mode (picture below). On a PAL Saturn the two clocks are slightly lower than on an NTSC one:
+
+| Mode | Screen width | CPU clock (NTSC) | CPU clock (PAL) |
+|---|---|---|---|
+| `OPTION HD320` (normal) | 320 pixels | 26.8466 MHz | 26.6875 MHz |
+| `OPTION HD352` | 352 pixels | 28.6364 MHz | 28.4375 MHz |
+
+![The same settings screen after OPTION HD352, with a red background](images/settings_screen_HD352.jpg)
+
+*The settings screen after `OPTION HD352`. The red background marks the 352-pixel, 28 MHz mode.*
+
+![The hidden PROGRAM DESIGN credit list shown by OPTION VERSION](images/option_version_credits.jpg)
+
+*What `OPTION VERSION` prints: the program design credits for BASTERM, the polygon font, the sound system and the rest of the program.*
+
+**The faster baud rates are still untested on hardware.** Whether they work depends on your USB adapter and cable, so drop back a step if transfers fail. The setting is saved in `GBASICSS_01`, so the Saturn stays in this mode until you type `OPTION HD320`. Programs drawn for a 320-pixel screen sit slightly off-centre in the wider mode.
 
 These settings are stored in the Saturn's backup RAM in a file called **`GBASICSS_01`** (1 block). If you delete that file in the Saturn's memory manager, every setting goes back to its default.
 

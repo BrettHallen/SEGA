@@ -126,6 +126,8 @@ The flag is set only by an undocumented form of `OPTION` (statement handler 0x06
 
 Any other word gives *Syntax error*. Because the mode is saved, the 28 MHz setting survives a power cycle until `OPTION HD320` is run. The screen is 32 pixels wider in this mode, so programs written for 320 pixels may sit off-centre.
 
+**Tested on hardware.** `OPTION HD352` and `OPTION HD320` were tried on a PAL Saturn (Australian) and both behave as described: each restarts the interpreter in its mode, and the mode survives until the other is run. The settings screen (title `[ SYSTEM CONFIGULATION ]`, spelt that way in the string at 0x0603359C) has a blue background in 320 mode and a red one in 352 mode, so the mode can be seen at a glance. On PAL the clocks are 26.6875 MHz (320) and 28.4375 MHz (352), against 26.8466 and 28.6364 MHz on NTSC. The six faster baud rates themselves have not yet been tried. Photos of both screens and of the `OPTION VERSION` list are in the [User Guide, section 6](../Documentation/GAME_BASIC_for_SEGA_SATURN_User_Guide_EN.md#6-the-system-settings-screen-lrz) and in [`Documentation/images/`](../Documentation/images/).
+
 ### Two receive modes
 
 The receive interrupt behaves differently depending on whether BASTERM's link is up.
