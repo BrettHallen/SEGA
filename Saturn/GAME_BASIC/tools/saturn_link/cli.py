@@ -332,11 +332,17 @@ def cmd_probe(a) -> int:
     t = SerialTransport(a.port, a.baud)
     print(f"{a.port} at {a.baud} baud, 8N1. GAME BASIC should be at its prompt.")
     seen = bytearray()
+    last_link = [0.0]
 
     def listen(seconds):
         end = time.monotonic() + seconds
         while time.monotonic() < end:
-            seen.extend(t.read(256, 0.02))
+            data = t.read(256, 0.02)
+            seen.extend(data)
+            # A probing Saturn sends NULs until it gets frame 0x01; answer it.
+            if b"\x00" in data and time.monotonic() - last_link[0] > 0.25:
+                t.write(P.command_frame(P.LINK))
+                last_link[0] = time.monotonic()
 
     listen(0.3)
     if seen:
@@ -356,7 +362,10 @@ def cmd_probe(a) -> int:
     if not seen:
         print("No reply to STOP. Nothing at all came back from the Saturn.")
         return 1
-    print(f"Reply to STOP: {bytes(seen).hex(' ')}")
+    shown = bytes(seen)
+    if len(shown) > 64:
+        shown = shown[:32] + b"..." + shown[-32:]
+    print(f"Reply to STOP: {shown.hex(' ')}")
     statuses = [n for n in P.STATUS_FRAMES if P.command_frame(n) in bytes(seen)]
     if statuses:
         print("The Saturn answered with " + ", ".join(P.command_name(n) for n in statuses)

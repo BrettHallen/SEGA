@@ -310,7 +310,32 @@ class LinkTests(unittest.TestCase):
             sat.write(b"\x00")
             link.pump_for(0.05)
         got = sat.read(64, 0.2)
-        self.assertEqual(got, P.command_frame(P.LINK))
+        # One LINK per 0.25 s at most, and nothing else.
+        self.assertTrue(got.startswith(P.command_frame(P.LINK)))
+        self.assertEqual(got, P.command_frame(P.LINK) * (len(got) // 4))
+        self.assertLessEqual(len(got), 8)
+
+    def test_link_frame_sent_while_nuls_keep_coming(self):
+        # A probing Saturn sends a NUL every 50 ms until it sees frame 0x01;
+        # the answer must not wait for the NULs to stop.
+        pc, sat = pipe_pair()
+        link = SaturnLink(pc, key_delay=0)
+        stop = threading.Event()
+
+        def nuls():
+            while not stop.is_set():
+                sat.write(b"\x00")
+                time.sleep(0.05)
+        th = threading.Thread(target=nuls, daemon=True)
+        th.start()
+        try:
+            t0 = time.monotonic()
+            link.pump_for(0.3)
+            got = sat.read(64, 0.1)
+        finally:
+            stop.set()
+        self.assertTrue(got.startswith(P.command_frame(P.LINK)))
+        self.assertLess(time.monotonic() - t0, 1.0)
 
     def test_real_speed_19200(self):
         link, mock = _session(baud=19200)

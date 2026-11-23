@@ -161,7 +161,9 @@ class SaturnLink:
         now = time.monotonic()
         if now - self._last_link_sent < 0.25:
             return  # one answer per burst is enough
-        self._drain_nuls(0.06)
+        # Answer straight away, as BASTERM does. A Saturn that is probing
+        # sends a NUL every 50 ms until it sees frame 0x01, so waiting for
+        # the NULs to stop first would never end (seen on hardware).
         self._cmd(P.LINK)
         self._last_link_sent = time.monotonic()
         if not self.linked:
