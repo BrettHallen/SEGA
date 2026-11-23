@@ -32,6 +32,7 @@ import gbcd_extract  # noqa: E402
 import sh2  # noqa: E402
 
 BASE = gbcd_extract.LOAD_ADDR
+RELF = {}   # bsrf/braf address -> resolved target, filled by trace()
 
 
 def load_image(path):
@@ -184,6 +185,16 @@ def trace(img, seeds, code_end, jtables=None):
                 if k in info and in_range(info[k]):
                     (calls if k == 'call' else branches).add(info[k])
                     todo.append(info[k])
+            if mn in ('bsrf', 'braf'):
+                # PC-relative call/jump through a register: target is pc+4+rn
+                # when rn holds a known constant (typically from a literal).
+                t = regs.get(int(ops[1:]))
+                if isinstance(t, int):
+                    t = (pc + 4 + t) & 0xFFFFFFFF
+                    RELF[pc] = t
+                    if in_range(t):
+                        (branches if mn == 'braf' else calls).add(t)
+                        todo.append(t)
             if 'jsr' in info:
                 t = regs.get(info['jsr'])
                 if t is not None and in_range(t):
@@ -227,7 +238,7 @@ def looks_like_function(img, a, code_end, lits, code):
     return False
 
 
-def disassemble(img, symfile, source_name):
+def disassemble(img, symfile, source_name, title=None):
     names, heads, notes, tables, sections = load_symbols(symfile)
 
     # Table entries and the code they point at.
@@ -330,10 +341,11 @@ def disassemble(img, symfile, source_name):
 
     out = []
     w = out.append
-    w('; GAME BASIC for SEGA SATURN, interpreter image main.bin (SH-2, big-endian)')
+    w('; ' + (title or 'GAME BASIC for SEGA SATURN, interpreter image main.bin') + ' (SH-2, big-endian)')
     w(f'; Load address 0x{BASE:08X}, {len(img.d)} bytes, SHA-1 {hashlib.sha1(img.d).hexdigest()}')
-    w(f'; Generated from {source_name} by gbcd_disasm.py with gbcd_symbols.txt.')
-    w('; Copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material: keep out of public repositories.')
+    w(f'; Generated from {source_name} by gbcd_disasm.py with {os.path.basename(symfile)}.')
+    if not title:
+        w('; Copyrighted (C)1998 ASCII Corp./Bits Laboratory/ESP inc. material: keep out of public repositories.')
     w(f'; {len(code)} instructions found by control flow; everything else prints as data.')
     w(';')
     w('; Columns: address, raw bytes, instruction, comment. "=X" is a PC-relative literal value.')
@@ -391,6 +403,8 @@ def disassemble(img, symfile, source_name):
             for k in ('branch', 'call', 'mova'):
                 if k in info and nm(info[k]):
                     ops = re.sub(r'0x[0-9a-f]{8}', nm(info[k]), ops)
+            if a in RELF:
+                cm.append('-> ' + (nm(RELF[a]) or '0x%08X' % RELF[a]))
             if info.get('delay') is None and a - 2 in code:
                 pmn, _, pinfo = sh2.decode(img.u16(a - 2), a - 2)
                 if pinfo.get('delay'):
@@ -467,9 +481,17 @@ def main():
     ap.add_argument('-o', '--out', required=True, help='listing to write (keep it out of public repos)')
     ap.add_argument('--symbols', default=os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                                       'gbcd_symbols.txt'))
+    ap.add_argument('--base', type=lambda v: int(v, 16),
+                    help='load address (hex) for another raw SH-2 image, e.g. 060F0000 for the BIOS backup library')
+    ap.add_argument('--title', help='first header line for a listing of another image')
     a = ap.parse_args()
-    img = Image(load_image(a.source))
-    text = disassemble(img, a.symbols, os.path.basename(a.source))
+    global BASE
+    if a.base is not None:
+        BASE = a.base
+        img = Image(open(a.source, 'rb').read())
+    else:
+        img = Image(load_image(a.source))
+    text = disassemble(img, a.symbols, os.path.basename(a.source), a.title)
     with open(a.out, 'w', encoding='utf-8') as f:
         f.write(text)
     print(f'{a.out}: {text.count(chr(10))} lines')
