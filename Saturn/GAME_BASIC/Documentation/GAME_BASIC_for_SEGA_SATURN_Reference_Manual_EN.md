@@ -14722,71 +14722,432 @@ The remaining columns hold graphic characters:
 
 *[p. 415 is blank.]*
 
-*[p. 416]*
-
 ## Index
 
-Entries are given as in the book, with page numbers.
+*[pp. 416–421]*
 
-**Symbols:** `'` 72 · `¥` 321 · `@` 322 · `@V` 326 · `[` 326 · `]` 327 · `(…)` 340 · `<` 343 · `>` 344 · `{…}` 341 · `&` 344 · `%` 346 · `_` 346 · `!` 347 · `/` 347 · `$` 349 · `*` 350 · `:|` 352 · `:|:` 352 · `:|2` 353 · `|` 351 · `|1` 353 · `|:` 352 · `^` 354
+Page numbers are the page numbers of the English PDF. Each entry is linked to its section.
 
-**A:** A～G 335 · ABS 24 · ACTIVE 117 · ASC 24 · ATN 25 · ATRID 224
+### Symbols
 
-**B:** BEEP 252 · BGM 253 · BIN$ 25 · BINHEX$ 26 · BITW$ 27 · BLOAD 98 · BSAVE 99
+- `'` · [70](#rem-or-)
+- `¥` · 280
+- `@` · [281](#-1)
+- `@V` · [283](#v-1)
+- `[` · [284](#-2)
+- `]` · [284](#-3)
+- `(…)` · [296](#-4)
+- `<` · [299](#-6)
+- `>` · [299](#-7)
+- `{…}` · [296](#-5)
+- `&` · [300](#-8)
+- `%` · [302](#-9)
+- `_` · [301](#_)
+- `!` · [302](#-10)
+- `/` · [303](#-11)
+- `$` · [304](#-12)
+- `*` · [305](#-13)
+- `:|` · [307](#-16)
+- `:|:` · [307](#-17)
+- `:|2` · [308](#2)
+- `|` · [306](#-14)
+- `|1` · [308](#1)
+- `|:` · [306](#-15)
+- `^` · [308](#-18)
 
-**C:** CAMERA 166 · CCOPY 118 · CHR$ 28 · CINT 29 · CIRCLE 120 · CLEAR 29 · CLOSE 100 · CLS 121 · COLOR 122 · COLOROFS 123 · *[p. 417]* CONT 31 · COS 31
+### A
 
-**D:** DATA 31 · DATE$ 32 · dc 348 · DELETE 33 · DIM 33 · DISPLAY 124 · ds 350 · DSKF 113 · DSP 254
+- A～G · [291](#ag)
+- ABS · [24](#abs)
+- ACTIVE · [108](#active)
+- ASC · [25](#asc)
+- ATN · [25](#atn)
+- ATRID · [205](#atrid)
 
-**E:** ec 330 · EDIT 34 · EFFECT 256 · EG 259 · el 329 · END 35 · ep 328 · ERL 35 · ERR 35 · ERROR 36 · EXP 36
+### B
 
-**F:** f 333 · ff 333 · fff 333 · FILES 100 · FILES$ 114 · FIND 37 · FIX 38 · FKEY 38 · FORMAT 101 · FOR TO STEP 39 · FRAC 40 · FRE 40 · FREAD 102 · FWRITE 102
+- BEEP · [222](#beep)
+- BGM · [223](#bgm)
+- BIN$ · [26](#bin)
+- BINHEX$ · [27](#binhex)
+- BITW$ · [27](#bitw)
+- BLOAD · [93](#bload)
+- BSAVE · [94](#bsave)
 
-**G:** GCOPY 125 · GETCHR 157 · GLOAD 103 · GOSUB 41 · GOTO 41 · GSAVE 106
+### C
 
-**H:** HEX$ 42 · HEXBIN$ 43
+- CAMERA · [152](#camera)
+- CCOPY · [110](#ccopy)
+- CHR$ · [28](#chr)
+- CINT · [29](#cint)
+- CIRCLE · [111](#circle)
+- CLEAR · [30](#clear)
+- CLOSE · [94](#close)
+- CLS · [112](#cls)
+- COLOR · [113](#color)
+- COLOROFS · [114](#colorofs)
+- CONT · [31](#cont)
+- COS · [31](#cos)
 
-**I:** IF GOTO 43 · IF THEN ELSE ENDIF 44 · INKEY$ 47 · INPUT 48 · INPUT$ 49 · INSTR 50 · INT 51 · INTERVAL 51
+### D
 
-**K:** K 324 · KILL 108 · KLOAD 127 · KPRINT 128
+- DATA · [32](#data)
+- DATE$ · [33](#date)
+- dc · [304](#dc)
+- DELETE · [33](#delete)
+- DIM · [34](#dim)
+- DISPLAY · [115](#display)
+- ds · [305](#ds)
+- DSKF · [105](#dskf)
+- DSP · [224](#dsp)
 
-*[p. 418]*
+### E
 
-**L:** L 331 · LEFT$ 53 · LEN 53 · LET 54 · LFO 263 · LINE 132 · LIST 55 · LOAD 108 · LOC 115 · LOCATE 55 · LOCK 56 · LOF 115 · LOG 56
+- ec · [287](#ec)
+- EDIT · [34](#edit)
+- EFFECT · [226](#effect)
+- EG · [228](#eg)
+- el · [286](#el)
+- END · [35](#end)
+- ep · [285](#ep)
+- ERL · [35](#erl)
+- ERR · [36](#err)
+- ERROR · [36](#error)
+- EXP · [37](#exp)
 
-**M:** mf 333 · MID$ 57, 58 · MMLSTAT() 267 · MOSAIC 133 · mp 333
+### F
 
-**N:** N 342 · NEW 58 · NEXT 59
+- f · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- ff · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- fff · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- FILES · [95](#files-1)
+- FILES$ · [106](#files-2)
+- FIND · [37](#find)
+- FIX · [38](#fix)
+- FKEY · [38](#fkey)
+- FORMAT · [96](#format)
+- FOR TO STEP · [39](#for-to-step)
+- FRAC · [40](#frac)
+- FRE · [40](#fre)
+- FREAD · [96](#fread)
+- FWRITE · [97](#fwrite)
 
-**O:** O 330 · OBJ 181
+### G
 
-- OBJ item numbers: 0 (@TYPE) 187 · 1 (@FLAG) 191 · 2 (@GROUP) 192 · 4 (@XP) 193 · 5 (@YP) 193 · 6 (@ZP) 193 · 8 (@XR) 193 · 9 (@YR) 193 · 10 (@ZR) 193 · 12 (@XS) 194 · 13 (@YS) 194 · 14 (@ZS) 194 · 16 (@ATR) 195 · 17 (@POLYGON) 196 · 18 (@ORDER) 196 · 19 (@TIME) 197 · 20 (@PARENT) 198 · 21 (@CHILD) 204 · 22 (@LEFT) 204 · 23 (@RIGHT) 205 · 24 (@XV) 205 · 25 (@YV) 205 · 26 (@ZV) 205 · 28 (@XA) 206 · 29 (@YA) 206 · 30 (@ZA) 206 · 32 (@XL) 207 · 33 (@YL) 207 · 34 (@ZL) 207 · 36 (@XRV) 208 · 37 (@YRV) 208 · 38 (@ZRV) 208 · 48 (@XP0) 208 · 49 (@YP0) 208 · 50 (@XP1) 208 · 51 (@YP1) 208 · 52 (@XP2) 209 · 53 (@YP2) 209 · 54 (@XP3) 209 · *[p. 419]* 55 (@YP3) 209 · 56 (@XD) 210 · 57 (@YD) 210 · 58 (@ZD) 210 · 59 (@RD) 210 · 60 (@GTEST) 211 · 61 (@RADIUS) 212 · 62 (@COLIDIST) 212 · 63 (@COLIOBJ) 213 · 64 (M00) 213 · 65 (M01) 213 · 66 (M02) 213 · 67 (M10) 213 · 68 (M11) 213 · 69 (M12) 213 · 70 (M20) 213 · 71 (M21) 213 · 72 (M22) 214 · 73 (M30) 214 · 74 (M31) 214 · 75 (M32) 214
+- GCOPY · [116](#gcopy)
+- GETCHR · [145](#getchr)
+- GLOAD · [97](#gload)
+- GOSUB · [41](#gosub)
+- GOTO · [41](#goto)
+- GSAVE · [100](#gsave)
 
-OBJATR 215 · OBJLINK 215 · OBJPOS 216 · OBJROT 216 · OBJTURN 217 · OBJTYPE 217 · OBJZOOM 218 · ON ERROR GOTO 59 · ON GOSUB 60 · ON GOTO 61 · ON INTERVAL 62 · ON RESTORE 63 · ON TIMER 64 · OPEN 110
+### H
 
-**P:** p 333 · P 327 · PAD 64 · PAINT 134 · PALETTE 136, 158 · PEEK 67 · PEEK$ 68 · PLAY 270 · PLAYCONT 272 · PLAYFADE 273 · PLAYINIT 274 · PLAYPAN 279 · PLAYPAUSE 280 · PLAYSTAT() 272 · PLAYSTOP 280 · PLAYTEMPO 280 · POINT 159 · POKE 68 · POLYGONID 224 · POS 69 · pp 333 · ppp 333 · PRINT 69 · PRINT USING 70 · PRIORITY 137 · PSET 139 · PUTCHR 139 · PUTSPRITE 167
+- HEX$ · [42](#hex)
+- HEXBIN$ · [43](#hexbin)
 
-**Q:** q 334
+### I
 
-*[p. 420]*
+- IF GOTO · [43](#if-goto)
+- IF THEN ELSE ENDIF · [44](#if-then-else-endif)
+- INKEY$ · [46](#inkey)
+- INPUT · [48](#input)
+- INPUT$ · [49](#input-1)
+- INSTR · [49](#instr)
+- INT · [50](#int)
+- INTERVAL · [51](#interval)
 
-**R:** R 342 · RANDOMIZE 71 · READ 72 · READCHR$ 160 · READHEX$ 161 · REM 72 · RENUM 73 · RESTORE 73 · RESUME 74 · RETURN 74 · RGB 162 · RGBADD 163 · RGBTO 164 · RIGHT$ 75 · RND 75 · ROTATE 142 · ROTCENTER 142 · ROTOVER 143 · ROTPOS 144 · ROTZOOM 145 · RUN 76
+### K
 
-**S:** S 323 · SAVE 111 · SCREEN 146 · SCROLL 151 · SEEK 112 · SETATR 218 · SETCHR 152 · SETDISP 169 · SETLIGHT 169 · SETPERS 170 · SETPFONT 170 · SETPOLYGON 172 · SETSONG 281 · SETSPRITE 174 · SETTEX 222 · SETVERTEX 175 · SFRE() 283 · SGN 77 · SHIFT 77 · SIN 78 · SKCLOSE 79 · SPACE$ 79 · SPRITE$ 177 · SPRWINDOW 178 · SQR 80 · STOP 80 · STR$ 80 · STRING$ 81 · STRW$ 82 · SWAP 83
+- K · [282](#k)
+- KILL · [101](#kill)
+- KLOAD · [118](#kload)
+- KPRINT · [119](#kprint)
 
-**T:** T 324 · TAN 83 · TARG 285 · TEXID 225 · TFRE() 307 · TIMER 84 · TLIST 308 · TPROP() 309
+### L
 
-- TPROP item numbers: 0 (@BEND) 311 · 1 (@LAYER) 311 · 2 (@TONE) 311 · 10 (@SN) 311 · 11 (@EN) 311 · *[p. 421]* 12 (@BN) 312 · 13 (@FT) 312 · 20 (@AR) 312 · 21 (@DR) 312 · 22 (@SR) 312 · 23 (@RR) 312 · 24 (@SL) 312 · 25 (@EGHOLD) 312 · 26 (@LSLINK) 312 · 27 (@KS) 312 · 30 (@SDIR) 313 · 31 (@SB) 313 · 32 (@SS) 313 · 33 (@LOOP) 313 · 34 (@PCM8B) 314 · 35 (@LSA) 314 · 36 (@LEA) 314 · 50 (@RE) 314 · 51 (@LFOF) 314 · 52 (@ALFOWS) 314 · 53 (@ALFOS) 314 · 54 (@PLFOWS) 314 · 55 (@PLFOS) 314 · 60 (@MDX) 315 · 61 (@MDY) 315 · 62 (@MDL) 315 · 70 (@ISEL) 315 · 71 (@IMIX) 315 · 72 (@DSEND) 315 · 73 (@DPAN) 316
+- L · [288](#l)
+- LEFT$ · [52](#left)
+- LEN · [52](#len)
+- LET · [53](#let)
+- LFO · [231](#lfo)
+- LINE · [123](#line)
+- LIST · [54](#list)
+- LOAD · [102](#load)
+- LOC · [107](#loc)
+- LOCATE · [54](#locate)
+- LOCK · [55](#lock)
+- LOF · [107](#lof)
+- LOG · [55](#log)
 
-**U:** UNLOCK 85 · USERDATA 86 · USERDATA() 88
+### M
 
-**V:** v 333 · V 325 · VAL 89 · VERSION 89 · VERTEX 226 · VOLUME 317 · VSYNC 154
+- mf · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- MID$ · [56](#mid-statement), [57](#mid-function)
+- MMLSTAT() · [233](#mmlstat)
+- MOSAIC · [123](#mosaic)
+- mp · [290](#ppp--pp--p--mp--mf--f--ff--fff)
 
-**W:** WADD$ 90 · WANDOR$ 90 · WIDTH 91 · WINDOW 155 · WMUL$ 91 · WXOR$ 92
+### N
 
-**X:** XATN 93 · XCOS 93 · XDIST 94 · XSIN 94 · XSQR 95 · XTAN 95
+- N · [298](#n)
+- NEW · [57](#new)
+- NEXT · [58](#next)
 
-**Z:** ZOOM 156
+### O
+
+- O · [287](#o)
+- OBJ · [165](#obj)
+  - 0 (@TYPE) · [171](#0-object-type-type)
+  - 1 (@FLAG) · [174](#1-auxiliary-flag-flag)
+  - 2 (@GROUP) · [175](#2-object-group-group)
+  - 4 (@XP) · [176](#4-x-position-xp)
+  - 5 (@YP) · [176](#5-y-position-yp)
+  - 6 (@ZP) · [176](#6-z-position-zp)
+  - 8 (@XR) · [177](#8-x-rotation-angle-xr)
+  - 9 (@YR) · [177](#9-y-rotation-angle-yr)
+  - 10 (@ZR) · [177](#10-z-rotation-angle-zr)
+  - 12 (@XS) · [177](#12-x-scale-xs)
+  - 13 (@YS) · [177](#13-y-scale-ys)
+  - 14 (@ZS) · [177](#14-z-scale-zs)
+  - 16 (@ATR) · [178](#16-attribute-id-number-atr)
+  - 17 (@POLYGON) · [179](#17-polygon-id-number-polygon)
+  - 18 (@ORDER) · [179](#18-moverotate-conversion-order-order)
+  - 19 (@TIME) · [180](#19-display-time-time)
+  - 20 (@PARENT) · [181](#20-link-structure-parent-object-parent)
+  - 21 (@CHILD) · [186](#21-link-structure-child-object-child)
+  - 22 (@LEFT) · [186](#22-link-structure-elder-sibling-object-left)
+  - 23 (@RIGHT) · [187](#23-link-structure-younger-sibling-object-right)
+  - 24 (@XV) · [187](#24-x-speed-xv)
+  - 25 (@YV) · [187](#25-y-speed-yv)
+  - 26 (@ZV) · [188](#26-z-speed-zv)
+  - 28 (@XA) · [188](#28-x-acceleration-xa)
+  - 29 (@YA) · [188](#29-y-acceleration-ya)
+  - 30 (@ZA) · [188](#30-z-acceleration-za)
+  - 32 (@XL) · [189](#32-x-speed-limiter-xl)
+  - 33 (@YL) · [189](#33-y-speed-limiter-yl)
+  - 34 (@ZL) · [189](#34-z-speed-limiter-zl)
+  - 36 (@XRV) · [190](#36-x-rotation-speed-xrv)
+  - 37 (@YRV) · [190](#37-y-rotation-speed-yrv)
+  - 38 (@ZRV) · [190](#38-z-rotation-speed-zrv)
+  - 48 (@XP0) · [190](#48-4-point-sprite-vertex-x0-xp0)
+  - 49 (@YP0) · [191](#49-4-point-sprite-vertex-y0-yp0)
+  - 50 (@XP1) · [191](#50-4-point-sprite-vertex-x1-xp1)
+  - 51 (@YP1) · [191](#51-4-point-sprite-vertex-y1-yp1)
+  - 52 (@XP2) · [191](#52-4-point-sprite-vertex-x2-xp2)
+  - 53 (@YP2) · [191](#53-4-point-sprite-vertex-y2-yp2)
+  - 54 (@XP3) · [191](#54-4-point-sprite-vertex-x3-xp3)
+  - 55 (@YP3) · [191](#55-4-point-sprite-vertex-y3-yp3)
+  - 56 (@XD) · [192](#56-x-position-projected-on-screen-xd)
+  - 57 (@YD) · [192](#57-y-position-projected-on-screen-yd)
+  - 58 (@ZD) · [192](#58-z-position-from-screen-zd)
+  - 59 (@RD) · [192](#59-radiuszd-rd)
+  - 60 (@GTEST) · [193](#60-collision-test-group-setting-gtest)
+  - 61 (@RADIUS) · [194](#61-radius-for-contact-test-radius)
+  - 62 (@COLIDIST) · [194](#62-contact-flag-and-its-distance-colidist)
+  - 63 (@COLIOBJ) · [195](#63-number-of-the-object-contacted-coliobj)
+  - 64 (M00) · [195](#64-matrix-at-perspective-transformation-m00)
+  - 65 (M01) · [195](#65-matrix-at-perspective-transformation-m01)
+  - 66 (M02) · [195](#66-matrix-at-perspective-transformation-m02)
+  - 67 (M10) · [195](#67-matrix-at-perspective-transformation-m10)
+  - 68 (M11) · [195](#68-matrix-at-perspective-transformation-m11)
+  - 69 (M12) · [195](#69-matrix-at-perspective-transformation-m12)
+  - 70 (M20) · [195](#70-matrix-at-perspective-transformation-m20)
+  - 71 (M21) · [195](#71-matrix-at-perspective-transformation-m21)
+  - 72 (M22) · [196](#72-matrix-at-perspective-transformation-m22)
+  - 73 (M30) · [196](#73-matrix-at-perspective-transformation-m30)
+  - 74 (M31) · [196](#74-matrix-at-perspective-transformation-m31)
+  - 75 (M32) · [196](#75-matrix-at-perspective-transformation-m32)
+- OBJATR · [197](#objatr)
+- OBJLINK · [197](#objlink)
+- OBJPOS · [198](#objpos)
+- OBJROT · [198](#objrot)
+- OBJTURN · [199](#objturn)
+- OBJTYPE · [199](#objtype)
+- OBJZOOM · [199](#objzoom)
+- ON ERROR GOTO · [58](#on-error-goto)
+- ON GOSUB · [59](#on-gosub)
+- ON GOTO · [60](#on-goto)
+- ON INTERVAL · [60](#on-interval)
+- ON RESTORE · [61](#on-restore)
+- ON TIMER · [62](#on-timer)
+- OPEN · [103](#open)
+
+### P
+
+- p · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- P · [285](#p)
+- PAD · [63](#pad)
+- PAINT · [125](#paint)
+- PALETTE · [126](#palette), [146](#palette-1)
+- PEEK · [66](#peek)
+- PEEK$ · [66](#peek-1)
+- PLAY · [236](#play)
+- PLAYCONT · [238](#playcont)
+- PLAYFADE · [239](#playfade)
+- PLAYINIT · [239](#playinit)
+- PLAYPAN · [244](#playpan)
+- PLAYPAUSE · [245](#playpause)
+- PLAYSTAT() · [238](#playstat)
+- PLAYSTOP · [245](#playstop)
+- PLAYTEMPO · [246](#playtempo)
+- POINT · [146](#point)
+- POKE · [67](#poke)
+- POLYGONID · [205](#polygonid)
+- POS · [67](#pos)
+- pp · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- ppp · [290](#ppp--pp--p--mp--mf--f--ff--fff)
+- PRINT · [68](#print)
+- PRINT USING · [68](#print-using)
+- PRIORITY · [127](#priority)
+- PSET · [129](#pset)
+- PUTCHR · [129](#putchr)
+- PUTSPRITE · [153](#putsprite)
+
+### Q
+
+- q · [290](#q)
+
+### R
+
+- R · [298](#r)
+- RANDOMIZE · [69](#randomize)
+- READ · [70](#read)
+- READCHR$ · [147](#readchr)
+- READHEX$ · [148](#readhex)
+- REM · [70](#rem-or-)
+- RENUM · [71](#renum)
+- RESTORE · [71](#restore)
+- RESUME · [72](#resume)
+- RETURN · [72](#return)
+- RGB · [149](#rgb)
+- RGBADD · [149](#rgbadd)
+- RGBTO · [150](#rgbto)
+- RIGHT$ · [72](#right)
+- RND · [73](#rnd)
+- ROTATE · [132](#rotate)
+- ROTCENTER · [132](#rotcenter)
+- ROTOVER · [133](#rotover)
+- ROTPOS · [134](#rotpos)
+- ROTZOOM · [135](#rotzoom)
+- RUN · [73](#run)
+
+### S
+
+- S · [281](#s)
+- SAVE · [104](#save)
+- SCREEN · [135](#screen)
+- SCROLL · [140](#scroll)
+- SEEK · [105](#seek)
+- SETATR · [200](#setatr)
+- SETCHR · [141](#setchr)
+- SETDISP · [154](#setdisp)
+- SETLIGHT · [155](#setlight)
+- SETPERS · [156](#setpers)
+- SETPFONT · [156](#setpfont)
+- SETPOLYGON · [157](#setpolygon)
+- SETSONG · [246](#setsong)
+- SETSPRITE · [159](#setsprite)
+- SETTEX · [203](#settex)
+- SETVERTEX · [160](#setvertex)
+- SFRE() · [248](#sfre)
+- SGN · [74](#sgn)
+- SHIFT · [75](#shift)
+- SIN · [76](#sin)
+- SKCLOSE · [76](#skclose)
+- SPACE$ · [76](#space)
+- SPRITE$ · [161](#sprite)
+- SPRWINDOW · [162](#sprwindow)
+- SQR · [77](#sqr)
+- STOP · [77](#stop)
+- STR$ · [77](#str)
+- STRING$ · [78](#string)
+- STRW$ · [79](#strw)
+- SWAP · [80](#swap)
+
+### T
+
+- T · [282](#t)
+- TAN · [80](#tan)
+- TARG · [249](#targ)
+- TEXID · [206](#texid)
+- TFRE() · [266](#tfre)
+- TIMER · [81](#timer)
+- TLIST · [267](#tlist)
+- TPROP() · [269](#tprop)
+  - 0 (@BEND) · [271](#0-bend-range-rw-bend)
+  - 1 (@LAYER) · [271](#1-number-of-layers--1-rw-layer)
+  - 2 (@TONE) · [271](#2-number-of-voices--1-r-tone)
+  - 10 (@SN) · [271](#10-start-note-rw-sn)
+  - 11 (@EN) · [271](#11-end-note-rw-en)
+  - 12 (@BN) · [271](#12-base-note-rw-bn)
+  - 13 (@FT) · [271](#13-fine-tune-rw-ft)
+  - 20 (@AR) · [272](#20-attack-rate-rw-ar)
+  - 21 (@DR) · [272](#21-decay-rate-rw-dr)
+  - 22 (@SR) · [272](#22-sustain-rate-rw-sr)
+  - 23 (@RR) · [272](#23-release-rate-rw-rr)
+  - 24 (@SL) · [272](#24-sustain-level-rw-sl)
+  - 25 (@EGHOLD) · [272](#25-eg-hold-mode-rw-eghold)
+  - 26 (@LSLINK) · [272](#26-loop-start-link-rw-lslink)
+  - 27 (@KS) · [272](#27-key-rate-scaling-rw-ks)
+  - 30 (@SDIR) · [272](#30-sound-direct-rw-sdir)
+  - 31 (@SB) · [272](#31-source-bit-control-rw-sb)
+  - 32 (@SS) · [273](#32-sound-source-control-rw-ss)
+  - 33 (@LOOP) · [273](#33-loop-control-rw-loop)
+  - 34 (@PCM8B) · [273](#34-waveform-data-word-length-r-pcm8b)
+  - 35 (@LSA) · [273](#35-loop-start-address-rw-lsa)
+  - 36 (@LEA) · [274](#36-loop-end-address-rw-lea)
+  - 50 (@RE) · [274](#50-lfo-reset-rw-re)
+  - 51 (@LFOF) · [274](#51-lfo-frequency-rw-lfof)
+  - 52 (@ALFOWS) · [274](#52-alfo-amplitude-modulation-waveform-selection-rw-alfows)
+  - 53 (@ALFOS) · [274](#53-alfo-amplitude-modulation-depth-rw-alfos)
+  - 54 (@PLFOWS) · [274](#54-plfo-frequency-modulation-waveform-selection-rw-plfows)
+  - 55 (@PLFOS) · [274](#55-plfo-frequency-modulation-depth-rw-plfos)
+  - 60 (@MDX) · [274](#60-modulation-input-x-selection-layer-number-rw-mdx)
+  - 61 (@MDY) · [274](#61-modulation-input-y-selection-layer-number-rw-mdy)
+  - 62 (@MDL) · [274](#62-modulation-level-rw-mdl)
+  - 70 (@ISEL) · [275](#70-input-selection-rw-isel)
+  - 71 (@IMIX) · [275](#71-input-mix-level-rw-imix)
+  - 72 (@DSEND) · [275](#72-direct-data-send-level-rw-dsend)
+  - 73 (@DPAN) · [275](#73-direct-data-position-rw-dpan)
+
+### U
+
+- UNLOCK · [82](#unlock)
+- USERDATA · [82](#userdata)
+- USERDATA() · [84](#userdata-1)
+
+### V
+
+- v · [289](#v-2)
+- V · [283](#v)
+- VAL · [85](#val)
+- VERSION · [86](#version)
+- VERTEX · [207](#vertex)
+- VOLUME · [276](#volume)
+- VSYNC · [143](#vsync)
+
+### W
+
+- WADD$ · [86](#wadd)
+- WANDOR$ · [86](#wandor)
+- WIDTH · [87](#width)
+- WINDOW · [144](#window)
+- WMUL$ · [88](#wmul)
+- WXOR$ · [88](#wxor)
+
+### X
+
+- XATN · [89](#xatn)
+- XCOS · [89](#xcos)
+- XDIST · [90](#xdist)
+- XSIN · [90](#xsin)
+- XSQR · [91](#xsqr)
+- XTAN · [91](#xtan)
+
+### Z
+
+- ZOOM · [144](#zoom)
 
 *[Two blank pages follow, then the back cover.]*
 

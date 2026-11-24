@@ -1,0 +1,22 @@
+Build of GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.pdf (and the Index in the .md)
+
+From this folder:
+
+  python3 build.py ../GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.md ../GAME_BASIC_for_SEGA_SATURN_Reference_Manual_EN.pdf
+
+Needs pandoc, node with playwright (Chromium), and python3 with beautifulsoup4 and pypdf.
+
+What it does
+- Converts the Markdown with pandoc (gfm -> html5, --section-divs) and prints it with Chromium (build.js, style.css).
+- The Index is generated from index_entries.tsv (every entry of the Japanese index, pp. 416-421, with its book page).
+  Each entry is matched to its heading in the translation; the PDF page of that heading becomes the entry's page number.
+- It renders twice (or until the numbers stop changing), then writes the page numbers into both the PDF index
+  and the Markdown index, so the two always agree.
+- Page numbers count every page of the PDF, covers included, so the footer, the index and a PDF viewer's page number match.
+- The front and back covers are copied from the first and last page of the existing PDF
+  (or from a 2-page PDF given with --covers covers.pdf) and scaled to fill an A4 page.
+  A blank page follows the front cover and precedes the back cover, so the total page count is even:
+  printed double-sided, the manual starts on a right-hand page and the back cover is the back of the last sheet.
+
+To change the index, edit index_entries.tsv (group, parent entry for sub-items, name, book pages) and rebuild;
+edits made by hand to the Index section of the .md are overwritten by the build.
