@@ -1,0 +1,866 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SETCHR Character Designer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a workbench. Editor canvas on the left, palette and preview on the right, BASIC output underneath. */
+:root {
+  --bg: #eef0f4;
+  --panel: #ffffff;
+  --sunk: #e3e6ed;
+  --line: #cdd2dc;
+  --fg: #1a1e27;
+  --muted: #5b6273;
+  --accent: #2a55c9;
+  --accent-fg: #ffffff;
+  --warn: #9a5a00;
+  --warn-bg: #fff3dc;
+  --grid: rgba(20,24,34,.16);
+  --cellgrid: rgba(20,24,34,.55);
+  --display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14171d; --panel: #1c2028; --sunk: #11141a; --line: #2e3440; --fg: #e4e7ee; --muted: #9098aa;
+  --accent: #6d93ff; --accent-fg: #0d1220; --warn: #f2b45a; --warn-bg: #2d2412;
+  --grid: rgba(255,255,255,.10); --cellgrid: rgba(255,255,255,.45); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #14171d; --panel: #1c2028; --sunk: #11141a; --line: #2e3440; --fg: #e4e7ee; --muted: #9098aa;
+  --accent: #6d93ff; --accent-fg: #0d1220; --warn: #f2b45a; --warn-bg: #2d2412;
+  --grid: rgba(255,255,255,.10); --cellgrid: rgba(255,255,255,.45); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.45 var(--body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 20px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 16px; }
+h1 { font: 600 1.6rem/1.1 var(--display); letter-spacing: .01em; margin: 0; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); max-width: 70ch; }
+h2 { font: 600 .78rem/1 var(--display); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); margin: 0; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row.spread { justify-content: space-between; }
+label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+input[type=number], input[type=text], select { font: 13px var(--mono); color: var(--fg); background: var(--sunk); border: 1px solid var(--line); border-radius: 5px; padding: 5px 7px; }
+input[type=number] { width: 68px; }
+input[type=text] { width: 110px; }
+button { font: 500 13px var(--body); color: var(--fg); background: var(--sunk); border: 1px solid var(--line); border-radius: 5px; padding: 6px 10px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button[aria-pressed=true] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; border-right: 1px solid var(--line); }
+.seg button:last-child { border-right: 0; }
+.editor-box { overflow: auto; background: var(--sunk); border-radius: 6px; padding: 10px; display: flex; justify-content: center; }
+#ed { display: block; touch-action: none; cursor: crosshair; image-rendering: pixelated; }
+.status { font: 12px var(--mono); color: var(--muted); min-height: 1.4em; font-variant-numeric: tabular-nums; }
+.swatches { display: grid; gap: 3px; }
+.swatches.s16 { grid-template-columns: repeat(8, 1fr); }
+.swatches.s256 { grid-template-columns: repeat(16, 1fr); gap: 1px; }
+.sw { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--line); position: relative; cursor: pointer; padding: 0; max-width: 100%; }
+.s16 .sw { font: 10px var(--mono); color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000; display: flex; align-items: flex-end; justify-content: flex-start; padding: 2px 3px; }
+.s256 .sw { border-radius: 1px; border-width: 0; }
+.sw.t { background-image: conic-gradient(#999 25%, #ddd 0 50%, #999 0 75%, #ddd 0); background-size: 10px 10px; }
+.sw.fg { outline: 2px solid var(--fg); outline-offset: 1px; z-index: 2; }
+.sw.sc { box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 4px var(--fg); }
+.cur { display: flex; gap: 12px; align-items: center; }
+.chip { width: 34px; height: 34px; border-radius: 5px; border: 1px solid var(--line); flex: none; }
+.slider { display: grid; grid-template-columns: 14px 1fr 34px; align-items: center; gap: 8px; font: 12px var(--mono); }
+.slider input[type=range] { width: 100%; }
+.slider output { text-align: right; font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); font-size: 12px; }
+.muted { color: var(--muted); }
+.note { font-size: 12.5px; color: var(--muted); margin: 0; max-width: 68ch; }
+.warn { font-size: 12.5px; color: var(--warn); background: var(--warn-bg); border-radius: 5px; padding: 7px 10px; margin: 0; }
+.prev-box { background: var(--sunk); border-radius: 6px; padding: 10px; overflow: auto; display: flex; justify-content: center; min-height: 80px; align-items: center; }
+#pv { image-rendering: pixelated; display: block; }
+textarea { width: 100%; min-height: 260px; resize: vertical; font: 12.5px/1.5 var(--mono); color: var(--fg); background: var(--sunk); border: 1px solid var(--line); border-radius: 6px; padding: 10px; white-space: pre; overflow: auto; }
+#imp { min-height: 140px; }
+.out-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; margin-top: 16px; align-items: start; }
+@media (max-width: 900px) { .out-grid { grid-template-columns: minmax(0, 1fr); } }
+.opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px 14px; }
+.opts label { justify-content: space-between; }
+details summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+details[open] summary { margin-bottom: 8px; }
+kbd { font: 11px var(--mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; background: var(--sunk); }
+.toast { min-height: 1.3em; font-size: 12.5px; color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color .12s, background .12s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>SETCHR Character Designer</h1>
+    <p>Draw 8×8 characters for GAME BASIC for SEGA SATURN and get the <span class="mono">PALETTE</span>, <span class="mono">SETCHR … READ</span> and <span class="mono">DATA</span> lines to paste into your program.</p>
+  </header>
+
+  <div class="grid">
+    <section class="panel" aria-label="Editor">
+      <div class="row spread">
+        <div class="row">
+          <div class="seg" role="group" aria-label="Colour mode">
+            <button id="m16" type="button">16-colour text</button>
+            <button id="m256" type="button">256-colour</button>
+          </div>
+          <label>Across <input id="cols" type="number" min="1" max="16" value="2"></label>
+          <label>Down <input id="rows" type="number" min="1" max="16" value="2"></label>
+        </div>
+        <div class="row">
+          <button id="undo" type="button" title="Undo (Ctrl+Z)">Undo</button>
+          <button id="redo" type="button" title="Redo (Ctrl+Y)">Redo</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="seg" role="group" aria-label="Drawing tool">
+          <button type="button" data-tool="pen" title="Pen (B)">Pen</button>
+          <button type="button" data-tool="fill" title="Fill (G)">Fill</button>
+          <button type="button" data-tool="line" title="Line (L)">Line</button>
+          <button type="button" data-tool="rect" title="Box (R)">Box</button>
+          <button type="button" data-tool="pick" title="Pick colour (I, or Alt+click)">Pick</button>
+        </div>
+        <label><input id="showgrid" type="checkbox" checked> Dot grid</label>
+      </div>
+      <div class="editor-box"><canvas id="ed" tabindex="0" aria-label="Character editor. Left button draws with the main colour, right button with the second colour."></canvas></div>
+      <div class="status" id="status">&nbsp;</div>
+      <div class="row">
+        <div class="seg" role="group" aria-label="Apply changes to">
+          <button type="button" id="scopeCell">This character</button>
+          <button type="button" id="scopeAll">Whole sheet</button>
+        </div>
+        <button type="button" data-op="flipH">Flip ↔</button>
+        <button type="button" data-op="flipV">Flip ↕</button>
+        <button type="button" data-op="rot">Rotate 90°</button>
+        <button type="button" data-op="left" title="Shift left (wraps)">←</button>
+        <button type="button" data-op="right" title="Shift right (wraps)">→</button>
+        <button type="button" data-op="up" title="Shift up (wraps)">↑</button>
+        <button type="button" data-op="down" title="Shift down (wraps)">↓</button>
+        <button type="button" data-op="swap" title="Swap main and second colour in the dots">Swap colours</button>
+        <button type="button" data-op="clear">Clear</button>
+        <button type="button" id="copyCell">Copy char</button>
+        <button type="button" id="pasteCell">Paste char</button>
+      </div>
+      <p class="note">Click a character to select it. Left button draws with the main colour, right button with the second colour. <kbd>X</kbd> swaps them, <kbd>B</kbd> <kbd>G</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>I</kbd> pick a tool.</p>
+    </section>
+
+    <div class="stack">
+      <section class="panel" aria-label="Palette">
+        <div class="row spread"><h2 id="palTitle">Palette</h2><button type="button" id="palReset">Reset palette</button></div>
+        <div id="sw" class="swatches s16"></div>
+        <div class="cur">
+          <div class="chip" id="chipFg" title="Main colour"></div>
+          <div class="chip" id="chipSc" title="Second colour"></div>
+          <div class="mono" id="curInfo"></div>
+        </div>
+        <div id="sliders">
+          <div class="slider"><span>R</span><input id="r" type="range" min="0" max="31"><output id="ro"></output></div>
+          <div class="slider"><span>G</span><input id="g" type="range" min="0" max="31"><output id="go"></output></div>
+          <div class="slider"><span>B</span><input id="b" type="range" min="0" max="31"><output id="bo"></output></div>
+        </div>
+        <p class="note" id="palNote"></p>
+      </section>
+
+      <section class="panel" aria-label="Preview">
+        <div class="row spread"><h2>Preview</h2>
+          <div class="row">
+            <select id="pvScale" aria-label="Preview size"><option value="1">1×</option><option value="2" selected>2×</option><option value="3">3×</option><option value="4">4×</option></select>
+            <select id="pvBack" aria-label="Preview background"><option value="#000000">Black</option><option value="#101860">Blue</option><option value="checker">Checker</option><option value="#ffffff">White</option></select>
+            <label><input id="pvTile" type="checkbox"> Tile 3×3</label>
+          </div>
+        </div>
+        <div class="prev-box"><canvas id="pv"></canvas></div>
+        <p class="note">1× is the real size on a 320×224 screen.</p>
+      </section>
+    </div>
+  </div>
+
+  <div class="out-grid">
+    <section class="panel" aria-label="BASIC output">
+      <div class="row spread"><h2>BASIC output</h2>
+        <div class="row">
+          <button type="button" class="primary" id="copyOut">Copy</button>
+          <button type="button" id="saveB">Save .B file</button>
+        </div>
+      </div>
+      <div class="opts">
+        <label>Logical BG <input id="oBg" type="number" min="0" max="9" value="4"></label>
+        <label>First pattern <input id="oFirst" type="number" min="0" max="1023" value="128"></label>
+        <label><span id="oCodeLbl">Palette code</span> <input id="oCode" type="number" min="0" max="15" value="1"></label>
+        <label>DATA layout <select id="oFmt">
+          <option value="row">Hex, one row per line</option>
+          <option value="comma">Bytes with commas</option>
+          <option value="char">Hex, one char per line</option></select></label>
+        <label>Palette lines <select id="oPal">
+          <option value="used">Colours used</option>
+          <option value="all">Whole palette</option>
+          <option value="none">None</option></select></label>
+        <label>DATA label <input id="oLabel" type="text" value="CHARS"></label>
+        <label><span><input id="oNum" type="checkbox" checked> Line numbers from</span> <input id="oStart" type="number" min="0" value="1000"></label>
+        <label>Step <input id="oStep" type="number" min="1" value="10"></label>
+        <label><span><input id="oDemo" type="checkbox" checked> PUTCHR demo at X,Y</span> <span><input id="oDX" type="number" min="0" value="10" style="width:52px"> <input id="oDY" type="number" min="0" value="10" style="width:52px"></span></label>
+      </div>
+      <textarea id="out" readonly spellcheck="false" aria-label="Generated BASIC"></textarea>
+      <div id="warns" class="stack" style="gap:6px"></div>
+      <div class="toast" id="toast" role="status"></div>
+    </section>
+
+    <section class="panel" aria-label="Import">
+      <h2>Import</h2>
+      <p class="note">Paste <span class="mono">DATA</span> lines (with or without line numbers), and any <span class="mono">PALETTE</span> and <span class="mono">SETCHR</span> lines that go with them. Plain hex works too. Each pattern is 32 bytes in 16 colours and 64 bytes in 256 colours.</p>
+      <textarea id="imp" spellcheck="false" aria-label="Lines to import" placeholder="1000 SETCHR 4,128,1,READ&#10;1010 DATA 00FFF000&#10;1020 DATA 0FF0FF00&#10;…"></textarea>
+      <div class="row">
+        <button type="button" class="primary" id="doImp">Import lines</button>
+        <label><input id="impKeep" type="checkbox"> Keep sheet size</label>
+      </div>
+      <div class="row">
+        <label class="muted">Picture (PNG/GIF, nearest palette colour) <input id="png" type="file" accept="image/*"></label>
+      </div>
+      <details>
+        <summary>Project file</summary>
+        <div class="row">
+          <button type="button" id="saveProj">Save project (.json)</button>
+          <label class="muted">Open <input id="openProj" type="file" accept=".json,application/json"></label>
+        </div>
+        <p class="note">Your work is also kept in this browser between visits.</p>
+      </details>
+      <details>
+        <summary>How the data is laid out</summary>
+        <p class="note">From the Reference Manual (pp. 152–154): dots go left to right from the top-left of the 8×8 cell. In 16 colours each dot is one hex digit, so a row is 4 bytes; in 256 colours each dot is one byte, so a row is 8 bytes. Colour 0 is always transparent. <span class="mono">SETCHR BG,pattern,count,READ</span> reads <i>count</i> patterns from <span class="mono">DATA</span>; it reads each <span class="mono">DATA</span> line to its end. On the 16-colour text screen a dot shows palette entry <i>code</i>×16+<i>dot</i>, where <i>code</i> is the COLOR number in <span class="mono">PUTCHR</span> bits 15–12. On a 256-colour screen the <span class="mono">PUTCHR</span> character number is pattern×2.</p>
+      </details>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const STORE = 'setchr-designer-v1';
+
+/* ---------- palettes ---------- */
+const W15 = (r, g, b) => (r & 31) | ((g & 31) << 5) | ((b & 31) << 10);
+const R5 = w => w & 31, G5 = w => (w >> 5) & 31, B5 = w => (w >> 10) & 31;
+const to8 = v => (v << 3) | (v >> 2);
+const css = w => `rgb(${to8(R5(w))},${to8(G5(w))},${to8(B5(w))})`;
+const BASE16 = [[0,0,0],[0,0,0],[0,0,20],[24,3,3],[20,4,20],[3,20,5],[3,18,18],[20,12,4],
+  [12,12,13],[6,10,31],[31,9,9],[31,13,28],[9,30,9],[9,28,31],[31,30,6],[31,31,31]].map(c => W15(...c));
+function default256() {
+  const p = BASE16.slice();
+  const lv = [0, 6, 12, 19, 25, 31];
+  for (let r = 0; r < 6; r++) for (let g = 0; g < 6; g++) for (let b = 0; b < 6; b++) p.push(W15(lv[r], lv[g], lv[b]));
+  for (let i = 0; i < 24; i++) { const v = Math.round(1 + i * 29 / 23); p.push(W15(v, v, v)); }
+  return p; // 16 + 216 + 24 = 256
+}
+
+/* ---------- state ---------- */
+const S = {
+  mode: 16, cols: 2, rows: 2, px: new Uint8Array(256),
+  pal16: BASE16.slice(), pal256: default256(),
+  fg: 15, sc: 0, tool: 'pen', sel: { cx: 0, cy: 0 }, scope: 'cell', grid: true,
+  opt: { bg: 4, first: 128, code16: 1, code256: 0, fmt: 'row', pal: 'used', label: 'CHARS', num: true, start: 1000, step: 10, demo: true, dx: 10, dy: 10 }
+};
+const W = () => S.cols * 8, H = () => S.rows * 8;
+const pal = () => S.mode === 16 ? S.pal16 : S.pal256;
+const maxIdx = () => S.mode === 16 ? 15 : 255;
+
+/* sample: a ringed planet over 2x2 characters */
+const SAMPLE = [
+  '0000000000000000','000000111100000F','0000117EE7710000','00017EEEE7771000',
+  '0017EEE777777100','0017EE7777777100','DD17E777777771DD','0DDDDDDDDDDDDDD0',
+  '00DDDDDDDDDDDD00','0017777777777100','0001777777771000','0000117777110000',
+  '0000001111000000','0F00000000000000','0000000000000F00','0000000000000000'];
+function loadSample() {
+  S.mode = 16; S.cols = 2; S.rows = 2; S.px = new Uint8Array(256);
+  SAMPLE.forEach((row, y) => [...row].forEach((c, x) => { S.px[y * 16 + x] = parseInt(c, 16); }));
+}
+
+/* ---------- undo ---------- */
+let undoS = [], redoS = [];
+const snap = () => JSON.stringify({ mode: S.mode, cols: S.cols, rows: S.rows, px: Array.from(S.px), p16: S.pal16, p256: S.pal256 });
+function restore(j) { const o = JSON.parse(j); S.mode = o.mode; S.cols = o.cols; S.rows = o.rows; S.px = Uint8Array.from(o.px); S.pal16 = o.p16; S.pal256 = o.p256; }
+function push() { undoS.push(snap()); if (undoS.length > 150) undoS.shift(); redoS = []; }
+function undo() { if (!undoS.length) return; redoS.push(snap()); restore(undoS.pop()); fixColours(); renderAll(); }
+function redo() { if (!redoS.length) return; undoS.push(snap()); restore(redoS.pop()); fixColours(); renderAll(); }
+
+/* ---------- sheet ops ---------- */
+function resize(c, r) {
+  c = Math.max(1, Math.min(16, c | 0)); r = Math.max(1, Math.min(16, r | 0));
+  if (c === S.cols && r === S.rows) return;
+  const n = new Uint8Array(c * 8 * r * 8), ow = W(), nw = c * 8;
+  for (let y = 0; y < Math.min(H(), r * 8); y++) for (let x = 0; x < Math.min(ow, nw); x++) n[y * nw + x] = S.px[y * ow + x];
+  S.cols = c; S.rows = r; S.px = n;
+  S.sel.cx = Math.min(S.sel.cx, c - 1); S.sel.cy = Math.min(S.sel.cy, r - 1);
+}
+function nearest(w, p, lo, hi) {
+  let best = lo, bd = 1e9;
+  for (let i = lo; i <= hi; i++) {
+    const d = (R5(w) - R5(p[i])) ** 2 + (G5(w) - G5(p[i])) ** 2 + (B5(w) - B5(p[i])) ** 2;
+    if (d < bd) { bd = d; best = i; }
+  }
+  return best;
+}
+function setMode(m) {
+  if (m === S.mode) return;
+  push();
+  if (m === 16) {
+    const map = new Map();
+    S.px = S.px.map(v => {
+      if (v < 16) return v;
+      if (!map.has(v)) map.set(v, nearest(S.pal256[v], S.pal16, 1, 15));
+      return map.get(v);
+    });
+  }
+  S.mode = m; fixColours(); renderAll();
+}
+function fixColours() { S.fg = Math.min(S.fg, maxIdx()); S.sc = Math.min(S.sc, maxIdx()); }
+function region() {
+  return S.scope === 'all' ? { x0: 0, y0: 0, w: W(), h: H() } : { x0: S.sel.cx * 8, y0: S.sel.cy * 8, w: 8, h: 8 };
+}
+function op(name) {
+  const g = region(), w = W();
+  const get = (x, y) => S.px[(g.y0 + y) * w + g.x0 + x];
+  const buf = [];
+  for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) buf.push(get(x, y));
+  const at = (x, y) => buf[y * g.w + x];
+  let f;
+  switch (name) {
+    case 'flipH': f = (x, y) => at(g.w - 1 - x, y); break;
+    case 'flipV': f = (x, y) => at(x, g.h - 1 - y); break;
+    case 'rot':
+      if (g.w !== g.h) { toast('Rotate needs a square sheet. Select one character instead.'); return; }
+      f = (x, y) => at(y, g.w - 1 - x); break;
+    case 'left': f = (x, y) => at((x + 1) % g.w, y); break;
+    case 'right': f = (x, y) => at((x - 1 + g.w) % g.w, y); break;
+    case 'up': f = (x, y) => at(x, (y + 1) % g.h); break;
+    case 'down': f = (x, y) => at(x, (y - 1 + g.h) % g.h); break;
+    case 'swap': f = (x, y) => { const v = at(x, y); return v === S.fg ? S.sc : v === S.sc ? S.fg : v; }; break;
+    case 'clear': f = () => 0; break;
+    default: return;
+  }
+  push();
+  const out = [];
+  for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) out.push(f(x, y));
+  for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) S.px[(g.y0 + y) * w + g.x0 + x] = out[y * g.w + x];
+  renderAll();
+}
+let clip = null;
+function copyCell() {
+  const w = W(), x0 = S.sel.cx * 8, y0 = S.sel.cy * 8; clip = [];
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) clip.push(S.px[(y0 + y) * w + x0 + x]);
+  toast(`Copied pattern ${patNo(S.sel.cx, S.sel.cy)}.`);
+}
+function pasteCell() {
+  if (!clip) { toast('Copy a character first.'); return; }
+  push(); const w = W(), x0 = S.sel.cx * 8, y0 = S.sel.cy * 8;
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) S.px[(y0 + y) * w + x0 + x] = Math.min(clip[y * 8 + x], maxIdx());
+  renderAll();
+}
+const patNo = (cx, cy) => S.opt.first + cy * S.cols + cx;
+
+/* ---------- encoding ---------- */
+function cellBytes(cx, cy) {
+  const w = W(), out = [];
+  for (let y = 0; y < 8; y++) {
+    const base = (cy * 8 + y) * w + cx * 8;
+    if (S.mode === 16) for (let x = 0; x < 8; x += 2) out.push(((S.px[base + x] & 15) << 4) | (S.px[base + x + 1] & 15));
+    else for (let x = 0; x < 8; x++) out.push(S.px[base + x]);
+  }
+  return out;
+}
+const hx = (v, n = 2) => v.toString(16).toUpperCase().padStart(n, '0');
+function cleanLabel(s) { const t = String(s || '').toUpperCase().replace(/^\*/, '').replace(/[^A-Z0-9_]/g, ''); return /^[A-Z]/.test(t) ? t : 'CHARS'; }
+
+function generate() {
+  const o = S.opt, n = S.cols * S.rows, m = S.mode;
+  const code = m === 16 ? o.code16 : o.code256;
+  const last = o.first + n - 1, limit = m === 16 ? 1023 : 511;
+  const L = [], warns = [];
+  const label = cleanLabel(o.label);
+  L.push(`'${n} char${n > 1 ? 's' : ''} (${S.cols}x${S.rows}), ${m} colours, patterns ${o.first}-${last} on BG ${o.bg}`);
+  if (m === 16) L.push(`'Needs the text screen in 16 colours on BG ${o.bg} (SCREEN 0 does this for BG 4)`);
+  else L.push(`'For a 256-colour character screen, e.g. SCREEN 0,4,256 or BG 5`);
+  // palette
+  if (o.pal !== 'none') {
+    let idx;
+    if (o.pal === 'all') idx = Array.from({ length: maxIdx() }, (_, i) => i + 1);
+    else idx = [...new Set(S.px)].filter(v => v > 0).sort((a, b) => a - b);
+    const p = pal(), base = m === 16 ? code * 16 : code * 256;
+    let i = 0;
+    while (i < idx.length) {
+      const run = [idx[i]];
+      while (i + run.length < idx.length && idx[i + run.length] === run[run.length - 1] + 1 && run.length < 8) run.push(idx[i + run.length]);
+      L.push(`PALETTE ${o.bg},${base + run[0]},` + run.map(k => `RGB(${R5(p[k])},${G5(p[k])},${B5(p[k])})`).join(','));
+      i += run.length;
+    }
+  }
+  L.push(`RESTORE *${label}`);
+  L.push(`SETCHR ${o.bg},${o.first},${n},READ`);
+  if (o.demo) {
+    for (let cy = 0; cy < S.rows; cy++) {
+      const vals = [];
+      for (let cx = 0; cx < S.cols; cx++) {
+        const p = patNo(cx, cy);
+        vals.push('&H' + hx(m === 16 ? ((code & 15) << 12) | (p & 1023) : ((code & 15) << 12) | ((p * 2) & 1023), 4));
+      }
+      L.push(`PUTCHR ${o.bg},(${o.dx},${o.dy + cy}),${vals.join(',')}`);
+    }
+  }
+  L.push(`*${label}`);
+  for (let cy = 0; cy < S.rows; cy++) for (let cx = 0; cx < S.cols; cx++) {
+    const b = cellBytes(cx, cy), per = m === 16 ? 4 : 8;
+    L.push(`'pattern ${patNo(cx, cy)}`);
+    if (o.fmt === 'char') L.push('DATA ' + b.map(v => hx(v)).join(''));
+    else for (let r = 0; r < 8; r++) {
+      const rowB = b.slice(r * per, r * per + per).map(v => hx(v));
+      L.push('DATA ' + (o.fmt === 'comma' ? rowB.join(',') : rowB.join('')));
+    }
+  }
+  // warnings
+  if (last > limit) warns.push(`Patterns run to ${last}; the most is ${limit} in ${m} colours. Lower the first pattern or the sheet size.`);
+  if (m === 16 && code === 0) warns.push('Palette code 0 holds the normal text colours, so the PALETTE lines will recolour your PRINT text too. Code 1 or higher avoids that.');
+  if (m === 16 && o.first < 256 && o.first <= 126 && last >= 32) warns.push(`On the text screen pattern numbers are character codes, so patterns ${Math.max(32, o.first)}-${Math.min(126, last)} replace letters PRINT uses. Ctrl+P puts the font back.`);
+  if (m === 256 && code > 1) warns.push('A 256-colour screen uses palette code 0 (or 0 and 1 on a 512-colour rotation screen).');
+  if (!o.num) warns.push('Without line numbers you can paste this into the editor in BASTERM, but a saved .B file needs them.');
+  let lines = L;
+  if (o.num) lines = L.map((s, i) => `${o.start + i * o.step} ${s}`);
+  const lastNo = o.start + (L.length - 1) * o.step;
+  if (o.num && lastNo > 65529) warns.push(`Line numbers reach ${lastNo}. Use a smaller start or step.`);
+  return { text: lines.join('\n'), warns };
+}
+
+/* ---------- import ---------- */
+function splitItems(s) {
+  const out = []; let cur = '', q = false;
+  for (const ch of s) {
+    if (ch === '"') { q = !q; continue; }
+    if (ch === ',' && !q) { out.push(cur); cur = ''; continue; }
+    if (ch === "'" && !q) break;
+    cur += ch;
+  }
+  out.push(cur);
+  return out.map(t => t.trim());
+}
+function num(t) {
+  t = String(t).trim();
+  let m = /^&H([0-9A-F]+)$/i.exec(t); if (m) return parseInt(m[1], 16);
+  m = /^RGB\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i.exec(t); if (m) return W15(+m[1], +m[2], +m[3]);
+  if (/^\d+$/.test(t)) return parseInt(t, 10);
+  m = /^(\d+)\s*\*\s*(\d+)\s*\+\s*(\d+)$/.exec(t); if (m) return m[1] * m[2] + +m[3];
+  return NaN;
+}
+function parseImport(text) {
+  const lines = text.replace(/\r/g, '\n').split('\n');
+  const dataLines = [], palDefs = []; let setchr = null, any = false, sheet = null;
+  for (let raw of lines) {
+    const s = raw.replace(/^\s*\d+\s*/, '').trim();
+    if (!s) continue;
+    let m;
+    if (!sheet && (m = /^'\s*\d+\s+chars?\s+\((\d+)x(\d+)\)/i.exec(s))) { sheet = { cols: +m[1], rows: +m[2] }; continue; }
+    if ((m = /^DATA\b(.*)$/i.exec(s))) {
+      const bytes = [];
+      for (let it of splitItems(m[1])) {
+        it = it.replace(/\s+/g, '');
+        if (!it) continue;
+        if (!/^[0-9A-F]+$/i.test(it)) continue;
+        if (it.length % 2) it = '0' + it;
+        for (let i = 0; i < it.length; i += 2) bytes.push(parseInt(it.slice(i, i + 2), 16));
+      }
+      dataLines.push(bytes); any = true;
+    } else if ((m = /^PALETTE\s*([^,]*),(.*)$/i.exec(s))) {
+      const items = splitItems(m[2].replace(/RGB\s*\(([^)]*)\)/gi, (a, b) => 'RGB(' + b.replace(/,/g, ';') + ')'))
+        .map(t => t.replace(/;/g, ','));
+      const start = num(items[0]);
+      if (!isNaN(start) && items.length > 1) items.slice(1).forEach((t, i) => { const v = num(t); if (!isNaN(v)) palDefs.push([start + i, v & 0x7fff]); });
+    } else if ((m = /SETCHR\s*(\d*)\s*,\s*(\d*)\s*,\s*(\d+)\s*,\s*READ/i.exec(s))) {
+      if (!setchr) setchr = { bg: m[1] === '' ? null : +m[1], first: m[2] === '' ? null : +m[2], count: +m[3] };
+    }
+  }
+  if (!any) { // plain hex
+    const hex = text.replace(/&H/gi, '').replace(/[^0-9A-F]/gi, '');
+    if (hex.length >= 2) { const b = []; for (let i = 0; i + 1 < hex.length; i += 2) b.push(parseInt(hex.slice(i, i + 2), 16)); dataLines.push(b); }
+  }
+  return { dataLines, palDefs, setchr, sheet };
+}
+function doImport() {
+  const r = parseImport($('imp').value);
+  const allBytes = r.dataLines.flat();
+  if (!allBytes.length && !r.palDefs.length) { toast('Nothing to import: no DATA, PALETTE or hex found.'); return; }
+  push();
+  // mode: rows of 4 bytes -> 16 colours, rows of 8 -> 256, otherwise keep
+  const lens = new Set(r.dataLines.map(l => l.length));
+  let mode = S.mode;
+  if (lens.size === 1) { const l = [...lens][0]; if (l === 4 || l === 32) mode = 16; else if (l === 8 || l === 64) mode = 256; }
+  else if (lens.size === 2 && lens.has(4) && lens.has(32)) mode = 16;
+  if (mode !== S.mode) { S.mode = mode; }
+  const size = mode === 16 ? 32 : 64;
+  let count = Math.floor(allBytes.length / size);
+  if (r.setchr && r.setchr.count && r.setchr.count < count) count = r.setchr.count;
+  const msgs = [];
+  if (allBytes.length % size && count >= 1) msgs.push(`${allBytes.length % size} leftover bytes ignored`);
+  if (allBytes.length && count < 1) { msgs.push(`only ${allBytes.length} bytes, a pattern needs ${size}`); }
+  if (count >= 1) {
+    if (!$('impKeep').checked) {
+      if (r.sheet && r.sheet.cols * r.sheet.rows === count) resize(r.sheet.cols, r.sheet.rows);
+      else { const c = Math.min(count, 8); resize(c, Math.min(16, Math.ceil(count / c))); }
+    }
+    S.px.fill(0);
+    const cells = Math.min(count, S.cols * S.rows), w = W();
+    for (let k = 0; k < cells; k++) {
+      const cx = k % S.cols, cy = (k / S.cols) | 0, b = allBytes.slice(k * size, k * size + size);
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
+        const v = mode === 16 ? (b[y * 4 + (x >> 1)] >> (x & 1 ? 0 : 4)) & 15 : b[y * 8 + x];
+        S.px[(cy * 8 + y) * w + cx * 8 + x] = v;
+      }
+    }
+    if (count > cells) msgs.push(`${count - cells} patterns did not fit the sheet`);
+    msgs.unshift(`${cells} pattern${cells > 1 ? 's' : ''} in ${mode} colours`);
+  }
+  if (r.setchr) {
+    if (r.setchr.bg !== null) S.opt.bg = r.setchr.bg;
+    if (r.setchr.first !== null) S.opt.first = r.setchr.first;
+  }
+  if (r.palDefs.length) {
+    const p = pal(), span = mode === 16 ? 16 : 256;
+    const code = Math.floor(r.palDefs[0][0] / span);
+    if (mode === 16) S.opt.code16 = Math.min(15, code); else S.opt.code256 = Math.min(1, code);
+    let set = 0;
+    for (const [n, v] of r.palDefs) { const i = n - code * span; if (i >= 1 && i < span) { p[i] = v; set++; } }
+    msgs.push(`${set} palette entr${set === 1 ? 'y' : 'ies'} (code ${code})`);
+  }
+  fixColours(); syncOpts(); renderAll();
+  toast('Imported ' + msgs.join(', ') + '.');
+}
+
+function importPicture(file) {
+  const url = URL.createObjectURL(file), img = new Image();
+  img.onload = () => {
+    let w = img.naturalWidth, h = img.naturalHeight;
+    push();
+    if (w % 8 === 0 && h % 8 === 0 && w <= 128 && h <= 128) resize(w / 8, h / 8);
+    const cw = W(), ch = H(), c = document.createElement('canvas'); c.width = cw; c.height = ch;
+    const x = c.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(img, 0, 0, cw, ch);
+    const d = x.getImageData(0, 0, cw, ch).data, p = pal(), memo = new Map();
+    for (let i = 0; i < cw * ch; i++) {
+      if (d[i * 4 + 3] < 128) { S.px[i] = 0; continue; }
+      const w15 = W15(d[i * 4] >> 3, d[i * 4 + 1] >> 3, d[i * 4 + 2] >> 3);
+      if (!memo.has(w15)) memo.set(w15, nearest(w15, p, 1, maxIdx()));
+      S.px[i] = memo.get(w15);
+    }
+    URL.revokeObjectURL(url); renderAll();
+    toast(`Picture mapped to the nearest palette colours on a ${S.cols}x${S.rows} sheet${(w !== cw || h !== ch) ? ` (scaled from ${w}x${h})` : ''}.`);
+  };
+  img.onerror = () => toast('That file could not be read as a picture.');
+  img.src = url;
+}
+
+/* ---------- drawing ---------- */
+const ed = $('ed'), ctx = ed.getContext('2d');
+let Z = 24;
+function zoomFor() {
+  const box = ed.parentElement.clientWidth - 20;
+  const fit = Math.floor(Math.min(box, 620) / W());
+  return Math.max(4, Math.min(48, fit || 4));
+}
+function drawEditor(preview) {
+  Z = zoomFor();
+  const w = W(), h = H(), dpr = window.devicePixelRatio || 1;
+  const cssW = w * Z, cssH = h * Z;
+  if (ed.width !== Math.round(cssW * dpr) || ed.height !== Math.round(cssH * dpr)) {
+    ed.width = Math.round(cssW * dpr); ed.height = Math.round(cssH * dpr);
+    ed.style.width = cssW + 'px'; ed.style.height = cssH + 'px';
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const p = pal(), half = Z / 2;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    let v = S.px[y * w + x];
+    if (preview && preview.has(y * w + x)) v = preview.get(y * w + x);
+    if (v === 0) {
+      ctx.fillStyle = '#8a8f99'; ctx.fillRect(x * Z, y * Z, Z, Z);
+      ctx.fillStyle = '#b7bbc3'; ctx.fillRect(x * Z, y * Z, half, half); ctx.fillRect(x * Z + half, y * Z + half, half, half);
+    } else { ctx.fillStyle = css(p[v]); ctx.fillRect(x * Z, y * Z, Z, Z); }
+  }
+  const st = getComputedStyle(document.documentElement);
+  if (S.grid && Z >= 8) {
+    ctx.strokeStyle = st.getPropertyValue('--grid'); ctx.lineWidth = 1; ctx.beginPath();
+    for (let x = 1; x < w; x++) if (x % 8) { ctx.moveTo(x * Z + .5, 0); ctx.lineTo(x * Z + .5, cssH); }
+    for (let y = 1; y < h; y++) if (y % 8) { ctx.moveTo(0, y * Z + .5); ctx.lineTo(cssW, y * Z + .5); }
+    ctx.stroke();
+  }
+  ctx.strokeStyle = st.getPropertyValue('--cellgrid'); ctx.lineWidth = 1.5; ctx.beginPath();
+  for (let x = 8; x < w; x += 8) { ctx.moveTo(x * Z, 0); ctx.lineTo(x * Z, cssH); }
+  for (let y = 8; y < h; y += 8) { ctx.moveTo(0, y * Z); ctx.lineTo(cssW, y * Z); }
+  ctx.stroke();
+  if (S.cols * S.rows > 1 || S.scope === 'cell') {
+    ctx.strokeStyle = st.getPropertyValue('--accent'); ctx.lineWidth = 3;
+    ctx.strokeRect(S.sel.cx * 8 * Z + 1.5, S.sel.cy * 8 * Z + 1.5, 8 * Z - 3, 8 * Z - 3);
+  }
+}
+function linePts(x0, y0, x1, y1) {
+  const pts = []; let dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1, e = dx + dy;
+  for (;;) { pts.push([x0, y0]); if (x0 === x1 && y0 === y1) break; const e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx; } if (e2 <= dx) { e += dx; y0 += sy; } }
+  return pts;
+}
+function rectPts(x0, y0, x1, y1) {
+  const pts = [], [a, b] = [Math.min(x0, x1), Math.max(x0, x1)], [c, d] = [Math.min(y0, y1), Math.max(y0, y1)];
+  for (let x = a; x <= b; x++) { pts.push([x, c], [x, d]); }
+  for (let y = c; y <= d; y++) { pts.push([a, y], [b, y]); }
+  return pts;
+}
+function flood(x, y, v) {
+  const w = W(), h = H(), t = S.px[y * w + x]; if (t === v) return;
+  const st = [[x, y]];
+  while (st.length) {
+    const [cx, cy] = st.pop();
+    if (cx < 0 || cy < 0 || cx >= w || cy >= h || S.px[cy * w + cx] !== t) continue;
+    S.px[cy * w + cx] = v; st.push([cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]);
+  }
+}
+let drag = null;
+function cellAt(e) {
+  const r = ed.getBoundingClientRect();
+  const x = Math.floor((e.clientX - r.left) / Z), y = Math.floor((e.clientY - r.top) / Z);
+  return [Math.max(0, Math.min(W() - 1, x)), Math.max(0, Math.min(H() - 1, y))];
+}
+ed.addEventListener('contextmenu', e => e.preventDefault());
+ed.addEventListener('pointerdown', e => {
+  e.preventDefault(); ed.focus();
+  const [x, y] = cellAt(e), w = W();
+  const colour = e.button === 2 ? S.sc : S.fg;
+  S.sel.cx = x >> 3; S.sel.cy = y >> 3;
+  const tool = e.altKey ? 'pick' : S.tool;
+  if (tool === 'pick') { const v = S.px[y * w + x]; if (e.button === 2) S.sc = v; else S.fg = v; renderAll(); return; }
+  push();
+  if (tool === 'fill') { flood(x, y, colour); renderAll(); return; }
+  drag = { tool, x0: x, y0: y, lx: x, ly: y, colour, id: e.pointerId };
+  ed.setPointerCapture(e.pointerId);
+  if (tool === 'pen') { S.px[y * w + x] = colour; drawEditor(); }
+  else drawEditor(previewMap(x, y));
+});
+function previewMap(x, y) {
+  const m = new Map(), w = W();
+  const pts = drag.tool === 'line' ? linePts(drag.x0, drag.y0, x, y) : rectPts(drag.x0, drag.y0, x, y);
+  for (const [a, b] of pts) m.set(b * w + a, drag.colour);
+  return m;
+}
+ed.addEventListener('pointermove', e => {
+  const [x, y] = cellAt(e), w = W();
+  const cx = x >> 3, cy = y >> 3;
+  $('status').textContent = `pattern ${patNo(cx, cy)}  ·  dot ${x & 7},${y & 7}  ·  colour ${S.px[y * w + x]}`;
+  if (!drag || drag.id !== e.pointerId) return;
+  if (drag.tool === 'pen') {
+    for (const [a, b] of linePts(drag.lx, drag.ly, x, y)) S.px[b * w + a] = drag.colour;
+    drag.lx = x; drag.ly = y; drawEditor();
+  } else drawEditor(previewMap(x, y));
+});
+function endDrag(e) {
+  if (!drag || drag.id !== e.pointerId) return;
+  if (drag.tool === 'line' || drag.tool === 'rect') {
+    const [x, y] = cellAt(e);
+    for (const [k, v] of previewMap(x, y)) S.px[k] = v;
+  }
+  drag = null; renderAll();
+}
+ed.addEventListener('pointerup', endDrag);
+ed.addEventListener('pointercancel', endDrag);
+ed.addEventListener('pointerleave', () => { if (!drag) $('status').innerHTML = '&nbsp;'; });
+
+/* ---------- palette UI ---------- */
+function renderPalette() {
+  const p = pal(), box = $('sw'), n = S.mode === 16 ? 16 : 256;
+  box.className = 'swatches ' + (n === 16 ? 's16' : 's256');
+  if (box.children.length !== n) {
+    box.textContent = '';
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'sw'; b.dataset.i = i;
+      box.appendChild(b);
+    }
+  }
+  const code = S.mode === 16 ? S.opt.code16 : S.opt.code256, base = S.mode === 16 ? code * 16 : code * 256;
+  [...box.children].forEach((b, i) => {
+    b.classList.toggle('t', i === 0);
+    b.style.background = i === 0 ? '' : css(p[i]);
+    b.classList.toggle('fg', i === S.fg); b.classList.toggle('sc', i === S.sc);
+    if (n === 16) b.textContent = hx(i, 1);
+    b.title = i === 0 ? 'Colour 0: transparent' : `Colour ${i} (palette entry ${base + i}): RGB(${R5(p[i])},${G5(p[i])},${B5(p[i])})`;
+    b.setAttribute('aria-label', b.title);
+  });
+  const chip = (el, i) => { el.style.background = i === 0 ? 'conic-gradient(#999 25%, #ddd 0 50%, #999 0 75%, #ddd 0) 0 0/10px 10px' : css(p[i]); };
+  chip($('chipFg'), S.fg); chip($('chipSc'), S.sc);
+  const w = p[S.fg];
+  $('curInfo').textContent = S.fg === 0 ? 'Colour 0 · transparent' : `Colour ${S.fg} → entry ${base + S.fg}\nRGB(${R5(w)},${G5(w)},${B5(w)})  &H${hx(w, 4)}`;
+  $('curInfo').style.whiteSpace = 'pre';
+  for (const [k, f] of [['r', R5], ['g', G5], ['b', B5]]) { $(k).value = f(w); $(k + 'o').textContent = f(w); $(k).disabled = S.fg === 0; }
+  $('palTitle').textContent = S.mode === 16 ? `Palette · code ${code} (entries ${base}–${base + 15})` : `Palette · code ${code} (entries ${base}–${base + 255})`;
+  $('palNote').textContent = S.mode === 16
+    ? 'Dots use colours 1–15 of the palette code you choose; 0 is transparent. The normal font draws with 15 (face) and 1 (outline). The console does not document its start-up colours, so the output always sets the colours with PALETTE.'
+    : 'Dots use palette entries 1–255 of the screen; 0 is transparent. The output sets the colours you use with PALETTE.';
+}
+$('sw').addEventListener('pointerdown', e => {
+  const b = e.target.closest('.sw'); if (!b) return;
+  e.preventDefault();
+  const i = +b.dataset.i; if (e.button === 2) S.sc = i; else S.fg = i; renderPalette();
+});
+$('sw').addEventListener('keydown', e => {
+  const b = e.target.closest('.sw'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); S.fg = +b.dataset.i; renderPalette(); }
+});
+$('sw').addEventListener('contextmenu', e => e.preventDefault());
+let sliderPushed = false;
+for (const k of ['r', 'g', 'b']) {
+  $(k).addEventListener('pointerdown', () => { if (!sliderPushed) { push(); sliderPushed = true; } });
+  $(k).addEventListener('keydown', () => { if (!sliderPushed) { push(); sliderPushed = true; } });
+  $(k).addEventListener('change', () => { sliderPushed = false; });
+  $(k).addEventListener('input', () => {
+    if (S.fg === 0) return;
+    pal()[S.fg] = W15(+$('r').value, +$('g').value, +$('b').value);
+    renderAll();
+  });
+}
+$('palReset').addEventListener('click', () => { push(); if (S.mode === 16) S.pal16 = BASE16.slice(); else S.pal256 = default256(); renderAll(); });
+
+/* ---------- preview ---------- */
+function drawPreview() {
+  const pv = $('pv'), s = +$('pvScale').value, rep = $('pvTile').checked ? 3 : 1;
+  const w = W(), h = H(), cw = w * rep, chh = h * rep;
+  pv.width = cw; pv.height = chh; pv.style.width = cw * s + 'px'; pv.style.height = chh * s + 'px';
+  pv.style.maxWidth = '100%';
+  const c = pv.getContext('2d'), img = c.createImageData(cw, chh), back = $('pvBack').value, p = pal();
+  for (let y = 0; y < chh; y++) for (let x = 0; x < cw; x++) {
+    const v = S.px[(y % h) * w + (x % w)], o = (y * cw + x) * 4;
+    let r, g, b;
+    if (v) { r = to8(R5(p[v])); g = to8(G5(p[v])); b = to8(B5(p[v])); }
+    else if (back === 'checker') { const k = ((x >> 2) + (y >> 2)) & 1 ? 0x99 : 0xcc; r = g = b = k; }
+    else { r = parseInt(back.slice(1, 3), 16); g = parseInt(back.slice(3, 5), 16); b = parseInt(back.slice(5, 7), 16); }
+    img.data[o] = r; img.data[o + 1] = g; img.data[o + 2] = b; img.data[o + 3] = 255;
+  }
+  c.putImageData(img, 0, 0);
+}
+
+/* ---------- options ---------- */
+function syncOpts() {
+  const o = S.opt;
+  $('oBg').value = o.bg; $('oFirst').value = o.first; $('oFmt').value = o.fmt; $('oPal').value = o.pal;
+  $('oLabel').value = o.label; $('oNum').checked = o.num; $('oStart').value = o.start; $('oStep').value = o.step;
+  $('oDemo').checked = o.demo; $('oDX').value = o.dx; $('oDY').value = o.dy;
+  $('oCode').value = S.mode === 16 ? o.code16 : o.code256;
+  $('oCode').max = S.mode === 16 ? 15 : 1;
+  $('oFirst').max = S.mode === 16 ? 1023 : 511;
+  $('oCodeLbl').textContent = S.mode === 16 ? 'Palette code (COLOR)' : 'Palette code';
+}
+function readOpts() {
+  const o = S.opt, int = (id, d) => { const v = parseInt($(id).value, 10); return isNaN(v) ? d : v; };
+  o.bg = int('oBg', 4); o.first = Math.max(0, int('oFirst', 0)); o.fmt = $('oFmt').value; o.pal = $('oPal').value;
+  o.label = $('oLabel').value; o.num = $('oNum').checked; o.start = Math.max(0, int('oStart', 1000)); o.step = Math.max(1, int('oStep', 10));
+  o.demo = $('oDemo').checked; o.dx = Math.max(0, int('oDX', 10)); o.dy = Math.max(0, int('oDY', 10));
+  const c = Math.max(0, int('oCode', 0));
+  if (S.mode === 16) o.code16 = Math.min(15, c); else o.code256 = Math.min(1, c);
+}
+document.querySelectorAll('.opts input, .opts select').forEach(el => el.addEventListener('input', () => { readOpts(); renderOut(); renderPalette(); save(); }));
+
+/* ---------- render ---------- */
+let lastText = '';
+function renderOut() {
+  const g = generate(); lastText = g.text;
+  $('out').value = g.text;
+  const box = $('warns'); box.textContent = '';
+  for (const w of g.warns) { const p = document.createElement('p'); p.className = 'warn'; p.textContent = w; box.appendChild(p); }
+}
+function renderAll() {
+  $('m16').setAttribute('aria-pressed', S.mode === 16); $('m256').setAttribute('aria-pressed', S.mode === 256);
+  $('cols').value = S.cols; $('rows').value = S.rows;
+  document.querySelectorAll('[data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === S.tool));
+  $('scopeCell').setAttribute('aria-pressed', S.scope === 'cell'); $('scopeAll').setAttribute('aria-pressed', S.scope === 'all');
+  syncOpts(); drawEditor(); renderPalette(); drawPreview(); renderOut(); save();
+}
+let tt;
+function toast(m) { $('toast').textContent = m; clearTimeout(tt); tt = setTimeout(() => { $('toast').textContent = ''; }, 6000); }
+
+/* ---------- persistence ---------- */
+let sv;
+function projectJSON() {
+  return JSON.stringify({ app: 'setchr-designer', v: 1, mode: S.mode, cols: S.cols, rows: S.rows,
+    px: Array.from(S.px, v => hx(v)).join(''), pal16: S.pal16, pal256: S.pal256, opt: S.opt });
+}
+function loadProject(o) {
+  if (!o || !o.px) throw new Error('bad');
+  S.mode = o.mode === 256 ? 256 : 16; S.cols = Math.max(1, Math.min(16, o.cols | 0)); S.rows = Math.max(1, Math.min(16, o.rows | 0));
+  const n = S.cols * S.rows * 64; S.px = new Uint8Array(n);
+  for (let i = 0; i < n; i++) S.px[i] = parseInt(o.px.substr(i * 2, 2), 16) || 0;
+  if (Array.isArray(o.pal16) && o.pal16.length === 16) S.pal16 = o.pal16.map(v => v & 0x7fff);
+  if (Array.isArray(o.pal256) && o.pal256.length === 256) S.pal256 = o.pal256.map(v => v & 0x7fff);
+  if (o.opt) Object.assign(S.opt, o.opt);
+  fixColours();
+}
+function save() { clearTimeout(sv); sv = setTimeout(() => { try { localStorage.setItem(STORE, projectJSON()); } catch (e) {} }, 300); }
+let dl = null;
+if (window.claude && window.claude.use) window.claude.use('downloads').then(d => { dl = d; }).catch(() => {});
+function download(name, text, type) {
+  if (dl) {
+    dl.save({ filename: name, data: text }).then(() => toast(`Saved ${name}.`), () => toast('The file was not saved. Use Copy instead.'));
+    return;
+  }
+  try {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type }));
+    a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast(`Saved ${name}. If no file appears, use Copy instead.`);
+  } catch (e) { toast('This page cannot save files here. Use Copy instead.'); }
+}
+
+/* ---------- wiring ---------- */
+$('m16').onclick = () => setMode(16);
+$('m256').onclick = () => setMode(256);
+$('cols').addEventListener('change', () => { push(); resize(+$('cols').value, S.rows); renderAll(); });
+$('rows').addEventListener('change', () => { push(); resize(S.cols, +$('rows').value); renderAll(); });
+document.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { S.tool = b.dataset.tool; renderAll(); });
+document.querySelectorAll('[data-op]').forEach(b => b.onclick = () => op(b.dataset.op));
+$('scopeCell').onclick = () => { S.scope = 'cell'; renderAll(); };
+$('scopeAll').onclick = () => { S.scope = 'all'; renderAll(); };
+$('showgrid').onchange = () => { S.grid = $('showgrid').checked; drawEditor(); };
+$('undo').onclick = undo; $('redo').onclick = redo;
+$('copyCell').onclick = copyCell; $('pasteCell').onclick = pasteCell;
+['pvScale', 'pvBack', 'pvTile'].forEach(id => $(id).addEventListener('input', drawPreview));
+$('copyOut').onclick = () => {
+  const ta = $('out');
+  const fallback = () => { ta.focus(); ta.select(); toast('Selected. Press Ctrl+C (or ⌘C) to copy.'); };
+  try { navigator.clipboard.writeText(lastText).then(() => toast('Copied to the clipboard.'), fallback); } catch (e) { fallback(); }
+};
+$('saveB').onclick = () => download(cleanLabel(S.opt.label).slice(0, 8) + '.B', lastText.replace(/\n/g, '\r\n') + '\r\n', 'text/plain');
+$('doImp').onclick = doImport;
+$('png').addEventListener('change', e => { const f = e.target.files[0]; if (f) importPicture(f); e.target.value = ''; });
+$('saveProj').onclick = () => download(cleanLabel(S.opt.label).toLowerCase() + '_chars.json', projectJSON(), 'application/json');
+$('openProj').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  f.text().then(t => { push(); loadProject(JSON.parse(t)); syncOpts(); renderAll(); toast(`Opened ${f.name}.`); })
+    .catch(() => toast('That file is not a designer project.'));
+  e.target.value = '';
+});
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea, select')) return;
+  const k = e.key.toLowerCase();
+  if ((e.ctrlKey || e.metaKey) && k === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+  if ((e.ctrlKey || e.metaKey) && k === 'y') { e.preventDefault(); redo(); return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const tools = { b: 'pen', g: 'fill', l: 'line', r: 'rect', i: 'pick' };
+  if (tools[k]) { S.tool = tools[k]; renderAll(); }
+  else if (k === 'x') { [S.fg, S.sc] = [S.sc, S.fg]; renderPalette(); }
+});
+let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(drawEditor, 100); });
+const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+if (mq && mq.addEventListener) mq.addEventListener('change', () => drawEditor());
+
+/* ---------- start ---------- */
+let loaded = false;
+try { const j = localStorage.getItem(STORE); if (j) { loadProject(JSON.parse(j)); loaded = true; } } catch (e) {}
+if (!loaded) loadSample();
+renderAll();
+if (!loaded) toast('A sample is loaded: a planet drawn over 2×2 characters. Clear it to start your own.');
+
+window.SETCHR = { generate, parseImport, doImport, S, renderAll, loadSample }; // for testing
+})();
+</script>
+</html>
