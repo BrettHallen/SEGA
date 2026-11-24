@@ -78,13 +78,13 @@ class BitmapTests(unittest.TestCase):
         lines, count, reduced = B.setchr_lines(8, 8, px)
         self.assertEqual((count, reduced), (1, False))
         self.assertIn("PALETTE 4,17,RGB(31,0,0)", lines)
-        i = lines.index("SETCHR 4,0,32,READ")
+        i = lines.index("SETCHR 4,0,1,READ")
         self.assertEqual(lines[i + 1:i + 9], ["DATA 11110000"] * 8)
 
     def test_setchr_256_and_numbers(self):
         px = [None] * 63 + [(0, 0, 255)]
         lines, count, _ = B.setchr_lines(8, 8, px, colours=256, bg=5, first=64)
-        self.assertIn("SETCHR 5,64,64,READ", lines)
+        self.assertIn("SETCHR 5,64,1,READ", lines)
         self.assertEqual(lines[-1], "DATA 0000000000000001")
         self.assertEqual(B.number_lines(["A", "B"], 100, 10), ["100 A", "110 B"])
         with self.assertRaises(B.BitmapError):

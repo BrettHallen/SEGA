@@ -230,7 +230,7 @@ test('PNG and Saturn bitmaps convert both ways', { skip: !hasPython }, async () 
   state.pick = 0;
   await state.commands['gameBasic.toSetchr']({ fsPath: path.join(dir, 'CHR.png') });
   assert.deepStrictEqual(state.errors, []);
-  assert.match(fs.readFileSync(path.join(dir, 'CHR_chr.B'), 'ascii'), /SETCHR 4,0,32,READ\r\nDATA 11111111/);
+  assert.match(fs.readFileSync(path.join(dir, 'CHR_chr.B'), 'ascii'), /SETCHR 4,0,1,READ\r\nDATA 11111111/);
   // A 16x16 .1 picture (all black) -> PNG -> SPRITE$ lines.
   const sixteen = path.join(dir, 'SPR.1');
   fs.writeFileSync(sixteen, Buffer.concat([Buffer.from([0, 16, 0, 16]), Buffer.alloc(512, 0).map((b, i) => (i % 2 ? 0 : 0x80))]));

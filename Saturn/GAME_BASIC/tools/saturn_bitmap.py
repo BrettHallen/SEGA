@@ -24,7 +24,7 @@ Colours are 5 bits each: red in bits 0-4, green 5-9, blue 10-14, as RGB().
 Width is 1-512 and height 1-256.
 
 --setchr turns a PNG into 8x8 character patterns as GAME BASIC lines:
-SETCHR <BG>,<pattern>,<bytes>,READ followed by one hex DATA line per dot row
+SETCHR <BG>,<pattern>,1,READ (the count is a number of patterns) followed by one hex DATA line per dot row
 (Reference Manual pp. 152-154), plus PALETTE lines for the colours. The
 picture is cut into 8x8 cells, left to right, top to bottom. "16" makes
 16-colour patterns for the text screen (4 bits per dot, 32 bytes each, up to
@@ -403,7 +403,6 @@ def setchr_lines(w: int, h: int, pixels: Sequence[Pixel], colours: int = 16, bg:
     pal, index, reduced = _palette_for(pixels, 15 if colours == 16 else 255)
     if palette_code is None:
         palette_code = 1 if colours == 16 else 0
-    nbytes = 32 if colours == 16 else 64
     out = [f"' {count} characters, {w // 8}x{h // 8} cells of 8x8, "
            f"{colours}-colour patterns {first}-{first + count - 1} on BG {bg}"
            f" (made by saturn_bitmap.py)"]
@@ -420,7 +419,7 @@ def setchr_lines(w: int, h: int, pixels: Sequence[Pixel], colours: int = 16, bg:
     for cy in range(rows):
         for cx in range(cols):
             pattern = first + cy * cols + cx
-            out.append(f"SETCHR {bg},{pattern},{nbytes},READ")
+            out.append(f"SETCHR {bg},{pattern},1,READ")
             for y in range(8):
                 row = pixels[(cy * 8 + y) * w + cx * 8:(cy * 8 + y) * w + cx * 8 + 8]
                 vals = [0 if p is None else index[word_from_rgb(p)] for p in row]
