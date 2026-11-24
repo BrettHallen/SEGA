@@ -10,7 +10,7 @@ a { color: #1f4e9c; text-decoration: none; }
 code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.6pt; background: #eef1f6; padding: 1px 3px; border-radius: 3px; }
 pre { background: #f4f6fa; border: 1px solid #d6dde9; border-radius: 4px; padding: 8px 10px; white-space: pre-wrap; break-inside: avoid; }
 pre code { background: none; padding: 0; }
-blockquote { margin: 0 0 12px; background: #fff6dd; border-left: 4px solid #e8a33d; padding: 18px 12px; }
+blockquote { break-inside: avoid; margin: 0 0 12px; background: #fff6dd; border-left: 4px solid #e8a33d; padding: 18px 12px; }
 blockquote > :last-child { margin-bottom: 0; }
 table { border-collapse: collapse; width: 100%; margin: 0 0 14px; font-size: 9pt; }
 th { background: #e3eaf6; text-align: left; font-weight: bold; }

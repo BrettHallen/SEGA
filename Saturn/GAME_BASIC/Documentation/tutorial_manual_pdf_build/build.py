@@ -23,19 +23,49 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TITLE = 'GAME BASIC for SEGA SATURN Tutorial Manual (English)'
 LEAD, TAIL = '<div class="dummy-lead"></div>', '<div class="dummy-tail"></div>'
 MIN_LINES = 5               # a smaller heading is kept with at least this many lines of what follows
-MAX_KEEP = 40               # ... unless that would need a block taller than this (in lines)
+MAX_KEEP = 50               # ... unless that would need a block taller than this (in lines)
+
+HEADS = ('h3', 'h4', 'h5')
+MAX_TABLE_ROWS = 30         # tables up to this many rows are kept whole on one page
+
+def is_label(el):
+    """A paragraph that acts as a heading: bold-only text such as "■ Bitmap screen" or
+    "Screen mode 1", or a short lead-in line ending in a colon."""
+    if el.name != 'p':
+        return False
+    text = el.get_text().strip()
+    kids = [k for k in el.contents if not (isinstance(k, str) and not k.strip())]
+    if len(kids) == 1 and getattr(kids[0], 'name', None) == 'strong' and len(text) < 90:
+        return True
+    return text.endswith(':') and len(text) < 160
 
 def page_breaks(soup):
-    # keep each smaller heading on the same page as at least MIN_LINES lines of what follows it
-    for h in soup.find_all(['h3', 'h4', 'h5']):
+    # keep tables whole, and notes (blockquotes) in one piece (see style.css)
+    for t in soup.find_all('table'):
+        if len(t.find_all('tr')) <= MAX_TABLE_ROWS:
+            t['class'] = t.get('class', []) + ['keep']
+    # keep each smaller heading or label on the same page as at least MIN_LINES lines of what follows it
+    # (one level of wrapping only: Chromium does not reliably honour nested keep blocks, so a
+    # heading's group runs on through any labels and needs MIN_LINES after the last of them)
+    for h in soup.find_all(lambda e: e.name in HEADS or is_label(e)):
+        if h.find_parent('div', class_='keep-with-next'):
+            continue
         group, lines = [], 0
         for nxt in h.find_next_siblings():
-            if nxt.name == 'section' or nxt.name in ('h3', 'h4', 'h5'):
+            if nxt.name == 'section' or nxt.name in HEADS:
                 break
+            if is_label(nxt):
+                if h.name == 'p':
+                    break
+                lines = 0
             group.append(nxt); lines += est_lines(nxt)
-            if lines >= MIN_LINES:
+            if lines >= MIN_LINES or nxt.name in ('table', 'blockquote'):
                 break
-        if group and lines <= MAX_KEEP:
+        # a small table that closes the item (e.g. a "Shortcut" table) stays with it too
+        after = group[-1].find_next_sibling() if group else None
+        if after is not None and after.name == 'table' and len(after.find_all('tr')) <= 4:
+            group.append(after)
+        if group and sum(est_lines(g) for g in group) <= MAX_KEEP:
             wrap = soup.new_tag('div', attrs={'class': 'keep-with-next'})
             h.insert_before(wrap); wrap.append(h.extract())
             for g in group: wrap.append(g.extract())
@@ -44,6 +74,8 @@ def est_lines(el):
     """Rough height of a block, in body text lines (about 95 characters each)."""
     if el.name == 'table':
         return 1.5 * len(el.find_all('tr')) + 1
+    if el.name == 'div':
+        return sum(est_lines(c) for c in el.find_all(recursive=False))
     if el.name == 'pre':
         return el.get_text().count('\n') + 2
     if el.name in ('ul', 'ol'):
