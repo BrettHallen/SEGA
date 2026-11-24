@@ -1,0 +1,16 @@
+Build of GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_EN.pdf
+
+From this folder:
+
+  python3 build.py ../GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_EN.md ../GAME_BASIC_for_SEGA_SATURN_Tutorial_Manual_EN.pdf
+
+Needs pandoc, node with playwright (Chromium), and python3 with beautifulsoup4 and pypdf.
+
+- Same look as the Reference Manual (style.css is shared in content with reference_manual_pdf_build).
+- Every chapter starts on a new page. Sections (Introduction, Contents, 2.1, 2.2 ...) flow on, but a section
+  heading that would land near the bottom of a page (less than about eight lines of room) moves to the next page.
+- Smaller headings are kept on the same page as at least five lines of what follows them.
+- Page numbers count every page, covers included, so the footer matches a PDF viewer's page number.
+- The covers are copied from the first and last page of the existing PDF (or a 2-page PDF given with
+  --covers covers.pdf) and scaled to fill A4. A blank page follows the front cover, and one or two
+  blank pages precede the back cover, so the page count is always even and the back cover prints on the back of the last sheet.
